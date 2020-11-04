@@ -8,9 +8,9 @@ export class Migration20201102135739 extends Migration {
         table.uuid('id').notNullable().primary();
         table.uuid('by_employee').notNullable().references('employees.id');
         table.uuid('to_employee').notNullable().references('employees.id');
-        table.timestamp('createdAt').defaultTo(this.getKnex().fn.now());
-        table.timestamp('updatedAt').defaultTo(this.getKnex().fn.now());
-        table.timestamp('deletedAt');
+        table.timestamp('created_at').defaultTo(this.getKnex().fn.now());
+        table.timestamp('updated_at').defaultTo(this.getKnex().fn.now());
+        table.timestamp('deleted_at');
       })
     });
   }

@@ -35,9 +35,9 @@ export class Migration20201102135901 extends Migration {
               .references('product_instances.id')
               .onUpdate('CASCADE') // if Article primary key is changed, update this foreign key.
               .onDelete('NO ACTION');
-            table.timestamp('createdAt').defaultTo(this.getKnex().fn.now());
-            table.timestamp('updatedAt').defaultTo(this.getKnex().fn.now());
-            table.timestamp('deletedAt');
+            table.timestamp('created_at').defaultTo(this.getKnex().fn.now());
+            table.timestamp('updated_at').defaultTo(this.getKnex().fn.now());
+            table.timestamp('deleted_at');
           });
       });
   }

@@ -24,9 +24,9 @@ export class Migration20201102135636 extends Migration {
             table
               .enu('position', ['diretor', 'gerente', 'tecnico'])
               .notNullable();
-              table.timestamp('createdAt').defaultTo(this.getKnex().fn.now());
-              table.timestamp('updatedAt').defaultTo(this.getKnex().fn.now());
-              table.timestamp('deletedAt');
+              table.timestamp('created_at').defaultTo(this.getKnex().fn.now());
+              table.timestamp('updated_at').defaultTo(this.getKnex().fn.now());
+              table.timestamp('deleted_at');
           })
           .then(() =>
             this.getKnex().raw(

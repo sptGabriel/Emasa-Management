@@ -9,9 +9,9 @@ export class Migration20201102135900 extends Migration {
         table.uuid('supply_id').references('supplying.id');
         table.string('name', 100);
         table.string('signature', 100);
-        table.timestamp('createdAt').defaultTo(this.getKnex().fn.now());
-        table.timestamp('updatedAt').defaultTo(this.getKnex().fn.now());
-        table.timestamp('deletedAt');
+        table.timestamp('created_at').defaultTo(this.getKnex().fn.now());
+        table.timestamp('updated_at').defaultTo(this.getKnex().fn.now());
+        table.timestamp('deleted_at');
       })
     });
   }

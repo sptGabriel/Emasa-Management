@@ -11,9 +11,9 @@ export class Migration20201102135739 extends Migration {
           table.boolean('arrived').defaultTo(false);
           table.timestamp('orderedAt').notNullable();
           table.timestamp('arrivesAt').notNullable();
-          table.timestamp('createdAt').defaultTo(this.getKnex().fn.now());
-          table.timestamp('updatedAt').defaultTo(this.getKnex().fn.now());
-          table.timestamp('deletedAt');
+          table.timestamp('created_at').defaultTo(this.getKnex().fn.now());
+          table.timestamp('updated_at').defaultTo(this.getKnex().fn.now());
+          table.timestamp('deleted_at');
         })
     });
   }

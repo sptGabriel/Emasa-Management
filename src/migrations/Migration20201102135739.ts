@@ -12,9 +12,9 @@ export class Migration20201102135739 extends Migration {
           table.string('supplier_email', 100);
           table.string('supplier_phone', 100);
           table.string('description', 100);
-          table.timestamp('createdAt').defaultTo(this.getKnex().fn.now());
-          table.timestamp('updatedAt').defaultTo(this.getKnex().fn.now());
-          table.timestamp('deletedAt');
+          table.timestamp('created_at').defaultTo(this.getKnex().fn.now());
+          table.timestamp('updated_at').defaultTo(this.getKnex().fn.now());
+          table.timestamp('deleted_at');
         })
     });
   }

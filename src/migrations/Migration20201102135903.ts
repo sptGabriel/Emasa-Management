@@ -9,9 +9,9 @@ export class Migration20201102135903 extends Migration {
         table.uuid('product_id').references('products.id').notNullable();
         table.unique(['supply_id', 'product_id']);
         table.integer('quantity').notNullable();
-        table.timestamp('createdAt').defaultTo(this.getKnex().fn.now());
-        table.timestamp('updatedAt').defaultTo(this.getKnex().fn.now());
-        table.timestamp('deletedAt');
+        table.timestamp('created_at').defaultTo(this.getKnex().fn.now());
+        table.timestamp('updated_at').defaultTo(this.getKnex().fn.now());
+        table.timestamp('deleted_at');
       })
     });
   }
