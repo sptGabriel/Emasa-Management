@@ -11,7 +11,7 @@ export class Migration20201102135859 extends Migration {
           .createTable('products', async table => {
             table.uuid('id').notNullable().primary();
             table.string('name', 100).notNullable();
-            table.string('codReference', 100).notNullable();
+            table.string('cod_reference', 100).notNullable();
             table
               .uuid('category_id')
               .notNullable()

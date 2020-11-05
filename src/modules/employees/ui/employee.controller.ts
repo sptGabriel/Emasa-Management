@@ -12,7 +12,7 @@ export class EmployeeController extends BaseController {
   }
   protected initRouter() {
     this.router.get(`${this.path}`, this.index);
-    this.router.post(`${this.path}/create`, this.createEmployee);
+    this.router.post(`${this.path}/add`, this.createEmployee);
   }
   private index = async (arg0: string, index: any) => {
     throw new Error('Method not implemented.');

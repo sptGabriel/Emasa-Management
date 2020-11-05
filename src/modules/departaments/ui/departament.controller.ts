@@ -12,7 +12,7 @@ export class DepartamentController extends BaseController {
   }
   protected initRouter() {
     this.router.get(`${this.path}`, this.index);
-    this.router.post(`${this.path}/create`, this.createDepartament);
+    this.router.post(`${this.path}/add`, this.createDepartament);
   }
   private index = async (arg0: string, index: any) => {
     throw new Error('Method not implemented.');

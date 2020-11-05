@@ -1,8 +1,6 @@
 import { Positions } from '@modules/employees/domain/employee.entity';
 
 export interface CreateProductCategoryDTO {
-  cnpj: string;
-  supplier_name: string;
-  supplier_email: string;
-  description: string;
+  name: string;
+  parent_id: string;
 }

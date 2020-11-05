@@ -9,8 +9,8 @@ export class Migration20201102135739 extends Migration {
           table.uuid('id').notNullable().primary();
           table.uuid('supplier_id').notNullable().references('suppliers.id');
           table.boolean('arrived').defaultTo(false);
-          table.timestamp('orderedAt').notNullable();
-          table.timestamp('arrivesAt').notNullable();
+          table.timestamp('ordered_at').notNullable();
+          table.timestamp('arrives_at').notNullable();
           table.timestamp('created_at').defaultTo(this.getKnex().fn.now());
           table.timestamp('updated_at').defaultTo(this.getKnex().fn.now());
           table.timestamp('deleted_at');

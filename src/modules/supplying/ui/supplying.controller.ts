@@ -1,18 +1,18 @@
-import { CreateSupplierDTO } from '@modules/supplier/application/dtos/createSupplier_DTO';
 import { BaseController } from '@shared/core/baseController';
 import { NextFunction, Request, Response } from 'express';
 import { container, singleton } from 'tsyringe';
-import { CreateSupplierUseCase } from '../application/useCases/createSupplier';
+import { CreateSupplyDTO } from '../application/dtos/createSupply_DTO';
+import { CreateSupplyUseCase } from '../application/useCases/createSupply';
 @singleton()
-export class SupplierController extends BaseController {
+export class SupplyingController extends BaseController {
   constructor() {
     super();
-    this.path = '/supplier';
+    this.path = '/supplying';
     this.initRouter();
   }
   protected initRouter() {
     this.router.get(`${this.path}`, this.index);
-    this.router.post(`${this.path}/create`, this.createSupplier);
+    this.router.post(`${this.path}/add`, this.createSupplier);
   }
   private index = async (arg0: string, index: any) => {
     throw new Error('Method not implemented.');
@@ -23,9 +23,9 @@ export class SupplierController extends BaseController {
     next: NextFunction,
   ) => {
     try {
-      const dto: CreateSupplierDTO = request.body;
+      const dto: CreateSupplyDTO = request.body;
       const result = await container
-        .resolve(CreateSupplierUseCase)
+        .resolve(CreateSupplyUseCase)
         .execute(dto);
       if (result.isLeft()) return next(result.value);
       return response.json(result.value);
