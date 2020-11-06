@@ -7,7 +7,7 @@ import { CreateEmployeeUseCase } from '../application/useCases/createEmployee';
 export class EmployeeController extends BaseController {
   constructor() {
     super();
-    this.path = '/employee';
+    this.path = '/employees';
     this.initRouter();
   }
   protected initRouter() {
@@ -30,7 +30,7 @@ export class EmployeeController extends BaseController {
       if (result.isLeft()) return next(result.value);
       return response.json(result.value);
     } catch (error) {
-      console.log(error)
+      console.log(error);
       next(error);
     }
   };

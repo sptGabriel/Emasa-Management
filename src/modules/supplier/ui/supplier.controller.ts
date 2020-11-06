@@ -7,7 +7,7 @@ import { CreateSupplierUseCase } from '../application/useCases/createSupplier';
 export class SupplierController extends BaseController {
   constructor() {
     super();
-    this.path = '/supplier';
+    this.path = '/suppliers';
     this.initRouter();
   }
   protected initRouter() {

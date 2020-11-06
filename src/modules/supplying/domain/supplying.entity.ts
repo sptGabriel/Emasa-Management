@@ -2,12 +2,14 @@ import {
   Collection,
   Entity,
   ManyToMany,
+  ManyToOne,
   OneToMany,
   PrimaryKey,
   Property,
   Unique,
 } from '@mikro-orm/core';
 import { Cascade } from '@mikro-orm/core/enums';
+import { Contract } from '@modules/contracts/domain/contract.entity';
 import { v4, validate } from 'uuid';
 import { SuppliedProducts } from './suppliedProducts.entity';
 export interface SupplyProps {
@@ -36,27 +38,24 @@ export class Supply {
   public updated_at = new Date();
   @Property()
   public deleted_at?: Date;
+  @ManyToOne(() => Contract, { fieldName: 'contract_id' })
+  public contract: Contract;
   @OneToMany(() => SuppliedProducts, supplied => supplied.supply)
   public suppliedProducts = new Collection<SuppliedProducts>(this);
-  // @OneToMany(
-  //   () => SuppliedProducts,
-  //   suppliedProducts => suppliedProducts.supply,
-  //   { cascade: [Cascade.PERSIST] },
-  // )
-  // public suppliedProducts = new Collection<SuppliedProducts>(this);
-  constructor(container: SupplyProps) {
+  constructor(container: SupplyProps, contract: Contract) {
     this.id = container.id ? container.id : v4();
     this.deleted_at = container.deleted_at;
     this.arrives_at = container.arrives_at;
     this.arrived = container.arrived;
     this.ordered_at = container.ordered_at;
     this.supplier_id = container.supplier_id;
+    this.contract = contract;
   }
-  static build = (props: SupplyProps): Supply => {
+  static build = (props: SupplyProps, contract: Contract): Supply => {
     if (props.id && !validate(props.id))
       throw new Error(`Invalid UUID: ${props.id}`);
     if (!validate(props.supplier_id))
       throw new Error(`Invalid UUID:${props.supplier_id}`);
-    return new Supply(props);
+    return new Supply(props, contract);
   };
 }
