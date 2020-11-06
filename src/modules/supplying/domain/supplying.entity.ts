@@ -1,7 +1,25 @@
-import { Entity, PrimaryKey, Property, Unique } from '@mikro-orm/core';
+import {
+  Collection,
+  Entity,
+  ManyToMany,
+  OneToMany,
+  PrimaryKey,
+  Property,
+  Unique,
+} from '@mikro-orm/core';
+import { Cascade } from '@mikro-orm/core/enums';
 import { v4, validate } from 'uuid';
-@Entity({ tableName: 'supplying' })
-export class Supplying {
+import { SuppliedProducts } from './suppliedProducts.entity';
+export interface SupplyProps {
+  id?: string;
+  supplier_id: string;
+  arrived: boolean;
+  ordered_at: Date;
+  arrives_at: Date;
+  deleted_at?: Date;
+}
+@Entity({ tableName: 'supplies' })
+export class Supply {
   @PrimaryKey()
   public readonly id: string;
   @Property()
@@ -9,28 +27,39 @@ export class Supplying {
   @Property()
   public arrived: boolean;
   @Property()
-  public orderedAt: Date;
+  public ordered_at: Date;
   @Property()
-  public arrivesAt: Date;
+  public arrives_at: Date;
   @Property()
-  public createdAt = new Date();
+  public created_at = new Date();
   @Property({ onUpdate: () => new Date() })
-  public updatedAt = new Date();
+  public updated_at = new Date();
   @Property()
-  public deletedAt?: Date;
-  constructor(
-    props: Omit<Supplying, 'id' | 'updatedAt' | 'createdAt'>,
-    id?: string,
-  ) {
-    Object.assign(this, props);
-    if (!id) this.id = v4();
+  public deleted_at?: Date;
+  @ManyToMany(() => SuppliedProducts, 'supplies', {
+    owner: true,
+    cascade: [Cascade.PERSIST],
+  })
+  public suppliedProducts = new Collection<SuppliedProducts>(this);
+  // @OneToMany(
+  //   () => SuppliedProducts,
+  //   suppliedProducts => suppliedProducts.supply,
+  //   { cascade: [Cascade.PERSIST] },
+  // )
+  // public suppliedProducts = new Collection<SuppliedProducts>(this);
+  constructor(container: SupplyProps) {
+    this.id = container.id ? container.id : v4();
+    this.deleted_at = container.deleted_at;
+    this.arrives_at = container.arrives_at;
+    this.arrived = container.arrived;
+    this.ordered_at = container.ordered_at;
+    this.supplier_id = container.supplier_id;
   }
-  static build = (
-    props: Omit<Supplying, 'id' | 'updatedAt' | 'createdAt'>,
-    id?: string,
-  ): Supplying => {
-    const isValidUUID = id ? validate(id) : null;
-    if (isValidUUID === false) throw new Error(`Invalid UUID V4`);
-    return new Supplying(props, id);
+  static build = (props: SupplyProps): Supply => {
+    if (props.id && !validate(props.id))
+      throw new Error(`Invalid UUID: ${props.id}`);
+    if (!validate(props.supplier_id))
+      throw new Error(`Invalid UUID:${props.supplier_id}`);
+    return new Supply(props);
   };
 }

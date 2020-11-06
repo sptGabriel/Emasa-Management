@@ -17,5 +17,5 @@ export interface ISupplyingRepository {
      * @param {string} supplyingProps
      * @returns {Promise<Supplying>}
      */
-    create(supplying: Supplying): Promise<Supplying>;
+    create(supplying: any): Promise<Supplying>;
 }

@@ -1,11 +1,16 @@
 import { Positions } from "@modules/employees/domain/employee.entity";
 export interface supplyingProducts {
-  id: string;
-  quantity: string;
+  supply_id?:string;
+  product_id: string;
+  quantity: number;
 }
-export interface CreateSupplyDTO {
+export interface SupplyDTO {
   supplier_id: string;
   arrived: boolean;
-  orderedAt: Date;
+  ordered_at: Date;
+  arrives_at: Date;
+}
+export interface CreateSupplyDTO {
+  supply: SupplyDTO;
   suppliedProducts: supplyingProducts[];
 }

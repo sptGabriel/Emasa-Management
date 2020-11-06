@@ -4,10 +4,10 @@ import { container, singleton } from 'tsyringe';
 import { CreateSupplyDTO } from '../application/dtos/createSupply_DTO';
 import { CreateSupplyUseCase } from '../application/useCases/createSupply';
 @singleton()
-export class SupplyingController extends BaseController {
+export class SuppliesController extends BaseController {
   constructor() {
     super();
-    this.path = '/supplying';
+    this.path = '/supplies';
     this.initRouter();
   }
   protected initRouter() {
@@ -30,6 +30,7 @@ export class SupplyingController extends BaseController {
       if (result.isLeft()) return next(result.value);
       return response.json(result.value);
     } catch (error) {
+      console.log(error)
       next(error);
     }
   };

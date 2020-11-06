@@ -2,10 +2,10 @@ import { Migration } from '@mikro-orm/migrations';
 export class Migration20201102135739 extends Migration {
 
   async up(): Promise<void> {
-    return this.getKnex().schema.hasTable('supplying').then( (exists) => {
+    return this.getKnex().schema.hasTable('supplies').then( (exists) => {
       if (exists) return;
       return this.getKnex().schema // **** udpate
-        .createTable('supplying', async table => {
+        .createTable('supplies', async table => {
           table.uuid('id').notNullable().primary();
           table.uuid('supplier_id').notNullable().references('suppliers.id');
           table.boolean('arrived').defaultTo(false);

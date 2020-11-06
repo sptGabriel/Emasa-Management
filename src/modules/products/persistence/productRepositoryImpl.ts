@@ -10,8 +10,8 @@ export class ProductRepository implements IProductRepository {
   constructor(@inject('EntityManager') private entityManager: EntityManager) {
     this.repository = entityManager.getRepository(Product);
   }
-  public byArray = async (ids: string[]): Promise<Product[] | undefined>  => {
-    return await this.repository.find({$in:id})
+  public byArray = async (ids: string[]): Promise<Product[]>  => {
+    return await this.repository.find(ids)
   }
   public create = async (product: Product): Promise<Product> => {
     if(!(product instanceof Product)) throw new Error(`Invalid Data Type`)

@@ -6,7 +6,7 @@ export class Migration20201102135900 extends Migration {
       return this.getKnex().schema // **** udpate
       .createTable('contracts', async table => {
         table.uuid('id').notNullable().primary();
-        table.uuid('supply_id').references('supplying.id');
+        table.uuid('supply_id').references('supplies.id');
         table.string('name', 100);
         table.string('signature', 100);
         table.timestamp('created_at').defaultTo(this.getKnex().fn.now());
