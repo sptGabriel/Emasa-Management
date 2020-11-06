@@ -36,10 +36,7 @@ export class Supply {
   public updated_at = new Date();
   @Property()
   public deleted_at?: Date;
-  @ManyToMany(() => SuppliedProducts, 'supplies', {
-    owner: true,
-    cascade: [Cascade.PERSIST],
-  })
+  @OneToMany(() => SuppliedProducts, supplied => supplied.supply)
   public suppliedProducts = new Collection<SuppliedProducts>(this);
   // @OneToMany(
   //   () => SuppliedProducts,

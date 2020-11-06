@@ -6,6 +6,7 @@ import { SupplyingRepository } from '@modules/supplying/persistence/supplyingRep
 import { Either, left, right } from '@shared/core/either';
 import { IUseCase } from '@shared/core/useCase';
 import { AppError } from '@shared/errors/BaseError';
+import { ensure } from '@utils/ensure';
 import { inject, injectable } from 'tsyringe';
 import { Supply } from '../../domain/supplying.entity';
 import { CreateSupplyDTO } from '../dtos/createSupply_DTO';
@@ -39,9 +40,9 @@ export class CreateSupplyUseCase
     supply.suppliedProducts.set(
       request.suppliedProducts.map(supplied => {
         return SuppliedProducts.build({
-          product_id: supplied.product_id,
+          product: ensure(hasProducts.find((x) => x.id == supplied.product_id)),
           quantity: supplied.quantity,
-          supply_id: supply.id,
+          supply: supply,
         });
       }),
     );

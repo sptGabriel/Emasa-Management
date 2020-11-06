@@ -12,45 +12,35 @@ import { Product } from '@modules/products/domain/product.entity';
 import { v4, validate } from 'uuid';
 import { Supply } from './supplying.entity';
 export interface SuppliedProductsProps {
-  product_id: string;
-  supply_id: string;
+  product: Product;
+  supply: Supply;
   quantity: number;
 }
 @Entity({ tableName: 'supplied_products' })
 export class SuppliedProducts {
-  @Property()
-  public product_id: string;
-  @Property()
-  public supply_id: string;
+  @ManyToOne(() => Product,{ primary: true, fieldName:'product_id' })
+  public product: Product;
+  @ManyToOne(() => Supply,{ primary: true, fieldName:'supply_id' })
+  public supply: Supply;
   @Property()
   public quantity: number;
-  @ManyToOne({ entity: () => Product, primary: true, joinColumn: 'product_id' })
-  public product: Product;
-  @ManyToMany(() => Supply, supply => supply.suppliedProducts)
-  public supplies = new Collection<Supply>(this);
-  // @ManyToOne({
-  //   entity: () => Supplying,
-  //   primary: true,
-  //   joinColumn: 'supply_id',
-  // })
-  // public supply: Supplying;
   @Property()
-  public createdAt = new Date();
+  public created_at = new Date();
   @Property({ onUpdate: () => new Date() })
-  public updatedAt = new Date();
+  public updated_at = new Date();
   @Property()
-  public deletedAt?: Date;
+  public deleted_at?: Date;
   [PrimaryKeyType]: [number, number];
   constructor(container:SuppliedProductsProps) {
-    this.product_id = container.product_id;
-    this.supply_id = container.supply_id;
     this.quantity = container.quantity
+    this.product = container.product
+    this.supply = container.supply
   }
   public static build = (
-    {supply_id,quantity,product_id}:SuppliedProductsProps
+    {supply,quantity,product}:SuppliedProductsProps
   ): SuppliedProducts => {
-    if (!validate(product_id)) throw new Error(`${product_id} Invalid UUID V4`);
-    if (!validate(supply_id)) throw new Error(`${supply_id} Invalid UUID V4`);
-    return new SuppliedProducts({product_id, supply_id, quantity});
+    if (!(supply instanceof Supply)) throw new Error(`Invalid Supply Type`);
+    if (!(product instanceof Product)) throw new Error(`Invalid Product Type`);
+    return new SuppliedProducts({product, supply, quantity});
   };
 }
