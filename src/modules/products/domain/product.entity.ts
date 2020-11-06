@@ -7,24 +7,24 @@ export class Product {
   @Property()
   public name: string;
   @Property()
-  public codReference: string;
+  public cod_reference: string;
   @Property()
   public category_id: string;
   @Property()
-  public createdAt = new Date();
+  public created_at = new Date();
   @Property({ onUpdate: () => new Date() })
-  public updatedAt = new Date();
+  public updated_at = new Date();
   @Property()
-  public deletedAt?: Date;
+  public deleted_at?: Date;
   constructor(
-    props: Omit<Product, 'id' | 'updatedAt' | 'createdAt'>,
+    props: Omit<Product, 'id' | 'updated_at' | 'created_at'>,
     id?: string,
   ) {
     Object.assign(this, props);
     if (!id) this.id = v4();
   }
   static build = (
-    props: Omit<Product, 'id' | 'updatedAt' | 'createdAt'>,
+    props: Omit<Product, 'id' | 'updated_at' | 'created_at'>,
     id?: string,
   ): Product => {
     const isValidUUID = id ? validate(id) : null;
