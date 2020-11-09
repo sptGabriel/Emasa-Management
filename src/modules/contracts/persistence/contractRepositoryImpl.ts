@@ -2,6 +2,7 @@ import { wrap } from '@mikro-orm/core';
 import { EntityRepository, EntityManager } from '@mikro-orm/postgresql';
 import { Pagination } from '@shared/core/pagination';
 import { inject, injectable } from 'tsyringe';
+import { couldStartTrivia } from 'typescript';
 import { Contract } from '../domain/contract.entity';
 import { IContractRepository } from './contractRepository';
 @injectable()

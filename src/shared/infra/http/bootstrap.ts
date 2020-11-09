@@ -11,8 +11,8 @@ export interface BootStrapContainer {
 @injectable()
 @singleton()
 export class BootstrapApplication implements BootStrapContainer {
-  constructor(@inject(ExpressServer) private HttpServer: IHttpServer,
-   @inject(MikroOrmClient) private DatabaseOrm: IDatabaseORM) {
+  constructor(@inject(MikroOrmClient) private DatabaseOrm: IDatabaseORM,
+  @inject(ExpressServer) private HttpServer: IHttpServer,) {
   }
   public getHttpServer = (): IHttpServer => {
     return this.HttpServer
@@ -21,11 +21,11 @@ export class BootstrapApplication implements BootStrapContainer {
     return this.DatabaseOrm
   }
   public start = async () => {
-    console.log(chalk.yellow(`Starting Http Server`))
-    await this.HttpServer.start();
-    console.log(chalk.yellow(`Http Server started successfully`))
     console.log(chalk.yellow(`Starting Database`))
     await this.DatabaseOrm.start();
     console.log(chalk.yellow(`Database started successfully`))
+    console.log(chalk.yellow(`Starting Http Server`))
+    await this.HttpServer.start();
+    console.log(chalk.yellow(`Http Server started successfully`))
   };
 }

@@ -15,25 +15,25 @@ export class Migration20201102135901 extends Migration {
               .uuid('product_id')
               .notNullable()
               .references('products.id')
-              .onUpdate('CASCADE') // if Article primary key is changed, update this foreign key.
+              .onUpdate('CASCADE')
               .onDelete('CASCADE');
             table
-              .uuid('contract_id')
+              .uuid('stock_id')
+              .onUpdate('CASCADE')
+              .onDelete('NO ACTION')
               .notNullable()
-              .references('contracts.id')
-              .onUpdate('CASCADE') // if Article primary key is changed, update this foreign key.
-              .onDelete('NO ACTION');
+              .references('product_stocks.id');
             table
               .uuid('employee_id')
               .notNullable()
               .references('employees.id')
-              .onUpdate('CASCADE') // if Article primary key is changed, update this foreign key.
+              .onUpdate('CASCADE')
               .onDelete('NO ACTION');
             table.enu('type', ['component', 'equipament']).notNullable();
             table
               .uuid('parent')
               .references('product_instances.id')
-              .onUpdate('CASCADE') // if Article primary key is changed, update this foreign key.
+              .onUpdate('CASCADE')
               .onDelete('NO ACTION');
             table.timestamp('created_at').defaultTo(this.getKnex().fn.now());
             table.timestamp('updated_at').defaultTo(this.getKnex().fn.now());

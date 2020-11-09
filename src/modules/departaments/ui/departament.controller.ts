@@ -1,3 +1,4 @@
+import { RequestContext } from '@mikro-orm/core';
 import { BaseController } from '@shared/core/baseController';
 import { NextFunction, Request, Response } from 'express';
 import { container, singleton } from 'tsyringe';

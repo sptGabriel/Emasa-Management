@@ -9,7 +9,6 @@ import {
 } from '@mikro-orm/core';
 import { Contract } from '@modules/contracts/domain/contract.entity';
 import { Employee } from '@modules/employees/domain/employee.entity';
-import { v4, validate } from 'uuid';
 import { Product } from './product.entity';
 export enum ProductTypes {
   equipament = 'equipament',
@@ -37,12 +36,14 @@ export class ProductInstance {
   public contract: Contract;
   @ManyToOne(() => Employee, { fieldName: 'employee_id' })
   public employee: Employee;
+  @ManyToOne({ entity: () => ProductInstance })
+  public parent = ProductInstance;
   @OneToMany({
     entity: () => ProductInstance,
     mappedBy: 'parent',
     orphanRemoval: true,
   })
-  public parent = new Collection<ProductInstance>(this);
+  public parents = new Collection<ProductInstance>(this);
   @Property()
   public created_at = new Date();
   @Property({ onUpdate: () => new Date() })

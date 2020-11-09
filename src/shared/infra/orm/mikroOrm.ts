@@ -21,7 +21,7 @@ export class MikroOrmClient implements IDatabaseORM {
     this.connection.close();
   }
   public getEntityManager(): EntityManager {
-    return this.connection.em.fork();
+    return this.connection.em;
   }
   public start = async () => {
     try {

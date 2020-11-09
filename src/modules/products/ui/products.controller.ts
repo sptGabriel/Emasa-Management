@@ -4,6 +4,7 @@ import { container, singleton } from 'tsyringe';
 import { AssignProductDTO } from '../application/dtos/assignProduct_DTO';
 import { CreateProductCategoryDTO } from '../application/dtos/createProductCategory_DTO';
 import { CreateProductDTO } from '../application/dtos/createProduct_DTO';
+import { AssignProductUseCase } from '../application/useCases/assignProduct';
 import { CreateProductUseCase } from '../application/useCases/createProduct';
 import { CreateProductCategoryUseCase } from '../application/useCases/createProductCategory';
 @singleton()
@@ -16,11 +17,8 @@ export class ProductsController extends BaseController {
   protected initRouter() {
     this.router.get(`${this.path}`, this.index);
     this.router.post(`${this.path}/add`, this.createProduct);
-    this.router.post(
-      `${this.path}/:product_id/assign_to/:employee_id`,
-      this.createCategory,
-    );
-    this.router.post(`${this.path}/category/add`, this.assignProduct);
+    this.router.post(`${this.path}/assign`, this.assignProduct);
+    this.router.post(`${this.path}/category/add`, this.createCategory);
   }
   private index = async (arg0: string, index: any) => {
     throw new Error('Method not implemented.');
@@ -31,15 +29,8 @@ export class ProductsController extends BaseController {
     next: NextFunction,
   ) => {
     try {
-      const { employee_id, product_id } = request.params;
-      const {
-        contract_id,
-        parent_id,
-        patrimony_code,
-        serial_number,
-        type,
-      }: AssignProductDTO = request.body;
-      const result = await container.resolve(CreateProductUseCase).execute(dto);
+      const dto: AssignProductDTO = request.body;
+      const result = await container.resolve(AssignProductUseCase).execute(dto);
       if (result.isLeft()) return next(result.value);
       return response.json(result.value);
     } catch (error) {
@@ -55,8 +46,9 @@ export class ProductsController extends BaseController {
       const dto: CreateProductDTO = request.body;
       const result = await container.resolve(CreateProductUseCase).execute(dto);
       if (result.isLeft()) return next(result.value);
-      return response.json(result.value);
+      return response.json(result.value.toJSON());
     } catch (error) {
+      console.log(error)
       next(error);
     }
   };

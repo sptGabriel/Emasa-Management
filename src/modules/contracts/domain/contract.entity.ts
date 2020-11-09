@@ -3,6 +3,7 @@ import {
   Entity,
   ManyToOne,
   OneToMany,
+  OneToOne,
   PrimaryKey,
   Property,
   Unique,
@@ -25,12 +26,8 @@ export class Contract {
   public name: string;
   @Property()
   public signature: string;
-  @OneToMany({
-    entity: () => Supply,
-    mappedBy: 'contract',
-    orphanRemoval: true,
-  })
-  supplies = new Collection<Supply>(this);
+  @OneToOne(() => Supply, supply => supply.contract)
+  public supply: Supply;
   @Property()
   public createdAt = new Date();
   @Property({ onUpdate: () => new Date() })

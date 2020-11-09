@@ -1,5 +1,6 @@
 import { IContractRepository } from '@modules/contracts/persistence/contractRepository';
 import { ContractRepository } from '@modules/contracts/persistence/contractRepositoryImpl';
+import { ProductStocks } from '@modules/products/domain/stock.entity';
 import { IProductRepository } from '@modules/products/persistence/productRepository';
 import { ProductRepository } from '@modules/products/persistence/productRepositoryImpl';
 import { ISupplierRepository } from '@modules/supplier/persistence/supplierRepository';
@@ -13,7 +14,7 @@ import { AppError } from '@shared/errors/BaseError';
 import { ensure } from '@utils/ensure';
 import { inject, injectable } from 'tsyringe';
 import { Supply } from '../../domain/supplying.entity';
-import { CreateSupplyDTO } from '../dtos/createSupply_DTO';
+import { CreateSupplyDTO, supplyingProducts } from '../dtos/createSupply_DTO';
 @injectable()
 export class CreateSupplyUseCase
   implements IUseCase<CreateSupplyDTO, Promise<Either<AppError, Supply>>> {
@@ -27,6 +28,12 @@ export class CreateSupplyUseCase
     @inject(ContractRepository)
     private contractsRepository: IContractRepository,
   ) {}
+  private validateProducts = async (suppliedProducts: supplyingProducts[]) => {
+    const ids = suppliedProducts.map(supplied => supplied.product_id);
+    const hasProducts = await this.productsRepository.byArray(ids)
+    if (hasProducts.length !== ids.length)  throw new Error('tratar error.');
+    return hasProducts
+  };
   public execute = async ({
     supply,
     suppliedProducts,
@@ -35,14 +42,15 @@ export class CreateSupplyUseCase
     if (!hasContract) return left(new Error('Contract dont Exists.'));
     const hasSupplier = await this.supplierRepository.byId(supply.supplier_id);
     if (!hasSupplier) return left(new Error('Supplier dont Exists.'));
-    const products_ids = suppliedProducts.map(product => {
-      return product.product_id;
-    });
-    const hasProducts = await this.productsRepository.byArray(products_ids);
-    if (hasProducts.length < 1) return left(new Error('Products dont Exists.'));
-    if (hasProducts.length !== products_ids.length) {
-      return left(new Error('tratar error.'));
+    const alreadySupplied = await this.supplyingRepository.byContract(
+      supply.contract_id,
+    );
+    if (alreadySupplied) {
+      return left(
+        new Error(`${supply.contract_id}, already has supply of products`),
+      );
     }
+    const hasProducts = await this.validateProducts(suppliedProducts);
     const supplyResult = Supply.build(supply, hasContract);
     supplyResult.suppliedProducts.set(
       suppliedProducts.map(supplied => {
@@ -50,10 +58,17 @@ export class CreateSupplyUseCase
           product: ensure(hasProducts.find(x => x.id == supplied.product_id)),
           quantity: supplied.quantity,
           supply: supplyResult,
+          unit_price: supplied.unit_price
         });
       }),
     );
-    const provided = await this.supplyingRepository.create(supplyResult);
+    const stock = supplyResult.suppliedProducts.getItems().map((supplied) => {
+      return ProductStocks.build({
+        quantity: supplied.quantity,
+        supply: supplied.supply,
+        product: supplied.product,
+    })})
+    const provided = await this.supplyingRepository.create(supplyResult,stock);
     return right(provided);
   };
 }

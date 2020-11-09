@@ -1,5 +1,5 @@
 import dotenv, { DotenvConfigOutput } from 'dotenv';
-import { MikroORM, Options } from '@mikro-orm/core';
+import { LoadStrategy, MikroORM, Options } from '@mikro-orm/core';
 import { TsMorphMetadataProvider } from '@mikro-orm/reflection/TsMorphMetadataProvider';
 import path from 'path';
 const configResult: DotenvConfigOutput = dotenv.config();

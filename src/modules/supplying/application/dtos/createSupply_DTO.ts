@@ -3,6 +3,7 @@ export interface supplyingProducts {
   supply_id?: string;
   product_id: string;
   quantity: number;
+  unit_price: number;
 }
 export interface SupplyDTO {
   supplier_id: string;
@@ -10,6 +11,7 @@ export interface SupplyDTO {
   arrived: boolean;
   ordered_at: Date;
   arrives_at: Date;
+  total_amount:number;
 }
 export interface CreateSupplyDTO {
   supply: SupplyDTO;

@@ -11,6 +11,11 @@ export interface IProductRepository {
    * @returns {Promise<Product[] | undefined >}
    */
   byArray(ids: string[]): Promise<Product[]>;
+    /**
+   * @param {number} id[]
+   * @returns {Promise<Product[] | undefined >}
+   */
+  findProductsWithStock(ids: string[]): Promise<Product[]>;
   /**
    * @param {number} id
    * @returns {Promise<Product>}

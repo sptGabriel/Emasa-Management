@@ -4,21 +4,40 @@ import {
   ManyToMany,
   ManyToOne,
   OneToMany,
+  OneToOne,
   PrimaryKey,
   Property,
   Unique,
 } from '@mikro-orm/core';
 import { Cascade } from '@mikro-orm/core/enums';
 import { Contract } from '@modules/contracts/domain/contract.entity';
+import { ProductStocks } from '@modules/products/domain/stock.entity';
 import { v4, validate } from 'uuid';
 import { SuppliedProducts } from './suppliedProducts.entity';
 export interface SupplyProps {
   id?: string;
   supplier_id: string;
+  total_amount:number;
   arrived: boolean;
   ordered_at: Date;
   arrives_at: Date;
   deleted_at?: Date;
+}
+interface suppliedProducts {
+  product_id: string;
+  quantity: number;
+  unit_price:number;
+}
+export interface toResponse {
+  id: string;
+  supplier_id: string;
+  contract_id: string;
+  total_amount:number;
+  arrived: boolean;
+  arrives_at: Date;
+  ordered_at: Date;
+  created_at: Date;
+  updated_at: Date;
 }
 @Entity({ tableName: 'supplies' })
 export class Supply {
@@ -26,6 +45,8 @@ export class Supply {
   public readonly id: string;
   @Property()
   public supplier_id: string;
+  @Property()
+  public total_amount: number;
   @Property()
   public arrived: boolean;
   @Property()
@@ -38,8 +59,13 @@ export class Supply {
   public updated_at = new Date();
   @Property()
   public deleted_at?: Date;
-  @ManyToOne(() => Contract, { fieldName: 'contract_id' })
+  @OneToOne(() => Contract, contract => contract.supply, {
+    owner: true,
+    orphanRemoval: true,
+  })
   public contract: Contract;
+  @OneToOne({entity: () => ProductStocks, mappedBy: 'supply' })
+  public product_stock!: ProductStocks;
   @OneToMany(() => SuppliedProducts, supplied => supplied.supply)
   public suppliedProducts = new Collection<SuppliedProducts>(this);
   constructor(container: SupplyProps, contract: Contract) {
@@ -50,6 +76,7 @@ export class Supply {
     this.ordered_at = container.ordered_at;
     this.supplier_id = container.supplier_id;
     this.contract = contract;
+    this.total_amount = container.total_amount
   }
   static build = (props: SupplyProps, contract: Contract): Supply => {
     if (props.id && !validate(props.id))
@@ -58,4 +85,17 @@ export class Supply {
       throw new Error(`Invalid UUID:${props.supplier_id}`);
     return new Supply(props, contract);
   };
+
+  // toJson = (): toResponse => {
+  //   return {
+  //     id: this.id,
+  //     supplier_id:this.supplier_id,
+  //     contract_id:this.contract.id,
+  //     arrived: this.arrived,
+  //     arrives_at: this.arrives_at,
+  //     ordered_at:this.ordered_at,
+  //     created_at: this.created_at,
+  //     updated_at: this.updated_at,
+  //   }
+  // };
 }

@@ -1,3 +1,4 @@
+import { ProductStocks } from '@modules/products/domain/stock.entity';
 import { IProductCategoryRepository } from '@modules/products/persistence/productCategoryRepository';
 import { ProductCategoryRepository } from '@modules/products/persistence/productCategoryRepositoryImpl';
 import { IProductRepository } from '@modules/products/persistence/productRepository';
@@ -20,6 +21,12 @@ export class CreateProductUseCase
   public execute = async (
     request: CreateProductDTO,
   ): Promise<Either<AppError, Product>> => {
+    if(typeof request.current_price !== 'number'){
+      return left(new Error('invalid current_price dont Exists.'));
+    }
+    if (typeof request.has_instances !== 'boolean'){
+      return left(new Error('invalid has_instace dont Exists.'));
+    }
     const hasCategory = await this.categoryRepository.byId(request.category_id);
     if (!hasCategory) return left(new Error('Category dont Exists.'));
     const hasProduct = await this.productRepository.byCodReference(
@@ -27,6 +34,7 @@ export class CreateProductUseCase
     );
     if (hasProduct) return left(new Error('Product Already Exists.'));
     const product = await this.productRepository.create(Product.build(request));
-    return right(product);
+    const productPersistence = await this.productRepository.create(product);
+    return right(productPersistence);
   };
 }
