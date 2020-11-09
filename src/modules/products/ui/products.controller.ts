@@ -46,9 +46,9 @@ export class ProductsController extends BaseController {
       const dto: CreateProductDTO = request.body;
       const result = await container.resolve(CreateProductUseCase).execute(dto);
       if (result.isLeft()) return next(result.value);
-      return response.json(result.value.toJSON());
+      return response.json(result.value);
     } catch (error) {
-      console.log(error)
+      console.log(error);
       next(error);
     }
   };
@@ -63,7 +63,7 @@ export class ProductsController extends BaseController {
         .resolve(CreateProductCategoryUseCase)
         .execute(dto);
       if (result.isLeft()) return next(result.value);
-      return response.json(result.value);
+      return response.json(result.value.toJSON());
     } catch (error) {
       next(error);
     }

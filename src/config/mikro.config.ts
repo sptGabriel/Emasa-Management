@@ -7,8 +7,8 @@ if (configResult.error) {
   throw configResult.error;
 }
 const rootDir = process.env.NODE_ENV === 'development' ? 'src' : 'build/src';
-const extension = process.env.NODE_ENV === 'development' ? 'ts' : 'js'
-export default  {
+const extension = process.env.NODE_ENV === 'development' ? 'ts' : 'js';
+export default {
   metadataProvider: TsMorphMetadataProvider,
   type: 'postgresql',
   dbName: 'emasa_ti',
@@ -19,12 +19,11 @@ export default  {
     path: path.join(__dirname, '../migrations'), // path to the folder with migrations
     pattern: /^[\w-]+\d+\.[tj]s$/, // regex pattern for the migration files
     tableName: 'migrationsHistory',
-    emit:extension,
-    transactional: true
+    emit: extension,
+    transactional: true,
   },
   password: 'emasa03210',
-  port: 5433,
+  port: 5432,
   tsNode: process.env.APP_ENV === 'development',
   user: 'emasa',
 } as Options;
-

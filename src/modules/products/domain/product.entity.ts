@@ -1,4 +1,14 @@
-import { Collection, Entity, IdentifiedReference, ManyToOne, OneToMany, OneToOne, PrimaryKey, Property, Reference } from '@mikro-orm/core';
+import {
+  Collection,
+  Entity,
+  IdentifiedReference,
+  ManyToOne,
+  OneToMany,
+  OneToOne,
+  PrimaryKey,
+  Property,
+  Reference,
+} from '@mikro-orm/core';
 import { v4, validate } from 'uuid';
 import { ProductCategory } from './productCategory.entity';
 import { ProductStocks } from './stock.entity';
@@ -8,6 +18,7 @@ interface productContainer {
   cod_reference: string;
   category: ProductCategory;
   has_instances: boolean;
+  current_price: number;
 }
 @Entity({ tableName: 'products' })
 export class Product {
@@ -19,7 +30,7 @@ export class Product {
   public cod_reference: string;
   @Property()
   public has_instances: boolean;
-  @Property({default:0})
+  @Property({ default: 0 })
   public current_price: number;
   @ManyToOne({ entity: () => ProductCategory, fieldName: 'category_id' })
   public category!: IdentifiedReference<ProductCategory>;
@@ -29,7 +40,7 @@ export class Product {
   public created_at = new Date();
   @Property({ onUpdate: () => new Date() })
   public updated_at = new Date();
-  @Property({default:null})
+  @Property({ default: null })
   public deleted_at?: Date;
   constructor(container: productContainer) {
     this.id = container.id ? container.id : v4();
@@ -37,16 +48,25 @@ export class Product {
     this.category = Reference.create(container.category);
     this.name = container.name;
     this.has_instances = container.has_instances;
+    this.current_price = container.current_price;
   }
   static build = ({
     id,
     category,
     cod_reference,
     name,
-    has_instances
+    has_instances,
+    current_price,
   }: productContainer): Product => {
     if (id && !validate(id)) throw new Error(`invalid uuid`);
-    return new Product({ id, category, cod_reference, name, has_instances });
+    return new Product({
+      id,
+      category,
+      cod_reference,
+      name,
+      has_instances,
+      current_price,
+    });
   };
 
   // public toJSON = () => {
@@ -61,7 +81,7 @@ export class Product {
   //     deleted_at:this.deleted_at ? this.deleted_at : null
   //   }
   // }
-    // @OneToOne(() => ProductStocks, stock => stock.product, {
+  // @OneToOne(() => ProductStocks, stock => stock.product, {
   //   mappedBy: 'product',
   //   serializer: value => value.quatity,
   //   serializedName: 'quantity',

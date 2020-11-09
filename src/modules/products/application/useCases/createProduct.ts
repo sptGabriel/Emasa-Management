@@ -1,4 +1,3 @@
-import { ProductStocks } from '@modules/products/domain/stock.entity';
 import { IProductCategoryRepository } from '@modules/products/persistence/productCategoryRepository';
 import { ProductCategoryRepository } from '@modules/products/persistence/productCategoryRepositoryImpl';
 import { IProductRepository } from '@modules/products/persistence/productRepository';
@@ -18,23 +17,34 @@ export class CreateProductUseCase
     @inject(ProductRepository)
     private productRepository: IProductRepository,
   ) {}
-  public execute = async (
-    request: CreateProductDTO,
-  ): Promise<Either<AppError, Product>> => {
-    if(typeof request.current_price !== 'number'){
+  public execute = async ({
+    category_id,
+    cod_reference,
+    current_price,
+    has_instances,
+    name,
+  }: CreateProductDTO): Promise<Either<AppError, Product>> => {
+    if (typeof current_price !== 'number') {
       return left(new Error('invalid current_price dont Exists.'));
     }
-    if (typeof request.has_instances !== 'boolean'){
+    if (typeof has_instances !== 'boolean') {
       return left(new Error('invalid has_instace dont Exists.'));
     }
-    const hasCategory = await this.categoryRepository.byId(request.category_id);
-    if (!hasCategory) return left(new Error('Category dont Exists.'));
+    const category = await this.categoryRepository.byId(category_id);
+    if (!category) return left(new Error('Category dont Exists.'));
     const hasProduct = await this.productRepository.byCodReference(
-      request.cod_reference,
+      cod_reference,
     );
     if (hasProduct) return left(new Error('Product Already Exists.'));
-    const product = await this.productRepository.create(Product.build(request));
-    const productPersistence = await this.productRepository.create(product);
-    return right(productPersistence);
+    const product = await this.productRepository.create(
+      Product.build({
+        category,
+        cod_reference,
+        has_instances,
+        name,
+        current_price,
+      }),
+    );
+    return right(product);
   };
 }

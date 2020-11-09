@@ -19,10 +19,10 @@ export class Migration20201102135901 extends Migration {
               .onDelete('CASCADE');
             table
               .uuid('stock_id')
+              .references('product_stocks.id')
               .onUpdate('CASCADE')
               .onDelete('NO ACTION')
-              .notNullable()
-              .references('product_stocks.id');
+              .notNullable();
             table
               .uuid('employee_id')
               .notNullable()
