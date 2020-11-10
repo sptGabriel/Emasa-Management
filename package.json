@@ -7,7 +7,7 @@
     "release": "standard",
     "commit": "cz",
     "build": "babel src --extensions \".js,.ts\" --out-dir dist --copy-files --no-copy-ignored",
-    "start:dev": "ts-node-dev --inspect --respawn --transpile-only --ignore-watch node_modules -r tsconfig-paths/register src/shared/infra/http/index.ts",
+    "start:dev": "ts-node-dev --inspect --respawn --transpile-only --ignore-watch node_modules -r tsconfig-paths/register src/shared/infra/index.ts",
     "start:debug": "node start --debug --watch",
     "start:prod": "node dist/index.ts",
     "test": "jest",
