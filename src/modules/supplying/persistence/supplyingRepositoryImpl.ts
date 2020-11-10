@@ -2,52 +2,50 @@ import { wrap } from '@mikro-orm/core';
 import { EntityRepository, EntityManager } from '@mikro-orm/postgresql';
 import { ProductStocks } from '@modules/products/domain/stock.entity';
 import { Pagination } from '@shared/core/pagination';
+import { IBootstrap } from '@shared/infra/bootstrap';
 import { inject, injectable } from 'tsyringe';
 import { Supply } from '../domain/supplying.entity';
 import { ISupplyingRepository } from './supplyingRepository';
 @injectable()
 export class SupplyingRepository implements ISupplyingRepository {
-  private supplyingRepository: EntityRepository<Supply>;
-  constructor(@inject('EntityManager') private entityManager: EntityManager) {
-    this.supplyingRepository = entityManager.fork().getRepository(Supply);
+  private em: EntityManager;
+  constructor(@inject('bootstrap') bootstrap: IBootstrap) {
+    this.em = bootstrap.getDatabaseORM().getConnection().em.fork();
   }
   public create = async (
     supplying: Supply,
     stock: ProductStocks[],
   ): Promise<Supply> => {
     if (!(supplying instanceof Supply)) throw new Error(`Invalid Data Type`);
-    await this.entityManager.begin();
+    await this.em.begin();
     try {
-      await this.supplyingRepository.persist(supplying);
-      await this.entityManager
-        .fork()
-        .createQueryBuilder(ProductStocks)
-        .insert(stock)
-      await this.entityManager.commit();
+      await this.em.persist(supplying);
+      await this.em.fork().createQueryBuilder(ProductStocks).insert(stock);
+      await this.em.commit();
       return supplying;
     } catch (e) {
       console.log(e);
-      await this.entityManager.rollback();
+      await this.em.rollback();
       throw e;
     }
   };
   public update = async (id: string, data: any): Promise<Supply> => {
-    const supplying = await this.supplyingRepository.findOne({ id });
+    const supplying = await this.em.findOne(Supply, id);
     if (!supplying) throw new Error(`${data.matricula} dont exists`);
     wrap(supplying).assign(data);
-    await this.supplyingRepository.persist(data).flush();
+    await this.em.persist(data).flush();
     return supplying;
   };
   public all = async (pagination: Pagination): Promise<Supply[]> => {
-    return await this.supplyingRepository.findAll();
+    return await this.em.find(Supply, {});
   };
   public byId = async (id: string): Promise<Supply | undefined> => {
-    const supplying = await this.supplyingRepository.findOne({ id });
+    const supplying = await this.em.findOne(Supply, id);
     if (!supplying) return;
     return supplying;
   };
   public byContract = async (id: string): Promise<Supply | undefined> => {
-    const supplying = await this.supplyingRepository.findOne({
+    const supplying = await this.em.findOne(Supply, {
       contract: { id },
     });
     if (!supplying) return;

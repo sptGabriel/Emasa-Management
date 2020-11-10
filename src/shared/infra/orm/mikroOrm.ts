@@ -5,15 +5,17 @@ import {
   MikroORM,
   Options,
 } from '@mikro-orm/core';
+import { PostgreSqlDriver } from '@mikro-orm/postgresql';
 import { IDatabaseORM } from './orm.contract';
 import { container, inject, injectable } from 'tsyringe';
-import ORMConfig from '@config/mikro.config'
 import chalk from 'chalk';
 @injectable()
 export class MikroOrmClient implements IDatabaseORM {
-  private connection: MikroORM<IDatabaseDriver<Connection>>;
-  constructor(@inject('OrmConfig') private options: Options) {}
-  public getConnection = (): MikroORM<IDatabaseDriver<Connection>> => {
+  private connection: MikroORM<PostgreSqlDriver>;
+  constructor(
+    @inject('OrmConfig') private options: Options<PostgreSqlDriver>,
+  ) {}
+  public getConnection = (): MikroORM<PostgreSqlDriver> => {
     return this.connection;
   };
   public close(): void {
@@ -26,10 +28,7 @@ export class MikroOrmClient implements IDatabaseORM {
   public start = async () => {
     try {
       this.connection = await MikroORM.init(this.options);
-      container.registerInstance(
-        'Connection',
-        this.getConnection(),
-      );
+      container.registerInstance('Connection', this.getConnection());
       container.registerInstance<EntityManager>(
         'EntityManager',
         this.getEntityManager(),

@@ -2,6 +2,7 @@ import dotenv, { DotenvConfigOutput } from 'dotenv';
 import { LoadStrategy, MikroORM, Options } from '@mikro-orm/core';
 import { TsMorphMetadataProvider } from '@mikro-orm/reflection/TsMorphMetadataProvider';
 import path from 'path';
+import { PostgreSqlDriver } from '@mikro-orm/postgresql';
 const configResult: DotenvConfigOutput = dotenv.config();
 if (configResult.error) {
   throw configResult.error;
@@ -23,7 +24,7 @@ export default {
     transactional: true,
   },
   password: 'emasa03210',
-  port: 5433,
+  port: 5432,
   tsNode: process.env.APP_ENV === 'development',
   user: 'emasa',
-} as Options;
+} as Options<PostgreSqlDriver>;
