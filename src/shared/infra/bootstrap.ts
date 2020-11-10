@@ -1,8 +1,14 @@
 import chalk from "chalk";
-import { inject, injectable, singleton } from "tsyringe";
-import { IDatabaseORM, MikroOrmClient } from "../orm";
-import { ExpressServer } from "./httpServer";
-import { IHttpServer } from "./server.contract";
+import { delay, inject, injectable, singleton } from "tsyringe";
+import { IDatabaseORM, MikroOrmClient } from "./orm";
+import { ExpressServer } from "./http/httpServer";
+import { IHttpServer } from "./http/server.contract";
+
+export interface IBootstrap {
+  getHttpServer(): IHttpServer;
+  getDatabaseORM():IDatabaseORM
+  start():void
+}
 
 export interface BootStrapContainer {
   getHttpServer(): IHttpServer;
