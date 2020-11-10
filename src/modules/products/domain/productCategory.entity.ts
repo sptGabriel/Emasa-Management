@@ -1,23 +1,18 @@
 import {
   Collection,
   Entity,
-  IdentifiedReference,
   ManyToOne,
   OneToMany,
   PrimaryKey,
   Property,
-  Reference,
-  Unique,
 } from '@mikro-orm/core';
 import { v4, validate } from 'uuid';
 import { Product } from './product.entity';
-
 interface categoryContainer {
   id?: string;
   name: string;
   parent?: ProductCategory | null;
 }
-
 @Entity({ tableName: 'product_categories' })
 export class ProductCategory {
   @PrimaryKey()
@@ -26,7 +21,7 @@ export class ProductCategory {
     nullable: true,
     fieldName: 'parent_id',
   })
-  public parent: ProductCategory;
+  public parent!: ProductCategory;
   @Property()
   public name: string;
   @OneToMany(() => Product, product => product.category)

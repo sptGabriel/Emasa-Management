@@ -20,9 +20,9 @@ export interface SuppliedProductsProps {
 @Entity({ tableName: 'supplied_products' })
 export class SuppliedProducts {
   @ManyToOne(() => Product,{ primary: true, fieldName:'product_id' })
-  public product: Product;
+  public product!: Product;
   @ManyToOne(() => Supply,{ primary: true, fieldName:'supply_id' })
-  public supply: Supply;
+  public supply!: Supply;
   @Property()
   public unit_price: number;
   @Property()
@@ -43,8 +43,6 @@ export class SuppliedProducts {
   public static build = (
     {supply,quantity,product, unit_price}:SuppliedProductsProps
   ): SuppliedProducts => {
-    if (!(supply instanceof Supply)) throw new Error(`Invalid Supply Type`);
-    if (!(product instanceof Product)) throw new Error(`Invalid Product Type`);
     return new SuppliedProducts({product, supply, quantity, unit_price});
   };
 }

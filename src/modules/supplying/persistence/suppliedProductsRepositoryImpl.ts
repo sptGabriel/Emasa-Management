@@ -2,7 +2,7 @@ import { wrap } from '@mikro-orm/core';
 import { EntityRepository, EntityManager } from '@mikro-orm/postgresql';
 import { Pagination } from '@shared/core/pagination';
 import { inject, injectable } from 'tsyringe';
-import { SuppliedProducts } from '../domain/SuppliedProducts.entity';
+import { SuppliedProducts } from '../domain/suppliedProducts.entity';
 import { ISuppliedProductsRepository } from './suppliedProductsRepository';
 @injectable()
 export class SuppliedProductsRepository implements ISuppliedProductsRepository {
@@ -19,7 +19,7 @@ export class SuppliedProductsRepository implements ISuppliedProductsRepository {
     supply_id: string,
     data: any,
   ): Promise<SuppliedProducts> => {
-    const suppliedProducts = await this.repository.findOne({supply_id})
+    const suppliedProducts = await this.repository.findOne({a})
     if(!suppliedProducts) throw new Error(`${data.matricula} dont exists`)
     wrap(suppliedProducts).assign(data)
     await this.repository.persist(data).flush();

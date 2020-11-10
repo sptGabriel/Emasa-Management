@@ -5,7 +5,9 @@ import { ProductRepository } from '@modules/products/persistence/productReposito
 import { Either, left, right } from '@shared/core/either';
 import { IUseCase } from '@shared/core/useCase';
 import { AppError } from '@shared/errors/BaseError';
+import { port } from 'envalid';
 import { inject, injectable } from 'tsyringe';
+import { couldStartTrivia } from 'typescript';
 import { Product } from '../../domain/product.entity';
 import { CreateProductDTO } from '../dtos/createProduct_DTO';
 @injectable()

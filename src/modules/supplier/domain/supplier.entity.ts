@@ -1,5 +1,12 @@
 import { Entity, PrimaryKey, Property, Unique } from '@mikro-orm/core';
 import { v4, validate } from 'uuid';
+interface supplierContainer {
+  id?: string;
+  cnpj: string;
+  supplier_name: string;
+  supplier_email: string;
+  description: string;
+}
 @Entity({ tableName: 'suppliers' })
 export class Supplier {
   @PrimaryKey()
@@ -13,24 +20,26 @@ export class Supplier {
   @Property()
   public description: string;
   @Property()
-  public createdAt = new Date();
+  public created_at = new Date();
   @Property({ onUpdate: () => new Date() })
-  public updatedAt = new Date();
+  public updated_at = new Date();
   @Property()
   public deletedAt?: Date;
-  constructor(
-    props: Omit<Supplier, 'id' | 'updatedAt' | 'createdAt'>,
-    id?: string,
-  ) {
-    Object.assign(this, props);
-    if (!id) this.id = v4();
+  constructor(container: supplierContainer) {
+    this.id = container.id ? container.id : v4();
+    this.supplier_email = container.supplier_email;
+    this.supplier_name = container.supplier_name;
+    this.cnpj = container.cnpj;
+    this.description = container.description;
   }
-  static build = (
-    props: Omit<Supplier, 'id' | 'updatedAt' | 'createdAt'>,
-    id?: string,
-  ): Supplier => {
-    const isValidUUID = id ? validate(id) : null;
-    if (isValidUUID === false) throw new Error(`Invalid UUID V4`);
-    return new Supplier(props, id);
+  static build = ({
+    id,
+    cnpj,
+    description,
+    supplier_email,
+    supplier_name,
+  }: supplierContainer): Supplier => {
+    if (id && !validate(id)) throw new Error(`Invalid UUID V4`);
+    return new Supplier({id,supplier_name,supplier_email,description,cnpj});
   };
 }

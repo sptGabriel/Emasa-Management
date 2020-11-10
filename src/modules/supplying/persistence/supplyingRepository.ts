@@ -1,5 +1,7 @@
 import { ProductStocks } from '@modules/products/domain/stock.entity';
 import { Pagination } from '@shared/core/pagination';
+import { addStock } from '../application/dtos/createSupply_DTO';
+import { SuppliedProducts } from '../domain/suppliedProducts.entity';
 import { Supply } from '../domain/supplying.entity';
 
 export interface ISupplyingRepository {

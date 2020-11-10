@@ -1,5 +1,7 @@
+import { Contract } from '@modules/contracts/domain/contract.entity';
 import { IContractRepository } from '@modules/contracts/persistence/contractRepository';
 import { ContractRepository } from '@modules/contracts/persistence/contractRepositoryImpl';
+import { Product } from '@modules/products/domain/product.entity';
 import { ProductStocks } from '@modules/products/domain/stock.entity';
 import { IProductRepository } from '@modules/products/persistence/productRepository';
 import { ProductRepository } from '@modules/products/persistence/productRepositoryImpl';
@@ -14,10 +16,15 @@ import { AppError } from '@shared/errors/BaseError';
 import { ensure } from '@utils/ensure';
 import { inject, injectable } from 'tsyringe';
 import { Supply } from '../../domain/supplying.entity';
-import { CreateSupplyDTO, supplyingProducts } from '../dtos/createSupply_DTO';
+import {
+  addStock,
+  addSupplyDTO,
+  SupplyDTO,
+  supplyingProducts,
+} from '../dtos/createSupply_DTO';
 @injectable()
 export class CreateSupplyUseCase
-  implements IUseCase<CreateSupplyDTO, Promise<Either<AppError, Supply>>> {
+  implements IUseCase<addSupplyDTO, Promise<Either<AppError, Supply>>> {
   constructor(
     @inject(SupplierRepository)
     private supplierRepository: ISupplierRepository,
@@ -28,16 +35,52 @@ export class CreateSupplyUseCase
     @inject(ContractRepository)
     private contractsRepository: IContractRepository,
   ) {}
+  private productSupply = (
+    supply: Supply,
+    suppliedProducts: supplyingProducts[],
+    products: Product[],
+  ): SuppliedProducts[] => {
+    return suppliedProducts.map(supplied => {
+      return SuppliedProducts.build({
+        product: ensure(products.find(x => x.id == supplied.product_id)),
+        quantity: supplied.quantity,
+        supply: supply,
+        unit_price: supplied.unit_price,
+      });
+    });
+  };
+  private addStock = (supply: Supply): ProductStocks[] => {
+    return supply.suppliedProducts.getItems().map(supplied => {
+      return ProductStocks.build({
+        product: supplied.product,
+        supply: supplied.supply,
+        quantity: supplied.quantity,
+      });
+    });
+  };
+  private addSupply = async (
+    supplyData: SupplyDTO,
+    suppliedProducts: supplyingProducts[],
+    contract: Contract,
+    products: Product[],
+  ) => {
+    const supply = Supply.build(supplyData, contract);
+    supply.suppliedProducts.set(
+      this.productSupply(supply, suppliedProducts, products),
+    );
+    const stock = this.addStock(supply);
+    return await this.supplyingRepository.create(supply, stock);
+  };
   private validateProducts = async (suppliedProducts: supplyingProducts[]) => {
     const ids = suppliedProducts.map(supplied => supplied.product_id);
-    const hasProducts = await this.productsRepository.byArray(ids)
-    if (hasProducts.length !== ids.length)  throw new Error('tratar error.');
-    return hasProducts
+    const hasProducts = await this.productsRepository.byArray(ids);
+    if (hasProducts.length !== ids.length) throw new Error('tratar error.');
+    return hasProducts;
   };
   public execute = async ({
     supply,
     suppliedProducts,
-  }: CreateSupplyDTO): Promise<Either<AppError, Supply>> => {
+  }: addSupplyDTO): Promise<Either<AppError, Supply>> => {
     const hasContract = await this.contractsRepository.byId(supply.contract_id);
     if (!hasContract) return left(new Error('Contract dont Exists.'));
     const hasSupplier = await this.supplierRepository.byId(supply.supplier_id);
@@ -51,24 +94,12 @@ export class CreateSupplyUseCase
       );
     }
     const hasProducts = await this.validateProducts(suppliedProducts);
-    const supplyResult = Supply.build(supply, hasContract);
-    supplyResult.suppliedProducts.set(
-      suppliedProducts.map(supplied => {
-        return SuppliedProducts.build({
-          product: ensure(hasProducts.find(x => x.id == supplied.product_id)),
-          quantity: supplied.quantity,
-          supply: supplyResult,
-          unit_price: supplied.unit_price
-        });
-      }),
+    const supplying = await this.addSupply(
+      supply,
+      suppliedProducts,
+      hasContract,
+      hasProducts,
     );
-    const stock = supplyResult.suppliedProducts.getItems().map((supplied) => {
-      return ProductStocks.build({
-        quantity: supplied.quantity,
-        supply: supplied.supply,
-        product: supplied.product,
-    })})
-    const provided = await this.supplyingRepository.create(supplyResult,stock);
-    return right(provided);
+    return right(supplying);
   };
 }

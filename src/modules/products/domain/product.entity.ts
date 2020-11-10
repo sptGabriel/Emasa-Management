@@ -33,7 +33,7 @@ export class Product {
   @Property({ default: 0 })
   public current_price: number;
   @ManyToOne({ entity: () => ProductCategory, fieldName: 'category_id' })
-  public category!: IdentifiedReference<ProductCategory>;
+  public category!:ProductCategory;
   @OneToMany(() => ProductStocks, stock => stock.product)
   public stock = new Collection<ProductStocks>(this);
   @Property()
@@ -45,7 +45,7 @@ export class Product {
   constructor(container: productContainer) {
     this.id = container.id ? container.id : v4();
     this.cod_reference = container.cod_reference;
-    this.category = Reference.create(container.category);
+    this.category = container.category;
     this.name = container.name;
     this.has_instances = container.has_instances;
     this.current_price = container.current_price;

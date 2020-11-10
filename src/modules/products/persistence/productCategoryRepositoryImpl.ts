@@ -31,7 +31,7 @@ export class ProductCategoryRepository implements IProductCategoryRepository {
   public byId = async (id: string): Promise<ProductCategory | undefined> => {
     const category = await this.repository.findOne(
       { id },
-      { parents: LoadStrategy.JOINED },
+      { populate: {parents: LoadStrategy.JOINED, parent:LoadStrategy.JOINED} },
     );
     if (!category) return;
     return category;

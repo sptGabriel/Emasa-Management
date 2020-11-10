@@ -1,12 +1,8 @@
 import {
-  Collection,
   Entity,
-  ManyToOne,
-  OneToMany,
   OneToOne,
   PrimaryKey,
   Property,
-  Unique,
 } from '@mikro-orm/core';
 import { Supply } from '@modules/supplying/domain/supplying.entity';
 import { isString } from '@utils/isString';
@@ -27,7 +23,7 @@ export class Contract {
   @Property()
   public signature: string;
   @OneToOne(() => Supply, supply => supply.contract)
-  public supply: Supply;
+  public supply!: Supply;
   @Property()
   public createdAt = new Date();
   @Property({ onUpdate: () => new Date() })
