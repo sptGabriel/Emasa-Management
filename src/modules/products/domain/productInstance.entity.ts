@@ -10,6 +10,7 @@ import {
 import { Contract } from '@modules/contracts/domain/contract.entity';
 import { Employee } from '@modules/employees/domain/employee.entity';
 import { Product } from './product.entity';
+import { ProductStocks } from './stock.entity';
 export enum ProductTypes {
   equipament = 'equipament',
   component = 'component',
@@ -19,7 +20,7 @@ interface instanceContainer {
   patrimony_code?: string;
   type: ProductTypes;
   product: Product;
-  contract: Contract;
+  stock: ProductStocks;
   employee: Employee;
 }
 @Entity({ tableName: 'product_instances' })
@@ -31,13 +32,13 @@ export class ProductInstance {
   @Enum()
   public type: ProductTypes;
   @ManyToOne(() => Product, { fieldName: 'product_id' })
-  public product: Product;
-  @ManyToOne(() => Contract, { fieldName: 'contract_id' })
-  public contract: Contract;
+  public product!: Product;
+  @ManyToOne(() => ProductStocks, { fieldName: 'stock_id' })
+  public stock!: ProductStocks;
   @ManyToOne(() => Employee, { fieldName: 'employee_id' })
-  public employee: Employee;
+  public employee!: Employee;
   @ManyToOne({ entity: () => ProductInstance })
-  public parent = ProductInstance;
+  public parent!: ProductInstance;
   @OneToMany({
     entity: () => ProductInstance,
     mappedBy: 'parent',
@@ -56,7 +57,7 @@ export class ProductInstance {
     this.patrimony_code = container.patrimony_code;
     this.type = ProductTypes[container.type];
     this.employee = container.employee;
-    this.contract = container.contract;
+    this.stock = container.stock;
     this.product = container.product;
   }
 

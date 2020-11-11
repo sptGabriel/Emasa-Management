@@ -1,6 +1,10 @@
 import { Pagination } from '@shared/core/pagination';
 import { ProductStocks } from '../domain/stock.entity';
 export interface IProductStocksRepository {
+  byContractAndProduct(
+    contract_id: string,
+    product_id: string,
+  ): Promise<ProductStocks | undefined>;
   /**
    * @param {Pagination} pagination
    * @returns {Promise<[Product[] , number]>}
