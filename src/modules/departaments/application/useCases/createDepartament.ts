@@ -1,4 +1,3 @@
-import { RequestContext } from '@mikro-orm/core';
 import { IDepartamentRepository } from '@modules/departaments/persistence/departamentRepository';
 import { DepartamentRepository } from '@modules/departaments/persistence/departamentRepositoryImpl';
 import { Either, left, right } from '@shared/core/either';
@@ -14,7 +13,8 @@ export class CreateDepartamentUseCase
   constructor(
     @inject(DepartamentRepository)
     private departamentRepository: IDepartamentRepository,
-  ) {}
+  ) {
+  }
   public execute = async (
     request: CreateDepartamentDTO,
   ): Promise<Either<AppError, Departament>> => {

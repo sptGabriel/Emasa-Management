@@ -21,7 +21,7 @@ export class DepartamentRepository implements IDepartamentRepository {
     const departament = await this.em.findOne(Departament, id);
     if (!departament) throw new Error(`${data.departament_name} dont exists`);
     wrap(departament).assign(data);
-    await this.repository.persist(departament).flush();
+    await this.em.persist(departament).flush();
     return departament;
   };
   public all = async (pagination: Pagination): Promise<Departament[]> => {
