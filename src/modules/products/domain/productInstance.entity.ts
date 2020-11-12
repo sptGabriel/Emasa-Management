@@ -12,7 +12,7 @@ import { Employee } from '@modules/employees/domain/employee.entity';
 import { Product } from './product.entity';
 import { ProductStocks } from './stock.entity';
 export enum ProductTypes {
-  equipament = 'equipament',
+  equipment = 'equipment',
   component = 'component',
 }
 interface instanceContainer {
