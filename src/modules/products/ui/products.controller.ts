@@ -1,12 +1,12 @@
 import { BaseController } from '@shared/core/baseController';
 import { NextFunction, Request, Response } from 'express';
 import { container, singleton } from 'tsyringe';
-import { AssignProductDTO } from '../application/dtos/assignProduct_DTO';
-import { CreateProductCategoryDTO } from '../application/dtos/createProductCategory_DTO';
-import { CreateProductDTO } from '../application/dtos/createProduct_DTO';
-import { AssignProductUseCase } from '../application/useCases/assignProduct';
-import { CreateProductUseCase } from '../application/useCases/createProduct';
-import { CreateProductCategoryUseCase } from '../application/useCases/createProductCategory';
+import { AssignProductDTO } from '../application/useCases/assignProduct/assignProduct_DTO';
+import { CreateProductCategoryDTO } from '../application/useCases/addProductCategory/createProductCategory_DTO';
+import { CreateProductDTO } from '../application/useCases/addProduct/createProduct_DTO';
+import { AssignProductUseCase } from '../application/useCases/assignProduct/assignProduct';
+import { CreateProductUseCase } from '../application/useCases/addProduct/createProduct';
+import { CreateProductCategoryUseCase } from '../application/useCases/addProductCategory/createProductCategory';
 @singleton()
 export class ProductsController extends BaseController {
   constructor() {

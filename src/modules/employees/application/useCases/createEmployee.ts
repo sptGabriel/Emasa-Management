@@ -17,26 +17,26 @@ export class CreateEmployeeUseCase
     @inject(DepartamentRepository)
     private departamentRepository: IDepartamentRepository,
   ) {}
-  public execute = async (
-    request: CreateEmployeeDTO,
-  ): Promise<Either<AppError, Employee>> => {
-    if (!(request.position in Positions)) throw new Error('Invalid position');
-    const hasEmployee = await this.employeeRepository.byMatricula(
-      request.matricula,
-    );
-    if (hasEmployee) {
-      return left(new Error(`${request.matricula} already exists`));
-    }
-    const hasDepartament = await this.departamentRepository.byId(
-      request.departament_id,
-    );
-    if (!hasDepartament) {
-      return left(
-        new Error(`Departament with: ${request.departament_id} dont exists`),
-      );
-    }
+  public execute = async ({
+    position,
+    last_name,
+    first_name,
+    matricula,
+    departament_id,
+  }: CreateEmployeeDTO): Promise<Either<AppError, Employee>> => {
+    if (!(position in Positions)) throw new Error('Invalid position');
+    const hasEmployee = await this.employeeRepository.byMatricula(matricula);
+    if (hasEmployee) left(new Error(`${matricula} already exists`));
+    const departament = await this.departamentRepository.byId(departament_id);
+    if (!departament) throw new Error(`Departament  dont exists`);
     const employee = await this.employeeRepository.create(
-      Employee.build(request),
+      Employee.build({
+        matricula,
+        first_name,
+        last_name,
+        position,
+        departament,
+      }),
     );
     return right(employee);
   };

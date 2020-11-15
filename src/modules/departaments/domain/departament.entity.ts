@@ -1,4 +1,5 @@
-import { Entity, PrimaryKey, Property, Unique } from '@mikro-orm/core';
+import { Collection, Entity, OneToMany, PrimaryKey, Property, Unique } from '@mikro-orm/core';
+import { Employee } from '@modules/employees/domain/employee.entity';
 import { isString } from '@utils/isString';
 import { v4,validate } from 'uuid';
 @Entity({ tableName: 'departaments' })
@@ -8,6 +9,8 @@ export class Departament {
   @Property()
   @Unique({ name: 'name' })
   public departament_name: string;
+  @OneToMany(() => Employee, employee => employee.departament)
+  public employees = new Collection<Employee>(this);
   @Property()
   public createdAt = new Date();
   @Property({ onUpdate: () => new Date() })

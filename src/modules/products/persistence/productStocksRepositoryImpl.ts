@@ -18,8 +18,8 @@ export class ProductStocksRepository implements IProductStocksRepository {
     product_id: string,
     quantity: number,
   ): Promise<ProductStocks> => {
-    const queryBuilder = this.em.createQueryBuilder(ProductStocks);
-    const stock = queryBuilder
+    const queryBuilder = await this.em.createQueryBuilder(ProductStocks);
+    const stock = await queryBuilder
       .update({ quantity: queryBuilder.raw(`quantity + ${quantity}`) })
       .where({ product_id })
       .getResult()

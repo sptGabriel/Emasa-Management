@@ -18,6 +18,11 @@ export interface IEmployeeRepository {
      * @param {string} matricula
      * @returns {Promise<Employee>}
      */
+    getEmployeeDepartament(matricula: string): Promise<Employee | undefined>;
+        /**
+     * @param {string} matricula
+     * @returns {Promise<Employee>}
+     */
     byMatricula(matricula: string): Promise<Employee | undefined>;
         /**
      * @param {string} employeeProps

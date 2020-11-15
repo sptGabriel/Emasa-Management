@@ -1,11 +1,10 @@
-import { RequestContext, wrap } from '@mikro-orm/core';
 import { ProductCategoryRepository } from '@modules/products/persistence/productCategoryRepositoryImpl';
 import { Either, left, right } from '@shared/core/either';
 import { IUseCase } from '@shared/core/useCase';
 import { AppError } from '@shared/errors/BaseError';
 import { inject, injectable } from 'tsyringe';
-import { ProductCategory } from '../../domain/productCategory.entity';
-import { CreateProductCategoryDTO } from '../dtos/createProductCategory_DTO';
+import { ProductCategory } from '@modules/products/domain/productCategory.entity';
+import { CreateProductCategoryDTO } from './createProductCategory_DTO';
 @injectable()
 export class CreateProductCategoryUseCase
   implements

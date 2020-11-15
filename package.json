@@ -71,7 +71,9 @@
     "helmet": "^4.1.1",
     "pg": "^8.4.2",
     "reflect-metadata": "^0.1.13",
+    "tiny-types": "^1.15.0",
     "tsyringe": "^4.3.0",
+    "typescript-optional": "^2.0.1",
     "uuid": "^8.3.1"
   },
   "husky": {

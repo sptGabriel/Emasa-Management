@@ -1,16 +1,16 @@
 import { Dictionary } from '../dictionary';
 import { Command } from './command';
 export type Type<T = unknown> = new (...arguments_: readonly any[]) => T;
-export abstract class CommandBus {
+
+export class CommandBus{
   private handlers: { [k: string]: Command } = {};
-  constructor(...params: Command[]) {
+  constructor(...params: Type<Command>[]) {
     params.forEach(command => {
-      if (!command.getName()) return;
-      this.handlers[command.getName()] = command;
+      this.handlers[command.name] = command.prototype;
     });
   }
 
-  protected registerCommand = (command: Type<Command>): void => {
+  protected registerCommand = async (command: Type<Command>) => {
     if (!command.name) return;
     const hasCommand = this.handlers[command.name];
     if (hasCommand) throw new Error(`Command ${command.name} already exists`);
@@ -20,7 +20,7 @@ export abstract class CommandBus {
   protected executeCommand = async (command: Type<Command>): Promise<any> => {
     const hasCommand = this.handlers[command.name];
     if (!hasCommand) throw new Error(`Command ${command.name} dont exists`);
-    return await hasCommand.execute();
+    return await this.handlers[command.name].execute();
   };
 
   protected undoCommand = async <TCommand extends Command>(

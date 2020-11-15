@@ -13,6 +13,7 @@ export default {
   metadataProvider: TsMorphMetadataProvider,
   type: 'postgresql',
   dbName: 'emasa_ti',
+  debug:true,
   // debug: process.env.NODE_ENV === 'development',
   entities: [rootDir + '/modules/**/domain/*.entity.{js,ts}'],
   host: 'localhost',

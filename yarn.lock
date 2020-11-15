@@ -6922,6 +6922,11 @@ tildify@2.0.0:
   resolved "https://registry.yarnpkg.com/tildify/-/tildify-2.0.0.tgz#f205f3674d677ce698b7067a99e949ce03b4754a"
   integrity sha512-Cc+OraorugtXNfs50hU9KS369rFXCfgGLpfCfvlc+Ud5u6VWmUQsOAa9HbTvheQdYnrdJqqv1e5oIqXppMYnSw==
 
+tiny-types@^1.15.0:
+  version "1.15.0"
+  resolved "https://registry.yarnpkg.com/tiny-types/-/tiny-types-1.15.0.tgz#ac80472b5efa41b969f08f63346e81c8f594aa07"
+  integrity sha512-4yqVgVsqjnk4p0U8mXrC2etbjaIWlcPNrmHEx/gFPhYG7zcZDivTIygGJMbLYPhm8lH3X8rWT9DUY40pkk1Swg==
+
 tmp@^0.0.33:
   version "0.0.33"
   resolved "https://registry.yarnpkg.com/tmp/-/tmp-0.0.33.tgz#6d34335889768d21b2bcda0aa277ced3b1bfadf9"
@@ -7142,6 +7147,11 @@ typedarray@^0.0.6:
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
+
+typescript-optional@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/typescript-optional/-/typescript-optional-2.0.1.tgz#1dd4826bd751f78756e7eb3f96a16fbbeb3f7ee6"
+  integrity sha512-xuwmqsCjE4OeeMKxbNX3jjNcISGzYh5Q9R1rM5OyxEVNIr94CB5llCkfKW+1nZTKbbUV0axN3QAUuX2fus/DhQ==
 
 typescript@^4.0.5, typescript@~4.0.2:
   version "4.0.5"

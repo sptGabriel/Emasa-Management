@@ -15,7 +15,7 @@ export interface IProductInstanceRepository {
    * @param {number} id[]
    * @returns {Promise<ProductInstance[] | undefined >}
    */
-  hasInstance(product_id:string, employee:string): Promise<boolean>;
+  hasInstance(product_id:string, matricula:string): Promise<boolean>;
   /**
    * @param {number} id
    * @returns {Promise<ProductInstance>}
@@ -26,6 +26,11 @@ export interface IProductInstanceRepository {
    * @returns {Promise<ProductInstance>}
    */
   bySN(serial_number: string): Promise<ProductInstance | undefined>;
+      /**
+   * @param {number} id
+   * @returns {Promise<ProductInstance>}
+   */
+  byPatrimony(patrimony_code: string): Promise<ProductInstance | undefined>;
   /**
    * @param {string} ProductInstanceProps
    * @returns {Promise<ProductInstance>}

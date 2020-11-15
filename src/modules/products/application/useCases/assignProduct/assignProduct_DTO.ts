@@ -6,6 +6,7 @@ export interface AssignProductDTO {
   product_id: string;
   contract_id: string;
   matricula: string;
-  parent_id: string;
+  departament_id:string | null;
+  patrimony_parent: string | null;
   type: ProductTypes;
 }

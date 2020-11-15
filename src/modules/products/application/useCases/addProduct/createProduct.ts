@@ -5,11 +5,9 @@ import { ProductRepository } from '@modules/products/persistence/productReposito
 import { Either, left, right } from '@shared/core/either';
 import { IUseCase } from '@shared/core/useCase';
 import { AppError } from '@shared/errors/BaseError';
-import { port } from 'envalid';
 import { inject, injectable } from 'tsyringe';
-import { couldStartTrivia } from 'typescript';
-import { Product } from '../../domain/product.entity';
-import { CreateProductDTO } from '../dtos/createProduct_DTO';
+import { Product } from '@modules/products/domain/product.entity';
+import { CreateProductDTO } from './createProduct_DTO';
 @injectable()
 export class CreateProductUseCase
   implements IUseCase<CreateProductDTO, Promise<Either<AppError, Product>>> {
