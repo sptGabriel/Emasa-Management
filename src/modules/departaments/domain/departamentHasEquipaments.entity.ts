@@ -35,9 +35,12 @@ export class DepartamentHasComponents {
   public deletedAt?: Date;
   constructor(departament: Departament, instance: ComponentInstance) {
     this.departament = departament;
-    this.component = instance
+    this.component = instance;
   }
-  static build = (departament: Departament, instance: ComponentInstance): DepartamentHasComponents => {
+  static build = (
+    departament: Departament,
+    instance: ComponentInstance,
+  ): DepartamentHasComponents => {
     return new DepartamentHasComponents(departament, instance);
   };
 }

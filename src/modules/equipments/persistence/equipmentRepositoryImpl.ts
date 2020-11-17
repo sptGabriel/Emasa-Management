@@ -4,38 +4,68 @@ import { Pagination } from '@shared/core/pagination';
 import { IBootstrap } from '@shared/infra/bootstrap';
 import { inject, injectable } from 'tsyringe';
 import { EquipmentInstance } from '../domain/equipment.entity';
+import { ProductStocks } from '@modules/products/domain/stock.entity';
 import { IEquipmentRepository } from './equipmentRepository';
 @injectable()
-export class EquipmentRepository implements IEquipmentRepository {
+export class EquiqmentRepository implements IEquipmentRepository {
   private em: EntityManager;
   constructor(@inject('bootstrap') bootstrap: IBootstrap) {
     this.em = bootstrap.getDatabaseORM().getConnection().em.fork();
   }
-  public create = async (contract: EquipmentInstance): Promise<EquipmentInstance> => {
-    if (!(contract instanceof EquipmentInstance)) throw new Error(`Invalid Data Type`);
-    await this.em.persist(contract).flush();
-    return contract;
+  public byArray = async (ids: string[]): Promise<EquipmentInstance[]> => {
+    return await this.em.find(EquipmentInstance, { patrimony_code: ids }, [
+      'component',
+      'component.stock',
+    ]);
   };
-  public update = async (id: string, data: any): Promise<Contract> => {
-    const contract = await this.em.findOne(Contract, id);
-    if (!contract) throw new Error(`${data} dont exists`);
-    wrap(contract).assign(data);
-    await this.em.persist(contract).flush();
-    return contract;
+  public create = async (
+    instance: EquipmentInstance,
+  ): Promise<EquipmentInstance> => {
+    if (!(instance instanceof EquipmentInstance))
+      throw new Error(`Invalid Data Type`);
+    await this.em.persist(instance).flush();
+    return instance;
   };
-  public all = async (pagination: Pagination): Promise<Contract[]> => {
-    return await this.em.find(Contract, {});
+  public update = async (
+    patrimony_code: string,
+    data: any,
+  ): Promise<EquipmentInstance> => {
+    const instance = await this.em.findOne(EquipmentInstance, {
+      patrimony_code,
+    });
+    if (!instance) throw new Error(`${data.matricula} dont exists`);
+    wrap(instance).assign(data);
+    await this.em.persist(data).flush();
+    return instance;
   };
-  public byId = async (id: string): Promise<Contract | undefined> => {
-    const contract = await this.em.findOne(Contract, { id: id });
-    if (!contract) return;
-    return contract;
+  public all = async (pagination: Pagination): Promise<EquipmentInstance[]> => {
+    return await this.em.find(EquipmentInstance, {});
   };
-  public bySignature = async (
-    signature: string,
-  ): Promise<Contract | undefined> => {
-    const contract = await this.em.findOne(Contract, { signature });
-    if (!contract) return;
-    return contract;
+  public byId = async (id: string): Promise<EquipmentInstance | undefined> => {
+    const instance = await this.em.findOne(EquipmentInstance, {
+      id,
+    });
+    if (!instance) return;
+    return instance;
+  };
+  public byPatrimony = async (
+    patrimony_code: string,
+  ): Promise<EquipmentInstance | undefined> => {
+    const instance = await this.em.findOne(EquipmentInstance, {
+      patrimony_code,
+    });
+    if (!instance) return;
+    return instance;
+  };
+  public hasInstance = async (
+    product_id: string,
+    matricula: string,
+  ): Promise<boolean> => {
+    const parent = await this.em.findOne(EquipmentInstance, {
+      component: { product: { id: product_id } },
+      employee: { matricula },
+    });
+    if (!parent) return false;
+    return true;
   };
 }

@@ -27,9 +27,6 @@ export class CreateProductUseCase
     if (typeof current_price !== 'number') {
       return left(new Error('invalid current_price dont Exists.'));
     }
-    if (typeof has_instances !== 'boolean') {
-      return left(new Error('invalid has_instace dont Exists.'));
-    }
     const category = await this.categoryRepository.byId(category_id);
     if (!category) return left(new Error('Category dont Exists.'));
     const hasProduct = await this.productRepository.byCodReference(
@@ -40,7 +37,7 @@ export class CreateProductUseCase
       Product.build({
         category,
         cod_reference,
-        has_instances,
+        has_instances: has_instances ? has_instances : false,
         name,
         current_price,
       }),

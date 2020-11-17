@@ -1,37 +1,43 @@
 import {
+  Cascade,
+  Collection,
   Entity,
   ManyToOne,
+  OneToMany,
   OneToOne,
   PrimaryKey,
   Property,
+  Unique,
 } from '@mikro-orm/core';
 import { Departament } from '@modules/departaments/domain/departament.entity';
 import { Employee } from '@modules/employees/domain/employee.entity';
 import { ComponentInstance } from '@modules/products/domain/componentInstance.entity';
 import { v4, validate } from 'uuid';
+import { EquipmentHasComponents } from './equipamentHasComponents.entity';
 export interface EquipmentProps {
   id?: string;
   patrimony_code: string;
   employee: Employee;
-  departament: Departament;
   component: ComponentInstance;
 }
-@Entity({ tableName: 'equipments_instances' })
+@Entity({ tableName: 'equipments' })
 export class EquipmentInstance {
   @PrimaryKey()
   public readonly id: string;
+  @Unique({ name: 'patrimony' })
   @Property()
   public patrimony_code: string;
   @ManyToOne({ entity: () => Employee, fieldName: 'employee_id' })
   public employee!: Employee;
-  @ManyToOne({ entity: () => Departament, fieldName: 'departament_id' })
-  public departament!: Departament;
   @OneToOne(() => ComponentInstance, component => component.equipament, {
-    inversedBy: 'equipament',
+    owner: true,
     orphanRemoval: true,
+    cascade: [],
     fieldName: 'component_id',
   })
   public component: ComponentInstance;
+  @OneToMany(() => EquipmentHasComponents, equips => equips.equipment)
+  public components = new Collection<EquipmentHasComponents>(this);
   @Property()
   public createdAt = new Date();
   @Property({ onUpdate: () => new Date() })
@@ -42,21 +48,18 @@ export class EquipmentInstance {
   constructor(container: EquipmentProps) {
     this.id = container.id ? container.id : v4();
     this.patrimony_code = container.patrimony_code;
-    this.departament = container.departament;
     this.employee = container.employee;
     this.component = container.component;
   }
 
   static build = ({
     id,
-    departament,
     employee,
     patrimony_code,
     component,
   }: EquipmentProps): EquipmentInstance => {
     if (id && !validate(id)) throw new Error(`Invalid UUID V4`);
     return new EquipmentInstance({
-      departament,
       id,
       employee,
       patrimony_code,

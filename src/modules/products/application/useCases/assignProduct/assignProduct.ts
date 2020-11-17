@@ -2,12 +2,9 @@ import { IDepartamentRepository } from '@modules/departaments/persistence/depart
 import { DepartamentRepository } from '@modules/departaments/persistence/departamentRepositoryImpl';
 import { IEmployeeRepository } from '@modules/employees/persistence/employeeRepository';
 import { EmployeeRepository } from '@modules/employees/persistence/employeeRepositoryImpl';
-import {
-  ProductInstance,
-  ProductTypes,
-} from '@modules/products/domain/productInstance.entity';
-import { IProductInstanceRepository } from '@modules/products/persistence/instanceRepository';
-import { ProductInstanceRepository } from '@modules/products/persistence/instanceRepositoryImpl';
+import { ComponentInstance } from '@modules/products/domain/componentInstance.entity';
+import { IComponentInstanceRepository } from '@modules/products/persistence/instanceRepository';
+import { ComponentInstanceRepository } from '@modules/products/persistence/instanceRepositoryImpl';
 import { IProductRepository } from '@modules/products/persistence/productRepository';
 import { ProductRepository } from '@modules/products/persistence/productRepositoryImpl';
 import { IProductStocksRepository } from '@modules/products/persistence/productStocksRepository';
@@ -20,7 +17,7 @@ import { AssignProductDTO } from './assignProduct_DTO';
 @injectable()
 export class AssignProductUseCase
   implements
-    IUseCase<AssignProductDTO, Promise<Either<AppError, ProductInstance>>> {
+    IUseCase<AssignProductDTO, Promise<Either<AppError, ComponentInstance>>> {
   constructor(
     @inject(EmployeeRepository)
     private employeeRepository: IEmployeeRepository,
@@ -28,8 +25,8 @@ export class AssignProductUseCase
     private departamentRepository: IDepartamentRepository,
     @inject(ProductRepository)
     private productRepository: IProductRepository,
-    @inject(ProductInstanceRepository)
-    private instanceRepository: IProductInstanceRepository,
+    @inject(ComponentInstanceRepository)
+    private productInstanceRepository: IComponentInstanceRepository,
     @inject(ProductStocksRepository)
     private stockRepository: IProductStocksRepository,
   ) {}
@@ -56,77 +53,45 @@ export class AssignProductUseCase
   };
   private validateProductInstance = async (patrimony_code: string | null) => {
     if (!patrimony_code) return null;
-    const parentInstance = await this.instanceRepository.bySN(patrimony_code);
+    const parentInstance = await this.productInstanceRepository.bySN(
+      patrimony_code,
+    );
     if (parentInstance) return parentInstance;
     throw new Error(`Parent Product doesn't exist.`);
   };
-  private validateDepartament = async (
-    depart_id: string | null,
-    type: ProductTypes,
-  ) => {
-    if (depart_id === null || type === ProductTypes['component']) return null;
-    const departament = await this.departamentRepository.byId(depart_id);
-    if (!departament) throw new Error(`Parent Product doesn't exist.`);
+  private validateDepartament = async (departament_id: string) => {
+    const departament = await this.departamentRepository.byId(departament_id);
+    if (!departament) throw new Error(`Departament doesn't exist.`);
     return departament;
   };
-
-  //   public execute = async ({
-  //   contract_id,
-  //   matricula,
-  //   patrimony_parent,
-  //   patrimony_code,
-  //   product_id,
-  //   departament_id,
-  //   serial_number,
-  //   type,
-  // }: AssignProductDTO & { type: ProductTypes }): Promise<
-  //   Either<AppError, ProductInstance>
-  // > => {
-  //   // if (!(type in ProductTypes)) throw new Error(`${type}, is invalid`);
-  //   //verify employee
-
-  //   return right(productInstance);
-  // };
-
   public execute = async ({
     contract_id,
-    matricula,
-    patrimony_parent,
-    patrimony_code,
     product_id,
     departament_id,
     serial_number,
-    type,
-  }: AssignProductDTO & { type: ProductTypes }): Promise<
-    Either<AppError, ProductInstance>
-  > => {
+  }: AssignProductDTO): Promise<Either<AppError, ComponentInstance>> => {
     // if (!(type in ProductTypes)) throw new Error(`${type}, is invalid`);
-    //verify employee
-    const employee = await this.validateEmployee(matricula);
     //verify departament
-    const departament = await this.validateDepartament(departament_id, type);
+    const departament = await this.validateDepartament(departament_id);
     //verify product
     const product = await this.validateProduct(product_id);
     //verify if already exists instance
-    const hasInstance = await this.instanceRepository.bySN(serial_number);
-
-    //validate parent product instance
-    const parent = await this.validateProductInstance(patrimony_parent);
+    const hasInstance = await this.productInstanceRepository.bySN(
+      serial_number,
+    );
+    if (hasInstance) throw new Error(`instance already exists`);
     //validate stock
     const stock = await this.validateStock(contract_id, product_id);
     //verify type
-    const productInstance = await this.instanceRepository.create(
-      ProductInstance.build({
-        employee,
+    const component = await this.productInstanceRepository.create(
+      ComponentInstance.build({
         product,
         serial_number,
         stock,
-        type,
-        parent,
-        patrimony_code,
         departament,
       }),
     );
-    return right(productInstance);
+
+    return right(component);
   };
 }

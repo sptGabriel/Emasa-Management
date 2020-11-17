@@ -12,11 +12,9 @@ import { EquipmentInstance } from './equipment.entity';
 
 @Entity({ tableName: 'equipment_has_components' })
 export class EquipmentHasComponents {
-  @PrimaryKey()
-  public readonly id: string;
   @ManyToOne({
     entity: () => EquipmentInstance,
-    fieldName: 'equipament_id',
+    fieldName: 'equipment_id',
     primary: true,
   })
   public equipment!: EquipmentInstance;

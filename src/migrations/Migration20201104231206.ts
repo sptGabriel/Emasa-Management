@@ -1,22 +1,22 @@
 import { Migration } from '@mikro-orm/migrations';
-export class Migration20201102135739 extends Migration {
+export class Migration20201104231206 extends Migration {
   async up(): Promise<void> {
     return this.getKnex()
-      .schema.hasTable('withdrawal_products')
+      .schema.hasTable('equipment_has_components')
       .then(exists => {
         if (exists) return;
         return this.getKnex()
           .schema // **** udpate
-          .createTable('withdrawal_products', async table => {
+          .createTable('equipment_has_components', async table => {
             table
-              .string('serial_number')
-              .references('components.serial_number')
+              .uuid('equipment_id')
+              .references('equipments.id')
               .notNullable();
             table
-              .uuid('withdrawal_id')
-              .references('withdrawal.id')
+              .uuid('component_id')
+              .references('components.id')
               .notNullable();
-            table.primary(['serial_number', 'withdrawal_id']);
+            table.unique(['equipment_id', 'component_id']);
             table.timestamp('created_at').defaultTo(this.getKnex().fn.now());
             table.timestamp('updated_at').defaultTo(this.getKnex().fn.now());
             table.timestamp('deleted_at');
@@ -24,6 +24,6 @@ export class Migration20201102135739 extends Migration {
       });
   }
   async down(): Promise<void> {
-    return this.getKnex().schema.dropTable('withdrawal_products');
+    return this.getKnex().schema.dropTable('equipment_has_components');
   }
 }

@@ -8,7 +8,7 @@ import { CreateDepartamentUseCase } from '../application/useCases/createDepartam
 export class DepartamentController extends BaseController {
   constructor() {
     super();
-    this.path = '/departament';
+    this.path = '/departaments';
     this.initRouter();
   }
   protected initRouter() {

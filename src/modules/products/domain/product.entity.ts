@@ -1,13 +1,10 @@
 import {
   Collection,
   Entity,
-  IdentifiedReference,
   ManyToOne,
   OneToMany,
-  OneToOne,
   PrimaryKey,
   Property,
-  Reference,
 } from '@mikro-orm/core';
 import { v4, validate } from 'uuid';
 import { ProductCategory } from './productCategory.entity';
@@ -28,12 +25,12 @@ export class Product {
   public name: string;
   @Property()
   public cod_reference: string;
-  @Property()
+  @Property({ default: false })
   public has_instances: boolean;
   @Property({ default: 0 })
   public current_price: number;
   @ManyToOne({ entity: () => ProductCategory, fieldName: 'category_id' })
-  public category!:ProductCategory;
+  public category!: ProductCategory;
   @OneToMany(() => ProductStocks, stock => stock.product)
   public stock = new Collection<ProductStocks>(this);
   @Property()
