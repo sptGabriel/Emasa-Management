@@ -1,17 +1,14 @@
 import {
-  Collection,
   Entity,
-  Enum,
   ManyToOne,
-  OneToMany,
+  OneToOne,
   PrimaryKey,
   PrimaryKeyType,
   Property,
 } from '@mikro-orm/core';
-import { Contract } from '@modules/contracts/domain/contract.entity';
 import { Departament } from '@modules/departaments/domain/departament.entity';
 import { Employee } from '@modules/employees/domain/employee.entity';
-import { property } from 'tiny-types';
+import { EquipmentInstance } from '@modules/equipments/domain/equipment.entity';
 import { v4 } from 'uuid';
 import { Product } from './product.entity';
 import { ProductStocks } from './stock.entity';
@@ -22,25 +19,18 @@ export enum ProductTypes {
 interface instanceContainer {
   id?:string;
   serial_number: string;
-  patrimony_code?: string;
-  type: ProductTypes;
   product: Product;
-  stock: ProductStocks;
   employee: Employee;
-  parent: ProductInstance | null
-  departament: Departament | null;
+  equipament: EquipmentInstance;
+
 }
-@Entity({ tableName: 'product_instances' })
-export class ProductInstance {
+@Entity({ tableName: 'component_instances' })
+export class ComponentInstance {
   @PrimaryKey()
   public readonly id: string;
   @PrimaryKey()
   public readonly serial_number: string;
   [PrimaryKeyType]: [string, string];
-  @Property()
-  public patrimony_code?: string;
-  @Enum()
-  public type: ProductTypes;
   @ManyToOne(() => Product, { fieldName: 'product_id' })
   public product!: Product;
   @ManyToOne(() => ProductStocks, { fieldName: 'stock_id' })
@@ -49,14 +39,19 @@ export class ProductInstance {
   public employee!: Employee;
   @Property({persist:false})
   public departament: Departament | null;
-  @ManyToOne({ entity: () => ProductInstance, nullable:true })
-  public parent!: ProductInstance | null;
-  @OneToMany({
-    entity: () => ProductInstance,
-    mappedBy: 'parent',
-    orphanRemoval: true,
+  @OneToOne({
+    entity: () => EquipmentInstance,
+    mappedBy : 'component',
   })
-  public parents = new Collection<ProductInstance>(this);
+  public equipament: EquipmentInstance;
+  // @ManyToOne({ entity: () => ProductInstance, nullable:true })
+  // public parent!: ProductInstance | null;
+  // @OneToMany({
+  //   entity: () => ProductInstance,
+  //   mappedBy: 'parent',
+  //   orphanRemoval: true,
+  // })
+  // public parents = new Collection<ProductInstance>(this);
   @Property()
   public created_at = new Date();
   @Property({ onUpdate: () => new Date() })
@@ -67,16 +62,12 @@ export class ProductInstance {
   constructor(container: instanceContainer) {
     this.id = container.id ? container.id : v4();
     this.serial_number = container.serial_number;
-    this.patrimony_code = container.patrimony_code;
-    this.type = container.type;
-    this.employee = container.employee;
-    this.stock = container.stock;
     this.product = container.product;
-    this.departament = container.departament
-    this.parent = container.parent
+    this.equipament = container.equipament
+    this.employee = container.employee
   }
 
-  static build = (container: instanceContainer): ProductInstance => {
-    return new ProductInstance(container);
+  static build = (container: instanceContainer): ComponentInstance => {
+    return new ComponentInstance(container);
   };
 }

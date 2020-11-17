@@ -28,12 +28,12 @@ export class ProductInstanceRepository implements IProductInstanceRepository {
       const stockQueryBuilder = this.em.createQueryBuilder(ProductStocks);
       stockQueryBuilder
         .update({ quantity: stockQueryBuilder.raw(`quantity - 1`) })
-        .where({ id:instance.stock.id,product:instance.product.id }).execute();
-      if (instance.departament) {
+        .where({ id:instance.stock.id,product:instance.product_id }).execute();
+      if (instance.employee.departament) {
       await this.em
           .createQueryBuilder('departament_has_equipaments')
           .insert({
-            departament_id: instance.departament.id,
+            departament_id: instance.employee.departament.id,
             equipament_id: instance.id,
           }).getResult().catch((err)=> {console.log(err)})
       }
