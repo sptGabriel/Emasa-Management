@@ -13,10 +13,7 @@ export class EquiqmentRepository implements IEquipmentRepository {
     this.em = bootstrap.getDatabaseORM().getConnection().em.fork();
   }
   public byArray = async (ids: string[]): Promise<EquipmentInstance[]> => {
-    return await this.em.find(EquipmentInstance, { patrimony_code: ids }, [
-      'component',
-      'component.stock',
-    ]);
+    return await this.em.find(EquipmentInstance, { patrimony_code: ids });
   };
   public create = async (
     instance: EquipmentInstance,
@@ -56,6 +53,19 @@ export class EquiqmentRepository implements IEquipmentRepository {
     });
     if (!instance) return;
     return instance;
+  };
+  public bySN = async (
+    serial_number: string,
+  ): Promise<EquipmentInstance | undefined> => {
+    try {
+      const instance = await this.em.findOne(EquipmentInstance, {
+        component:{serial_number},
+      });
+      if (!instance) return;
+      return instance;
+    } catch (error) {
+      throw error
+    }
   };
   public hasInstance = async (
     product_id: string,

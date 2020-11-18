@@ -1,5 +1,6 @@
 import {
   Entity,
+  Filter,
   ManyToOne,
   OneToOne,
   PrimaryKey,
@@ -8,7 +9,6 @@ import {
   Unique,
 } from '@mikro-orm/core';
 import { Departament } from '@modules/departaments/domain/departament.entity';
-import { Employee } from '@modules/employees/domain/employee.entity';
 import { EquipmentInstance } from '@modules/equipments/domain/equipment.entity';
 import { v4 } from 'uuid';
 import { Product } from './product.entity';
@@ -20,6 +20,7 @@ interface instanceContainer {
   product: Product;
   departament: Departament;
 }
+@Filter({ name: 'componentIsEquipment', cond: args => ({ equipament: { id:{$nin: args.ids} } }) })
 @Entity({ tableName: 'components' })
 export class ComponentInstance {
   @PrimaryKey()
@@ -34,6 +35,7 @@ export class ComponentInstance {
   public stock!: ProductStocks;
   @OneToOne({
     entity: () => EquipmentInstance,
+    mappedBy: 'component'
   })
   public equipament: EquipmentInstance;
   @Property({ persist: false })

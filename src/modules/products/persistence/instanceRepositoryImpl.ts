@@ -1,4 +1,4 @@
-import { wrap } from '@mikro-orm/core';
+import { LoadStrategy, wrap } from '@mikro-orm/core';
 import { EntityManager } from '@mikro-orm/postgresql';
 import { DepartamentHasComponents } from '@modules/departaments/domain/departamentHasEquipaments.entity';
 import { Pagination } from '@shared/core/pagination';
@@ -15,10 +15,24 @@ export class ComponentInstanceRepository
     this.em = bootstrap.getDatabaseORM().getConnection().em.fork();
   }
   public byArray = async (ids: string[]): Promise<ComponentInstance[]> => {
-    return await this.em.find(ComponentInstance, { serial_number: ids }, [
-      'stock',
-    ]);
+    const qb = await this.em.createQueryBuilder(ComponentInstance, 'qb')
+    .select('qb.*').join('qb.equipments', 'eq').join('qb.equipments_has_components', 'eqhascp')
+    .where('qb.id':ids)
+    // return await this.em.find(ComponentInstance, { id: ids, equipament:{component:{id:ids}} }, {populate:{
+    // stock:LoadStrategy.JOINED,
+    // }});
   };
+  // public byArray2 = async (ids: string[]): Promise<ComponentInstance[]> => {
+  //   const array = await this.em.createQueryBuilder(ComponentInstance, 'cp')
+  //   .select(['cp.*'])
+  //   .leftJoin('eq.equipments', 'eq')
+  //   .leftJoin('eqcp.equipment_has_components', 'eqcp')
+  //   .getResult();
+  //   console.log(array)
+  //   // return await this.em.find(ComponentInstance, { id: ids, equipament:{component:{id:ids}} }, {populate:{
+  //   // stock:LoadStrategy.JOINED,
+  //   // }});
+  // };
   public create = async (
     instance: ComponentInstance,
   ): Promise<ComponentInstance> => {

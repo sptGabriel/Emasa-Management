@@ -1,6 +1,7 @@
 import { Pagination } from '@shared/core/pagination';
 import { EquipmentInstance } from '../domain/equipment.entity';
 export interface IEquipmentRepository {
+  bySN(component_sn: string):Promise<EquipmentInstance | undefined>;
   /**
    * @param {Pagination} pagination
    * @returns {Promise<[Product[] , number]>}

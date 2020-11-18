@@ -1,5 +1,5 @@
 import { Pagination } from '@shared/core/pagination';
-import { SuppliedProducts } from '../domain/SuppliedProducts.entity';
+import { SuppliedProducts } from '../domain/suppliedProducts.entity';
 
 export interface ISuppliedProductsRepository {
     /**

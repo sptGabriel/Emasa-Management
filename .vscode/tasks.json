@@ -1,0 +1,16 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "npm",
+			"script": "start:dev",
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"problemMatcher": [],
+			"label": "npm: start:dev",
+			"detail": "ts-node-dev --inspect --respawn --transpile-only --ignore-watch node_modules -r tsconfig-paths/register src/shared/infra/index.ts"
+		}
+	]
+}
