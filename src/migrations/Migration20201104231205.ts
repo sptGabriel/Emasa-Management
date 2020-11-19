@@ -8,14 +8,12 @@ export class Migration20201104231205 extends Migration {
         return this.getKnex()
           .schema // **** udpate
           .createTable('equipments', async table => {
-            table.uuid('id').notNullable().primary();
-            table.string('patrimony_code').notNullable().unique();
+            table.string('patrimony_code').notNullable().primary();
             table
               .uuid('component_id')
               .references('components.id')
-              .notNullable();
+              .notNullable().unique();
             table.uuid('employee_id').references('employees.id').notNullable();
-            table.unique(['id', 'patrimony_code']);
             table.timestamp('created_at').defaultTo(this.getKnex().fn.now());
             table.timestamp('updated_at').defaultTo(this.getKnex().fn.now());
             table.timestamp('deleted_at');

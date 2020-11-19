@@ -1,5 +1,4 @@
 import {
-  Cascade,
   Collection,
   Entity,
   ManyToOne,
@@ -9,7 +8,6 @@ import {
   Property,
   Unique,
 } from '@mikro-orm/core';
-import { Departament } from '@modules/departaments/domain/departament.entity';
 import { Employee } from '@modules/employees/domain/employee.entity';
 import { ComponentInstance } from '@modules/products/domain/componentInstance.entity';
 import { v4, validate } from 'uuid';
@@ -23,12 +21,10 @@ export interface EquipmentProps {
 @Entity({ tableName: 'equipments' })
 export class EquipmentInstance {
   @PrimaryKey()
-  public readonly id: string;
-  @Unique({ name: 'patrimony' })
-  @Property()
   public patrimony_code: string;
   @ManyToOne({ entity: () => Employee, fieldName: 'employee_id' })
   public employee!: Employee;
+  @Unique()
   @OneToOne(() => ComponentInstance, component => component.equipament, {
     owner: true,
     orphanRemoval: true,
@@ -46,7 +42,6 @@ export class EquipmentInstance {
   public deletedAt?: Date;
 
   constructor(container: EquipmentProps) {
-    this.id = container.id ? container.id : v4();
     this.patrimony_code = container.patrimony_code;
     this.employee = container.employee;
     this.component = container.component;

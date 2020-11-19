@@ -15,9 +15,19 @@ export class ComponentInstanceRepository
     this.em = bootstrap.getDatabaseORM().getConnection().em.fork();
   }
   public byArray = async (ids: string[]): Promise<ComponentInstance[]> => {
-    const qb = await this.em.createQueryBuilder(ComponentInstance, 'qb')
-    .select('qb.*').join('qb.equipments', 'eq').join('qb.equipments_has_components', 'eqhascp')
-    .where('qb.id':ids)
+    const a =  await this.em.find(
+      ComponentInstance,
+      { serial_number: ids, equipament:{component:{serial_number:ids}} },
+      {
+        populate: {
+          stock: LoadStrategy.JOINED,
+        },
+      },
+    );
+    console.log(a)
+    // const qb = await this.em.createQueryBuilder(ComponentInstance, 'qb')
+    // .select('qb.*').join('qb.equipments', 'eq').join('qb.equipments_has_components', 'eqhascp')
+    // .where('qb.id':ids)
     // return await this.em.find(ComponentInstance, { id: ids, equipament:{component:{id:ids}} }, {populate:{
     // stock:LoadStrategy.JOINED,
     // }});
@@ -89,7 +99,7 @@ export class ComponentInstanceRepository
     serial_number: string,
   ): Promise<ComponentInstance | undefined> => {
     const instance = await this.em.findOne(ComponentInstance, {
-      serial_number,
+      serial_number: serial_number,
     });
     if (!instance) return;
     return instance;

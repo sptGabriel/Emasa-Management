@@ -47,26 +47,27 @@
       matricula,
       patrimony_code,
     }: AssignEquipmentDTO): Promise<Either<AppError, EquipmentInstance>> => {
-      const hasEquipment = await this.equipmentRepository.byPatrimony(
-        patrimony_code,
-      );
-      if (hasEquipment) throw new Error(`This Equipment already exists`);
-      const employee = await this.employeeRepository.byMatricula(matricula);
-      if (!employee) throw new Error(`This employee doesn't exists`);
-      const product = await this.valideteComponent(component_sn)
-      if (!product) throw new Error(`This component product doesn't exists`);
       const hasAllComponents = await this.validateComponents(components);
-      const equipDomain = EquipmentInstance.build({
-        component: product,
-        employee,
-        patrimony_code,
-      });
-      // if (hasAllComponents && hasAllComponents.length > 0) {
-      //   equipDomain.components.set(hasAllComponents.map(component => {
-      //     return EquipmentHasComponents.build(equipDomain, component);
-      //   }))
-      // }
-      const equipment = await this.equipmentRepository.create(equipDomain);
-      return right(equipment);
+      // const hasEquipment = await this.equipmentRepository.byPatrimony(
+      //   patrimony_code,
+      // );
+      // if (hasEquipment) throw new Error(`This Equipment already exists`);
+      // const employee = await this.employeeRepository.byMatricula(matricula);
+      // if (!employee) throw new Error(`This employee doesn't exists`);
+      // const product = await this.valideteComponent(component_sn)
+      // if (!product) throw new Error(`This component product doesn't exists`);
+      // const hasAllComponents = await this.validateComponents(components);
+      // const equipDomain = EquipmentInstance.build({
+      //   component: product,
+      //   employee,
+      //   patrimony_code,
+      // });
+      // // if (hasAllComponents && hasAllComponents.length > 0) {
+      // //   equipDomain.components.set(hasAllComponents.map(component => {
+      // //     return EquipmentHasComponents.build(equipDomain, component);
+      // //   }))
+      // // }
+      // const equipment = await this.equipmentRepository.create(equipDomain);
+      // return right(equipment);
     };
   }

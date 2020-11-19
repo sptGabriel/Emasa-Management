@@ -10,8 +10,8 @@ export class Migration20201104231206 extends Migration {
           .createTable('equipment_has_components', async table => {
             table
               .uuid('equipment_id')
-              .references('equipments.id')
-              .notNullable();
+              .references('equipments.component_id')
+              .notNullable().unique();
             table
               .uuid('component_id')
               .references('components.id')
