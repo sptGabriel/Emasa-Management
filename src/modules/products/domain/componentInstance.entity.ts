@@ -1,7 +1,10 @@
 import {
+  Collection,
   Entity,
   Filter,
+  LoadStrategy,
   ManyToOne,
+  OneToMany,
   OneToOne,
   PrimaryKey,
   PrimaryKeyType,
@@ -9,6 +12,7 @@ import {
   Unique,
 } from '@mikro-orm/core';
 import { Departament } from '@modules/departaments/domain/departament.entity';
+import { EquipmentHasComponents } from '@modules/equipments/domain/equipamentHasComponents.entity';
 import { EquipmentInstance } from '@modules/equipments/domain/equipment.entity';
 import { v4 } from 'uuid';
 import { Product } from './product.entity';
@@ -20,7 +24,10 @@ interface instanceContainer {
   product: Product;
   departament: Departament;
 }
-@Filter({ name: 'componentIsEquipment', cond: args => ({ equipament: { id:{$nin: args.ids} } }) })
+@Filter({
+  name: 'componentIsEquipment',
+  cond: args => ({ equipament: { id: { $nin: args.ids } } }),
+})
 @Entity({ tableName: 'components' })
 export class ComponentInstance {
   @PrimaryKey()
@@ -28,18 +35,22 @@ export class ComponentInstance {
   @Unique({ name: 'component' })
   @Property()
   public readonly serial_number: string;
-  [PrimaryKeyType]: [string, string];
   @ManyToOne(() => Product, { fieldName: 'product_id' })
   public product!: Product;
   @ManyToOne(() => ProductStocks, { fieldName: 'stock_id' })
   public stock!: ProductStocks;
   @OneToOne({
     entity: () => EquipmentInstance,
-    mappedBy: 'component'
+    mappedBy: 'component',
+    strategy: LoadStrategy.JOINED,
   })
-  public equipament: EquipmentInstance;
+  public equipment: EquipmentInstance;
+  @OneToMany(() => EquipmentHasComponents, comp => comp.component, {
+    strategy: LoadStrategy.JOINED,
+  })
+  public equipments = new Collection<EquipmentHasComponents>(this);
   @Property({ persist: false })
-  departament?: Departament;
+  public departament?: Departament;
   @Property()
   public created_at = new Date();
   @Property({ onUpdate: () => new Date() })

@@ -10,6 +10,11 @@ export interface IComponentInstanceRepository {
    * @param {number} id[]
    * @returns {Promise<ProductInstance[] | undefined >}
    */
+  getComponents(ids: string[]): Promise<ComponentInstance[]>;
+  /**
+   * @param {number} id[]
+   * @returns {Promise<ProductInstance[] | undefined >}
+   */
   byArray(ids: string[]): Promise<ComponentInstance[]>;
   /**
    * @param {number} id[]

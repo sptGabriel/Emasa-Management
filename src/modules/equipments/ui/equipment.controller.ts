@@ -30,6 +30,7 @@ export class EquipmentsController extends BaseController {
       if (result.isLeft()) return next(result.value);
       return response.json(result.value);
     } catch (error) {
+      console.log(error);
       next(error);
     }
   };

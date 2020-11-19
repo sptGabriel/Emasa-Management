@@ -6,14 +6,38 @@ import { inject, injectable } from 'tsyringe';
 import { EquipmentInstance } from '../domain/equipment.entity';
 import { ProductStocks } from '@modules/products/domain/stock.entity';
 import { IEquipmentRepository } from './equipmentRepository';
+import { EquipmentHasComponents } from '../domain/equipamentHasComponents.entity';
 @injectable()
 export class EquiqmentRepository implements IEquipmentRepository {
   private em: EntityManager;
   constructor(@inject('bootstrap') bootstrap: IBootstrap) {
     this.em = bootstrap.getDatabaseORM().getConnection().em.fork();
   }
+  public getEquipandComponents = async (ids: string[]) => {
+    const equipments = await this.em.find(EquipmentInstance, {
+      $or: [
+        { component: { id: ids } },
+        { components: { component: { id: ids } } },
+      ],
+    });
+    console.log(equipments);
+  };
   public byArray = async (ids: string[]): Promise<EquipmentInstance[]> => {
+    return await this.em.find(
+      EquipmentInstance,
+      {
+        component: { id: ids },
+        components: { component: { id: ids } },
+      },
+      ['components'],
+    );
+  };
+  public byArray2 = async (ids: string[]): Promise<EquipmentInstance[]> => {
     return await this.em.find(EquipmentInstance, { patrimony_code: ids });
+    return await this.em.find(EquipmentInstance, {
+      component: { id: ids },
+      components: { component: { id: ids } },
+    });
   };
   public create = async (
     instance: EquipmentInstance,
@@ -59,12 +83,12 @@ export class EquiqmentRepository implements IEquipmentRepository {
   ): Promise<EquipmentInstance | undefined> => {
     try {
       const instance = await this.em.findOne(EquipmentInstance, {
-        component:{serial_number},
+        component: { serial_number },
       });
       if (!instance) return;
       return instance;
     } catch (error) {
-      throw error
+      throw error;
     }
   };
   public hasInstance = async (

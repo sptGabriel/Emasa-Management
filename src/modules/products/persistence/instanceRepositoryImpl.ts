@@ -14,17 +14,35 @@ export class ComponentInstanceRepository
   constructor(@inject('bootstrap') bootstrap: IBootstrap) {
     this.em = bootstrap.getDatabaseORM().getConnection().em.fork();
   }
-  public byArray = async (ids: string[]): Promise<ComponentInstance[]> => {
-    const a =  await this.em.find(
+  public getComponents = async (
+    sn_keys: string[],
+  ): Promise<ComponentInstance[]> => {
+    return await this.em.find(
       ComponentInstance,
-      { serial_number: ids, equipament:{component:{serial_number:ids}} },
       {
-        populate: {
-          stock: LoadStrategy.JOINED,
-        },
+        $or: [
+          { serial_number: sn_keys },
+          { equipment: { component: { serial_number: sn_keys } } },
+          { equipments: { component: { serial_number: sn_keys } } },
+        ],
       },
+      ['equipment', 'equipments'],
     );
-    console.log(a)
+  };
+  public byArray = async (ids: string[]): Promise<ComponentInstance[]> => {
+    const equipments = await this.em.find(
+      ComponentInstance,
+      {
+        $or: [
+          { serial_number: ids },
+          { equipment: { component: { serial_number: ids } } },
+          { equipments: { component: { serial_number: ids } } },
+        ],
+      },
+      ['equipment', 'equipments'],
+    );
+
+    console.log(equipments);
     // const qb = await this.em.createQueryBuilder(ComponentInstance, 'qb')
     // .select('qb.*').join('qb.equipments', 'eq').join('qb.equipments_has_components', 'eqhascp')
     // .where('qb.id':ids)
@@ -98,9 +116,13 @@ export class ComponentInstanceRepository
   public bySN = async (
     serial_number: string,
   ): Promise<ComponentInstance | undefined> => {
-    const instance = await this.em.findOne(ComponentInstance, {
-      serial_number: serial_number,
-    });
+    const instance = await this.em.findOne(
+      ComponentInstance,
+      {
+        serial_number: serial_number,
+      },
+      ['equipment', 'equipments'],
+    );
     if (!instance) return;
     return instance;
   };

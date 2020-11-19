@@ -10,7 +10,7 @@ import {
 } from '@mikro-orm/core';
 import { Employee } from '@modules/employees/domain/employee.entity';
 import { ComponentInstance } from '@modules/products/domain/componentInstance.entity';
-import { v4, validate } from 'uuid';
+import { validate } from 'uuid';
 import { EquipmentHasComponents } from './equipamentHasComponents.entity';
 export interface EquipmentProps {
   id?: string;
@@ -25,7 +25,7 @@ export class EquipmentInstance {
   @ManyToOne({ entity: () => Employee, fieldName: 'employee_id' })
   public employee!: Employee;
   @Unique()
-  @OneToOne(() => ComponentInstance, component => component.equipament, {
+  @OneToOne(() => ComponentInstance, component => component.equipment, {
     owner: true,
     orphanRemoval: true,
     cascade: [],
