@@ -70,7 +70,7 @@ export class AssignProductUseCase
     departament_id,
     serial_number,
     by_employee,
-    to_employee
+    to_employee,
   }: AssignProductDTO): Promise<Either<AppError, ComponentInstance>> => {
     // if (!(type in ProductTypes)) throw new Error(`${type}, is invalid`);
     //verify departament
@@ -84,8 +84,6 @@ export class AssignProductUseCase
     if (hasInstance) throw new Error(`instance already exists`);
     //validate stock
     const stock = await this.validateStock(contract_id, product_id);
-    //create withdrawal
-    const withdrawal = Withdrawal.build({byEmployee})
     //verify type
     const component = await this.productInstanceRepository.create(
       ComponentInstance.build({

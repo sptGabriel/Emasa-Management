@@ -12,6 +12,7 @@ import { ComponentInstanceRepository } from '@modules/products/persistence/insta
 import { IComponentInstanceRepository } from '@modules/products/persistence/instanceRepository';
 import { EquipmentHasComponents } from '@modules/equipments/domain/equipamentHasComponents.entity';
 import { Withdrawal } from '@modules/withdrawal/domain/withdrawal.entity';
+import { ComponentInstance } from '@modules/products/domain/componentInstance.entity';
 @injectable()
 export class AssignEquipmentUseCase
   implements
@@ -54,11 +55,28 @@ export class AssignEquipmentUseCase
     }
     return hasComponents;
   };
+  private valideDepartComponents = (
+    components: ComponentInstance[] | null,
+    equipment: EquipmentInstance,
+  ) => {
+    if (!components) return;
+    let invalid_serials: string[] = [];
+    for (const comp of components) {
+      if (comp.departament.id !== equipment.component.departament.id) {
+        invalid_serials.push(comp.serial_number);
+      }
+    }
+    if (invalid_serials) {
+      throw new Error(`The components do not belong to the same department`);
+    }
+  };
   public execute = async ({
     component_sn,
     components,
     matricula,
     patrimony_code,
+    by_employee,
+    to_employee,
   }: AssignEquipmentDTO): Promise<Either<AppError, EquipmentInstance>> => {
     const hasEquipment = await this.equipmentRepository.byPatrimony(
       patrimony_code,
@@ -73,6 +91,7 @@ export class AssignEquipmentUseCase
       employee,
       patrimony_code,
     });
+    await this.valideDepartComponents(hasAllComponents, equipDomain);
     if (hasAllComponents && hasAllComponents.length > 0) {
       equipDomain.components.set(
         hasAllComponents.map(component => {

@@ -17,14 +17,11 @@ import { Either, right } from '@shared/core/either';
 import { IUseCase } from '@shared/core/useCase';
 import { AppError } from '@shared/errors/BaseError';
 import { inject, injectable } from 'tsyringe';
-import { WithdrawalComponentDTO } from './withdrawalProduct_DTO';
+import { transferDTO } from './transferDTO';
 @injectable()
-export class WithdrawalComponentUseCase
+export class TransferComponentUseCase
   implements
-    IUseCase<
-      WithdrawalComponentDTO,
-      Promise<Either<AppError, WithdrawalComponents>>
-    > {
+    IUseCase<transferDTO, Promise<Either<AppError, WithdrawalComponents>>> {
   constructor(
     @inject(EmployeeRepository)
     private employeeRepository: IEmployeeRepository,
@@ -39,63 +36,59 @@ export class WithdrawalComponentUseCase
     @inject(WithdrawalRepository)
     private withdrawalRepository: IWithdrawalRepository,
   ) {}
-  private validateStock = async (contract_id: string, product_id: string) => {
-    const stock = await this.stockRepository.byContractAndProduct(
-      contract_id,
-      product_id,
-    );
-    if (stock && stock.quantity > 1) return stock;
-    if (stock && stock.quantity <= 1) {
-      throw new Error(`The stock of this product is less than or equal to 1`);
-    }
-    throw new Error(`This stock doesn't exists`);
-  };
-  private validateProduct = async (product_id: string) => {
-    const hasProduct = await this.productRepository.byId(product_id);
-    if (!hasProduct) throw new Error(`This product doesn't exist`);
-    return hasProduct;
-  };
-  private validateEmployeeOwner = async (
-    matricula: string,
-    departament_id: string,
-  ) => {
-    const employee = await this.employeeRepository.byMatricula(matricula);
-    if (!employee) {
-      throw new Error(
-        `The employee who would receive the component doesn't exist`,
-      );
-    }
-    if (employee.departament.id !== departament_id) {
-      throw new Error(
-        `The Employee does not belong to the component department`,
-      );
-    }
-    return employee;
-  };
-  private validateDepartament = async (departament_id: string) => {
-    const departament = await this.departamentRepository.byId(departament_id);
-    if (!departament) throw new Error(`Departament doesn't exist.`);
-    return departament;
-  };
+  // private validateStock = async (contract_id: string, product_id: string) => {
+  //   const stock = await this.stockRepository.byContractAndProduct(
+  //     contract_id,
+  //     product_id,
+  //   );
+  //   if (stock && stock.quantity > 1) return stock;
+  //   if (stock && stock.quantity <= 1) {
+  //     throw new Error(`The stock of this product is less than or equal to 1`);
+  //   }
+  //   throw new Error(`This stock doesn't exists`);
+  // };
+  // private validateProduct = async (product_id: string) => {
+  //   const hasProduct = await this.productRepository.byId(product_id);
+  //   if (!hasProduct) throw new Error(`This product doesn't exist`);
+  //   return hasProduct;
+  // };
+  // private validateEmployeeOwner = async (
+  //   matricula: string,
+  //   departament_id: string,
+  // ) => {
+  //   const employee = await this.employeeRepository.byMatricula(matricula);
+  //   if (!employee) {
+  //     throw new Error(
+  //       `The employee who would receive the component doesn't exist`,
+  //     );
+  //   }
+  //   if (employee.departament.id !== departament_id) {
+  //     throw new Error(
+  //       `The Employee does not belong to the component department`,
+  //     );
+  //   }
+  //   return employee;
+  // };
+  // private validateDepartament = async (departament_id: string) => {
+  //   const departament = await this.departamentRepository.byId(departament_id);
+  //   if (!departament) throw new Error(`Departament doesn't exist.`);
+  //   return departament;
+  // };
   private validateComponent = async (sn: string) => {
     const validate = await this.productInstanceRepository.bySN(sn);
-    if (!validate) return;
-    if (validate) throw new Error(`This component has already been assigned.`);
+    if (!validate) throw new Error(`This component doesn't exists.`);
+    return validate;
   };
 
   public execute = async ({
-    contract_id,
-    product_id,
-    departament_id,
-    serial_number,
-    by_employee,
-    to_employee,
-  }: WithdrawalComponentDTO): Promise<
-    Either<AppError, WithdrawalComponents>
-  > => {
+    component_sn,
+    description,
+    new_departament,
+    old_departament,
+  }: transferDTO): Promise<Either<AppError, WithdrawalComponents>> => {
     // if (!(type in ProductTypes)) throw new Error(`${type}, is invalid`);
     //verify if already exists instance
-    await this.validateComponent(serial_number);
+    const component = await this.validateComponent(component_sn);
     //verify departament
     const departament = await this.validateDepartament(departament_id);
     //validate receiver employee

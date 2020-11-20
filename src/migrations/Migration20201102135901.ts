@@ -22,6 +22,12 @@ export class Migration20201102135901 extends Migration {
               .onUpdate('CASCADE')
               .onDelete('NO ACTION')
               .notNullable();
+            table
+              .uuid('departament_id')
+              .notNullable()
+              .references('departaments.id')
+              .onUpdate('CASCADE')
+              .onDelete('NO ACTION');
             // table
             //   .uuid('employee_id')
             //   .notNullable()

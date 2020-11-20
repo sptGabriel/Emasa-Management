@@ -7,7 +7,6 @@ import {
   OneToMany,
   OneToOne,
   PrimaryKey,
-  PrimaryKeyType,
   Property,
   Unique,
 } from '@mikro-orm/core';
@@ -16,8 +15,8 @@ import { EquipmentHasComponents } from '@modules/equipments/domain/equipamentHas
 import { EquipmentInstance } from '@modules/equipments/domain/equipment.entity';
 import { WithdrawalComponents } from '@modules/withdrawal/domain/withdrawalComponents.entity';
 import { v4 } from 'uuid';
-import { Product } from './product.entity';
-import { ProductStocks } from './stock.entity';
+import { Product } from '@modules/products/domain/product.entity';
+import { ProductStocks } from '@modules/products/domain/stock.entity';
 interface instanceContainer {
   id?: string;
   serial_number: string;
@@ -25,12 +24,8 @@ interface instanceContainer {
   product: Product;
   departament: Departament;
 }
-@Filter({
-  name: 'componentIsEquipment',
-  cond: args => ({ equipament: { id: { $nin: args.ids } } }),
-})
 @Entity({ tableName: 'components' })
-export class ComponentInstance {
+export class Component {
   @PrimaryKey()
   public readonly id: string;
   @Unique({ name: 'component' })
@@ -81,7 +76,7 @@ export class ComponentInstance {
     this.departament = container.departament;
   }
 
-  static build = (container: instanceContainer): ComponentInstance => {
-    return new ComponentInstance(container);
+  static build = (container: instanceContainer): Component => {
+    return new Component(container);
   };
 }

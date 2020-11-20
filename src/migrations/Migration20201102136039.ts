@@ -1,5 +1,5 @@
 import { Migration } from '@mikro-orm/migrations';
-export class Migration20201102135739 extends Migration {
+export class Migration20201102136039 extends Migration {
   async up(): Promise<void> {
     return this.getKnex()
       .schema.hasTable('withdrawal_components')
@@ -12,7 +12,7 @@ export class Migration20201102135739 extends Migration {
               .uuid('withdrawal_id')
               .references('withdrawal.id')
               .notNullable();
-              table
+            table
               .uuid('component_id')
               .references('components.id')
               .notNullable();

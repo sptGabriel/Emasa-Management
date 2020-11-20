@@ -7,8 +7,6 @@ import { Withdrawal } from '../domain/withdrawal.entity';
 import { ProductStocks } from '@modules/products/domain/stock.entity';
 import { IWithdrawalRepository } from './withdrawalRepository';
 import { WithdrawalComponents } from '../domain/withdrawalComponents.entity';
-import { DepartamentHasComponents } from '@modules/departaments/domain/departamentHasEquipaments.entity';
-
 @injectable()
 export class WithdrawalRepository implements IWithdrawalRepository {
   private em: EntityManager;
@@ -39,16 +37,12 @@ export class WithdrawalRepository implements IWithdrawalRepository {
     await this.em.begin();
     try {
       await this.em.persist(instance).flush();
-      const departaments = await this.em
-        .createQueryBuilder(DepartamentHasComponents)
-        .insert({
-          departament_id: instance.component.departament?.id,
-          component_id: instance.component.id,
-        })
-        .execute();
       const stockQueryBuilder = this.em.createQueryBuilder(ProductStocks);
       const stock = await stockQueryBuilder
-        .update({ quantity: stockQueryBuilder.raw(`quantity - 1`) })
+        .update({
+          quantity: stockQueryBuilder.raw(`quantity - 1`),
+          updated_at: new Date(),
+        })
         .where({
           id: instance.component.stock_id,
           product: instance.component.product.id,

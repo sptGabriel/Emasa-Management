@@ -1,12 +1,11 @@
-import { LoadStrategy, wrap } from '@mikro-orm/core';
+import { wrap } from '@mikro-orm/core';
 import { EntityManager } from '@mikro-orm/postgresql';
-import { DepartamentHasComponents } from '@modules/departaments/domain/departamentHasEquipaments.entity';
 import { Pagination } from '@shared/core/pagination';
 import { IBootstrap } from '@shared/infra/bootstrap';
 import { inject, injectable } from 'tsyringe';
-import { ComponentInstance } from '../domain/componentInstance.entity';
-import { ProductStocks } from '../domain/stock.entity';
-import { IComponentInstanceRepository } from './instanceRepository';
+import { Component } from '../domain/component.entity';
+import { ProductStocks } from '@modules/products/domain/stock.entity';
+import { IComponentInstanceRepository } from './componentRepository';
 @injectable()
 export class ComponentInstanceRepository
   implements IComponentInstanceRepository {
@@ -16,9 +15,9 @@ export class ComponentInstanceRepository
   }
   public bySN2 = async (
     serial_number: string,
-  ): Promise<ComponentInstance | undefined> => {
+  ): Promise<Component | undefined> => {
     const instance = await this.em.findOne(
-      ComponentInstance,
+      Component,
       {
         serial_number: serial_number,
       },
@@ -27,11 +26,9 @@ export class ComponentInstanceRepository
     if (!instance) return;
     return instance;
   };
-  public getComponents = async (
-    sn_keys: string[],
-  ): Promise<ComponentInstance[]> => {
+  public getComponents = async (sn_keys: string[]): Promise<Component[]> => {
     return await this.em.find(
-      ComponentInstance,
+      Component,
       {
         $or: [
           { serial_number: sn_keys },
@@ -42,9 +39,9 @@ export class ComponentInstanceRepository
       ['equipment', 'equipments'],
     );
   };
-  public byArray = async (ids: string[]): Promise<ComponentInstance[]> => {
+  public byArray = async (ids: string[]): Promise<Component[]> => {
     const equipments = await this.em.find(
-      ComponentInstance,
+      Component,
       {
         $or: [
           { serial_number: ids },
@@ -74,11 +71,8 @@ export class ComponentInstanceRepository
   //   // stock:LoadStrategy.JOINED,
   //   // }});
   // };
-  public create = async (
-    instance: ComponentInstance,
-  ): Promise<ComponentInstance> => {
-    if (!(instance instanceof ComponentInstance))
-      throw new Error(`Invalid Data Type`);
+  public create = async (instance: Component): Promise<Component> => {
+    if (!(instance instanceof Component)) throw new Error(`Invalid Data Type`);
     await this.em.begin();
     try {
       await this.em.persist(instance).flush();
@@ -105,8 +99,8 @@ export class ComponentInstanceRepository
   public update = async (
     serial_number: string,
     data: any,
-  ): Promise<ComponentInstance> => {
-    const instance = await this.em.findOne(ComponentInstance, {
+  ): Promise<Component> => {
+    const instance = await this.em.findOne(Component, {
       serial_number,
     });
     if (!instance) throw new Error(`${data.matricula} dont exists`);
@@ -114,13 +108,13 @@ export class ComponentInstanceRepository
     await this.em.persist(data).flush();
     return instance;
   };
-  public all = async (pagination: Pagination): Promise<ComponentInstance[]> => {
-    return await this.em.find(ComponentInstance, {});
+  public all = async (pagination: Pagination): Promise<Component[]> => {
+    return await this.em.find(Component, {});
   };
   public byId = async (
     serial_number: string,
-  ): Promise<ComponentInstance | undefined> => {
-    const instance = await this.em.findOne(ComponentInstance, {
+  ): Promise<Component | undefined> => {
+    const instance = await this.em.findOne(Component, {
       serial_number,
     });
     if (!instance) return;
@@ -128,9 +122,9 @@ export class ComponentInstanceRepository
   };
   public bySN = async (
     serial_number: string,
-  ): Promise<ComponentInstance | undefined> => {
+  ): Promise<Component | undefined> => {
     const instance = await this.em.findOne(
-      ComponentInstance,
+      Component,
       {
         serial_number: serial_number,
       },
@@ -143,7 +137,7 @@ export class ComponentInstanceRepository
     id: string,
     matricula: string,
   ): Promise<boolean> => {
-    const parent = await this.em.findOne(ComponentInstance, {
+    const parent = await this.em.findOne(Component, {
       product: { id },
     });
     if (!parent) return false;
