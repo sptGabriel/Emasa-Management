@@ -6,8 +6,9 @@ export class Migration20201102135739 extends Migration {
       return this.getKnex().schema // **** udpate
       .createTable('withdrawal', async table => {
         table.uuid('id').notNullable().primary();
-        table.uuid('by_employee').notNullable().references('employees.id');
-        table.uuid('to_employee').notNullable().references('employees.id');
+        table.uuid('by_employee').notNullable()
+        table.uuid('to_employee').notNullable()
+        table.uuid('to_departament').notNullable()
         table.timestamp('created_at').defaultTo(this.getKnex().fn.now());
         table.timestamp('updated_at').defaultTo(this.getKnex().fn.now());
         table.timestamp('deleted_at');

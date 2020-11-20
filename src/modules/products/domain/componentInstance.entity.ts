@@ -14,13 +14,14 @@ import {
 import { Departament } from '@modules/departaments/domain/departament.entity';
 import { EquipmentHasComponents } from '@modules/equipments/domain/equipamentHasComponents.entity';
 import { EquipmentInstance } from '@modules/equipments/domain/equipment.entity';
+import { WithdrawalComponents } from '@modules/withdrawal/domain/withdrawalComponents.entity';
 import { v4 } from 'uuid';
 import { Product } from './product.entity';
 import { ProductStocks } from './stock.entity';
 interface instanceContainer {
   id?: string;
   serial_number: string;
-  stock: ProductStocks;
+  stock_id: string;
   product: Product;
   departament: Departament;
 }
@@ -37,8 +38,8 @@ export class ComponentInstance {
   public readonly serial_number: string;
   @ManyToOne(() => Product, { fieldName: 'product_id' })
   public product!: Product;
-  @ManyToOne(() => ProductStocks, { fieldName: 'stock_id' })
-  public stock!: ProductStocks;
+  @ManyToOne(() => ProductStocks, { fieldName: 'stock_id',mapToPk:true })
+  public stock_id!: string;
   @OneToOne({
     entity: () => EquipmentInstance,
     mappedBy: 'component',
@@ -49,6 +50,8 @@ export class ComponentInstance {
     strategy: LoadStrategy.JOINED,
   })
   public equipments = new Collection<EquipmentHasComponents>(this);
+  @OneToMany(() => WithdrawalComponents, Withdrawal => Withdrawal.component)
+  public withdrawal = new Collection<WithdrawalComponents>(this);
   @Property({ persist: false })
   public departament?: Departament;
   @Property()
@@ -62,7 +65,7 @@ export class ComponentInstance {
     this.id = container.id ? container.id : v4();
     this.serial_number = container.serial_number;
     this.product = container.product;
-    this.stock = container.stock;
+    this.stock_id = container.stock_id;
     this.departament = container.departament;
   }
 

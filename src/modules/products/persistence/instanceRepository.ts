@@ -31,6 +31,11 @@ export interface IComponentInstanceRepository {
    * @returns {Promise<ComponentInstance>}
    */
   bySN(serial_number: string): Promise<ComponentInstance | undefined>;
+    /**
+   * @param {number} id
+   * @returns {Promise<ComponentInstance>}
+   */
+  bySN2(serial_number: string): Promise<ComponentInstance | undefined>;
   /**
    * @param {string} ProductInstanceProps
    * @returns {Promise<ComponentInstance>}

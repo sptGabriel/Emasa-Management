@@ -11,7 +11,6 @@ import { IEmployeeRepository } from '@modules/employees/persistence/employeeRepo
 import { ComponentInstanceRepository } from '@modules/products/persistence/instanceRepositoryImpl';
 import { IComponentInstanceRepository } from '@modules/products/persistence/instanceRepository';
 import { EquipmentHasComponents } from '@modules/equipments/domain/equipamentHasComponents.entity';
-import { Withdrawal } from '@modules/withdrawal/domain/withdrawal.entity';
 @injectable()
 export class AssignEquipmentUseCase
   implements

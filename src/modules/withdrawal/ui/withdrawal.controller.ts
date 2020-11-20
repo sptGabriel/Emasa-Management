@@ -1,34 +1,34 @@
 import { BaseController } from '@shared/core/baseController';
 import { NextFunction, Request, Response } from 'express';
 import { container, singleton } from 'tsyringe';
-import { AssignEquipmentDTO } from '../application/useCases/assignEquipment/assignEquipment_DTO';
-import { AssignEquipmentUseCase } from '../application/useCases/assignEquipment/assignEquipment';
+import { WithdrawalComponentDTO } from '../application/useCases/withdrawalProduct/withdrawalProduct_DTO';
+import { WithdrawalComponentUseCase } from '../application/useCases/withdrawalProduct/withdrawalProduct';
 @singleton()
-export class EquipmentsController extends BaseController {
+export class WithdrawalController extends BaseController {
   constructor() {
     super();
-    this.path = '/equipments';
+    this.path = '/withdrawal';
     this.initRouter();
   }
   protected initRouter() {
     this.router.get(`${this.path}`, this.index);
-    this.router.post(`${this.path}/assign`, this.assignEquipment);
+    this.router.post(`${this.path}/product`, this.withdrawalProduct);
   }
   private index = async (arg0: string, index: any) => {
     throw new Error('Method not implemented.');
   };
-  private assignEquipment = async (
+  private withdrawalProduct = async (
     request: Request,
     response: Response,
     next: NextFunction,
   ) => {
     try {
-      const dto: AssignEquipmentDTO = request.body;
+      const dto: WithdrawalComponentDTO = request.body;
       const result = await container
-        .resolve(AssignEquipmentUseCase)
+        .resolve(WithdrawalComponentUseCase)
         .execute(dto);
       if (result.isLeft()) return next(result.value);
-      return response.json(result.value.toJSON());
+      return response.json(result.value);
     } catch (error) {
       console.log(error);
       next(error);

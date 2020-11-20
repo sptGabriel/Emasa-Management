@@ -35,11 +35,11 @@ export class EquipmentInstance {
   @OneToMany(() => EquipmentHasComponents, equips => equips.equipment)
   public components = new Collection<EquipmentHasComponents>(this);
   @Property()
-  public createdAt = new Date();
+  public created_at = new Date();
   @Property({ onUpdate: () => new Date() })
-  public updatedAt = new Date();
+  public updated_at = new Date();
   @Property()
-  public deletedAt?: Date;
+  public deleted_at?: Date;
 
   constructor(container: EquipmentProps) {
     this.patrimony_code = container.patrimony_code;
@@ -61,4 +61,16 @@ export class EquipmentInstance {
       component,
     });
   };
+
+  toJSON = () => {
+    return{
+      patrimony_code: this.patrimony_code,
+      component_owner: this.component.id,
+      employee_id: this.employee.id,
+      departament_id: this.component.departament?.id,
+      components: this.components.getItems().map((item) => item.component.serial_number),
+      created_at:this.created_at,
+      updated_at:this.updated_at
+    }
+  }
 }

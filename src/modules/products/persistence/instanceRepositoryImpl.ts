@@ -14,6 +14,19 @@ export class ComponentInstanceRepository
   constructor(@inject('bootstrap') bootstrap: IBootstrap) {
     this.em = bootstrap.getDatabaseORM().getConnection().em.fork();
   }
+  public bySN2 = async (
+    serial_number: string,
+  ): Promise<ComponentInstance | undefined> => {
+    const instance = await this.em.findOne(
+      ComponentInstance,
+      {
+        serial_number:serial_number
+      },
+      ['withdrawal'],
+    );
+    if (!instance) return;
+    return instance;
+  };
   public getComponents = async (
     sn_keys: string[],
   ): Promise<ComponentInstance[]> => {

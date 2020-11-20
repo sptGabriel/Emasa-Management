@@ -6,6 +6,7 @@ import { EquipmentsController } from '@modules/equipments/ui/equipment.controlle
 import { ProductsController } from '@modules/products/ui/products.controller';
 import { SupplierController } from '@modules/supplier/ui/supplier.controller';
 import { SuppliesController } from '@modules/supplying/ui/supplies.controller';
+import { WithdrawalController } from '@modules/withdrawal/ui/withdrawal.controller';
 import { BaseController } from '@shared/core/baseController';
 import { container } from 'tsyringe';
 
@@ -22,4 +23,8 @@ container.registerSingleton<BaseController>('Controllers', ContractController);
 container.registerSingleton<BaseController>(
   'Controllers',
   EquipmentsController,
+);
+container.registerSingleton<BaseController>(
+  'Controllers',
+  WithdrawalController,
 );

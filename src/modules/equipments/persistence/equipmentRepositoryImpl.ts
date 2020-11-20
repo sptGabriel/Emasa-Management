@@ -20,7 +20,6 @@ export class EquiqmentRepository implements IEquipmentRepository {
         { components: { component: { id: ids } } },
       ],
     });
-    console.log(equipments);
   };
   public byArray = async (ids: string[]): Promise<EquipmentInstance[]> => {
     return await this.em.find(
