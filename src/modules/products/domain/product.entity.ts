@@ -1,6 +1,7 @@
 import {
   Collection,
   Entity,
+  LoadStrategy,
   ManyToOne,
   OneToMany,
   PrimaryKey,
@@ -29,9 +30,13 @@ export class Product {
   public has_instances: boolean;
   @Property({ default: 0 })
   public current_price: number;
-  @ManyToOne({ entity: () => ProductCategory, fieldName: 'category_id' })
+  @ManyToOne({
+    entity: () => ProductCategory,
+    fieldName: 'category_id',
+    strategy: LoadStrategy.JOINED,
+  })
   public category!: ProductCategory;
-  @OneToMany(() => ProductStocks, stock => stock.product)
+  @OneToMany(() => ProductStocks, stock => stock.product, {strategy: LoadStrategy.JOINED,})
   public stock = new Collection<ProductStocks>(this);
   @Property()
   public created_at = new Date();

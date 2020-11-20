@@ -1,6 +1,7 @@
 import {
   Entity,
   IdentifiedReference,
+  LoadStrategy,
   ManyToOne,
   OneToOne,
   PrimaryKey,
@@ -24,9 +25,14 @@ export class ProductStocks {
     entity: () => Supply,
     inversedBy: 'product_stock',
     fieldName: 'supply_id',
+    strategy: LoadStrategy.JOINED,
   })
   public supply: Supply;
-  @ManyToOne({ entity: () => Product, fieldName: 'product_id' })
+  @ManyToOne({
+    entity: () => Product,
+    fieldName: 'product_id',
+    strategy: LoadStrategy.JOINED,
+  })
   public product!: IdentifiedReference<Product>;
   @Property({ default: null })
   public quantity: number;

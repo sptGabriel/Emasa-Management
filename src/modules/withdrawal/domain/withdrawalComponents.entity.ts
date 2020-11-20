@@ -1,5 +1,6 @@
 import {
   Entity,
+  LoadStrategy,
   ManyToOne,
   PrimaryKeyType,
   Property,
@@ -13,12 +14,14 @@ export class WithdrawalComponents {
     entity: () => Withdrawal,
     fieldName: 'withdrawal_id',
     primary: true,
+    strategy: LoadStrategy.JOINED,
   })
   public withdrawal!: Withdrawal;
   @ManyToOne({
     entity: () => ComponentInstance,
     fieldName: 'component_id',
     primary: true,
+    strategy: LoadStrategy.JOINED,
   })
   public component!: ComponentInstance;
   [PrimaryKeyType]: [ComponentInstance , Withdrawal];

@@ -1,6 +1,7 @@
 import {
   Collection,
   Entity,
+  LoadStrategy,
   OneToMany,
   PrimaryKey,
   Property,
@@ -8,10 +9,10 @@ import {
 import { v4, validate } from 'uuid';
 import { WithdrawalComponents } from './withdrawalComponents.entity';
 interface withdrawalContainer {
-  id?:string;
+  id?: string;
   by_employee: string;
   to_employee: string;
-  to_departament:string;
+  to_departament: string;
 }
 @Entity({ tableName: 'withdrawal' })
 export class Withdrawal {
@@ -23,7 +24,9 @@ export class Withdrawal {
   public to_employee: string;
   @Property()
   public to_departament: string;
-  @OneToMany(() => WithdrawalComponents, Withdrawal => Withdrawal.withdrawal)
+  @OneToMany(() => WithdrawalComponents, Withdrawal => Withdrawal.withdrawal, {
+    strategy: LoadStrategy.JOINED,
+  })
   public components = new Collection<WithdrawalComponents>(this);
   @Property()
   public created_at = new Date();
@@ -36,13 +39,18 @@ export class Withdrawal {
     this.id = container.id ? container.id : v4();
     this.by_employee = container.by_employee;
     this.to_employee = container.to_employee;
-    this.to_departament = container.to_departament
+    this.to_departament = container.to_departament;
   }
 
-  static build = ({ id, by_employee,to_employee,to_departament }: withdrawalContainer): Withdrawal => {
+  static build = ({
+    id,
+    by_employee,
+    to_employee,
+    to_departament,
+  }: withdrawalContainer): Withdrawal => {
     const isValidUUID = id ? validate(id) : null;
     if (isValidUUID === false) throw new Error(`Invalid UUID V4`);
-    return new Withdrawal({ id,  by_employee, to_employee,to_departament });
+    return new Withdrawal({ id, by_employee, to_employee, to_departament });
   };
 
   // toJSON = () => {

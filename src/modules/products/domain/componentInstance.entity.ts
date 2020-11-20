@@ -36,9 +36,16 @@ export class ComponentInstance {
   @Unique({ name: 'component' })
   @Property()
   public readonly serial_number: string;
-  @ManyToOne(() => Product, { fieldName: 'product_id' })
+  @ManyToOne(() => Product, {
+    fieldName: 'product_id',
+    strategy: LoadStrategy.JOINED,
+  })
   public product!: Product;
-  @ManyToOne(() => ProductStocks, { fieldName: 'stock_id',mapToPk:true })
+  @ManyToOne(() => ProductStocks, {
+    fieldName: 'stock_id',
+    mapToPk: true,
+    strategy: LoadStrategy.JOINED,
+  })
   public stock_id!: string;
   @OneToOne({
     entity: () => EquipmentInstance,
@@ -50,7 +57,9 @@ export class ComponentInstance {
     strategy: LoadStrategy.JOINED,
   })
   public equipments = new Collection<EquipmentHasComponents>(this);
-  @OneToMany(() => WithdrawalComponents, Withdrawal => Withdrawal.component)
+  @OneToMany(() => WithdrawalComponents, Withdrawal => Withdrawal.component, {
+    strategy: LoadStrategy.JOINED,
+  })
   public withdrawal = new Collection<WithdrawalComponents>(this);
   @Property({ persist: false })
   public departament?: Departament;

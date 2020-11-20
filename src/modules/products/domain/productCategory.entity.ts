@@ -1,6 +1,7 @@
 import {
   Collection,
   Entity,
+  LoadStrategy,
   ManyToOne,
   OneToMany,
   PrimaryKey,
@@ -24,7 +25,9 @@ export class ProductCategory {
   public parent!: ProductCategory;
   @Property()
   public name: string;
-  @OneToMany(() => Product, product => product.category)
+  @OneToMany(() => Product, product => product.category, {
+    strategy: LoadStrategy.JOINED,
+  })
   public products = new Collection<Product>(this);
   @OneToMany({
     entity: () => ProductCategory,

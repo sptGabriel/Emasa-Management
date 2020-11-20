@@ -52,11 +52,7 @@ export class WithdrawalComponentUseCase
   };
   private validateProduct = async (product_id: string) => {
     const hasProduct = await this.productRepository.byId(product_id);
-    if (!hasProduct) {
-      throw new Error(
-        `The employee who would receive the component does not exist`,
-      );
-    }
+    if (!hasProduct) throw new Error(`This product doesn't exist`)
     return hasProduct;
   };
   private validateEmployeeOwner = async (
