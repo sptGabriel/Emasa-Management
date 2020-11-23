@@ -1,4 +1,3 @@
-import { wrap } from '@mikro-orm/core';
 import { EntityManager } from '@mikro-orm/postgresql';
 import { Pagination } from '@shared/core/pagination';
 import { IBootstrap } from '@shared/infra/bootstrap';
@@ -6,7 +5,7 @@ import { inject, injectable } from 'tsyringe';
 import { Withdrawal } from '../domain/withdrawal.entity';
 import { ProductStocks } from '@modules/products/domain/stock.entity';
 import { IWithdrawalRepository } from './withdrawalRepository';
-import { WithdrawalComponents } from '../domain/withdrawalComponents.entity';
+import { WithdrawalProduct } from '../domain/withdrawalProducts.entity';
 @injectable()
 export class WithdrawalRepository implements IWithdrawalRepository {
   private em: EntityManager;
@@ -15,9 +14,9 @@ export class WithdrawalRepository implements IWithdrawalRepository {
   }
   public bySN = async (
     sn: string,
-  ): Promise<WithdrawalComponents | undefined> => {
+  ): Promise<WithdrawalProduct | undefined> => {
     const instance = await this.em.findOne(
-      WithdrawalComponents,
+      WithdrawalProduct,
       {
         component: { serial_number: sn },
       },
@@ -30,9 +29,9 @@ export class WithdrawalRepository implements IWithdrawalRepository {
     throw new Error('a');
   };
   public withdrawalProduct = async (
-    instance: WithdrawalComponents,
-  ): Promise<WithdrawalComponents> => {
-    if (!(instance instanceof WithdrawalComponents))
+    instance: WithdrawalProduct,
+  ): Promise<WithdrawalProduct> => {
+    if (!(instance instanceof WithdrawalProduct))
       throw new Error(`Invalid Data Type`);
     await this.em.begin();
     try {

@@ -1,6 +1,6 @@
 import { Pagination } from '@shared/core/pagination';
 import { Withdrawal } from '../domain/withdrawal.entity';
-import { WithdrawalComponents } from '../domain/withdrawalComponents.entity';
+import { WithdrawalProduct } from '../domain/withdrawalProducts.entity';
 export interface IWithdrawalRepository {
   
   all(pagination: Pagination): Promise<Withdrawal[]>;
@@ -18,12 +18,12 @@ export interface IWithdrawalRepository {
    * @param {number} id
    * @returns {Promise<EquipmentInstance>}
    */
-  bySN(sn: string): Promise<WithdrawalComponents | undefined>;
+  bySN(sn: string): Promise<WithdrawalProduct | undefined>;
     /**
    * @param {number} id
    * @returns {Promise<EquipmentInstance>}
    */
-  withdrawalProduct(withdrawal:WithdrawalComponents): Promise<WithdrawalComponents>;
+  withdrawalProduct(withdrawal:WithdrawalProduct): Promise<WithdrawalProduct>;
   /**
    * @param {string} ProductInstanceProps
    * @returns {Promise<ComponentInstance>}

@@ -1,6 +1,5 @@
 export interface transferDTO {
-  component_sn: string;
+  patrimony_code: string;
   new_departament: string;
-  old_departament: string;
   description: string;
 }

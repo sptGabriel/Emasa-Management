@@ -7,7 +7,7 @@ import {
   Property,
 } from '@mikro-orm/core';
 import { v4, validate } from 'uuid';
-import { WithdrawalComponents } from './withdrawalComponents.entity';
+import { WithdrawalProduct } from './withdrawalProducts.entity';
 interface withdrawalContainer {
   id?: string;
   by_employee: string;
@@ -24,10 +24,10 @@ export class Withdrawal {
   public to_employee: string;
   @Property()
   public to_departament: string;
-  @OneToMany(() => WithdrawalComponents, Withdrawal => Withdrawal.withdrawal, {
+  @OneToMany(() => WithdrawalProduct, Withdrawal => Withdrawal.withdrawal, {
     strategy: LoadStrategy.JOINED,
   })
-  public components = new Collection<WithdrawalComponents>(this);
+  public components = new Collection<WithdrawalProduct>(this);
   @Property()
   public created_at = new Date();
   @Property({ onUpdate: () => new Date() })

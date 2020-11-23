@@ -7,37 +7,37 @@ import {
   PrimaryKeyType,
   Property,
 } from '@mikro-orm/core';
-import { ComponentInstance } from '@modules/products/domain/componentInstance.entity';
-import { EquipmentInstance } from './equipment.entity';
+import { Component } from '@modules/components/domain/component.entity';
+import { Equipment } from './equipment.entity';
 
 @Entity({ tableName: 'equipment_has_components' })
 export class EquipmentHasComponents {
   @ManyToOne({
-    entity: () => EquipmentInstance,
+    entity: () => Equipment,
     fieldName: 'equipment_id',
     primary: true,
   })
-  public equipment!: EquipmentInstance;
+  public equipment!: Equipment;
   @ManyToOne({
-    entity: () => ComponentInstance,
+    entity: () => Component,
     fieldName: 'component_id',
     primary: true,
   })
-  public component!: ComponentInstance;
-  [PrimaryKeyType]: [EquipmentInstance, ComponentInstance];
+  public component!: Component;
+  [PrimaryKeyType]: [Equipment, Component];
   @Property()
   public createdAt = new Date();
   @Property({ onUpdate: () => new Date() })
   public updatedAt = new Date();
   @Property()
   public deletedAt?: Date;
-  constructor(equipment: EquipmentInstance, component: ComponentInstance) {
+  constructor(equipment: Equipment, component: Component) {
     this.equipment = equipment;
     this.component = component;
   }
   static build = (
-    equipment: EquipmentInstance,
-    component: ComponentInstance,
+    equipment: Equipment,
+    component: Component,
   ): EquipmentHasComponents => {
     return new EquipmentHasComponents(equipment, component);
   };

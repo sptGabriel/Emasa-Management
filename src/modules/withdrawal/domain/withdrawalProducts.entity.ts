@@ -5,11 +5,11 @@ import {
   PrimaryKeyType,
   Property,
 } from '@mikro-orm/core';
-import { ComponentInstance } from '@modules/products/domain/componentInstance.entity';
+import { Component} from '@modules/components/domain/component.entity';
 import { Withdrawal } from './withdrawal.entity';
 
 @Entity({ tableName: 'withdrawal_components' })
-export class WithdrawalComponents {
+export class WithdrawalProduct {
   @ManyToOne({
     entity: () => Withdrawal,
     fieldName: 'withdrawal_id',
@@ -18,27 +18,27 @@ export class WithdrawalComponents {
   })
   public withdrawal!: Withdrawal;
   @ManyToOne({
-    entity: () => ComponentInstance,
+    entity: () => Component,
     fieldName: 'component_id',
     primary: true,
     strategy: LoadStrategy.JOINED,
   })
-  public component!: ComponentInstance;
-  [PrimaryKeyType]: [ComponentInstance , Withdrawal];
+  public component!: Component;
+  [PrimaryKeyType]: [Component , Withdrawal];
   @Property()
   public createdAt = new Date();
   @Property({ onUpdate: () => new Date() })
   public updatedAt = new Date();
   @Property()
   public deletedAt?: Date;
-  constructor(withdrawal: Withdrawal, component: ComponentInstance) {
+  constructor(withdrawal: Withdrawal, component: Component) {
     this.withdrawal = withdrawal;
     this.component = component;
   }
   static build = (
     withdrawal: Withdrawal,
-    component: ComponentInstance,
-  ): WithdrawalComponents => {
-    return new WithdrawalComponents(withdrawal, component);
+    component: Component,
+  ): WithdrawalProduct => {
+    return new WithdrawalProduct(withdrawal, component);
   };
 }

@@ -14,7 +14,11 @@ export interface IDepartamentRepository {
      * @returns {Promise<User>}
      */
     byId(id: string): Promise<Departament | undefined>;
-
+    /**
+     * @param {number} id
+     * @returns {Promise<User>}
+     */
+    byArray(id: string[]): Promise<Departament[]>;
     /**
      * @param {string} departament_name
      * @returns {Promise<Departament>}

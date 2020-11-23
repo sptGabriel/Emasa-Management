@@ -1,5 +1,5 @@
-import { LoadStrategy, wrap } from '@mikro-orm/core';
-import { EntityRepository, EntityManager } from '@mikro-orm/postgresql';
+import { LoadStrategy } from '@mikro-orm/core';
+import { EntityManager } from '@mikro-orm/postgresql';
 import { Pagination } from '@shared/core/pagination';
 import { IBootstrap } from '@shared/infra/bootstrap';
 import { inject, injectable } from 'tsyringe';
@@ -28,13 +28,6 @@ export class ProductStocksRepository implements IProductStocksRepository {
       });
     return stock;
   };
-  // public update = async (id: string, data: any): Promise<ProductStocks> => {
-  //   const product = await this.repository.findOne({ id });
-  //   if (!product) throw new Error(`${data.matricula} dont exists`);
-  //   wrap(product).assign(data);
-  //   await this.repository.persist(data).flush();
-  //   return product;
-  // };
   public all = async (pagination: Pagination): Promise<ProductStocks[]> => {
     return await this.em.find(ProductStocks, {});
   };

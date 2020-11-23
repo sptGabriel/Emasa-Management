@@ -2,28 +2,28 @@ import { IDepartamentRepository } from '@modules/departaments/persistence/depart
 import { DepartamentRepository } from '@modules/departaments/persistence/departamentRepositoryImpl';
 import { IEmployeeRepository } from '@modules/employees/persistence/employeeRepository';
 import { EmployeeRepository } from '@modules/employees/persistence/employeeRepositoryImpl';
-import { ComponentInstance } from '@modules/products/domain/componentInstance.entity';
-import { IComponentInstanceRepository } from '@modules/products/persistence/instanceRepository';
-import { ComponentInstanceRepository } from '@modules/products/persistence/instanceRepositoryImpl';
+import { Component } from '@modules/components/domain/component.entity';
+import { IComponentRepository } from '@modules/components/persistence/componentRepository';
+import { ComponentRepository } from '@modules/components/persistence/componentRepositoryImpl';
 import { IProductRepository } from '@modules/products/persistence/productRepository';
 import { ProductRepository } from '@modules/products/persistence/productRepositoryImpl';
 import { IProductStocksRepository } from '@modules/products/persistence/productStocksRepository';
 import { ProductStocksRepository } from '@modules/products/persistence/productStocksRepositoryImpl';
+import { WithdrawalProduct } from '@modules/withdrawal/domain/withdrawalProducts.entity';
 import { Withdrawal } from '@modules/withdrawal/domain/withdrawal.entity';
-import { WithdrawalComponents } from '@modules/withdrawal/domain/withdrawalComponents.entity';
 import { IWithdrawalRepository } from '@modules/withdrawal/persistence/withdrawalRepository';
 import { WithdrawalRepository } from '@modules/withdrawal/persistence/withdrawalRepositoryImpl';
 import { Either, right } from '@shared/core/either';
 import { IUseCase } from '@shared/core/useCase';
 import { AppError } from '@shared/errors/BaseError';
 import { inject, injectable } from 'tsyringe';
-import { WithdrawalComponentDTO } from './withdrawalProduct_DTO';
+import { WithdrawalProductDTO } from './withdrawalProduct_DTO';
 @injectable()
-export class WithdrawalComponentUseCase
+export class WithdrawalProductUseCase
   implements
     IUseCase<
-      WithdrawalComponentDTO,
-      Promise<Either<AppError, WithdrawalComponents>>
+    WithdrawalProductDTO,
+      Promise<Either<AppError, WithdrawalProduct>>
     > {
   constructor(
     @inject(EmployeeRepository)
@@ -32,8 +32,8 @@ export class WithdrawalComponentUseCase
     private departamentRepository: IDepartamentRepository,
     @inject(ProductRepository)
     private productRepository: IProductRepository,
-    @inject(ComponentInstanceRepository)
-    private productInstanceRepository: IComponentInstanceRepository,
+    @inject(ComponentRepository)
+    private productInstanceRepository: IComponentRepository,
     @inject(ProductStocksRepository)
     private stockRepository: IProductStocksRepository,
     @inject(WithdrawalRepository)
@@ -90,8 +90,8 @@ export class WithdrawalComponentUseCase
     serial_number,
     by_employee,
     to_employee,
-  }: WithdrawalComponentDTO): Promise<
-    Either<AppError, WithdrawalComponents>
+  }: WithdrawalProductDTO): Promise<
+    Either<AppError, WithdrawalProduct>
   > => {
     // if (!(type in ProductTypes)) throw new Error(`${type}, is invalid`);
     //verify if already exists instance
@@ -116,7 +116,7 @@ export class WithdrawalComponentUseCase
     //validate stock
     const stock = await this.validateStock(contract_id, product_id);
     // create component
-    const componentDomain = ComponentInstance.build({
+    const componentDomain = Component.build({
       product,
       serial_number,
       stock_id: stock.id,
@@ -128,7 +128,7 @@ export class WithdrawalComponentUseCase
       by_employee: byEmployee.id,
       to_departament: departament.id,
     });
-    const withdrawalProductsDomain = WithdrawalComponents.build(
+    const withdrawalProductsDomain = WithdrawalProduct.build(
       withdrawalDomain,
       componentDomain,
     );

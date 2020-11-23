@@ -26,7 +26,7 @@ export default {
   },
   password: 'emasa03210',
   port: 5433,
-  tsNode: process.env.APP_ENV === 'development',
+  tsNode: true,
   loadStrategy: LoadStrategy.JOINED,
   user: 'emasa',
 } as Options<PostgreSqlDriver>;

@@ -34,7 +34,7 @@ export class EmployeeRepository implements IEmployeeRepository {
   public byMatricula = async (
     matricula: string,
   ): Promise<Employee | undefined> => {
-    const employee = await this.em.findOne(Employee, { matricula });
+    const employee = await this.em.findOne(Employee, { matricula:matricula });
     if (!employee) return;
     return employee;
   };

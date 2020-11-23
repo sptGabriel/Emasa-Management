@@ -1,5 +1,6 @@
-import { Entity, Enum, ManyToOne, PrimaryKey, Property, Unique } from '@mikro-orm/core';
+import { Entity, Enum, LoadStrategy, ManyToOne, OneToOne, PrimaryKey, Property, Unique } from '@mikro-orm/core';
 import { Departament } from '@modules/departaments/domain/departament.entity';
+import { User } from '@modules/users/domain/user.entity';
 import { v4, validate } from 'uuid';
 export interface EmployeeContainer {
   id?:string;
@@ -28,7 +29,12 @@ export class Employee {
   @Enum()
   public position: Positions;
   @ManyToOne({ entity: () => Departament, name: 'departament_id' })
-  public departament: Departament
+  public departament: Departament;
+  // @OneToOne({
+  //   entity: () => User,
+  //   mappedBy: 'employee',
+  // })
+  // public user:User;
   @Property()
   public createdAt = new Date();
   @Property({ onUpdate: () => new Date() })

@@ -1,7 +1,6 @@
 import {
   Collection,
   Entity,
-  Filter,
   LoadStrategy,
   ManyToOne,
   OneToMany,
@@ -12,11 +11,11 @@ import {
 } from '@mikro-orm/core';
 import { Departament } from '@modules/departaments/domain/departament.entity';
 import { EquipmentHasComponents } from '@modules/equipments/domain/equipamentHasComponents.entity';
-import { EquipmentInstance } from '@modules/equipments/domain/equipment.entity';
-import { WithdrawalComponents } from '@modules/withdrawal/domain/withdrawalComponents.entity';
+import { Equipment } from '@modules/equipments/domain/equipment.entity';
 import { v4 } from 'uuid';
 import { Product } from '@modules/products/domain/product.entity';
 import { ProductStocks } from '@modules/products/domain/stock.entity';
+import { WithdrawalProduct } from '@modules/withdrawal/domain/withdrawalProducts.entity';
 interface instanceContainer {
   id?: string;
   serial_number: string;
@@ -43,19 +42,19 @@ export class Component {
   })
   public stock_id!: string;
   @OneToOne({
-    entity: () => EquipmentInstance,
+    entity: () => Equipment,
     mappedBy: 'component',
     strategy: LoadStrategy.JOINED,
   })
-  public equipment: EquipmentInstance;
+  public equipment: Equipment;
   @OneToMany(() => EquipmentHasComponents, comp => comp.component, {
     strategy: LoadStrategy.JOINED,
   })
   public equipments = new Collection<EquipmentHasComponents>(this);
-  @OneToMany(() => WithdrawalComponents, Withdrawal => Withdrawal.component, {
+  @OneToMany(() => WithdrawalProduct, Withdrawal => Withdrawal.component, {
     strategy: LoadStrategy.JOINED,
   })
-  public withdrawal = new Collection<WithdrawalComponents>(this);
+  public withdrawal = new Collection<WithdrawalProduct>(this);
   @ManyToOne(() => Departament, {
     fieldName: 'departament_id',
     strategy: LoadStrategy.JOINED,

@@ -5,10 +5,10 @@ import { IBootstrap } from '@shared/infra/bootstrap';
 import { inject, injectable } from 'tsyringe';
 import { Component } from '../domain/component.entity';
 import { ProductStocks } from '@modules/products/domain/stock.entity';
-import { IComponentInstanceRepository } from './componentRepository';
+import { IComponentRepository } from './componentRepository';
+import { ComponentTransfer } from '../domain/componentTransfer.entity';
 @injectable()
-export class ComponentInstanceRepository
-  implements IComponentInstanceRepository {
+export class ComponentRepository implements IComponentRepository {
   private em: EntityManager;
   constructor(@inject('bootstrap') bootstrap: IBootstrap) {
     this.em = bootstrap.getDatabaseORM().getConnection().em.fork();
@@ -51,43 +51,54 @@ export class ComponentInstanceRepository
       },
       ['equipment', 'equipments'],
     );
-
-    console.log(equipments);
-    // const qb = await this.em.createQueryBuilder(ComponentInstance, 'qb')
-    // .select('qb.*').join('qb.equipments', 'eq').join('qb.equipments_has_components', 'eqhascp')
-    // .where('qb.id':ids)
-    // return await this.em.find(ComponentInstance, { id: ids, equipament:{component:{id:ids}} }, {populate:{
-    // stock:LoadStrategy.JOINED,
-    // }});
+    throw new Error('a');
   };
-  // public byArray2 = async (ids: string[]): Promise<ComponentInstance[]> => {
-  //   const array = await this.em.createQueryBuilder(ComponentInstance, 'cp')
-  //   .select(['cp.*'])
-  //   .leftJoin('eq.equipments', 'eq')
-  //   .leftJoin('eqcp.equipment_has_components', 'eqcp')
-  //   .getResult();
-  //   console.log(array)
-  //   // return await this.em.find(ComponentInstance, { id: ids, equipament:{component:{id:ids}} }, {populate:{
-  //   // stock:LoadStrategy.JOINED,
-  //   // }});
-  // };
   public create = async (instance: Component): Promise<Component> => {
     if (!(instance instanceof Component)) throw new Error(`Invalid Data Type`);
     await this.em.begin();
     try {
       await this.em.persist(instance).flush();
-      // const departaments = await this.em
-      //   .createQueryBuilder(DepartamentHasComponents)
-      //   .insert({
-      //     departament_id: instance.departament?.id,
-      //     component_id: instance.id,
-      //   })
-      //   .execute();
       const stockQueryBuilder = this.em.createQueryBuilder(ProductStocks);
       const stock = await stockQueryBuilder
         .update({ quantity: stockQueryBuilder.raw(`quantity - 1`) })
         .where({ id: instance.stock_id, product: instance.product.id })
         .execute();
+      await this.em.commit();
+      return instance;
+    } catch (e) {
+      console.log(e.detail, 'error');
+      await this.em.rollback();
+      throw e;
+    }
+  };
+  public componentTransfer = async (
+    instance: ComponentTransfer,
+    component:Component
+  ): Promise<ComponentTransfer> => {
+    // if (!(instance instanceof Component)) throw new Error(`Invalid Data Type`);
+    await this.em.begin();
+    try {
+      await this.em.persistAndFlush(instance);
+      await this.em.persistAndFlush(component)
+      await this.em.commit();
+      return instance;
+    } catch (e) {
+      console.log(e.detail, 'error');
+      await this.em.rollback();
+      throw e;
+    }
+  };
+  public equipmentTransfer = async (
+    instance: ComponentTransfer,
+  ): Promise<ComponentTransfer> => {
+    if (!(instance instanceof Component)) throw new Error(`Invalid Data Type`);
+    await this.em.begin();
+    try {
+      await this.em.persist(instance).flush();
+      const componentQueryBuilder = this.em
+        .createQueryBuilder(Component)
+        .update({ departament_id: instance.new_departament })
+        .where({component_id:instance.component_id}).execute();
       await this.em.commit();
       return instance;
     } catch (e) {

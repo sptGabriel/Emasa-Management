@@ -1,26 +1,26 @@
-import { EquiqmentRepository } from '@modules/equipments/persistence/equipmentRepositoryImpl';
+import { EquipmentRepository } from '@modules/equipments/persistence/equipmentRepositoryImpl';
 import { IEquipmentRepository } from '@modules/equipments/persistence/equipmentRepository';
 import { Either, left, right } from '@shared/core/either';
 import { IUseCase } from '@shared/core/useCase';
 import { AppError } from '@shared/errors/BaseError';
 import { inject, injectable } from 'tsyringe';
-import { EquipmentInstance } from '../../../domain/equipment.entity';
-import { AssignEquipmentDTO } from './assignEquipment_DTO';
+import { Equipment } from '../../../domain/equipment.entity';
+import { EquipmentAssignmentDTO } from './equipmentAssignment_DTO';
 import { EmployeeRepository } from '@modules/employees/persistence/employeeRepositoryImpl';
 import { IEmployeeRepository } from '@modules/employees/persistence/employeeRepository';
-import { ComponentInstanceRepository } from '@modules/products/persistence/instanceRepositoryImpl';
-import { IComponentInstanceRepository } from '@modules/products/persistence/instanceRepository';
+import { ComponentRepository } from '@modules/components/persistence/componentRepositoryImpl';
+import { IComponentRepository } from '@modules/components/persistence/componentRepository';
 import { EquipmentHasComponents } from '@modules/equipments/domain/equipamentHasComponents.entity';
 import { Withdrawal } from '@modules/withdrawal/domain/withdrawal.entity';
-import { ComponentInstance } from '@modules/products/domain/componentInstance.entity';
+import { Component } from '@modules/components/domain/component.entity';
 @injectable()
-export class AssignEquipmentUseCase
+export class EquipmentAssignmentUseCase
   implements
-    IUseCase<AssignEquipmentDTO, Promise<Either<AppError, EquipmentInstance>>> {
+    IUseCase<EquipmentAssignmentDTO, Promise<Either<AppError, Equipment>>> {
   constructor(
-    @inject(ComponentInstanceRepository)
-    private componentRepository: IComponentInstanceRepository,
-    @inject(EquiqmentRepository)
+    @inject(ComponentRepository)
+    private componentRepository: IComponentRepository,
+    @inject(EquipmentRepository)
     private equipmentRepository: IEquipmentRepository,
     @inject(EmployeeRepository)
     private employeeRepository: IEmployeeRepository,
@@ -56,8 +56,8 @@ export class AssignEquipmentUseCase
     return hasComponents;
   };
   private valideDepartComponents = (
-    components: ComponentInstance[] | null,
-    equipment: EquipmentInstance,
+    components: Component[] | null,
+    equipment: Equipment,
   ) => {
     if (!components) return;
     let invalid_serials: string[] = [];
@@ -66,7 +66,7 @@ export class AssignEquipmentUseCase
         invalid_serials.push(comp.serial_number);
       }
     }
-    if (invalid_serials) {
+    if (invalid_serials.length>0) {
       throw new Error(`The components do not belong to the same department`);
     }
   };
@@ -75,9 +75,7 @@ export class AssignEquipmentUseCase
     components,
     matricula,
     patrimony_code,
-    by_employee,
-    to_employee,
-  }: AssignEquipmentDTO): Promise<Either<AppError, EquipmentInstance>> => {
+  }: EquipmentAssignmentDTO): Promise<Either<AppError, Equipment>> => {
     const hasEquipment = await this.equipmentRepository.byPatrimony(
       patrimony_code,
     );
@@ -86,7 +84,7 @@ export class AssignEquipmentUseCase
     const employee = await this.employeeRepository.byMatricula(matricula);
     if (!employee) throw new Error(`This employee doesn't exists`);
     const hasAllComponents = await this.validateComponents(components);
-    const equipDomain = EquipmentInstance.build({
+    const equipDomain = Equipment.build({
       component: componentOwner,
       employee,
       patrimony_code,

@@ -8,30 +8,30 @@ import {
   Property,
   Unique,
 } from '@mikro-orm/core';
+import { Component } from '@modules/components/domain/component.entity';
 import { Employee } from '@modules/employees/domain/employee.entity';
-import { ComponentInstance } from '@modules/products/domain/componentInstance.entity';
 import { validate } from 'uuid';
 import { EquipmentHasComponents } from './equipamentHasComponents.entity';
 export interface EquipmentProps {
   id?: string;
   patrimony_code: string;
   employee: Employee;
-  component: ComponentInstance;
+  component: Component;
 }
 @Entity({ tableName: 'equipments' })
-export class EquipmentInstance {
+export class Equipment {
   @PrimaryKey()
   public patrimony_code: string;
   @ManyToOne({ entity: () => Employee, fieldName: 'employee_id' })
   public employee!: Employee;
   @Unique()
-  @OneToOne(() => ComponentInstance, component => component.equipment, {
+  @OneToOne(() => Component, component => component.equipment, {
     owner: true,
     orphanRemoval: true,
     cascade: [],
     fieldName: 'component_id',
   })
-  public component: ComponentInstance;
+  public component: Component;
   @OneToMany(() => EquipmentHasComponents, equips => equips.equipment)
   public components = new Collection<EquipmentHasComponents>(this);
   @Property()
@@ -52,9 +52,9 @@ export class EquipmentInstance {
     employee,
     patrimony_code,
     component,
-  }: EquipmentProps): EquipmentInstance => {
+  }: EquipmentProps): Equipment => {
     if (id && !validate(id)) throw new Error(`Invalid UUID V4`);
-    return new EquipmentInstance({
+    return new Equipment({
       id,
       employee,
       patrimony_code,

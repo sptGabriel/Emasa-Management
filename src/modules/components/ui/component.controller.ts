@@ -1,10 +1,10 @@
 import { BaseController } from '@shared/core/baseController';
 import { NextFunction, Request, Response } from 'express';
 import { container, singleton } from 'tsyringe';
-import { AssignComponentDTO } from '../application/useCases/transferComponent/transferDTO';
-import { AssignComponentUseCase } from '../application/useCases/transferComponent/transferComponent';
+import { transferDTO } from '../application/useCases/componentTransfer/transferDTO';
+import { ComponentTransferUseCase } from '../application/useCases/componentTransfer/componentTransfer';
 @singleton()
-export class ProductsController extends BaseController {
+export class ComponentController extends BaseController {
   constructor() {
     super();
     this.path = '/components';
@@ -23,9 +23,9 @@ export class ProductsController extends BaseController {
     next: NextFunction,
   ) => {
     try {
-      const dto: AssignComponentDTO = request.body;
+      const dto: transferDTO = request.body;
       const result = await container
-        .resolve(AssignComponentUseCase)
+        .resolve(ComponentTransferUseCase)
         .execute(dto);
       if (result.isLeft()) return next(result.value);
       return response.json(result.value);

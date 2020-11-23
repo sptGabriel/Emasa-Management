@@ -1,5 +1,5 @@
 import { LoadStrategy, wrap } from '@mikro-orm/core';
-import { EntityRepository, EntityManager } from '@mikro-orm/postgresql';
+import {  EntityManager } from '@mikro-orm/postgresql';
 import { Pagination } from '@shared/core/pagination';
 import { IBootstrap } from '@shared/infra/bootstrap';
 import { inject, injectable } from 'tsyringe';

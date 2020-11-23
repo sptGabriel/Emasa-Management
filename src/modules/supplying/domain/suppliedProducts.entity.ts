@@ -1,15 +1,10 @@
 import {
-  Collection,
   Entity,
-  ManyToMany,
   ManyToOne,
-  PrimaryKey,
   PrimaryKeyType,
   Property,
-  Unique,
 } from '@mikro-orm/core';
 import { Product } from '@modules/products/domain/product.entity';
-import { v4, validate } from 'uuid';
 import { Supply } from './supplying.entity';
 export interface SuppliedProductsProps {
   product: Product;

@@ -1,6 +1,7 @@
 import { Pagination } from '@shared/core/pagination';
 import { Component } from '../domain/component.entity';
-export interface IComponentInstanceRepository {
+import { ComponentTransfer } from '../domain/componentTransfer.entity';
+export interface IComponentRepository {
   /**
    * @param {Pagination} pagination
    * @returns {Promise<[Product[] , number]>}
@@ -41,4 +42,13 @@ export interface IComponentInstanceRepository {
    * @returns {Promise<Component>}
    */
   create(instance: Component): Promise<Component>;
+  /**
+   * @param {string} ProductInstanceProps
+   * @returns {Promise<Component>}
+   */
+  componentTransfer(instance: ComponentTransfer, component:Component): Promise<ComponentTransfer>;
+    /**
+   * @param {string} ProductInstanceProps
+   * @returns {Promise<Component>}
+   */
 }

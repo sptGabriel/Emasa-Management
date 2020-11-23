@@ -27,6 +27,9 @@ export class DepartamentRepository implements IDepartamentRepository {
   public all = async (pagination: Pagination): Promise<Departament[]> => {
     return await this.em.find(Departament, {});
   };
+  public byArray = async (id: string[]): Promise<Departament[]> => {
+    return await this.em.find(Departament, {id});
+  };
   public byId = async (id: string): Promise<Departament | undefined> => {
     const departamentRow = await this.em.findOne(Departament, { id });
     if (!departamentRow) return;

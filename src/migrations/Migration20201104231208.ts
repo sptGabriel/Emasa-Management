@@ -2,17 +2,16 @@ import { Migration } from '@mikro-orm/migrations';
 export class Migration20201104231206 extends Migration {
   async up(): Promise<void> {
     return this.getKnex()
-      .schema.hasTable('component_transfers_logs')
+      .schema.hasTable('users')
       .then(exists => {
         if (exists) return;
         return this.getKnex()
           .schema // **** udpate
-          .createTable('component_transfers_logs', async table => {
-            table.increments('id').primary().notNullable();
-            table.string('component_id').notNullable();
-            table.string('new_departament').notNullable();
-            table.string('old_departament').notNullable();
-            table.text('description').notNullable();
+          .createTable('users', async table => {
+            table.uuid('id').references('employees.id').primary().notNullable();
+            table.string('login').notNullable();
+            table.string('password').notNullable();
+            table.boolean('active').notNullable().defaultTo(false);
             table.timestamp('created_at').defaultTo(this.getKnex().fn.now());
             table.timestamp('updated_at').defaultTo(this.getKnex().fn.now());
             table.timestamp('deleted_at');
@@ -20,6 +19,6 @@ export class Migration20201104231206 extends Migration {
       });
   }
   async down(): Promise<void> {
-    return this.getKnex().schema.dropTable('component_transfers_logs');
+    return this.getKnex().schema.dropTable('users');
   }
 }

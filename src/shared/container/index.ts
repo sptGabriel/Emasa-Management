@@ -1,4 +1,5 @@
 import mikroConfig from '@config/mikro.config';
+import { ComponentController } from '@modules/components/ui/component.controller';
 import { ContractController } from '@modules/contracts/ui/contract.controller';
 import { DepartamentController } from '@modules/departaments/ui/departament.controller';
 import { EmployeeController } from '@modules/employees/ui/employee.controller';
@@ -24,6 +25,7 @@ container.registerSingleton<BaseController>(
   'Controllers',
   EquipmentsController,
 );
+container.registerSingleton<BaseController>('Controllers', ComponentController);
 container.registerSingleton<BaseController>(
   'Controllers',
   WithdrawalController,

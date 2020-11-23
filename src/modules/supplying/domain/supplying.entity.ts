@@ -1,15 +1,11 @@
 import {
   Collection,
   Entity,
-  ManyToMany,
-  ManyToOne,
   OneToMany,
   OneToOne,
   PrimaryKey,
   Property,
-  Unique,
 } from '@mikro-orm/core';
-import { Cascade } from '@mikro-orm/core/enums';
 import { Contract } from '@modules/contracts/domain/contract.entity';
 import { ProductStocks } from '@modules/products/domain/stock.entity';
 import { v4, validate } from 'uuid';

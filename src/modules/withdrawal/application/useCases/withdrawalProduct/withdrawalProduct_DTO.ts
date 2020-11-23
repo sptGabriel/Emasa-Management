@@ -1,4 +1,4 @@
-export interface WithdrawalComponentDTO {
+export interface WithdrawalProductDTO {
   serial_number: string;
   product_id: string;
   contract_id: string;
