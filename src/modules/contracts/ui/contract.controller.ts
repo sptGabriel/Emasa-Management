@@ -1,8 +1,8 @@
 import { BaseController } from '@shared/core/baseController';
 import { NextFunction, Request, Response } from 'express';
 import { container, singleton } from 'tsyringe';
-import { CreateContractDTO } from '../application/dtos/createContract_DTO';
-import { CreateContractUseCase } from '../application/useCases/createContract';
+import { CreateContractDTO } from '../application/useCases/newContract/createContract_DTO';
+import { CreateContractUseCase } from '../application/useCases/newContract/createContract';
 @singleton()
 export class ContractController extends BaseController {
   constructor() {

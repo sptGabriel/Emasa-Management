@@ -1,14 +1,29 @@
-import { Entity, Enum, LoadStrategy, ManyToOne, OneToOne, PrimaryKey, Property, Unique } from '@mikro-orm/core';
+import {
+  Cascade,
+  Entity,
+  Enum,
+  ManyToOne,
+  OneToOne,
+  PrimaryKey,
+  Property,
+  Unique,
+} from '@mikro-orm/core';
 import { Departament } from '@modules/departaments/domain/departament.entity';
-import { User } from '@modules/users/domain/user.entity';
+import { User, userContainer } from '@modules/users/domain/user.entity';
 import { v4, validate } from 'uuid';
+interface employeeUser {
+  login: string;
+  password: string;
+}
 export interface EmployeeContainer {
-  id?:string;
-  matricula:string;
-  departament:Departament;
+  id?: string;
+  matricula: string;
+  departament?: Departament;
   first_name: string;
   last_name: string;
   position: Positions;
+  user?: User;
+  userProps?: employeeUser;
 }
 export enum Positions {
   diretor = 'diretor',
@@ -30,11 +45,12 @@ export class Employee {
   public position: Positions;
   @ManyToOne({ entity: () => Departament, name: 'departament_id' })
   public departament: Departament;
-  // @OneToOne({
-  //   entity: () => User,
-  //   mappedBy: 'employee',
-  // })
-  // public user:User;
+  @OneToOne({
+    entity: () => User,
+    mappedBy: 'employee',
+    cascade: [Cascade.ALL],
+  })
+  public user: User;
   @Property()
   public createdAt = new Date();
   @Property({ onUpdate: () => new Date() })
@@ -46,14 +62,47 @@ export class Employee {
     this.matricula = container.matricula;
     this.first_name = container.first_name;
     this.last_name = container.last_name;
-    this.departament = container.departament;
+    if (container.departament) this.departament = container.departament;
     this.position = container.position;
+    if (container.user) this.user = container.user;
   }
-  static build = (
-    {id,matricula,departament,first_name,last_name,position}: EmployeeContainer,
-  ): Employee => {
+  static build = async ({
+    id,
+    matricula,
+    departament,
+    first_name,
+    last_name,
+    position,
+    user,
+    userProps,
+  }: EmployeeContainer): Promise<Employee> => {
     const isValidUUID = id ? validate(id) : null;
     if (isValidUUID === false) throw new Error(`Invalid UUID V4`);
-    return new Employee({id,position,last_name,first_name,departament,matricula});
+    if (!departament) throw new Error(`Departament doesn't exist`);
+    const employee = new Employee({
+      departament,
+      first_name,
+      last_name,
+      matricula,
+      position,
+      user: user ? user : undefined,
+      id,
+    });
+    if (!userProps) return employee;
+    const userDomain = await User.build({
+      active: false,
+      employee: employee,
+      login: userProps.login,
+      password: userProps.password,
+    });
+    return new Employee({
+      id,
+      position,
+      last_name,
+      first_name,
+      departament,
+      matricula,
+      user: userDomain,
+    });
   };
 }

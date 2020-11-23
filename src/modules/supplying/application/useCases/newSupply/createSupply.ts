@@ -15,13 +15,13 @@ import { IUseCase } from '@shared/core/useCase';
 import { AppError } from '@shared/errors/BaseError';
 import { ensure } from '@utils/ensure';
 import { inject, injectable } from 'tsyringe';
-import { Supply } from '../../domain/supplying.entity';
+import { Supply } from '../../../domain/supplying.entity';
 import {
   addStock,
   addSupplyDTO,
   SupplyDTO,
   supplyingProducts,
-} from '../dtos/createSupply_DTO';
+} from './createSupply_DTO';
 @injectable()
 export class CreateSupplyUseCase
   implements IUseCase<addSupplyDTO, Promise<Either<AppError, Supply>>> {

@@ -2,8 +2,8 @@ import { RequestContext } from '@mikro-orm/core';
 import { BaseController } from '@shared/core/baseController';
 import { NextFunction, Request, Response } from 'express';
 import { container, singleton } from 'tsyringe';
-import { CreateDepartamentDTO } from '../application/dtos/createDepartament_DTO';
-import { CreateDepartamentUseCase } from '../application/useCases/createDepartament';
+import { CreateDepartamentDTO } from '../application/useCases/newDepartament/newDepartament_DTO';
+import { CreateDepartamentUseCase } from '../application/useCases/newDepartament/newDepartament';
 @singleton()
 export class DepartamentController extends BaseController {
   constructor() {

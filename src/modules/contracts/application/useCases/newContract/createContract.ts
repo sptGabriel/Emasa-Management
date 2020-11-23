@@ -4,8 +4,8 @@ import { Either, left, right } from '@shared/core/either';
 import { IUseCase } from '@shared/core/useCase';
 import { AppError } from '@shared/errors/BaseError';
 import { inject, injectable } from 'tsyringe';
-import { Contract } from '../../domain/contract.entity';
-import { CreateContractDTO } from '../dtos/createContract_DTO';
+import { Contract } from '../../../domain/contract.entity';
+import { CreateContractDTO } from './createContract_DTO';
 @injectable()
 export class CreateContractUseCase
   implements IUseCase<CreateContractDTO, Promise<Either<AppError, Contract>>> {

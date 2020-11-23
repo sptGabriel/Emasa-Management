@@ -4,8 +4,8 @@ import { Either, left, right } from '@shared/core/either';
 import { IUseCase } from '@shared/core/useCase';
 import { AppError } from '@shared/errors/BaseError';
 import { inject, injectable } from 'tsyringe';
-import { Departament } from '../../domain/departament.entity';
-import { CreateDepartamentDTO } from '../dtos/createDepartament_DTO';
+import { Departament } from '../../../domain/departament.entity';
+import { CreateDepartamentDTO } from './newDepartament_DTO';
 @injectable()
 export class CreateDepartamentUseCase
   implements
@@ -13,8 +13,7 @@ export class CreateDepartamentUseCase
   constructor(
     @inject(DepartamentRepository)
     private departamentRepository: IDepartamentRepository,
-  ) {
-  }
+  ) {}
   public execute = async (
     request: CreateDepartamentDTO,
   ): Promise<Either<AppError, Departament>> => {

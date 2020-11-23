@@ -1,8 +1,8 @@
 import { BaseController } from '@shared/core/baseController';
 import { NextFunction, Request, Response } from 'express';
 import { container, singleton } from 'tsyringe';
-import { CreateEmployeeDTO } from '../application/dtos/createEmployee_DTO';
-import { CreateEmployeeUseCase } from '../application/useCases/createEmployee';
+import { NewEmployeeDTO } from '../application/useCases/newEmployee/newEmployee_DTO';
+import { NewEmployeeUseCase } from '../application/useCases/newEmployee/newEmployee';
 @singleton()
 export class EmployeeController extends BaseController {
   constructor() {
@@ -23,10 +23,8 @@ export class EmployeeController extends BaseController {
     next: NextFunction,
   ) => {
     try {
-      const dto: CreateEmployeeDTO = request.body;
-      const result = await container
-        .resolve(CreateEmployeeUseCase)
-        .execute(dto);
+      const dto: NewEmployeeDTO = request.body;
+      const result = await container.resolve(NewEmployeeUseCase).execute(dto);
       if (result.isLeft()) return next(result.value);
       return response.json(result.value);
     } catch (error) {

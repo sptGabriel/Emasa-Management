@@ -1,8 +1,8 @@
-import { CreateSupplierDTO } from '@modules/supplier/application/dtos/createSupplier_DTO';
+import { CreateSupplierDTO } from '@modules/supplier/application/useCases/newSupplier/createSupplier_DTO';
 import { BaseController } from '@shared/core/baseController';
 import { NextFunction, Request, Response } from 'express';
 import { container, singleton } from 'tsyringe';
-import { CreateSupplierUseCase } from '../application/useCases/createSupplier';
+import { CreateSupplierUseCase } from '../application/useCases/newSupplier/createSupplier';
 @singleton()
 export class SupplierController extends BaseController {
   constructor() {

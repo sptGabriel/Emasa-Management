@@ -63,14 +63,16 @@ export class Equipment {
   };
 
   toJSON = () => {
-    return{
+    return {
       patrimony_code: this.patrimony_code,
       component_owner: this.component.id,
       employee_id: this.employee.id,
       departament_id: this.component.departament?.id,
-      components: this.components.getItems().map((item) => item.component.serial_number),
-      created_at:this.created_at,
-      updated_at:this.updated_at
-    }
-  }
+      components: this.components
+        .getItems()
+        .map(item => item.component.serial_number),
+      created_at: this.created_at,
+      updated_at: this.updated_at,
+    };
+  };
 }
