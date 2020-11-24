@@ -1,7 +1,7 @@
 import { Cascade, Entity, OneToOne, Property } from '@mikro-orm/core';
 import { Employee } from '@modules/employees/domain/employee.entity';
 import { validate } from 'uuid';
-import { hash, genSaltSync } from 'bcryptjs';
+import { hash, genSaltSync, compareSync } from 'bcryptjs';
 import { isHashedRegex } from '@utils/isHashed';
 export interface userContainer {
   employee: Employee;
@@ -31,7 +31,14 @@ export class User {
     this.login = container.login;
     this.password = container.password;
   }
-  private static encryptPassWord = async (password: string) => {
+  public setLogin = (login: string) => {
+    if (!(typeof login === 'string')) throw new Error(`Login doesn't string`);
+    this.login = login;
+  };
+  public static DecryptPassword = (plain_pass: string, old_pass: string) => {
+    return compareSync(plain_pass, old_pass);
+  };
+  public static EncryptPassword = async (password: string) => {
     return await hash(password, genSaltSync(10)).catch(err => {
       throw err;
     });
@@ -47,7 +54,7 @@ export class User {
     if (password.length == 60 && password.match(isHashedRegex)) {
       throw new Error(`This password has been encrypted`);
     }
-    password = await User.encryptPassWord(password);
+    password = await User.EncryptPassword(password);
     return new User({ employee, login, password, active });
   };
 }

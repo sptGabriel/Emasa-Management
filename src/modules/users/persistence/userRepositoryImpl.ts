@@ -16,11 +16,28 @@ export class UserRepository implements IUserRepository {
     await this.em.persist(user).flush();
     return user;
   };
-  public update = async (matricula: string, data: any): Promise<User> => {
-    const user = await this.em.findOne(User, { employee: matricula });
-    if (!user) throw new Error(`${data.matricula} dont exists`);
-    wrap(user).assign(data);
-    await this.em.persist(user).flush();
+  public update = async (user: User): Promise<User> => {
+    await this.em.persistAndFlush(user);
+    return user;
+  };
+  public updatePassword = async (user: User): Promise<User> => {
+    await this.em
+      .createQueryBuilder(User)
+      .update({ password: user.password, updated_at: new Date() })
+      .where({
+        employee: { id: user.employee.id },
+      })
+      .execute();
+    return user;
+  };
+  public updateLogin = async (user: User): Promise<User> => {
+    await this.em
+      .createQueryBuilder(User)
+      .update({ login: user.login, updated_at: new Date() })
+      .where({
+        employee: { id: user.employee.id },
+      })
+      .execute();
     return user;
   };
   public all = async (pagination: Pagination): Promise<User[]> => {

@@ -29,4 +29,19 @@ export interface IUserRepository {
    * @returns {Promise<User>}
    */
   create(user: User): Promise<User>;
+    /**
+   * @param {string} employeeProps
+   * @returns {Promise<User>}
+   */
+  updatePassword(user: User): Promise<User>;
+      /**
+   * @param {string} employeeProps
+   * @returns {Promise<User>}
+   */
+  updateLogin(user: User): Promise<User>;
+      /**
+   * @param {string} employeeProps
+   * @returns {Promise<User>}
+   */
+  update(user: User): Promise<User>;
 }
