@@ -1,4 +1,5 @@
 import mikroConfig from '@config/mikro.config';
+import { AuthController } from '@modules/auth/ui/authenticate.controller';
 import { ComponentController } from '@modules/components/ui/component.controller';
 import { ContractController } from '@modules/contracts/ui/contract.controller';
 import { DepartamentController } from '@modules/departaments/ui/departament.controller';
@@ -32,3 +33,4 @@ container.registerSingleton<BaseController>(
   WithdrawalController,
 );
 container.registerSingleton<BaseController>('Controllers', UserController);
+container.registerSingleton<BaseController>('Controllers', AuthController);

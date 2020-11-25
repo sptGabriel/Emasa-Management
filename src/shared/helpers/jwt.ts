@@ -10,12 +10,12 @@ export const decode = (args: any, secret: Secret) => {
   }
   return decoded;
 };
-export const isTokenExpired = (decodedToken: any) => {
+export const isTokenNOTExpired = (decodedToken: any) => {
   if (typeof decodedToken.exp !== 'undefined' && decodedToken.exp < now) {
-    throw new Error(`token expired: ${JSON.stringify(decodedToken)}`);
+    return false;
   }
   if (typeof decodedToken.nbf !== 'undefined' && decodedToken.nbf > now) {
-    throw new Error(`token expired: ${JSON.stringify(decodedToken)}`);
+    return false;
   }
-  return decodedToken;
+  return true;
 };

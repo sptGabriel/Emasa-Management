@@ -3,6 +3,7 @@ import { Employee } from '@modules/employees/domain/employee.entity';
 import { validate } from 'uuid';
 import { hash, genSaltSync, compareSync } from 'bcryptjs';
 import { isHashedRegex } from '@utils/isHashed';
+import { IJWTAcessPayload } from './jwt';
 export interface userContainer {
   employee: Employee;
   login: string;
@@ -23,8 +24,22 @@ export class User {
   public login: string;
   @Property()
   public password: string;
+  @Property()
+  public ref_token: string;
+  @Property()
+  public ip_address: string;
   @Property({ default: false })
   public active: boolean;
+  @Property({ name: 'payload' })
+  public getJWTPayload = (): IJWTAcessPayload => {
+    return {
+      name: this.employee.getFullName(),
+      departament_id: this.employee.departament.id,
+      login: this.login,
+      matricula: this.employee.matricula,
+      position: this.employee.position,
+    };
+  };
   constructor(container: userContainer) {
     this.active = false;
     this.employee = container.employee;

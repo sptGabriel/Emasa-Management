@@ -1,13 +1,16 @@
 import authConfig from '@config/jwt.config';
 import { IBootstrap } from '@shared/infra/bootstrap';
 import { container } from 'tsyringe';
-import { decode, encode, isTokenExpired } from '@shared/helpers/jwt';
+import { decode, encode, isTokenNOTExpired } from '@shared/helpers/jwt';
 interface IJWTProps {
   sub: string;
 }
-interface IJWTPayload {
-  name: string;
+export interface IJWTAcessPayload {
+  login: string;
   matricula: string;
+  name: string;
+  position: string;
+  departament_id: string;
 }
 export class JWT {
   public sub: string;
@@ -15,22 +18,16 @@ export class JWT {
   private constructor(props: IJWTProps) {
     this.sub = props.sub;
   }
-  public static verifyRefreshToken = async (token: string) => {
+  public static getRefreshToken = async (matricula: string) => {
     if (!authConfig.secret) throw new Error(`Invalid public key`);
-    const refreshToken = isTokenExpired(decode(token, authConfig.secret));
-    const redis = container
-      .resolve<IBootstrap>('bootstrap')
-      .getRedisServer()
-      .getClient();
-    return new Promise<any>((resolve, reject) => {
-      redis.get(refreshToken.matricula, (err, data) => {
-        if (err) reject(err);
-        if (data !== refreshToken) reject(new Error(`Invalid Token`));
-        resolve(data);
-      });
-    });
+    // const refreshToken = isTokenExpired(decode(token, authConfig.secret));
+    const redis = container.resolve<IBootstrap>('bootstrap').getRedisServer();
+    const rfToken = await redis.getValueFromKey(matricula);
+    return rfToken && isTokenNOTExpired(rfToken)
+      ? rfToken
+      : await JWT.generateRefreshToken(matricula);
   };
-  public static verifyAcessToken = (token: string) => {
+  public static getAcessToken = (token: string) => {
     if (!authConfig.secret) throw new Error(`Invalid public key`);
     const validToken = decode(token, authConfig.secret);
     if (!validToken) throw new Error(`Not Authenticated`);
@@ -38,18 +35,17 @@ export class JWT {
   };
   private static generateRefreshToken = async (matricula: string) => {
     if (!authConfig.secret) throw new Error(`Invalid public key`);
-    const refreshToken = encode({}, authConfig.secret, { expiresIn: '30d' });
-    const redis = container
-      .resolve<IBootstrap>('bootstrap')
-      .getRedisServer()
-      .getClient();
-    const hasAdded = redis.set(matricula, refreshToken, 'EX', 720 * 60 * 60);
-    if (!hasAdded) throw new Error(`Problem to add refresh Token to storage`);
+    const refreshToken = encode({}, authConfig.secret, {
+      subject: matricula,
+      expiresIn: '30d',
+    });
+    const redis = container.resolve<IBootstrap>('bootstrap').getRedisServer();
+    await redis.setKeyWithEX(matricula, refreshToken, 720 * 60 * 60);
     return refreshToken;
   };
   private static generateAccessToken = (
     props: IJWTProps,
-    payload: IJWTPayload,
+    payload: IJWTAcessPayload,
   ) => {
     if (!authConfig.secret) throw new Error(`Invalid public key`);
     const token = encode(payload, authConfig.secret, {
@@ -58,11 +54,21 @@ export class JWT {
     });
     return token;
   };
-  public static create(props: IJWTProps, payload: IJWTPayload): JWT {
+  public static buildAcessToken(
+    props: IJWTProps,
+    payload: IJWTAcessPayload,
+  ): JWT {
     if (!props.sub) throw new Error(`Subscribe has invalid value`);
-    const signedToken = this.generateAccessToken(props, payload);
+    const AccessToken = this.generateAccessToken(props, payload);
     const jwtToken = new JWT(props);
-    jwtToken.token = signedToken;
+    jwtToken.token = AccessToken;
     return jwtToken;
   }
+  public static buildRefreshToken = async (matricula: string) => {
+    const refreshToken = await JWT.getRefreshToken(matricula);
+    if (!refreshToken) throw new Error(`Internal Error to Generate Token`);
+    const token = new JWT({ sub: matricula });
+    token.token = refreshToken;
+    return token;
+  };
 }

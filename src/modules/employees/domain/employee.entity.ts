@@ -37,9 +37,9 @@ export class Employee {
   public readonly id: string;
   @Property()
   public matricula: string;
-  @Property()
+  @Property({ hidden: true })
   public first_name: string;
-  @Property()
+  @Property({ hidden: true })
   public last_name: string;
   @Enum()
   public position: Positions;
@@ -51,6 +51,10 @@ export class Employee {
     cascade: [Cascade.ALL],
   })
   public user: User;
+  @Property({ name: 'fullName' })
+  public getFullName = () => {
+    return `${this.first_name} ${this.last_name}`;
+  };
   @Property()
   public createdAt = new Date();
   @Property({ onUpdate: () => new Date() })
