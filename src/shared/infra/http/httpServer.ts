@@ -8,7 +8,6 @@ import { container, singleton } from 'tsyringe';
 import { BaseController } from '@shared/core/baseController';
 import { RequestContext } from '@mikro-orm/core';
 import { EntityManager } from '@mikro-orm/postgresql';
-
 export class ExpressServer implements IHttpServer {
   private server: express.Application;
   private em:EntityManager
@@ -47,7 +46,7 @@ export class ExpressServer implements IHttpServer {
     this.initializeMiddlewares();
     this.initializeRouter();
     this.initializeErrorHandling();
-    this.server.listen(3000, () => {
+    this.server.listen(3000,'0.0.0.0', () => {
       console.log('this server is ready on port 3000');
     });
   };

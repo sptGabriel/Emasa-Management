@@ -9,10 +9,10 @@ import { IUseCase } from '@shared/core/useCase';
 import { AppError } from '@shared/errors/BaseError';
 import { inject, injectable } from 'tsyringe';
 import { User } from '../../../domain/user.entity';
-import { newUser } from './newUser_DTO';
+import { newUserDTO } from './newUser_DTO';
 @injectable()
 export class NewUserUseCase
-  implements IUseCase<newUser, Promise<Either<AppError, User>>> {
+  implements IUseCase<newUserDTO, Promise<Either<AppError, User>>> {
   constructor(
     @inject(EmployeeRepository)
     private employeeRepository: IEmployeeRepository,
@@ -25,13 +25,14 @@ export class NewUserUseCase
     login,
     matricula,
     password,
-  }: newUser): Promise<Either<AppError, User>> => {
+    ip_address
+  }: newUserDTO): Promise<Either<AppError, User>> => {
     const hasLogin = await this.userRepository.byLogin(login);
     if (hasLogin) throw new Error(`This login already exist`);
     const employee = await this.employeeRepository.byMatricula(matricula);
     if (!employee) throw new Error(`This employee doesn't exist`);
     const user = await this.userRepository.create(
-      User.build({ employee, login, password }),
+      await User.build({ employee, login, password,ip_address  }),
     );
     return right(user);
   };

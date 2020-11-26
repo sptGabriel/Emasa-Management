@@ -40,6 +40,16 @@ export class UserRepository implements IUserRepository {
       .execute();
     return user;
   };
+  public setRFToken = async (user: User): Promise<User> => {
+    await this.em
+      .createQueryBuilder(User)
+      .update({ ref_token: user.ref_token, updated_at: new Date() })
+      .where({
+        employee: { id: user.employee.id },
+      })
+      .execute();
+    return user;
+  };
   public all = async (pagination: Pagination): Promise<User[]> => {
     return await this.em.find(User, {});
   };
@@ -49,7 +59,7 @@ export class UserRepository implements IUserRepository {
     return user;
   };
   public byLogin = async (login: string): Promise<User | undefined> => {
-    const user = await this.em.findOne(User, { login });
+    const user = await this.em.findOne(User, { login }, ['employee']);
     if (!user) return;
     return user;
   };

@@ -7,7 +7,10 @@ import { UserRepository } from '@modules/users/persistence/userRepositoryImpl';
 import { IUserRepository } from '@modules/users/persistence/userRepository';
 import { User } from '@modules/users/domain/user.entity';
 import { IJWTAcessPayload, JWT } from '@modules/users/domain/jwt';
-import { isTokenNOTExpired } from '@shared/helpers/jwt';
+import { decode, isTokenNOTExpired } from '@shared/helpers/jwt';
+import { wrap } from '@mikro-orm/core';
+import { ensure } from '@utils/ensure';
+import authConfig from '@config/jwt.config';
 export interface loginResult {
   refresh: string;
   access: string;
@@ -31,8 +34,12 @@ export class LoginUseCase
     if (!user) throw new Error(`User doesn't exists`);
     const isValidPW = User.DecryptPassword(password, user.password);
     if (!isValidPW) throw new Error(`Invalid Password`);
-    return user;
+    if(user.ref_token) return user;
+    const token = await JWT.buildRefreshToken(user.employee.matricula)
+    wrap(user).assign({ref_token:token.token})
+    return await this.userRepository.setRFToken(user);
   };
+  
   public execute = async ({
     login,
     password,
@@ -40,14 +47,13 @@ export class LoginUseCase
     const user = await this.validateUser({ login, password });
     const acessToken = JWT.buildAcessToken(
       { sub: user.employee.matricula },
-      user.getJWTPayload(),
+      user.getJWTPayload,
     );
-    const rfTokenHasExpired = isTokenNOTExpired(user.ref_token);
-    if (!rfTokenHasExpired) throw new Error(`Invalid Token`);
+    const decodedRF = decode(user.ref_token, authConfig.secret);
     return right({
-      refresh: user.ref_token,
+      refresh: ensure(user.ref_token),
       access: acessToken.token,
-      user: user.getJWTPayload(),
+      user: user.getJWTPayload,
     });
   };
 }

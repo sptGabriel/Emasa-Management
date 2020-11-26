@@ -9,6 +9,8 @@ export interface userContainer {
   login: string;
   password: string;
   active?: boolean;
+  ref_token?: string | null;
+  ip_address: string;
 }
 @Entity({ tableName: 'users' })
 export class User {
@@ -24,16 +26,16 @@ export class User {
   public login: string;
   @Property()
   public password: string;
-  @Property()
-  public ref_token: string;
+  @Property({default:null})
+  public ref_token: string | null ; 
   @Property()
   public ip_address: string;
   @Property({ default: false })
   public active: boolean;
-  @Property({ name: 'payload' })
-  public getJWTPayload = (): IJWTAcessPayload => {
+  @Property({ name: 'payload', persist:false })
+  public get getJWTPayload(): IJWTAcessPayload {
     return {
-      name: this.employee.getFullName(),
+      name: this.employee.getFullName,
       departament_id: this.employee.departament.id,
       login: this.login,
       matricula: this.employee.matricula,
@@ -45,6 +47,9 @@ export class User {
     this.employee = container.employee;
     this.login = container.login;
     this.password = container.password;
+    this.ip_address = container.ip_address
+    if(container.ref_token) this.ref_token = container.ref_token
+    this.ref_token = null;
   }
   public setLogin = (login: string) => {
     if (!(typeof login === 'string')) throw new Error(`Login doesn't string`);
@@ -63,6 +68,8 @@ export class User {
     login,
     password,
     active = false,
+    ip_address,
+    ref_token,
   }: userContainer) => {
     if (!validate(employee.id)) throw new Error(`Invalid Employee UUID`);
     if (employee.user) throw new Error(`Employee already has user`);
@@ -70,6 +77,6 @@ export class User {
       throw new Error(`This password has been encrypted`);
     }
     password = await User.EncryptPassword(password);
-    return new User({ employee, login, password, active });
+    return new User({ employee, login, password, active, ip_address, ref_token});
   };
 }

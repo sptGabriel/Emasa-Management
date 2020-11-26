@@ -2,6 +2,7 @@ import authConfig from '@config/jwt.config';
 import { IBootstrap } from '@shared/infra/bootstrap';
 import { container } from 'tsyringe';
 import { decode, encode, isTokenNOTExpired } from '@shared/helpers/jwt';
+import { ensure } from '@utils/ensure';
 interface IJWTProps {
   sub: string;
 }
@@ -37,7 +38,7 @@ export class JWT {
     if (!authConfig.secret) throw new Error(`Invalid public key`);
     const refreshToken = encode({}, authConfig.secret, {
       subject: matricula,
-      expiresIn: '30d',
+      expiresIn: '10s',
     });
     const redis = container.resolve<IBootstrap>('bootstrap').getRedisServer();
     await redis.setKeyWithEX(matricula, refreshToken, 720 * 60 * 60);
@@ -47,8 +48,7 @@ export class JWT {
     props: IJWTProps,
     payload: IJWTAcessPayload,
   ) => {
-    if (!authConfig.secret) throw new Error(`Invalid public key`);
-    const token = encode(payload, authConfig.secret, {
+    const token = encode(payload, ensure(authConfig.secret), {
       subject: props.sub,
       expiresIn: authConfig.tokenExpiryTimeInSeconds,
     });
@@ -65,7 +65,7 @@ export class JWT {
     return jwtToken;
   }
   public static buildRefreshToken = async (matricula: string) => {
-    const refreshToken = await JWT.getRefreshToken(matricula);
+    const refreshToken = await JWT.generateRefreshToken(matricula);
     if (!refreshToken) throw new Error(`Internal Error to Generate Token`);
     const token = new JWT({ sub: matricula });
     token.token = refreshToken;

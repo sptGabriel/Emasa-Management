@@ -1416,6 +1416,13 @@
   dependencies:
     "@types/node" "*"
 
+"@types/request-ip@^0.0.35":
+  version "0.0.35"
+  resolved "https://registry.yarnpkg.com/@types/request-ip/-/request-ip-0.0.35.tgz#c30e832533296151c221532c48c10591b7edd468"
+  integrity sha512-FtI7lv1EDaZnWmaCU7ZTwfOpW76EioocaWyiSeWdfW1cDPZYzzij781A5O/UeHQUN9yjtjEcD3StTzZjKG0XEA==
+  dependencies:
+    "@types/node" "*"
+
 "@types/sequelize@*":
   version "4.28.9"
   resolved "https://registry.yarnpkg.com/@types/sequelize/-/sequelize-4.28.9.tgz#64d0fad07de2f30ef11003a8c2ef5ac0321de115"

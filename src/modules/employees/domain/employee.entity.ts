@@ -14,6 +14,7 @@ import { v4, validate } from 'uuid';
 interface employeeUser {
   login: string;
   password: string;
+  ip_address: string;
 }
 export interface EmployeeContainer {
   id?: string;
@@ -51,8 +52,8 @@ export class Employee {
     cascade: [Cascade.ALL],
   })
   public user: User;
-  @Property({ name: 'fullName' })
-  public getFullName = () => {
+  @Property({ name: 'fullName', persist:false })
+  public get getFullName ():string {
     return `${this.first_name} ${this.last_name}`;
   };
   @Property()
@@ -98,6 +99,7 @@ export class Employee {
       employee: employee,
       login: userProps.login,
       password: userProps.password,
+      ip_address: userProps.ip_address
     });
     return new Employee({
       id,

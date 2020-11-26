@@ -30,6 +30,9 @@ export class BootstrapApplication implements BootStrapContainer {
   public getDatabaseORM = (): IDatabaseORM => {
     return this.DatabaseOrm;
   };
+  public getRedisServer = (): IRedis => {
+    return this.RedisServer;
+  };
   public start = async () => {
     console.log(chalk.yellow(`Starting Redis Server`));
     this.RedisServer.startRedis();

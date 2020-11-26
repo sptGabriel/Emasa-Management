@@ -44,4 +44,9 @@ export interface IUserRepository {
    * @returns {Promise<User>}
    */
   update(user: User): Promise<User>;
+        /**
+   * @param {string} employeeProps
+   * @returns {Promise<User>}
+   */
+  setRFToken(user: User): Promise<User>;
 }

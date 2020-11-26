@@ -2,20 +2,24 @@ import { Either, right } from '@shared/core/either';
 import { IUseCase } from '@shared/core/useCase';
 import { AppError } from '@shared/errors/BaseError';
 import { inject, injectable } from 'tsyringe';
-import { IBootstrap } from '@shared/infra/bootstrap';
-import { IRedis } from '@shared/infra/redis';
 import { LogoutDTO } from './logoutDTO';
+import { UserRepository } from '@modules/users/persistence/userRepositoryImpl';
+import { IUserRepository } from '@modules/users/persistence/userRepository';
+import { wrap } from '@mikro-orm/core';
 @injectable()
 export class LogoutUseCase
   implements IUseCase<LogoutDTO, Promise<Either<AppError, any>>> {
-  private redisServer: IRedis;
-  constructor(@inject('bootstrap') bootstrap: IBootstrap) {
-    this.redisServer = bootstrap.getRedisServer();
+  constructor(@inject(UserRepository)
+  private userRepository: IUserRepository,) {
   }
   public execute = async ({
-    token,
+    matricula
   }: LogoutDTO): Promise<Either<AppError, any>> => {
-    await this.redisServer.getClient().SADD('token', token);
+    const user = await this.userRepository.byMatricula(matricula)
+    if(!user) throw new Error(`This user doesn't exists`)
+    wrap(user).assign({ref_token:null})
+    await this.userRepository.setRFToken(user);
+    // await this.userRepository.getClient().SADD('token', token);
     return right({ status: 200, data: 'You are logged out' });
   };
 }

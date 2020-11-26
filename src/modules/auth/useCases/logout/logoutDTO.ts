@@ -1,3 +1,3 @@
 export interface LogoutDTO {
-  token: string;
+  matricula:string;
 }
