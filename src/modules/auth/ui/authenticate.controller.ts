@@ -1,14 +1,9 @@
 import { BaseController } from '@shared/core/baseController';
-import { oneMonth } from '@utils/oneMonth';
 import { NextFunction, Request, Response } from 'express';
 import { container, singleton } from 'tsyringe';
 import { LoginUseCase } from '../useCases/login/login';
 import { loginDTO } from '../useCases/login/loginDTO';
 import { LogoutUseCase } from '../useCases/logout/logout';
-import { LogoutDTO } from '../useCases/logout/logoutDTO';
-import jwtConfig from '@config/jwt.config';
-import { decode } from '@shared/helpers/jwt';
-import { refreshTokenDTO } from '../useCases/refreshToken/refreshTokenDTO';
 import { RefreshTokenUseCase } from '../useCases/refreshToken/refreshToken';
 @singleton()
 export class AuthController extends BaseController {
@@ -41,9 +36,7 @@ export class AuthController extends BaseController {
         httpOnly: true,
         secure: false,
       });
-      return response.json({
-        user: result.value.user,
-      });
+      return response.json(result.value.user);
     } catch (error) {
       next(error);
     }
@@ -54,8 +47,11 @@ export class AuthController extends BaseController {
     next: NextFunction,
   ) => {
     try {
-      const dto: LogoutDTO = request.body;
-      const result = await container.resolve(LogoutUseCase).execute(dto);
+      const matricula = request.cookies['eid'];
+      const accToken = request.cookies['accToken'];
+      const result = await container
+        .resolve(LogoutUseCase)
+        .execute({ accToken, matricula });
       if (result.isLeft()) return next(result.value);
       return response.json(result.value);
     } catch (error) {
@@ -68,19 +64,20 @@ export class AuthController extends BaseController {
     next: NextFunction,
   ) => {
     try {
-      const dto: refreshTokenDTO = request.body;
-      const result = await container.resolve(RefreshTokenUseCase).execute(dto);
+      const matricula = request.cookies['eid'];
+      const accessToken = request.cookies['accToken'];
+      const result = await container
+        .resolve(RefreshTokenUseCase)
+        .execute({ accessToken, matricula });
       if (result.isLeft()) return next(result.value);
-      response.cookie('eid', dto.matricula);
+      response.cookie('eid', matricula);
       response.cookie('accToken', result.value.acessToken, {
         expires: new Date(Date.now() + 2 * 60 * 60 * 1000),
         maxAge: 2 * 60 * 60 * 1000, //two hours
         httpOnly: true,
         secure: false,
       });
-      return response.json({
-        message: 'Successfully authenticated',
-      });
+      return response.json({ message: result.value.message });
     } catch (error) {
       next(error);
     }

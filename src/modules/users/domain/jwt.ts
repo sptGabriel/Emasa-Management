@@ -29,6 +29,7 @@ export class JWT {
       : await JWT.generateRefreshToken(matricula);
   };
   public static getAcessToken = (token: string) => {
+    if (!token) throw new Error(`jwt must be provided`);
     if (!authConfig.secret) throw new Error(`Invalid public key`);
     const validToken = decode(token, authConfig.secret);
     if (!validToken) throw new Error(`Not Authenticated`);
@@ -36,9 +37,9 @@ export class JWT {
   };
   private static generateRefreshToken = async (matricula: string) => {
     if (!authConfig.secret) throw new Error(`Invalid public key`);
-    const refreshToken = encode({}, authConfig.secret, {
+    const refreshToken = encode({}, authConfig.rfSecret, {
       subject: matricula,
-      expiresIn: '10s',
+      expiresIn: '360s',
     });
     const redis = container.resolve<IBootstrap>('bootstrap').getRedisServer();
     await redis.setKeyWithEX(matricula, refreshToken, 720 * 60 * 60);

@@ -52,10 +52,10 @@ export class Employee {
     cascade: [Cascade.ALL],
   })
   public user: User;
-  @Property({ name: 'fullName', persist:false })
-  public get getFullName ():string {
+  @Property({ name: 'fullName', persist: false, hidden: true })
+  public get getFullName(): string {
     return `${this.first_name} ${this.last_name}`;
-  };
+  }
   @Property()
   public createdAt = new Date();
   @Property({ onUpdate: () => new Date() })
@@ -99,7 +99,7 @@ export class Employee {
       employee: employee,
       login: userProps.login,
       password: userProps.password,
-      ip_address: userProps.ip_address
+      ip_address: userProps.ip_address,
     });
     return new Employee({
       id,
