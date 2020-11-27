@@ -1,4 +1,5 @@
 export interface LogoutDTO {
-  matricula: string;
+  id: string;
   accToken: string;
+  ip:string;
 }

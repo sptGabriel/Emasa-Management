@@ -35,6 +35,7 @@ export class User {
   @Property({ name: 'payload', persist:false })
   public get getJWTPayload(): IJWTAcessPayload {
     return {
+      id: this.employee.id,
       name: this.employee.getFullName,
       departament_id: this.employee.departament.id,
       login: this.login,

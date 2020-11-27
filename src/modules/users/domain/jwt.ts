@@ -7,6 +7,7 @@ interface IJWTProps {
   sub: string;
 }
 export interface IJWTAcessPayload {
+  id:string
   login: string;
   matricula: string;
   name: string;
@@ -19,14 +20,14 @@ export class JWT {
   private constructor(props: IJWTProps) {
     this.sub = props.sub;
   }
-  public static getRefreshToken = async (matricula: string) => {
+  public static getRefreshToken = async (id: string) => {
     if (!authConfig.secret) throw new Error(`Invalid public key`);
     // const refreshToken = isTokenExpired(decode(token, authConfig.secret));
     const redis = container.resolve<IBootstrap>('bootstrap').getRedisServer();
-    const rfToken = await redis.getValueFromKey(matricula);
+    const rfToken = await redis.getValueFromKey(id);
     return rfToken && isTokenNOTExpired(rfToken)
       ? rfToken
-      : await JWT.generateRefreshToken(matricula);
+      : await JWT.generateRefreshToken(id);
   };
   public static getAcessToken = (token: string) => {
     if (!token) throw new Error(`jwt must be provided`);
@@ -35,14 +36,14 @@ export class JWT {
     if (!validToken) throw new Error(`Not Authenticated`);
     return validToken;
   };
-  private static generateRefreshToken = async (matricula: string) => {
+  private static generateRefreshToken = async (id: string) => {
     if (!authConfig.secret) throw new Error(`Invalid public key`);
     const refreshToken = encode({}, authConfig.rfSecret, {
-      subject: matricula,
+      subject: id,
       expiresIn: '360s',
     });
     const redis = container.resolve<IBootstrap>('bootstrap').getRedisServer();
-    await redis.setKeyWithEX(matricula, refreshToken, 720 * 60 * 60);
+    await redis.setKeyWithEX(id, refreshToken, 720 * 60 * 60);
     return refreshToken;
   };
   private static generateAccessToken = (

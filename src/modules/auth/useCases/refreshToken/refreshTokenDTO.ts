@@ -1,4 +1,4 @@
 export interface refreshTokenDTO {
-  accessToken: string
-  matricula:string
+  id:string
+  ip:string
 }

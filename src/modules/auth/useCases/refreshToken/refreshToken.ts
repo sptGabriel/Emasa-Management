@@ -14,6 +14,7 @@ import {
 import { wrap } from '@mikro-orm/core';
 import jwtConfig from '@config/jwt.config';
 import { JsonWebTokenError, TokenExpiredError } from 'jsonwebtoken';
+import instance from 'tsyringe/dist/typings/dependency-container';
 @injectable()
 export class RefreshTokenUseCase
   implements IUseCase<refreshTokenDTO, Promise<Either<AppError, any>>> {
@@ -22,24 +23,35 @@ export class RefreshTokenUseCase
     private userRepository: IUserRepository,
   ) {}
 
-  private validateUser = async (matricula: string) => {
-    const user = await this.userRepository.byMatricula(matricula);
+  private validateUser = async ({ id, ip }: refreshTokenDTO) => {
+    const user = await this.userRepository.byId(id);
     if (!user) throw new Error(`User doesn't exists`);
+    if (user.ip_address !== ip) {
+      throw new Error(
+        `It was not possible to generate an access and refresh token.`,
+      );
+    }
     const hasValidToken = user.ref_token
       ? await promisifyDecode(user.ref_token, jwtConfig.rfSecret)
       : false;
     if (!(hasValidToken instanceof Error) && hasValidToken) return user;
-    const renewToken = await JWT.buildRefreshToken(user.employee.matricula);
+    if (
+      hasValidToken instanceof JsonWebTokenError &&
+      !(hasValidToken instanceof TokenExpiredError)
+    ) {
+      throw new Error(`Problem with Token, ${hasValidToken.message}`)
+    }
+    const renewToken = await JWT.buildRefreshToken(user.employee.id);
     wrap(user).assign({ ref_token: renewToken.token });
     return await this.userRepository.setRFToken(user);
   };
   public execute = async ({
-    accessToken,
-    matricula,
+    id,
+    ip,
   }: refreshTokenDTO): Promise<Either<AppError, any>> => {
-    const user = await this.validateUser(matricula);
+    const user = await this.validateUser({ id, ip });
     const renewAcessToken = JWT.buildAcessToken(
-      { sub: user.employee.matricula },
+      { sub: user.employee.id },
       user.getJWTPayload,
     );
     return right({
