@@ -17,8 +17,11 @@ export class ExpressServer implements IHttpServer {
   }
   private initializeRouter = () => {
     container.resolveAll<BaseController>("Controllers").forEach((controller) => {
-      this.server.use(controller.getRouter())
+      this.server.use('/api/v1',controller.getRouter())
     })
+    this.server.get('/favico.ico', (req, res) => {
+      res.sendStatus(404);
+    });
     this.server.get('/favico.ico', (req, res) => {
       res.sendStatus(404);
     });
@@ -30,10 +33,27 @@ export class ExpressServer implements IHttpServer {
     this.server.use(ErrorMiddleware);
   }
   private initializeMiddlewares = () => {
-    this.server.use(cors());
+    this.server.use(cookieParser());
+    this.server.use(cors({
+      credentials: true,
+      origin: 'http://localhost:3000',
+      optionsSuccessStatus: 200,
+      methods: ['POST', 'PUT', 'GET', 'OPTIONS', 'HEAD'],
+      exposedHeaders: ["eid", "Access-Token"],},
+      ));
+      this.server.use(function(req, res, next) {
+        res.header('Content-Type', 'application/json;charset=UTF-8')
+        res.header("Access-Control-Allow-Headers","Set-Cookie")
+        res.setHeader('Access-Control-Allow-Credentials', true);
+        res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+        res.header(
+          'Access-Control-Allow-Headers',
+          'Origin, X-Requested-With, Content-Type, Accept'
+        )
+        next()
+    })
     this.server.use(express.json());
     this.server.use(bodyParser.json());
-    this.server.use(cookieParser());
     this.server.use((req, res, next) => {
       RequestContext.create(this.em, next);
     });
@@ -46,7 +66,7 @@ export class ExpressServer implements IHttpServer {
     this.initializeMiddlewares();
     this.initializeRouter();
     this.initializeErrorHandling();
-    this.server.listen(3000,'0.0.0.0', () => {
+    this.server.listen(4000,'0.0.0.0', () => {
       console.log('this server is ready on port 3000');
     });
   };

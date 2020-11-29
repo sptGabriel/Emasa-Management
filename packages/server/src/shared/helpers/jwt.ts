@@ -24,6 +24,7 @@ export const promisifyDecode = async (
   });
 };
 export const isTokenNOTExpired = (decodedToken: any) => {
+  console.log(decodedToken.exp)
   if (typeof decodedToken.exp !== 'undefined' && decodedToken.exp < now) {
     return false;
   }

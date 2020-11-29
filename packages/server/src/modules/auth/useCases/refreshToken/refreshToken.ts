@@ -34,6 +34,10 @@ export class RefreshTokenUseCase
     const hasValidToken = user.ref_token
       ? await promisifyDecode(user.ref_token, jwtConfig.rfSecret)
       : false;
+    const now = Date.now().valueOf() / 1000;
+    if(hasValidToken.exp > now){
+      const a = hasValidToken.exp - now.toUTCString();
+    }
     if (!(hasValidToken instanceof Error) && hasValidToken) return user;
     if (
       hasValidToken instanceof JsonWebTokenError &&
