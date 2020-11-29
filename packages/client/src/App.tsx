@@ -1,26 +1,16 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
-
-function App() {
+import { ThemeProvider } from 'styled-components';
+import { LoginComponentTest } from './modules/login/components';
+import { CSSReset } from './shared/components/cssReset';
+import { useAppTheme } from './shared/utils/useAppTheme';
+const App: React.FunctionComponent = () => {
+  const { theme } = useAppTheme();
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ThemeProvider theme={theme}>
+      <CSSReset />
+      <LoginComponentTest></LoginComponentTest>
+    </ThemeProvider>
   );
-}
+};
 
 export default App;
