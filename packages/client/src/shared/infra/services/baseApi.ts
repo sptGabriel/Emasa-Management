@@ -3,15 +3,15 @@
 import axios, { AxiosInstance } from 'axios';
 import { apiConfig } from '../../../config/api';
 import { get } from 'lodash'
-import { IAuthService } from '../../../modules/user/application/services/authService';
-
+import CookieUniversal from 'universal-cookie';
+import { RootStore } from '../../../store/rootStore';
+const Cookie = new CookieUniversal();
 export abstract class BaseAPI {
   protected baseUrl: string;
   private axiosInstance: AxiosInstance | any = null;
-  public authService: IAuthService;
 
-  constructor (authService: IAuthService) {
-    this.authService = authService;
+  constructor (protected rootStore:RootStore) {
+    this.rootStore = rootStore
     this.baseUrl = apiConfig.baseUrl
     this.axiosInstance = axios.create({})
     this.axiosInstance.defaults.withCredentials = true;
@@ -39,7 +39,7 @@ export abstract class BaseAPI {
       method: 'GET',
       url: `${this.baseUrl}/users/token/refresh`,
       headers:{
-        Cookie: `eid=${this.authService.getToken()}; accToken=${this.authService.getToken()};`
+        Cookie: `eid=${Cookie.get('eid')}; accToken=${Cookie.get('Access-Token')};`
       },
       withCredentials:true
     });
@@ -52,11 +52,8 @@ export abstract class BaseAPI {
         try {
           const accessToken = await this
           .regenerateAccessTokenFromRefreshToken();
-          this.authService.setToken(accessToken)
-          console.log(error)
         } catch (error) {
           this.authService.removeToken();
-          console.log(error);
         }
         // if (accessToken) {
         //   try {
