@@ -1,7 +1,7 @@
 /* eslint-disable consistent-return */
-import { observable } from "mobx";
-import CookieUniversal from "universal-cookie";
-import { RootStore } from "./rootStore";
+import { observable } from 'mobx';
+import CookieUniversal from 'universal-cookie';
+import { RootStore } from './rootStore';
 
 export class CookieStore {
   private cookie: CookieUniversal;
@@ -12,10 +12,10 @@ export class CookieStore {
   }
 
   @observable getAccessToken = (): string => {
-    return this.cookie.get("Access-Token");
+    return this.cookie.get('Access-Token');
   };
 
   @observable removeAccessToken = (): void => {
-    return this.cookie.remove("Access-Token");
+    return this.cookie.remove('Access-Token');
   };
 }

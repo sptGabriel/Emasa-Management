@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-import { observable } from "mobx";
+import { observable } from 'mobx';
 
 type TUser = {
   id: string;

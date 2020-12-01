@@ -4,11 +4,11 @@ type colors = {
   secondary: string;
   background: string;
   text: string;
-}
+};
 export type ITheme = {
   type: string;
   colors: colors;
-}
+};
 
 export const lightTheme: ITheme = {
   type: 'light',
@@ -16,9 +16,9 @@ export const lightTheme: ITheme = {
     primary: '#fff',
     secondary: '#2a2d34',
     background: '#FFF',
-    text: '#333',
-  },
-}
+    text: '#333'
+  }
+};
 
 export const darkTheme: ITheme = {
   type: 'dark',
@@ -26,6 +26,6 @@ export const darkTheme: ITheme = {
     primary: '#fff',
     secondary: '#2a2d34',
     background: '#FFF',
-    text: '#333',
-  },
-}
+    text: '#333'
+  }
+};

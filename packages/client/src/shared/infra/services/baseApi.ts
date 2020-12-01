@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable prettier/prettier */
 import axios, { AxiosInstance } from 'axios';
-import { get } from 'lodash'
+import { get } from 'lodash';
 import CookieUniversal from 'universal-cookie';
 import { apiConfig } from '../../../config/api';
 import { RootStore } from '../../../store/rootStore';
@@ -14,52 +14,78 @@ export abstract class BaseAPI {
 
   private axiosInstance: AxiosInstance | any = null;
 
-  constructor (public rootStore:RootStore) {
-    this.rootStore = rootStore
-    this.baseUrl = apiConfig.baseUrl
-    this.axiosInstance = axios.create({})
+  constructor(public rootStore: RootStore) {
+    this.rootStore = rootStore;
+    this.baseUrl = apiConfig.baseUrl;
+    this.axiosInstance = axios.create({});
     this.axiosInstance.defaults.withCredentials = true;
     this.enableInterceptors();
   }
 
-  private enableInterceptors (): void {
+  private enableInterceptors(): void {
     this.axiosInstance.interceptors.response.use(
-      this.getSuccessResponseHandler(),
-    )
+      this.getSuccessResponseHandler()
+    );
   }
 
-  private getSuccessResponseHandler () :unknown {
+  private getSuccessResponseHandler(): unknown {
     return (response: unknown) => {
       return response;
+    };
+  }
+
+  private didAccessTokenExpire(response: unknown): boolean {
+    return get(response, 'data.message') === 'Token has expired.';
+  }
+
+  public async getCurrentUser(): Promise<any> {
+    if (!this.rootStore.cookieStore.getAccessToken()) {
+      return Promise.reject(new Error(`Invalid Token`));
     }
+    this.axiosInstance.defaults.withCredentials = true;
+    const currentUser = await axios({
+      method: 'GET',
+      url: `${this.baseUrl}/users/me`,
+      withCredentials: true,
+      headers: {
+        'content-Type': 'application/json',
+        Accept: '/',
+        'Cache-Control': 'no-cache',
+        credentials: 'same-origin',
+        Cookie: `Access-Token=${Cookie.get('Access-Token')};`
+      }
+    });
+    return currentUser.data;
   }
 
-  private didAccessTokenExpire (response: unknown): boolean {
-    return get(response, 'data.message') === "Token has expired.";
-  }
-
-  private async regenerateAccessTokenFromRefreshToken (): Promise<unknown> {
+  private async regenerateAccessTokenFromRefreshToken(): Promise<unknown> {
     const response = await axios({
       method: 'GET',
       url: `${this.baseUrl}/users/token/refresh`,
-      headers:{
-        Cookie: `eid=${Cookie.get('eid')}; accToken=${Cookie.get('Access-Token')};`
+      headers: {
+        Cookie: `eid=${Cookie.get('eid')}; accToken=${Cookie.get(
+          'Access-Token'
+        )};`
       },
-      withCredentials:true
+      withCredentials: true
     });
     return response.data.accessToken;
   }
 
-  protected get (url: string, params?: unknown, headers?: unknown): Promise<unknown> {
+  protected get(
+    url: string,
+    params?: unknown,
+    headers?: unknown
+  ): Promise<unknown> {
     return this.axiosInstance({
       method: 'GET',
       url: `${this.baseUrl}${url}`,
       params: params || null,
       headers: headers || null
-    })
+    });
   }
 
-  protected post (url: string, data?: any, params?: any): Promise<any> { 
+  protected post(url: string, data?: any, params?: any): Promise<any> {
     return this.axiosInstance({
       method: 'POST',
       url: `${this.baseUrl}${url}`,
@@ -70,7 +96,7 @@ export abstract class BaseAPI {
         crossDomain: true,
         'Content-Type': 'application/json'
       },
-      withCredentials:true,
-    })
+      withCredentials: true
+    });
   }
 }

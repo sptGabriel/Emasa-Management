@@ -1,10 +1,10 @@
-import { action, observable } from "mobx";
-import { AuthStore } from "./authStore";
-import { CookieStore } from "./cookieStore";
-import { UserStore } from "./userStore";
+import { action, observable } from 'mobx';
+import { AuthStore } from './authStore';
+import { CookieStore } from './cookieStore';
+import { UserStore } from './userStore';
 
 export class RootStore {
-  @observable appName = "Emasa";
+  @observable appName = 'Emasa';
 
   @observable appLoaded = false;
 

@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React from "react";
-import { FaUser } from "react-icons/fa";
-import { AiTwotoneLock } from "react-icons/ai";
+import React from 'react';
+import { FaUser } from 'react-icons/fa';
+import { AiTwotoneLock } from 'react-icons/ai';
 import {
   MainCONTENT,
   MainCONTAINER,
@@ -11,8 +11,8 @@ import {
   InputsSECTION,
   InputSTYLED,
   LoginBUTTON,
-  WrapRegister,
-} from "./styles";
+  WrapRegister
+} from './styles';
 
 const Inputs: React.FunctionComponent = () => {
   return (

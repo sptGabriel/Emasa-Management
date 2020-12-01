@@ -1,8 +1,8 @@
 /* eslint-disable no-useless-constructor */
-import { observable, action } from "mobx";
-import { UserModel } from "../models/userModel";
-import { BaseAPI } from "../shared/infra/services/baseApi";
-import { RootStore } from "./rootStore";
+import { observable, action, runInAction } from 'mobx';
+import { UserModel } from '../models/userModel';
+import { BaseAPI } from '../shared/infra/services/baseApi';
+import { RootStore } from './rootStore';
 
 export class UserStore extends BaseAPI {
   @observable currentUser: UserModel | null = null;
@@ -15,49 +15,37 @@ export class UserStore extends BaseAPI {
 
   constructor(rootStore: RootStore) {
     super(rootStore);
-    if (rootStore.cookieStore.getAccessToken()) this.pullUser();
+    if (rootStore.cookieStore.getAccessToken()) {
+      (async () => this.pullUser())();
+    }
   }
 
-  @action pullUser = async (): Promise<UserModel> => {
+  @action pullUser = async (): Promise<void> => {
     this.loadingUser = true;
-    if (!this.rootStore.cookieStore.getAccessToken())
-      return Promise.reject(new Error(`Invalid Token`));
     try {
-      const currentUser: UserModel = await this.get("/users/me", {
-        Cookie: `Access-Token=${this.rootStore.cookieStore.getAccessToken()};`,
+      await this.get('/users/me', {
+        Cookie: `Access-Token=${this.rootStore.cookieStore.getAccessToken()};`
       }).then(
-        action(({ data }: any) => {
-          this.currentUser = new UserModel(data);
-          return data;
+        action('fetchSuccess', ({ data }: any) => {
+          const model = new UserModel(data);
+          if (model) this.currentUser = model;
+          this.loadingUser = false;
+        }),
+        action('fetchError', (error: Error) => {
+          throw error;
         })
       );
-      this.rootStore.authStore.isAuth = true;
-      this.loadingUser = false;
-      return currentUser;
+      // runInAction(() => {
+      //   this.currentUser = new UserModel(data);
+      //   this.loadingUser = false;
+      // });
     } catch (error) {
-      this.loadingUser = false;
-      this.currentUser = null;
-      this.rootStore.authStore.isAuth = false;
+      runInAction(() => {
+        this.loadingUser = false;
+        this.currentUser = null;
+        this.rootStore.authStore.isAuth = false;
+      });
       throw error;
     }
   };
-
-  // @action updateUser(newUser) {
-  //   this.updatingUser = true;
-  //   return agent.Auth.save(newUser)
-  //     .then(
-  //       action(({ user }) => {
-  //         this.currentUser = user;
-  //       })
-  //     )
-  //     .finally(
-  //       action(() => {
-  //         this.updatingUser = false;
-  //       })
-  //     );
-  // }
-
-  // @action forgetUser() {
-  //   this.currentUser = undefined;
-  // }
 }

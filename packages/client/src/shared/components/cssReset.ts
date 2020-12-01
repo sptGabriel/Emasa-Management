@@ -1,4 +1,4 @@
-import { createGlobalStyle } from "styled-components";
+import { createGlobalStyle } from 'styled-components';
 
 export const CSSReset = createGlobalStyle`
         @import url('https://fonts.googleapis.com/css?family=Poppins&display=swap');
