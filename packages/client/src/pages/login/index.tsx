@@ -1,4 +1,7 @@
-import React from 'react';
+/* eslint-disable jsx-a11y/anchor-is-valid */
+import React from "react";
+import { FaUser } from "react-icons/fa";
+import { AiTwotoneLock } from "react-icons/ai";
 import {
   MainCONTENT,
   MainCONTAINER,
@@ -9,9 +12,8 @@ import {
   InputSTYLED,
   LoginBUTTON,
   WrapRegister,
-} from './styles';
-import { FaUser } from 'react-icons/fa';
-import { AiTwotoneLock } from 'react-icons/ai';
+} from "./styles";
+
 const Inputs: React.FunctionComponent = () => {
   return (
     <InputsSECTION>
@@ -51,7 +53,8 @@ const Form: React.FunctionComponent = () => {
       {/* <div className="separator" /> */}
       <hr className="gradient-line" />
       <WrapRegister>
-        Não tem uma conta? <a>Registre-se</a>
+        Não tem uma conta?
+        <a>Registre-se</a>
       </WrapRegister>
     </FormCONTAINER>
   );

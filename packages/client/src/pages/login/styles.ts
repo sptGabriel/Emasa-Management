@@ -1,8 +1,9 @@
-import styled from 'styled-components';
-import { dynamicFlex } from '../../shared/components/dynamicFlexContainer';
-import one from '../../assets/one.png';
-import satelite from '../../assets/satelite.png';
-import two from '../../assets/two.png';
+import styled from "styled-components";
+import { dynamicFlex } from "../../shared/components/dynamicFlexContainer";
+import one from "../../assets/one.png";
+import satelite from "../../assets/satelite.png";
+import two from "../../assets/two.png";
+
 export const MainCONTAINER = styled(dynamicFlex)`
   min-height: 100vh;
   background-color: #fafafa;
@@ -40,7 +41,7 @@ export const LogoCONTAINER = styled(dynamicFlex)`
   }
   .emasaTXT {
     text-align: center;
-    font-family: 'Dancing Script', cursive;
+    font-family: "Dancing Script", cursive;
     font-size: 25px;
     text-transform: uppercase;
     letter-spacing: 3px;

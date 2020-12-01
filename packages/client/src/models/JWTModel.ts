@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 export type JWTType = {
   id: string;
   name: string;

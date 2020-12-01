@@ -1,13 +1,16 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React from "react";
+import ReactDOM from "react-dom";
+import App from "./App";
+import reportWebVitals from "./reportWebVitals";
+import { RootStoreProvider } from "./shared/infra/mobx";
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <RootStoreProvider>
+      <App />
+    </RootStoreProvider>
   </React.StrictMode>,
-  document.getElementById('emasa')
+  document.getElementById("emasa")
 );
 
 // If you want to start measuring performance in your app, pass a function

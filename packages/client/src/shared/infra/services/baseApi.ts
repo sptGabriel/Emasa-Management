@@ -1,16 +1,20 @@
+/* eslint-disable import/no-extraneous-dependencies */
+/* eslint-disable class-methods-use-this */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable prettier/prettier */
 import axios, { AxiosInstance } from 'axios';
-import { apiConfig } from '../../../config/api';
 import { get } from 'lodash'
 import CookieUniversal from 'universal-cookie';
+import { apiConfig } from '../../../config/api';
 import { RootStore } from '../../../store/rootStore';
+
 const Cookie = new CookieUniversal();
 export abstract class BaseAPI {
   protected baseUrl: string;
+
   private axiosInstance: AxiosInstance | any = null;
 
-  constructor (protected rootStore:RootStore) {
+  constructor (public rootStore:RootStore) {
     this.rootStore = rootStore
     this.baseUrl = apiConfig.baseUrl
     this.axiosInstance = axios.create({})
@@ -21,20 +25,20 @@ export abstract class BaseAPI {
   private enableInterceptors (): void {
     this.axiosInstance.interceptors.response.use(
       this.getSuccessResponseHandler(),
-      this.getErrorResponseHandler()
     )
   }
 
-  private getSuccessResponseHandler () {
-    return (response: any) => {
+  private getSuccessResponseHandler () :unknown {
+    return (response: unknown) => {
       return response;
     }
   }
 
-  private didAccessTokenExpire (response: any): boolean {
+  private didAccessTokenExpire (response: unknown): boolean {
     return get(response, 'data.message') === "Token has expired.";
   }
-  private async regenerateAccessTokenFromRefreshToken (): Promise<any> {
+
+  private async regenerateAccessTokenFromRefreshToken (): Promise<unknown> {
     const response = await axios({
       method: 'GET',
       url: `${this.baseUrl}/users/token/refresh`,
@@ -46,56 +50,21 @@ export abstract class BaseAPI {
     return response.data.accessToken;
   }
 
-  private getErrorResponseHandler () {
-    return async (error: any) => {
-      if (this.didAccessTokenExpire(error.response)) {
-        try {
-          const accessToken = await this
-          .regenerateAccessTokenFromRefreshToken();
-        } catch (error) {
-          this.authService.removeToken();
-        }
-        // if (accessToken) {
-        //   try {
-        //     // Get the new access token
-        //     const accessToken = await this
-        //       .regenerateAccessTokenFromRefreshToken();
-
-        //     // Save token
-        //     this.authService.setToken('access-token', accessToken);
-
-        //     // Retry request
-        //     error.config.headers['authorization'] = accessToken;
-        //     return this.axiosInstance.request(error.config);
-            
-        //   } catch (err) {
-        //     // remove access and refresh tokens
-        //     this.authService.removeToken('access-token');
-        //     this.authService.removeToken('refresh-token');
-        //     console.log(err);
-        //   }
-        // }
-        
-      }
-      return Promise.reject({ ...error })
-    }
-  }
-
-  protected get (url: string, params?: any, headers?: any): Promise<any> {
+  protected get (url: string, params?: unknown, headers?: unknown): Promise<unknown> {
     return this.axiosInstance({
       method: 'GET',
       url: `${this.baseUrl}${url}`,
-      params: params ? params : null,
-      headers: headers ? headers : null
+      params: params || null,
+      headers: headers || null
     })
   }
 
-  protected post (url: string, data?: any, params?: any, headers?: any): Promise<any> { 
+  protected post (url: string, data?: any, params?: any): Promise<any> { 
     return this.axiosInstance({
       method: 'POST',
       url: `${this.baseUrl}${url}`,
-      data: data ? data : null,
-      params: params ? params : null,
+      data: data || null,
+      params: params || null,
       // headers ? headers : null
       headers: {
         crossDomain: true,

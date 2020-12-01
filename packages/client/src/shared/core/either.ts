@@ -1,3 +1,5 @@
+/* eslint-disable class-methods-use-this */
+/* eslint-disable max-classes-per-file */
 /* eslint-disable prettier/prettier */
 export type Either<L, A> = Left<L, A> | Right<L, A>;
 

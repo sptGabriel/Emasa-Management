@@ -1,13 +1,13 @@
 /* eslint-disable prettier/prettier */
 type colors = {
-  primary: string
-  secondary: string
-  background: string
-  text: string
+  primary: string;
+  secondary: string;
+  background: string;
+  text: string;
 }
 export type ITheme = {
-  type: string
-  colors: colors
+  type: string;
+  colors: colors;
 }
 
 export const lightTheme: ITheme = {

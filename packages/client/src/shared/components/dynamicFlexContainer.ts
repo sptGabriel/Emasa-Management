@@ -2,9 +2,9 @@
 import styled from 'styled-components'
 
 export type TDynamicFlex = {
-  column?: boolean
-  align?: string
-  justify?: string
+  column?: boolean;
+  align?: string;
+  justify?: string;
 }
 export const dynamicFlex = styled.div<TDynamicFlex>`
   display: flex;

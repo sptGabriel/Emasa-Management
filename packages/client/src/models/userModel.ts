@@ -1,4 +1,5 @@
-import { observable } from 'mobx';
+/* eslint-disable camelcase */
+import { observable } from "mobx";
 
 type TUser = {
   id: string;
@@ -9,10 +10,15 @@ type TUser = {
 };
 export class UserModel implements TUser {
   @observable id: string;
+
   @observable name: string;
+
   @observable departament_id: string;
+
   @observable matricula: string;
+
   @observable position: string;
+
   constructor(props: TUser) {
     this.id = props.id;
     this.name = props.name;
