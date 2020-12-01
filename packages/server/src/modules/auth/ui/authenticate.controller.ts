@@ -33,10 +33,9 @@ export class AuthController extends BaseController {
       const result = await container.resolve(LoginUseCase).execute(dto);
       if (result.isLeft()) return next(result.value);
       response.cookie('eid', result.value.user.id);
-      response.cookie('accToken', result.value.access, {
+      response.cookie('Access-Token', result.value.access, {
         expires: new Date(Date.now() + 2 * 60 * 60 * 1000),
         maxAge: 2 * 60 * 60 * 1000, //two hours
-        httpOnly: true,
         secure: false,
       });
       return response.json(result.value.user);
@@ -75,10 +74,9 @@ export class AuthController extends BaseController {
         .execute({ id, ip });
       if (result.isLeft()) return next(result.value);
       response.cookie('eid', id);
-      response.cookie('accToken', result.value.acessToken, {
+      response.cookie('Access-Token', result.value.acessToken, {
         expires: new Date(Date.now() + 2 * 60 * 60 * 1000),
         maxAge: 2 * 60 * 60 * 1000, //two hours
-        httpOnly: true,
         secure: false,
       });
       return response.json({ message: result.value.message });
