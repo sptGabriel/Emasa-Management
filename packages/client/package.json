@@ -15,6 +15,7 @@
     "mobx-react-lite": "2.2.2",
     "mobx-state-tree": "^4.0.2",
     "polished": "^4.0.5",
+    "prop-types": "^15.7.2",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-icons": "^4.1.0",
@@ -81,7 +82,10 @@
     "typescript": "^4.1.2"
   },
   "babel": {
-    "plugins": ["transform-decorators-legacy","transform-class-properties"],
+    "plugins": [
+      "transform-decorators-legacy",
+      "transform-class-properties"
+    ],
     "presets": [
       "react-app"
     ]

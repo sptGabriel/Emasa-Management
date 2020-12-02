@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-import { observable } from 'mobx';
+import { makeAutoObservable, makeObservable, observable } from 'mobx';
 
 type TUser = {
   id: string;
@@ -9,17 +9,18 @@ type TUser = {
   position: string;
 };
 export class UserModel implements TUser {
-  @observable id: string;
+  id: string;
 
-  @observable name: string;
+  name: string;
 
-  @observable departament_id: string;
+  departament_id: string;
 
-  @observable matricula: string;
+  matricula: string;
 
-  @observable position: string;
+  position: string;
 
   constructor(props: TUser) {
+    makeAutoObservable(this);
     this.id = props.id;
     this.name = props.name;
     this.departament_id = props.departament_id;

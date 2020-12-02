@@ -1,44 +1,43 @@
 /* eslint-disable no-useless-constructor */
-import { observable, action, runInAction } from 'mobx';
+import {
+  observable,
+  action,
+  runInAction,
+  makeAutoObservable,
+  makeObservable
+} from 'mobx';
+import axios from 'axios';
 import { UserModel } from '../models/userModel';
 import { BaseAPI } from '../shared/infra/services/baseApi';
 import { RootStore } from './rootStore';
 
-export class UserStore extends BaseAPI {
-  @observable currentUser: UserModel | null = null;
+export class UserStore {
+  currentUser: UserModel | null = null;
 
-  @observable loadingUser = false;
+  loadingUser = false;
 
-  @observable updatingUser = false;
+  updatingUser = false;
 
-  @observable updatingUserErrors = false;
+  updatingUserErrors = false;
 
-  constructor(rootStore: RootStore) {
-    super(rootStore);
-    if (rootStore.cookieStore.getAccessToken()) {
-      (async () => this.pullUser())();
-    }
+  constructor(public rootStore: RootStore) {
+    makeAutoObservable(this, { pullUser: action });
+    this.rootStore = rootStore;
+    // if (rootStore.cookieStore.getAccessToken()) {
+    //   (async () => this.pullUser())();
+    // }
   }
 
-  @action pullUser = async (): Promise<void> => {
+  pullUser = async (): Promise<void> => {
     this.loadingUser = true;
     try {
-      await this.get('/users/me', {
-        Cookie: `Access-Token=${this.rootStore.cookieStore.getAccessToken()};`
-      }).then(
-        action('fetchSuccess', ({ data }: any) => {
-          const model = new UserModel(data);
-          if (model) this.currentUser = model;
-          this.loadingUser = false;
-        }),
-        action('fetchError', (error: Error) => {
-          throw error;
-        })
-      );
-      // runInAction(() => {
-      //   this.currentUser = new UserModel(data);
-      //   this.loadingUser = false;
-      // });
+      const axiosInstance = axios.create({});
+      const callApi = await axiosInstance({
+        method: 'GET',
+        url: `http://localhost:4000/api/v1/users/me`,
+        withCredentials: true
+      });
+      this.currentUser = new UserModel(callApi.data);
     } catch (error) {
       runInAction(() => {
         this.loadingUser = false;
@@ -46,6 +45,8 @@ export class UserStore extends BaseAPI {
         this.rootStore.authStore.isAuth = false;
       });
       throw error;
+    } finally {
+      this.loadingUser = false;
     }
   };
 }

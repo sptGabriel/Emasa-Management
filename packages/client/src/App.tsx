@@ -9,6 +9,7 @@ const App: React.FunctionComponent = observer(() => {
   const { theme } = useAppTheme();
   const store = useRootStore();
   useComponentWillMount(() => {
+    store.authStore.login('xd', 'xd');
     console.log(store.userStore, 'user');
     console.log(store.authStore.rootStore.userStore, 'auth');
     console.log(store, 'FULL STORE');

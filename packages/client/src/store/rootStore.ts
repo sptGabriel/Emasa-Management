@@ -1,12 +1,12 @@
-import { action, observable } from 'mobx';
+import { action, makeAutoObservable, makeObservable, observable } from 'mobx';
 import { AuthStore } from './authStore';
 import { CookieStore } from './cookieStore';
 import { UserStore } from './userStore';
 
 export class RootStore {
-  @observable appName = 'Emasa';
+  appName = 'Emasa';
 
-  @observable appLoaded = false;
+  appLoaded = false;
 
   userStore: UserStore;
 
@@ -15,12 +15,13 @@ export class RootStore {
   cookieStore: CookieStore;
 
   constructor() {
+    makeAutoObservable(this);
     this.cookieStore = new CookieStore(this);
     this.userStore = new UserStore(this);
     this.authStore = new AuthStore(this);
   }
 
-  @action setAppLoaded(): void {
+  setAppLoaded(): void {
     this.appLoaded = true;
   }
 }
