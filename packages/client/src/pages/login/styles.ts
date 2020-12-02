@@ -1,8 +1,8 @@
-import styled from 'styled-components';
-import { dynamicFlex } from '../../shared/components/dynamicFlexContainer';
-import one from '../../assets/one.png';
-import satelite from '../../assets/satelite.png';
-import two from '../../assets/two.png';
+import styled from 'styled-components'
+import { dynamicFlex } from '../../shared/components/dynamicFlexContainer'
+import one from '../../assets/one.png'
+import satelite from '../../assets/satelite.png'
+import two from '../../assets/two.png'
 
 export const MainCONTAINER = styled(dynamicFlex)`
   min-height: 100vh;
@@ -12,22 +12,22 @@ export const MainCONTAINER = styled(dynamicFlex)`
       url(${satelite}) no-repeat top 200px left 80px,
       url(${two}) no-repeat top 260px right 80px, #fafafa;
   }
-`;
+`
 export const MainCONTENT = styled(dynamicFlex)`
   flex: 1 1 0%;
   width: 100%;
   max-width: 1000px;
   padding: 32px;
-`;
+`
 export const LoginCONTAINER = styled(dynamicFlex)`
   flex: 1 1 0%;
   width: 100%;
   padding: 28px 0px 50px;
-`;
+`
 export const LoginCONTENT = styled(dynamicFlex)`
   width: 100%;
   -webkit-box-pack: justify;
-`;
+`
 export const LogoCONTAINER = styled(dynamicFlex)`
   align-self: center;
   width: 100%;
@@ -60,15 +60,17 @@ export const LogoCONTAINER = styled(dynamicFlex)`
     width: 100px;
     margin-right: 15px;
   }
-`;
+`
 export const FormCONTAINER = styled.form`
   display: flex;
   flex-direction: column;
+  position: relative;
   width: 100%;
   max-width: 480px;
   background: rgb(32, 32, 36);
-  border: 1px solid #e4dada;
-  border-radius: 10px;
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 8px 16px rgba(0, 0, 0, 0.1);
   padding: 32px;
   .separator {
     align-items: center;
@@ -106,12 +108,12 @@ export const FormCONTAINER = styled.form`
     display: flex;
     flex-direction: column;
   }
-`;
+`
 export const InputsSECTION = styled.section`
   display: grid;
   grid-auto-flow: row;
   gap: 10px;
-`;
+`
 export const InputSTYLED = styled.div`
   & > div:first-child {
     display: flex;
@@ -157,7 +159,7 @@ export const InputSTYLED = styled.div`
     font-family: Roboto, sans-serif;
     transition: border 0.2s ease 0s;
   }
-`;
+`
 export const LoginBUTTON = styled.button`
   &:disabled {
     background: #0996dd;
@@ -175,10 +177,10 @@ export const LoginBUTTON = styled.button`
   text-transform: uppercase;
   border-radius: 6px;
   border: 0px;
-`;
+`
 export const WrapRegister = styled.div`
   font-size: 14px;
   padding-top: 6px;
   color: rgb(204, 204, 204);
   text-align: center;
-`;
+`

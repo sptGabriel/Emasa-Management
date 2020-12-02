@@ -1,24 +1,37 @@
-import * as React from 'react';
-import { observer } from 'mobx-react-lite';
-import { ThemeProvider } from 'styled-components';
-import { useRootStore } from './shared/infra/mobx';
-import { useAppTheme } from './shared/utils/useAppTheme';
-import { useComponentWillMount } from './shared/utils/useComponentWillMount';
+import React from 'react'
+import { observer } from 'mobx-react-lite'
+import { ThemeProvider } from 'styled-components'
+import { useAppTheme } from './shared/utils/useAppTheme'
+import { CSSReset } from './shared/components/cssReset'
+import AuthenticatedApp from './shared/infra/router'
+import { useComponentWillMount } from './shared/utils/useComponentWillMount'
+import {
+  useAuthStore,
+  useCookiesStore,
+  useCurrentUserStore
+} from './shared/utils/useStoreHooks'
+import LoginComponent from './pages/login'
+
+function AuthApp() {
+  const { getAccessToken } = useCookiesStore()
+  const { isAuth } = useAuthStore()
+  const { currentUser, pullUser } = useCurrentUserStore()
+  useComponentWillMount(() => {
+    if (getAccessToken()) pullUser()
+  })
+  return (
+    <>{isAuth && currentUser ? <AuthenticatedApp /> : <LoginComponent />}</>
+  )
+}
 
 const App: React.FunctionComponent = observer(() => {
-  const { theme } = useAppTheme();
-  const store = useRootStore();
-  useComponentWillMount(() => {
-    store.authStore.login('xd', 'xd');
-    console.log(store.userStore, 'user');
-    console.log(store.authStore.rootStore.userStore, 'auth');
-    console.log(store, 'FULL STORE');
-  });
+  const { theme } = useAppTheme()
   return (
     <ThemeProvider theme={theme}>
-      <a href="/">{store.userStore.currentUser?.name}</a>
+      <CSSReset />
+      <AuthApp />
     </ThemeProvider>
-  );
-});
+  )
+})
 
-export default App;
+export default App

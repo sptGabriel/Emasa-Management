@@ -1,27 +1,27 @@
-import { action, makeAutoObservable, makeObservable, observable } from 'mobx';
-import { AuthStore } from './authStore';
-import { CookieStore } from './cookieStore';
-import { UserStore } from './userStore';
+import { makeAutoObservable } from 'mobx'
+import { AuthStore } from './authStore'
+import { CookieStore } from './cookieStore'
+import { CurrentUserStore } from './currentUserStore'
 
 export class RootStore {
-  appName = 'Emasa';
+  appName = 'Emasa'
 
-  appLoaded = false;
+  appLoaded = false
 
-  userStore: UserStore;
+  currentUserStore: CurrentUserStore
 
-  authStore: AuthStore;
+  authStore: AuthStore
 
-  cookieStore: CookieStore;
+  cookieStore: CookieStore
 
   constructor() {
-    makeAutoObservable(this);
-    this.cookieStore = new CookieStore(this);
-    this.userStore = new UserStore(this);
-    this.authStore = new AuthStore(this);
+    makeAutoObservable(this)
+    this.cookieStore = new CookieStore(this)
+    this.currentUserStore = new CurrentUserStore(this)
+    this.authStore = new AuthStore(this)
   }
 
   setAppLoaded(): void {
-    this.appLoaded = true;
+    this.appLoaded = true
   }
 }

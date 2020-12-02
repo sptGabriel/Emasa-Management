@@ -2,47 +2,47 @@
 /* eslint-disable class-methods-use-this */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable prettier/prettier */
-import axios, { AxiosInstance } from 'axios';
-import { get } from 'lodash';
-import CookieUniversal from 'universal-cookie';
-import { apiConfig } from '../../../config/api';
-import { RootStore } from '../../../store/rootStore';
+import axios, { AxiosInstance } from 'axios'
+import { get } from 'lodash'
+import CookieUniversal from 'universal-cookie'
+import { apiConfig } from '../../../config/api'
+import { RootStore } from '../../../store/rootStore'
 
-const Cookie = new CookieUniversal();
+const Cookie = new CookieUniversal()
 export abstract class BaseAPI {
-  protected baseUrl: string;
+  protected baseUrl: string
 
-  private axiosInstance: AxiosInstance | any = null;
+  private axiosInstance: AxiosInstance | any = null
 
   constructor(public rootStore: RootStore) {
-    this.rootStore = rootStore;
-    this.baseUrl = apiConfig.baseUrl;
-    this.axiosInstance = axios.create({});
-    this.axiosInstance.defaults.withCredentials = true;
-    this.enableInterceptors();
+    this.rootStore = rootStore
+    this.baseUrl = apiConfig.baseUrl
+    this.axiosInstance = axios.create({})
+    this.axiosInstance.defaults.withCredentials = true
+    this.enableInterceptors()
   }
 
   private enableInterceptors(): void {
     this.axiosInstance.interceptors.response.use(
       this.getSuccessResponseHandler()
-    );
+    )
   }
 
   private getSuccessResponseHandler(): unknown {
     return (response: unknown) => {
-      return response;
-    };
+      return response
+    }
   }
 
   private didAccessTokenExpire(response: unknown): boolean {
-    return get(response, 'data.message') === 'Token has expired.';
+    return get(response, 'data.message') === 'Token has expired.'
   }
 
   public async getCurrentUser(): Promise<any> {
     if (!this.rootStore.cookieStore.getAccessToken()) {
-      return Promise.reject(new Error(`Invalid Token`));
+      return Promise.reject(new Error(`Invalid Token`))
     }
-    this.axiosInstance.defaults.withCredentials = true;
+    this.axiosInstance.defaults.withCredentials = true
     const currentUser = await axios({
       method: 'GET',
       url: `${this.baseUrl}/users/me`,
@@ -54,8 +54,8 @@ export abstract class BaseAPI {
         credentials: 'same-origin',
         Cookie: `Access-Token=${Cookie.get('Access-Token')};`
       }
-    });
-    return currentUser.data;
+    })
+    return currentUser.data
   }
 
   private async regenerateAccessTokenFromRefreshToken(): Promise<unknown> {
@@ -68,8 +68,8 @@ export abstract class BaseAPI {
         )};`
       },
       withCredentials: true
-    });
-    return response.data.accessToken;
+    })
+    return response.data.accessToken
   }
 
   protected get(
@@ -82,7 +82,7 @@ export abstract class BaseAPI {
       url: `${this.baseUrl}${url}`,
       params: params || null,
       headers: headers || null
-    });
+    })
   }
 
   protected post(url: string, data?: any, params?: any): Promise<any> {
@@ -97,6 +97,6 @@ export abstract class BaseAPI {
         'Content-Type': 'application/json'
       },
       withCredentials: true
-    });
+    })
   }
 }

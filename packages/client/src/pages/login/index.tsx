@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React from 'react';
-import { FaUser } from 'react-icons/fa';
-import { AiTwotoneLock } from 'react-icons/ai';
+import React from 'react'
+import { FaUser } from 'react-icons/fa'
+import { AiTwotoneLock } from 'react-icons/ai'
 import {
   MainCONTENT,
   MainCONTAINER,
@@ -12,7 +12,7 @@ import {
   InputSTYLED,
   LoginBUTTON,
   WrapRegister
-} from './styles';
+} from './styles'
 
 const Inputs: React.FunctionComponent = () => {
   return (
@@ -40,8 +40,8 @@ const Inputs: React.FunctionComponent = () => {
         </div>
       </InputSTYLED>
     </InputsSECTION>
-  );
-};
+  )
+}
 const Form: React.FunctionComponent = () => {
   return (
     <FormCONTAINER>
@@ -57,8 +57,8 @@ const Form: React.FunctionComponent = () => {
         <a>Registre-se</a>
       </WrapRegister>
     </FormCONTAINER>
-  );
-};
+  )
+}
 // const LogoSection: React.FunctionComponent = () => {
 //   return (
 //     <LogoCONTAINER column>
@@ -73,7 +73,7 @@ const Form: React.FunctionComponent = () => {
 //     </LogoCONTAINER>
 //   )
 // }
-export const LoginComponent: React.FC = () => {
+const LoginComponent: React.FC = () => {
   return (
     <MainCONTAINER column align="center">
       <MainCONTENT column align="center">
@@ -84,5 +84,6 @@ export const LoginComponent: React.FC = () => {
         </LoginCONTAINER>
       </MainCONTENT>
     </MainCONTAINER>
-  );
-};
+  )
+}
+export default LoginComponent

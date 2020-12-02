@@ -1,8 +1,10 @@
 {
-  "presets": ["react-app"],
+  "presets": ["react-app",
+    "@babel/preset-react",
+    "@babel/preset-env"],
   "plugins": [
     ["@babel/plugin-proposal-decorators",
-      { "legacy": true,
+      { "legacy": true
       }
     ],
     [
@@ -11,5 +13,8 @@
         "loose": true
       }
     ],
-  ],
+    [
+      "emotion"
+    ]
+  ]
 }

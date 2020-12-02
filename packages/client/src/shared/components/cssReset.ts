@@ -1,4 +1,4 @@
-import { createGlobalStyle } from 'styled-components';
+import { createGlobalStyle } from 'styled-components'
 
 export const CSSReset = createGlobalStyle`
         @import url('https://fonts.googleapis.com/css?family=Poppins&display=swap');
@@ -94,4 +94,4 @@ export const CSSReset = createGlobalStyle`
             'Oxygen', 'Ubuntu', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
             sans-serif; */
         }
-`;
+`

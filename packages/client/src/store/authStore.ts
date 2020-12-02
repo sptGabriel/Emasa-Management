@@ -1,20 +1,19 @@
 /* eslint-disable no-useless-constructor */
 /* eslint-disable consistent-return */
-import Axios from 'axios';
-import { action, autorun, makeAutoObservable, reaction } from 'mobx';
-import { UserModel } from '../models/userModel';
-import { RootStore } from './rootStore';
+import Axios from 'axios'
+import { action, makeAutoObservable } from 'mobx'
+import { RootStore } from './rootStore'
 
 export class AuthStore {
-  isAuth = false;
+  isAuth = false
 
-  inProgress = false;
+  inProgress = false
 
-  errors = undefined;
+  errors = undefined
 
   constructor(public rootStore: RootStore) {
-    makeAutoObservable(this);
-    this.rootStore = rootStore;
+    makeAutoObservable(this)
+    this.rootStore = rootStore
     // autorun(() => {
     //   if (
     //     this.rootStore.cookieStore.getAccessToken() &&
@@ -28,8 +27,8 @@ export class AuthStore {
   }
 
   @action async login(login: string, password: string): Promise<void> {
-    this.inProgress = true;
-    this.errors = undefined;
+    this.inProgress = true
+    this.errors = undefined
     try {
       await Axios({
         method: 'POST',
@@ -40,17 +39,17 @@ export class AuthStore {
           'Content-Type': 'application/json'
         },
         withCredentials: true
-      }).then(() => this.rootStore.userStore.pullUser());
-      this.isAuth = true;
+      }).then(() => this.rootStore.currentUserStore.pullUser())
+      this.isAuth = true
     } catch (error) {
       this.errors =
-        error.response && error.response.body && error.response.body.errors;
-      throw error;
+        error.response && error.response.body && error.response.body.errors
+      throw error
     }
   }
 
   @action logout(): Promise<void> {
-    this.rootStore.cookieStore.removeAccessToken();
-    return Promise.resolve();
+    this.rootStore.cookieStore.removeAccessToken()
+    return Promise.resolve()
   }
 }

@@ -1,5 +1,5 @@
-import { useMemo } from 'react';
+import { useMemo } from 'react'
 
-export const useComponentWillMount = (func: any) => {
-  useMemo(func, []);
-};
+export const useComponentWillMount = (func: any): void => {
+  useMemo(func, [])
+}
