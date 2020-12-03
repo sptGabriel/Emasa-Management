@@ -29,12 +29,12 @@ export class UserController extends BaseController {
     try {
       const ip =  ensure(getRequestIpAddress(request))
       const id = request.cookies['eid'];
-      const accessToken = request.cookies['Access-Token']
+      const accessToken = request.cookies['@Emasa/Access-Token']
+      const refreshToken = request.cookies['@Emasa/Refresh-Token']
       const result = await container
         .resolve(getCurrentUserCase)
         .execute({ token:accessToken, ip });
       if (result.isLeft()) return next(result.value);
-    
       return response.json(result.value.getJWTPayload);
     } catch (error) {
       next(error);

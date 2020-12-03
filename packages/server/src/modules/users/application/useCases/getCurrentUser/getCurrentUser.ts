@@ -8,8 +8,6 @@ import { inject, injectable } from 'tsyringe';
 import { User } from '../../../domain/user.entity';
 import { currentUserDTO } from './currentUserDTO';
 import jwtConfig from '@config/jwt.config';
-import { decode } from 'jsonwebtoken';
-import instance from 'tsyringe/dist/typings/dependency-container';
 @injectable()
 export class getCurrentUserCase
   implements IUseCase<currentUserDTO, Promise<Either<AppError, User>>> {
@@ -21,7 +19,7 @@ export class getCurrentUserCase
     ip,token
   }: currentUserDTO): Promise<Either<AppError, User>> => {
     const decoded = await promisifyDecode(token,jwtConfig.secret)
-    if(decoded instanceof Error) throw new Error(`Invalid Token`);
+    if(decoded instanceof Error) throw decoded;
     const user = await this.userRepository.byId(decoded.id);
     if (!user) throw new Error(`This user doesn't exist`);
     if(ip !== user.ip_address) throw new Error(`Invalid User IP Addres`)

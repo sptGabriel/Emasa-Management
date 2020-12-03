@@ -40,7 +40,7 @@ export class JWT {
     if (!authConfig.secret) throw new Error(`Invalid public key`);
     const refreshToken = encode({}, authConfig.rfSecret, {
       subject: id,
-      expiresIn: '360s',
+      expiresIn: 720 * 60 * 60 * 1000,
     });
     const redis = container.resolve<IBootstrap>('bootstrap').getRedisServer();
     await redis.setKeyWithEX(id, refreshToken, 720 * 60 * 60);
@@ -50,9 +50,10 @@ export class JWT {
     props: IJWTProps,
     payload: IJWTAcessPayload,
   ) => {
+    // authConfig.tokenExpiryTimeInSeconds
     const token = encode(payload, ensure(authConfig.secret), {
       subject: props.sub,
-      expiresIn: authConfig.tokenExpiryTimeInSeconds,
+      expiresIn: '60s',
     });
     return token;
   };
@@ -66,10 +67,10 @@ export class JWT {
     jwtToken.token = AccessToken;
     return jwtToken;
   }
-  public static buildRefreshToken = async (matricula: string) => {
-    const refreshToken = await JWT.generateRefreshToken(matricula);
+  public static buildRefreshToken = async (id: string) => {
+    const refreshToken = await JWT.generateRefreshToken(id);
     if (!refreshToken) throw new Error(`Internal Error to Generate Token`);
-    const token = new JWT({ sub: matricula });
+    const token = new JWT({ sub: id });
     token.token = refreshToken;
     return token;
   };

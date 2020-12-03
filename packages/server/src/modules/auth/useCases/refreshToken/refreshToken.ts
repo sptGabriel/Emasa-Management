@@ -6,15 +6,10 @@ import { refreshTokenDTO } from './refreshTokenDTO';
 import { UserRepository } from '@modules/users/persistence/userRepositoryImpl';
 import { IUserRepository } from '@modules/users/persistence/userRepository';
 import { JWT } from '@modules/users/domain/jwt';
-import {
-  decode,
-  isTokenNOTExpired,
-  promisifyDecode,
-} from '@shared/helpers/jwt';
+import { promisifyDecode } from '@shared/helpers/jwt';
 import { wrap } from '@mikro-orm/core';
 import jwtConfig from '@config/jwt.config';
 import { JsonWebTokenError, TokenExpiredError } from 'jsonwebtoken';
-import instance from 'tsyringe/dist/typings/dependency-container';
 @injectable()
 export class RefreshTokenUseCase
   implements IUseCase<refreshTokenDTO, Promise<Either<AppError, any>>> {
@@ -52,6 +47,8 @@ export class RefreshTokenUseCase
   public execute = async ({
     id,
     ip,
+    accessToken,
+    refreshToken
   }: refreshTokenDTO): Promise<Either<AppError, any>> => {
     const user = await this.validateUser({ id, ip });
     const renewAcessToken = JWT.buildAcessToken(

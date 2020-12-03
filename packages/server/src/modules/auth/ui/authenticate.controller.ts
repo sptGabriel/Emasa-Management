@@ -17,7 +17,7 @@ export class AuthController extends BaseController {
     this.router.get(`${this.path}`, this.index);
     this.router.post(`/login`, this.login);
     this.router.get(`/logout`, this.logout);
-    this.router.get(`/refresh-token`, this.refreshToken);
+    this.router.get(`/users/me/refresh-token`, this.refreshToken);
   }
   private index = async (arg0: string, index: any) => {
     throw new Error('Method not implemented.');
@@ -33,10 +33,12 @@ export class AuthController extends BaseController {
       const result = await container.resolve(LoginUseCase).execute(dto);
       if (result.isLeft()) return next(result.value);
       response.cookie('eid', result.value.user.id);
-      response.cookie('Access-Token', result.value.access, {
-        expires: new Date(Date.now() + 2 * 60 * 60 * 1000),
-        maxAge: 2 * 60 * 60 * 1000, //two hours
+      response.cookie('@Emasa/Access-Token', result.value.access);
+      response.cookie('@Emasa/Refresh-Token', result.value.refresh, {
+        expires: new Date(Date.now() + 720 * 60 * 60 * 1000),
+        maxAge: 720 * 60 * 60 * 1000, //two hours
         secure: false,
+        httpOnly: true
       });
       return response.json(result.value.user);
     } catch (error) {
@@ -69,9 +71,12 @@ export class AuthController extends BaseController {
     try {
       const ip =  ensure(getRequestIpAddress(request))
       const id = request.cookies['eid'];
+      const accessToken = request.cookies['@Emasa/Access-Token']
+      const refreshToken = request.cookies['@Emasa/Refresh-Token']
+      if(!(accessToken && refreshToken)) throw new Error(`Please needed login`)
       const result = await container
         .resolve(RefreshTokenUseCase)
-        .execute({ id, ip });
+        .execute({ id, ip,accessToken,refreshToken });
       if (result.isLeft()) return next(result.value);
       response.cookie('eid', id);
       response.cookie('Access-Token', result.value.acessToken, {
