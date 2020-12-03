@@ -1,7 +1,6 @@
 /* eslint-disable no-useless-constructor */
 /* eslint-disable consistent-return */
-import Axios from 'axios'
-import { action, makeAutoObservable } from 'mobx'
+import { action, makeAutoObservable, makeObservable } from 'mobx'
 import { RootStore } from './rootStore'
 
 export class AuthStore {
@@ -11,45 +10,41 @@ export class AuthStore {
 
   errors = undefined
 
-  constructor(public rootStore: RootStore) {
-    makeAutoObservable(this)
+  rootStore: RootStore
+
+  constructor(rootStore: RootStore) {
+    makeObservable(this, {
+      login: action,
+      logout: action,
+      isAuth: true,
+      inProgress: true,
+      errors: true,
+      rootStore: true
+    })
     this.rootStore = rootStore
-    // autorun(() => {
-    //   if (
-    //     this.rootStore.cookieStore.getAccessToken() &&
-    //     this.rootStore.userStore.currentUser
-    //   ) {
-    //     console.log('a');
-    //     this.isAuth = true;
-    //   }
-    //   console.log(this.isAuth);
-    // });
   }
 
-  @action async login(login: string, password: string): Promise<void> {
+  async login(login: string, password: string): Promise<void> {
     this.inProgress = true
     this.errors = undefined
     try {
-      await Axios({
-        method: 'POST',
-        url: `http://localhost:4000/api/v1/login`,
-        data: { login, password },
-        headers: {
-          crossDomain: true,
-          'Content-Type': 'application/json'
-        },
-        withCredentials: true
+      await this.rootStore.AxiosStore.post('/login', {
+        login,
+        password
       }).then(() => this.rootStore.currentUserStore.pullUser())
       this.isAuth = true
     } catch (error) {
       this.errors =
         error.response && error.response.body && error.response.body.errors
       throw error
+    } finally {
+      this.inProgress = false
     }
   }
 
-  @action logout(): Promise<void> {
-    this.rootStore.cookieStore.removeAccessToken()
+  logout(): Promise<void> {
+    this.rootStore.currentUserStore.currentUser = null
+    this.rootStore.cookieStore.removeToken('eid')
     return Promise.resolve()
   }
 }

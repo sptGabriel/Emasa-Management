@@ -10,11 +10,11 @@ export class CookieStore {
     this.cookie = new CookieUniversal()
   }
 
-  getAccessToken = (): string => {
-    return this.cookie.get('Access-Token')
+  getToken = (key: string): string => {
+    return this.cookie.get(key)
   }
 
-  removeAccessToken = (): void => {
-    return this.cookie.remove('Access-Token')
+  removeToken = (key: string): void => {
+    return this.cookie.remove(key)
   }
 }

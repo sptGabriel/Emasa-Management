@@ -4,8 +4,8 @@ import { CurrentUserStore } from '../../store/currentUserStore'
 import { useRootStore } from '../infra/mobx'
 
 export function useAuthStore(): AuthStore {
-  const { authStore } = useRootStore()
-  return authStore
+  const rootStore = useRootStore()
+  return rootStore.authStore
 }
 export function useCurrentUserStore(): CurrentUserStore {
   const { currentUserStore } = useRootStore()

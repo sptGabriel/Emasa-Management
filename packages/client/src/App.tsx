@@ -11,16 +11,17 @@ import {
   useCurrentUserStore
 } from './shared/utils/useStoreHooks'
 import LoginComponent from './pages/login'
+import { useRootStore } from './shared/infra/mobx'
 
 function AuthApp() {
-  const { getAccessToken } = useCookiesStore()
-  const { isAuth } = useAuthStore()
-  const { currentUser, pullUser } = useCurrentUserStore()
+  const { currentUserStore, cookieStore, authStore } = useRootStore()
   useComponentWillMount(() => {
-    if (getAccessToken()) pullUser()
+    if (cookieStore.getToken('eid')) currentUserStore.pullUser()
   })
   return (
-    <>{isAuth && currentUser ? <AuthenticatedApp /> : <LoginComponent />}</>
+    <>
+      {currentUserStore.currentUser ? <AuthenticatedApp /> : <LoginComponent />}
+    </>
   )
 }
 
