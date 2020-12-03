@@ -1,6 +1,6 @@
 /* eslint-disable no-useless-constructor */
 /* eslint-disable consistent-return */
-import { action, makeAutoObservable, makeObservable } from 'mobx'
+import { action, makeObservable, runInAction } from 'mobx'
 import { RootStore } from './rootStore'
 
 export class AuthStore {
@@ -22,6 +22,26 @@ export class AuthStore {
       rootStore: true
     })
     this.rootStore = rootStore
+  }
+
+  refreshToken = async (): Promise<void> => {
+    this.inProgress = true
+    try {
+      await this.rootStore.AxiosStore.get('/users/me/refresh-token')
+        .then(() => {
+          this.rootStore.currentUserStore.pullUser()
+        })
+        .then(() => {
+          this.isAuth = true
+        })
+    } catch (error) {
+      runInAction(() => {
+        this.rootStore.authStore.isAuth = false
+      })
+      throw error
+    } finally {
+      this.inProgress = false
+    }
   }
 
   async login(login: string, password: string): Promise<void> {

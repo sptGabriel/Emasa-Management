@@ -24,12 +24,7 @@ export class CurrentUserStore {
   pullUser = async (): Promise<void> => {
     this.loadingUser = true
     try {
-      const axiosInstance = axios.create({})
-      const callApi = await axiosInstance({
-        method: 'GET',
-        url: `http://localhost:4000/api/v1/users/me`,
-        withCredentials: true
-      })
+      const callApi = await this.rootStore.AxiosStore.get('/users/me')
       this.currentUser = new UserModel(callApi.data)
     } catch (error) {
       runInAction(() => {

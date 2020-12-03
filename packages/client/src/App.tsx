@@ -5,11 +5,6 @@ import { useAppTheme } from './shared/utils/useAppTheme'
 import { CSSReset } from './shared/components/cssReset'
 import AuthenticatedApp from './shared/infra/router'
 import { useComponentWillMount } from './shared/utils/useComponentWillMount'
-import {
-  useAuthStore,
-  useCookiesStore,
-  useCurrentUserStore
-} from './shared/utils/useStoreHooks'
 import LoginComponent from './pages/login'
 import { useRootStore } from './shared/infra/mobx'
 
