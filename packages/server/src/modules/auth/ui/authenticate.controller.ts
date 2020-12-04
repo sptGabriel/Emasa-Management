@@ -34,12 +34,7 @@ export class AuthController extends BaseController {
       if (result.isLeft()) return next(result.value);
       response.cookie('eid', result.value.user.id);
       response.cookie('@Emasa/Access-Token', result.value.access);
-      response.cookie('@Emasa/Refresh-Token', result.value.refresh, {
-        expires: new Date(Date.now() + 720 * 60 * 60 * 1000),
-        maxAge: 720 * 60 * 60 * 1000, //two hours
-        secure: false,
-        httpOnly: true
-      });
+      response.cookie('@Emasa/Refresh-Token', result.value.refresh);
       return response.json(result.value.user);
     } catch (error) {
       next(error);
@@ -73,17 +68,13 @@ export class AuthController extends BaseController {
       const id = request.cookies['eid'];
       const accessToken = request.cookies['@Emasa/Access-Token']
       const refreshToken = request.cookies['@Emasa/Refresh-Token']
-      if(!(accessToken && refreshToken)) throw new Error(`Please needed login`)
       const result = await container
         .resolve(RefreshTokenUseCase)
         .execute({ id, ip,accessToken,refreshToken });
       if (result.isLeft()) return next(result.value);
       response.cookie('eid', id);
-      response.cookie('Access-Token', result.value.acessToken, {
-        expires: new Date(Date.now() + 2 * 60 * 60 * 1000),
-        maxAge: 2 * 60 * 60 * 1000, //two hours
-        secure: false,
-      });
+      response.cookie('@Emasa/Access-Token', result.value.acessToken);
+      response.cookie('@Emasa/Refresh-Token', result.value.refreshToken);
       return response.json({ message: result.value.message });
     } catch (error) {
       next(error);

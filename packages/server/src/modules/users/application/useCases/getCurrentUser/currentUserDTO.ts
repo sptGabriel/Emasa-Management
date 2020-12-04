@@ -1,4 +1,4 @@
 export interface currentUserDTO {
   ip:string;
-  token:string;
+  accessToken:string;
 }

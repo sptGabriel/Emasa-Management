@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-shadow */
 import { useState, useEffect } from 'react'
 import { darkTheme, lightTheme, ITheme } from '../themes/index'

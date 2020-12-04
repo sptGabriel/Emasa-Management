@@ -1,5 +1,5 @@
 export default {
   secret: 'aaaaa',
-  rfSecret: 'sadasdsa',
+  rfSecret: 'sadasdsax',
   tokenExpiryTimeInSeconds: 8 * 60 * 60,
 };

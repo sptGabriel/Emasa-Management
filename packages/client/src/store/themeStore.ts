@@ -9,7 +9,7 @@ export class ThemeStore {
     this.rootStore = rootStore
   }
 
-  toggleDarkMode() {
+  public toggleDarkMode = () => {
     this.isDarkMode = !this.isDarkMode
   }
 }

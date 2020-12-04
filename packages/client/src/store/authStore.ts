@@ -1,5 +1,3 @@
-/* eslint-disable no-useless-constructor */
-/* eslint-disable consistent-return */
 import { action, makeObservable, runInAction } from 'mobx'
 import { RootStore } from './rootStore'
 
@@ -24,7 +22,7 @@ export class AuthStore {
     this.rootStore = rootStore
   }
 
-  refreshToken = async (): Promise<void> => {
+  public refreshToken = async (): Promise<void> => {
     this.inProgress = true
     try {
       await this.rootStore.AxiosStore.get('/users/me/refresh-token')
@@ -44,7 +42,7 @@ export class AuthStore {
     }
   }
 
-  async login(login: string, password: string): Promise<void> {
+  public login = async (login: string, password: string): Promise<void> => {
     this.inProgress = true
     this.errors = undefined
     try {
@@ -62,9 +60,11 @@ export class AuthStore {
     }
   }
 
-  logout(): Promise<void> {
+  public logout = (): Promise<void> => {
     this.rootStore.currentUserStore.currentUser = null
     this.rootStore.cookieStore.removeToken('eid')
+    this.rootStore.cookieStore.removeToken('@Emasa/Refresh-Token')
+    this.rootStore.cookieStore.removeToken('@Emasa/Access-Token')
     return Promise.resolve()
   }
 }

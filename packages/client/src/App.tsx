@@ -8,17 +8,17 @@ import { useComponentWillMount } from './shared/utils/useComponentWillMount'
 import LoginComponent from './pages/login'
 import { useRootStore } from './shared/infra/mobx'
 
-function AuthApp() {
+const AuthApp = observer(() => {
   const { currentUserStore, cookieStore, authStore } = useRootStore()
   useComponentWillMount(() => {
-    if (cookieStore.getToken('eid')) currentUserStore.pullUser()
+    if (cookieStore.getToken('@Emasa/Access-Token')) currentUserStore.pullUser()
   })
   return (
     <>
       {currentUserStore.currentUser ? <AuthenticatedApp /> : <LoginComponent />}
     </>
   )
-}
+})
 
 const App: React.FunctionComponent = observer(() => {
   const { theme } = useAppTheme()

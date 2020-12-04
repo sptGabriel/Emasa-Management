@@ -13,7 +13,7 @@ const LayoutDashBoard = () => {
   )
 }
 
-function AppRoutes() {
+const AppRoutes = () => {
   return (
     <Route path="dashboard" element={<LayoutDashBoard />}>
       <Route path="/" element={<> Dash home</>} />
@@ -23,7 +23,7 @@ function AppRoutes() {
   )
 }
 
-function Authenticated(): JSX.Element {
+const Authenticated = (): JSX.Element => {
   return <AppRoutes />
 }
 

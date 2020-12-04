@@ -3,15 +3,15 @@ import { CookieStore } from '../../store/cookieStore'
 import { CurrentUserStore } from '../../store/currentUserStore'
 import { useRootStore } from '../infra/mobx'
 
-export function useAuthStore(): AuthStore {
+export const useAuthStore = (): AuthStore => {
   const rootStore = useRootStore()
   return rootStore.authStore
 }
-export function useCurrentUserStore(): CurrentUserStore {
+export const useCurrentUserStore = (): CurrentUserStore => {
   const { currentUserStore } = useRootStore()
   return currentUserStore
 }
-export function useCookiesStore(): CookieStore {
+export const useCookiesStore = (): CookieStore => {
   const { cookieStore } = useRootStore()
   return cookieStore
 }

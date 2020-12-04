@@ -1,6 +1,4 @@
-/* eslint-disable no-useless-constructor */
 import { action, runInAction, makeAutoObservable } from 'mobx'
-import axios from 'axios'
 import { UserModel } from '../models/userModel'
 import { RootStore } from './rootStore'
 
@@ -16,12 +14,9 @@ export class CurrentUserStore {
   constructor(public rootStore: RootStore) {
     makeAutoObservable(this, { pullUser: action })
     this.rootStore = rootStore
-    // if (rootStore.cookieStore.getAccessToken()) {
-    //   (async () => this.pullUser())();
-    // }
   }
 
-  pullUser = async (): Promise<void> => {
+  public pullUser = async (): Promise<void> => {
     this.loadingUser = true
     try {
       const callApi = await this.rootStore.AxiosStore.get('/users/me')

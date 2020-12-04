@@ -30,7 +30,7 @@ export class RootStore {
     this.authStore = new AuthStore(this)
   }
 
-  setAppLoaded(): void {
+  public setAppLoaded = (): void => {
     this.appLoaded = true
   }
 }
