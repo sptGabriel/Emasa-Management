@@ -1,31 +1,26 @@
 import React from 'react'
 import { observer } from 'mobx-react-lite'
-import { ThemeProvider } from 'styled-components'
+import { ThemeProvider } from '@emotion/react'
 import { useAppTheme } from './shared/utils/useAppTheme'
-import { CSSReset } from './shared/components/cssReset'
+import GlobalReset from './shared/utils/cssReset'
 import AuthenticatedApp from './shared/infra/router'
 import { useComponentWillMount } from './shared/utils/useComponentWillMount'
-import LoginComponent from './pages/login'
 import { useRootStore } from './shared/infra/mobx'
 
-const AuthApp = observer(() => {
-  const { currentUserStore, cookieStore, authStore } = useRootStore()
-  useComponentWillMount(() => {
-    if (cookieStore.getToken('@Emasa/Access-Token')) currentUserStore.pullUser()
-  })
-  return (
-    <>
-      {currentUserStore.currentUser ? <AuthenticatedApp /> : <LoginComponent />}
-    </>
-  )
-})
+// const AuthApp = observer(() => {
+//   const { currentUserStore, cookieStore } = useRootStore()
+//   useComponentWillMount(() => {
+//     if (cookieStore.getToken('@Emasa/Access-Token')) currentUserStore.pullUser()
+//   })
+//   return <>{currentUserStore.currentUser ? <AuthenticatedApp /> : <div />}</>
+// })
 
 const App: React.FunctionComponent = observer(() => {
   const { theme } = useAppTheme()
   return (
     <ThemeProvider theme={theme}>
-      <CSSReset />
-      <AuthApp />
+      <GlobalReset />
+      <AuthenticatedApp />
     </ThemeProvider>
   )
 })
