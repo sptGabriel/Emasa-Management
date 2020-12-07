@@ -179,16 +179,9 @@ const GlobalStyle: React.FC = () => {
           margin: 0;
         }
         html {
-          height: 100%;
-          font-size: 62.5%;
-        }
-        body,
-        html {
-          width: 100%;
-          height: 100%;
         }
         body {
-          height: 100%;
+          overflow: hidden;
           font-family: Roboto, sans-serif, Poppins;
           background-color: #fafafb;
           text-rendering: optimizelegibility !important;

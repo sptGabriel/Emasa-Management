@@ -1,46 +1,72 @@
 import React from 'react'
 import styled from '@emotion/styled/macro'
+import { observer } from 'mobx-react-lite'
 import { Container } from './FlexBox'
-import logo from '../../assets/logo_emasa.png'
+import logo from '../../assets/logoem.svg'
 import NavBar from './NavBar'
+import MenuBurguer from './Hamburguer'
+import { useRootStore } from '../infra/mobx'
 /* SideBar Styles Start */
-const Header = styled(Container)`
+export interface SideBarState {
+  open: boolean
+}
+const HeaderBox = styled(Container)`
   background-color: rgb(255, 255, 255);
-  height: 70px;
-  line-height: 70px;
-  align-content: center;
   padding: 0;
   width: 100%;
-  position: fixed;
-  left: 0;
-  z-index: 1030;
-  box-shadow: 0 0.46875rem 2.1875rem rgba(4, 9, 20, 0.03),
-    0 0.9375rem 1.40625rem rgba(4, 9, 20, 0.03),
-    0 0.25rem 0.53125rem rgba(4, 9, 20, 0.05),
-    0 0.125rem 0.1875rem rgba(4, 9, 20, 0.03);
+  height: 100%;
+  position: relative;
+  box-shadow: 0 1px 4px -1px rgba(0, 0, 0, 0.15);
   transition: all 0.2s;
+  z-index: 100;
 `
-const LogoWrapper = styled(Container)`
-  width: 250px;
-  height: 70px;
-  padding: 0 1rem;
-  background-color: transparent;
-  transition: all 0.2s ease;
+const LogoWrapper = styled(Container)<SideBarState>`
+  display: ${({ open }) => (open ? 'flex' : 'none')};
+  align-items: center;
+  h1 {
+    color: #fff;
+    font-weight: bold;
+    font-size: 1.4rem;
+    font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
+    text-transform: uppercase;
+  }
   img {
     width: 60px;
     vertical-align: middle;
     border-style: none;
   }
 `
-const DashBoardHeader: React.FC = () => {
+const AppHeader = styled(Container)<SideBarState>`
+  width: ${({ open }) => (open ? '250px' : '60px')};
+  height: 70px;
+  padding: 0 1.5rem;
+  background-color: transparent;
+  transition: width 0.2s;
+  visibility: visible;
+`
+const AppHeaderLogo: React.FC = observer(() => {
+  const { layoutStore } = useRootStore()
   return (
-    <Header align="center">
-      <LogoWrapper align="center">
+    <AppHeader
+      open={layoutStore.sideBar}
+      align="center"
+      justify="space-between"
+    >
+      <LogoWrapper open={layoutStore.sideBar}>
         <img src={logo} alt="Emasa Logo" />
+        <h1>Emasa</h1>
       </LogoWrapper>
+      <MenuBurguer />
+    </AppHeader>
+  )
+})
+
+const Header: React.FC = () => {
+  return (
+    <HeaderBox align="center">
+      <AppHeaderLogo />
       <NavBar />
-    </Header>
+    </HeaderBox>
   )
 }
-
-export default DashBoardHeader
+export default Header
