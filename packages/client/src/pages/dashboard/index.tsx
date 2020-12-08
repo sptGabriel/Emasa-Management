@@ -3,9 +3,6 @@ import { observer } from 'mobx-react-lite'
 import React from 'react'
 import Header from '../../shared/components/Header'
 import { useRootStore } from '../../shared/infra/mobx'
-// import { Outlet } from 'react-router-dom'
-// import ContentBox from '../../shared/components/Content'
-// import { Container } from '../../shared/components/FlexBox'
 import ASide from '../../shared/components/SideBar'
 
 export interface SideBarState {

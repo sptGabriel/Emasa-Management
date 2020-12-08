@@ -29,8 +29,11 @@
     "prettier"
   ],
   "rules": {
-    "prettier/prettier": ["error",{
-      "endOfLine": "auto"}
+    "prettier/prettier": [
+      "error",
+      {
+        "endOfLine": "auto"
+      }
     ],
     "indent": [
       "error",
@@ -40,7 +43,9 @@
     "@typescript-eslint/no-explicit-any": "off",
     "react-hooks/rules-of-hooks": "error",
     "no-use-before-define": "off",
-    "@typescript-eslint/no-use-before-define": ["error"],
+    "@typescript-eslint/no-use-before-define": [
+      "error"
+    ],
     "react-hooks/exhaustive-deps": "warn",
     "react/jsx-filename-extension": [
       1,

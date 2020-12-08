@@ -1,11 +1,11 @@
 /* eslint-disable indent */
+import React, { useState, useEffect, MouseEvent } from 'react'
 import { css } from '@emotion/react'
 import styled from '@emotion/styled/macro'
 import { observer } from 'mobx-react-lite'
 import { shade } from 'polished'
-import React, { useState, useEffect, MouseEvent } from 'react'
 import { IconType } from 'react-icons'
-import { FaAngleUp, FaAngleDown, FaGhost } from 'react-icons/fa'
+import { FaGhost } from 'react-icons/fa'
 import { VscChevronDown, VscChevronUp } from 'react-icons/vsc'
 import { useRootStore } from '../infra/mobx'
 import { ITag, IDropdownItems, Tags } from '../utils/MenuTags'
@@ -42,7 +42,35 @@ const TitleItem = styled.div<{ open: boolean }>`
   margin-top: 0.9375rem;
 `
 const MenuList = styled.ul<IMenu>`
+  position: relative;
+  background: #fff;
+  overflow-y: scroll;
   padding: ${({ open }) => (open ? '0' : '1rem 0')};
+  color: transparent;
+  margin-top: 20px;
+  margin-bottom: 30px;
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 18px;
+  }
+  ::-webkit-scrollbar-thumb {
+    height: 6px;
+    border: 2px solid rgba(0, 0, 0, 0);
+    background-clip: padding-box;
+    -webkit-border-radius: 7px;
+    background-color: rgba(242, 242, 242, 0.9);
+  }
+  ::-webkit-scrollbar-button {
+    width: 0;
+    height: 0;
+    display: none;
+  }
+  ::-webkit-scrollbar-corner {
+    background-color: transparent;
+  }
+  ::-webkit-scrollbar-track {
+    margin-bottom: 40vh;
+  }
 `
 
 const OpenedStyled = styled.ul<IDropDown>`
@@ -149,28 +177,34 @@ const ListWrap = styled.div<IListWrap>`
   justify-content: ${({ open }) => (open ? 'space-between' : 'center')};
   align-items: center;
   position: relative;
-  border-radius: 0.25rem;
+  border-radius: 10px;
+  background-color: ${({ tagActive }) => (tagActive ? '#dad6ff' : '#fff')};
+  transition: all 0.5s ease;
+  padding: 12px 15px;
   :hover {
+    background-color: rgb(116 102 255 / 0.12);
     a {
-      span {
-        color: #3e82f7;
+      svg {
+        fill: rgba(115, 102, 255, 1);
+        stroke: #7366ff;
+        transition: all 0.3s ease;
       }
-    }
-    svg {
-      color: #3e82f7;
+      span {
+        color: #7366ff;
+      }
     }
   }
   a {
     display: flex;
     align-items: center;
-    color: rgba(26, 51, 83, 0.85);
     span {
+      color: ${({ tagActive }) => (tagActive ? '#7366ff' : '#2c323f')};
       margin-bottom: -2px;
     }
     svg {
-      color: ${({ tagActive }) => (tagActive ? '#3e82f7' : '#343a40')};
-      opacity: ${({ tagActive }) => (tagActive ? '1' : '0.5')};
+      color: ${({ tagActive }) => (tagActive ? '#7366ff' : '#2c323f')};
       margin-right: ${({ open }) => (open ? '10px' : '0')};
+      stroke-width: 2.3px;
       transition: all 0.5s cubic-bezier(0, 1, 0, 1);
     }
   }
@@ -180,31 +214,30 @@ const ListWrap = styled.div<IListWrap>`
   & .down-up_svg,
   .li-name {
     display: ${({ open }) => (open ? 'space-between' : 'none')};
-    font-weight: ${({ tagActive }) => (tagActive ? 'bold' : '600')};
-    font-family: Poppins;
-    color: ${({ tagActive }) =>
-      tagActive ? '#3f6ad8' : 'rgba(26, 51, 83, 0.85)'};
-    font-size: 0.835rem;
+    color: ${({ tagActive }) => (tagActive ? '#7366ff' : '#2c323f')};
+    letter-spacing: 0.7px;
+    font-family: Roboto;
+    text-transform: capitalize;
+    font-weight: 500;
   }
   & .svg-arrow {
-    color: #3e82f7;
-    opacity: 1;
+    color: #222;
   }
 `
 
 const ListItem = styled.li<IListItem>`
   display: flex;
   flex-direction: column;
+  position: relative;
+  padding: 0 20px;
   justify-content: ${({ open }) => (open ? 'space-between' : 'center')};
   cursor: pointer;
-  position: relative;
-  background: ${({ active }) => (active ? 'rgba(62, 130, 247, 0.1)' : '#fff')};
   margin-bottom: 8px;
   ::after {
-    border-right: 3px solid #3e82f7;
+    border-left: 0px solid #3e82f7;
     position: absolute;
     top: 0;
-    right: 0;
+    left: 0;
     bottom: 0;
     transform: scaleY(0.0001);
     opacity: ${({ active }) => (active ? '1' : '0')};
@@ -214,14 +247,6 @@ const ListItem = styled.li<IListItem>`
       opacity 0.15s cubic-bezier(0.215, 0.61, 0.355, 1),
       -webkit-transform 0.15s cubic-bezier(0.215, 0.61, 0.355, 1);
   }
-  /* ${({ active }) =>
-    active
-      ? css`
-          ::after {
-            opacity: ;
-          }
-        `
-      : ''}; */
   &:hover ${ListWrap} {
     svg {
       color: ${({ open }) => (open ? '' : '#3e82f7')};
@@ -235,7 +260,6 @@ const ListItem = styled.li<IListItem>`
 
   &:hover {
     border-right: ${({ open }) => (open ? '' : '3px #3e82f7 solid')};
-    /* background: ${({ open }) => (open ? `#e0f3ff` : ``)}; */
     ${ListWrap} {
       :after {
         content: '';
@@ -248,7 +272,6 @@ const ListItem = styled.li<IListItem>`
         height: 0;
         border-top: 10px solid transparent;
         border-bottom: 10px solid transparent;
-        /* border-right: 10px solid ${shade(0.2, '#3c8dbc')}; */
         clear: both;
         z-index: 11;
       }
@@ -336,93 +359,6 @@ const Drop: React.FC<IDrop> = observer(({ active, dropItems, isOpen }) => {
 interface IMenuTags {
   open: boolean
 }
-// const PagesTags: React.FC<IMenuTags> = observer(({ open }) => {
-//   return (
-//     <>
-//       <TitleItem open={open}>Pages</TitleItem>
-//       {menuItems.map((item, index) => (
-//         <ListItem
-//           key={item.Name}
-//           open={open}
-//           isDropDown={!!item.DropdownItems}
-//           active={item.Active}
-//         >
-//           <TagList
-//             sideBarStatus={open}
-//             tag={item}
-//             clickHandler={clickHandler}
-//           />
-//           {item.DropdownItems ? (
-//             <Drop
-//               active={item.Active}
-//               dropItems={item.DropdownItems}
-//               Icon={item.Icon}
-//               isOpen={open}
-//               setVisible={clickHandler}
-//             />
-//           ) : (
-//             ''
-//           )}
-//         </ListItem>
-//       ))}
-//     </>
-//   )
-// })
-// const DashTags: React.FC<IMenuTags> = observer(({ open }) => {
-//   const [menuItems, setMenuItems] = useState<ITag[]>(Tags)
-//   const showHideDropItem: ShowHideDropItem = (tag) => {
-//     setMenuItems((items) =>
-//       items.map((item) => ({
-//         ...item,
-//         Active: item.Name === tag.Name ? tag.Active !== true : false
-//       }))
-//     )
-//   }
-//   useEffect(() => {
-//     setMenuItems((items) =>
-//       items.map((item) => ({
-//         ...item,
-//         Active: false
-//       }))
-//     )
-//   }, [open])
-
-//   const clickHandler: ClickHandler = (tag) => (e) => {
-//     e.preventDefault()
-//     showHideDropItem(tag)
-//   }
-//   return (
-//     <>
-//       <TitleItem open={open}>DashBoard</TitleItem>
-//       {menuItems.map((item, index) => (
-//         <ListItem
-//           key={item.Name}
-//           open={open}
-//           isDropDown={!!item.DropdownItems}
-//           active={item.Active}
-//         >
-//           <TagList
-//             sideBarStatus={open}
-//             tag={item}
-//             clickHandler={clickHandler}
-//           />
-//           {item.DropdownItems ? (
-//             <Drop
-//               active={item.Active}
-//               dropItems={item.DropdownItems}
-//               Icon={item.Icon}
-//               isOpen={open}
-//               setVisible={clickHandler}
-//             />
-//           ) : (
-//             ''
-//           )}
-//         </ListItem>
-//       ))}
-//     </>
-//   )
-// })
-
 const MenuTags: React.FC = observer(() => {
   const { layoutStore } = useRootStore()
   const [tags, setTags] = useState<ITag[]>(Tags)
@@ -487,28 +423,3 @@ const MenuTags: React.FC = observer(() => {
 })
 
 export default MenuTags
-// {menuItems.map((item, index) => (
-//   <ListItem
-//     key={item.Name}
-//     open={layoutStore.sideBar}
-//     isDropDown={!!item.DropdownItems}
-//     active={item.Active}
-//   >
-//     <TagList
-//       sideBarStatus={layoutStore.sideBar}
-//       tag={item}
-//       clickHandler={clickHandler}
-//     />
-//     {item.DropdownItems ? (
-//       <Drop
-//         active={item.Active}
-//         dropItems={item.DropdownItems}
-//         Icon={item.Icon}
-//         isOpen={layoutStore.sideBar}
-//         setVisible={clickHandler}
-//       />
-//     ) : (
-//       ''
-//     )}
-//   </ListItem>
-// ))}

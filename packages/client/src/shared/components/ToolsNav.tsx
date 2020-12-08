@@ -1,14 +1,8 @@
-/** @jsxImportSource @emotion/react */
 import React from 'react'
 import styled from '@emotion/styled/macro'
-import { css } from '@emotion/react'
-import { IoIosExit } from 'react-icons/io'
-import { flex } from 'styled-system'
 import { observer } from 'mobx-react-lite'
 import { CgLogOff } from 'react-icons/cg'
 import { Container } from './FlexBox'
-import Search from './SearchBox'
-import MenuBurguer from './Hamburguer'
 import { useRootStore } from '../infra/mobx'
 /* SideBar Styles Start */
 export interface SideBarState {

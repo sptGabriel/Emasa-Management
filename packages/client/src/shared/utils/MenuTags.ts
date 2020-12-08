@@ -6,7 +6,7 @@ import {
   AiOutlineLineChart
 } from 'react-icons/ai'
 import { BsPersonBoundingBox } from 'react-icons/bs'
-
+import { GrUserWorker } from 'react-icons/gr'
 import { RiBuildingLine } from 'react-icons/ri'
 import {
   FaFileContract,
@@ -65,7 +65,7 @@ export const Tags: ITag[] = [
     DropdownItems: null
   },
   {
-    Name: 'Inventory Management',
+    Name: 'Inventory',
     Link: '../dashboards',
     Icon: AiOutlineShop,
     DropdownItems: null
@@ -74,7 +74,7 @@ export const Tags: ITag[] = [
     Title: 'Pages',
     Name: 'Employees',
     Link: '../dashboards',
-    Icon: BsPersonBoundingBox,
+    Icon: GrUserWorker,
     DropdownItems: [
       { Name: 'Elo Boost', Link: '/eloBost' },
       { Name: 'Duo Boost', Link: '/duoBoost' },

@@ -1,10 +1,19 @@
 {
-  "presets": ["react-app",
+  "presets": [
+    "react-app",
+    "@babel/preset-env",
     "@babel/preset-react",
-    "@babel/preset-env"],
+    {
+      "runtime": "automatic",
+      "importSource": "@emotion/react"
+    }
+  ],
   "plugins": [
-    ["@babel/plugin-proposal-decorators",
-      { "legacy": true
+    "@emotion/babel-plugin",
+    [
+      "@babel/plugin-proposal-decorators",
+      {
+        "legacy": true
       }
     ],
     [
@@ -12,9 +21,26 @@
       {
         "loose": true
       }
-    ],
-    [
-      "emotion"
     ]
   ]
 }
+
+// // {
+// //   "presets": [
+// //     "@emotion/babel-preset-css-prop"
+// //   ],
+// //   "plugins": [
+// //     [
+// //       "@babel/plugin-proposal-decorators",
+// //       {
+// //         "legacy": true
+// //       }
+// //     ],
+// //     [
+// //       "@babel/plugin-proposal-class-properties",
+// //       {
+// //         "loose": true
+// //       }
+// //     ]
+// //   ]
+// // }

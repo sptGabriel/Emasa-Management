@@ -1,10 +1,8 @@
-/** @jsxImportSource @emotion/react */
 /* eslint-disable prettier/prettier */
 import React, { useState } from 'react'
 import styled from '@emotion/styled/macro'
 import { BiSearchAlt } from 'react-icons/bi'
 import { css } from '@emotion/react'
-
 
 interface SearchState {
   isOpen: boolean
@@ -16,18 +14,16 @@ export const SearchWrapper = styled.div<SearchState>`
   .input-holder {
     height: 42px;
     width: ${(props) => (props.isOpen ? '290px' : '42px')};
-    background: ${(props) => (props.isOpen ? 
-    ' rgba(0,0,0,0.05)' : 'rgba(255,255,255,0)')};
+    background: ${(props) =>
+    props.isOpen ? ' rgba(0,0,0,0.05)' : 'rgba(255,255,255,0)'};
     overflow: hidden;
     border-radius: ${(props) => (props.isOpen ? '50px' : '')};
-    /* ${(props) => (props.isOpen ? css`
-    border-radius: 50px;
-    background: rgba(0,0,0,0.05);
-    ` : '')}; */
     overflow: hidden;
     position: relative;
-    transition: ${(props) => (props.isOpen ?
-    'all .5s cubic-bezier(0.000, 0.105, 0.035, 1.570)' : 'all 0.3s ease-in-out')};
+    transition: ${(props) =>
+    props.isOpen
+      ? 'all .5s cubic-bezier(0.000, 0.105, 0.035, 1.570)'
+      : 'all 0.3s ease-in-out'};
   }
   .search-input {
     width: 100%;
@@ -41,9 +37,9 @@ export const SearchWrapper = styled.div<SearchState>`
     border: none;
     outline: none;
     color: #455560;
-    transform: ${(props) => (props.isOpen ?
-    'translate(0, 11px)' : 'translate(0, 60px)')};
-    transition: all .3s cubic-bezier(0.000, 0.105, 0.035, 1.570);
+    transform: ${(props) =>
+    props.isOpen ? 'translate(0, 11px)' : 'translate(0, 60px)'};
+    transition: all 0.3s cubic-bezier(0, 0.105, 0.035, 1.57);
     transition-delay: 0.3s;
     font-size: 0.88rem;
   }
@@ -63,21 +59,24 @@ export const SearchWrapper = styled.div<SearchState>`
     outline: none !important;
     box-sizing: border-box;
     text-transform: none;
-    ${(props) => (props.isOpen ? css`
-    width: 42px;
-    height: 42px;
-    margin: 0;
-    border-radius: 30px;
-    ` : '')};
-    :hover{
-      svg{
+    ${(props) =>
+    props.isOpen
+      ? css`
+            width: 42px;
+            height: 42px;
+            margin: 0;
+            border-radius: 30px;
+          `
+      : ''};
+    :hover {
+      svg {
         opacity: 0.7;
       }
     }
-    svg{
-      transform: ${({isOpen}) => (isOpen ? 'rotate(0)' : 'rotate(90deg)')};
-      color:#3e82f7;
-      transition: all .4s cubic-bezier(0.650, -0.600, 0.240, 1.650);
+    svg {
+      transform: ${({ isOpen }) => (isOpen ? 'rotate(0)' : 'rotate(90deg)')};
+      color: #3e82f7;
+      transition: all 0.4s cubic-bezier(0.65, -0.6, 0.24, 1.65);
     }
     span {
       width: 22px;
@@ -85,9 +84,9 @@ export const SearchWrapper = styled.div<SearchState>`
       display: inline-block;
       vertical-align: middle;
       position: relative;
-      transform: ${(props) => (props.isOpen ?
-    'rotate(-45deg)' : 'rotate(45deg)')};
-      transition: all .4s cubic-bezier(0.650, -0.600, 0.240, 1.650);
+      transform: ${(props) =>
+    props.isOpen ? 'rotate(-45deg)' : 'rotate(45deg)'};
+      transition: all 0.4s cubic-bezier(0.65, -0.6, 0.24, 1.65);
       cursor: pointer;
       ::after {
         width: 14px;
@@ -95,19 +94,19 @@ export const SearchWrapper = styled.div<SearchState>`
         left: 4px;
         top: 0;
         border-radius: 16px;
-        border: 2px solid #3e82f7;;
+        border: 2px solid #3e82f7;
         position: absolute;
         content: '';
       }
       ::before {
-          width: 4px;
-      height: 11px;
-      left: 9px;
-      top: 13px;
-      border-radius: 2px;
-      background: #3e82f7;;
-      position: absolute;
-      content: '';
+        width: 4px;
+        height: 11px;
+        left: 9px;
+        top: 13px;
+        border-radius: 2px;
+        background: #3e82f7;
+        position: absolute;
+        content: '';
       }
     }
   }
@@ -123,10 +122,11 @@ export const SearchWrapper = styled.div<SearchState>`
     cursor: pointer;
     opacity: 0 !important;
     transform: rotate(-180deg);
-    transition: ${(props) => (props.isOpen ?
-    'all 0.6s cubic-bezier(0, 0.105, 0.035, 1.57)'
-    : 'all 0.2s cubic-bezier(0.285, -0.45, 0.935, 0.11)')};
-    transition-delay: ${(props) => props.isOpen ? '0.5s' : '0.1s'};
+    transition: ${(props) =>
+    props.isOpen
+      ? 'all 0.6s cubic-bezier(0, 0.105, 0.035, 1.57)'
+      : 'all 0.2s cubic-bezier(0.285, -0.45, 0.935, 0.11)'};
+    transition-delay: ${(props) => (props.isOpen ? '0.5s' : '0.1s')};
     padding: 0;
     background-color: transparent;
     border: 0;
@@ -138,15 +138,18 @@ export const SearchWrapper = styled.div<SearchState>`
     color: #000;
     text-shadow: 0 1px 0 #fff;
     outline: none !important;
-    ${(props) => (props.isOpen ? css`
-    left: 300px;
-    opacity: 1 !important;
-    transform: rotate(45deg);
-    ` : '')};
-    :hover::before{
+    ${(props) =>
+    props.isOpen
+      ? css`
+            left: 300px;
+            opacity: 1 !important;
+            transform: rotate(45deg);
+          `
+      : ''};
+    :hover::before {
       opacity: 0.5;
     }
-    :hover::after{
+    :hover::after {
       opacity: 0.5;
     }
     ::before {

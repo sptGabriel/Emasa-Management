@@ -1,5 +1,4 @@
 /* eslint-disable prettier/prettier */
-/** @jsxImportSource @emotion/react */
 import React from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
@@ -39,7 +38,7 @@ import { useRootStore } from '../infra/mobx'
 export interface SideBarState {
   open: boolean
 }
-const Burguer = styled('button')<SideBarState>`
+const Burguer = styled('button') <SideBarState>`
   padding: 0px 0px;
   display: inline-block;
   cursor: pointer;
@@ -60,12 +59,12 @@ const Burguer = styled('button')<SideBarState>`
     position: relative;
   }
   .hamburger-inner {
-    transform:${({ open }) =>
+    transform: ${({ open }) =>
     open ? 'translate3d(0, 6px, 0) rotate(135deg)' : ''};
-    transition-delay:${({ open }) => open ? '0.075s' : ''};
+    transition-delay: ${({ open }) => (open ? '0.075s' : '')};
     width: 24px;
     height: 2px;
-    background-color: #3e82f7;;
+    background-color: #3e82f7;
     border-radius: 10px;
     position: absolute;
     top: 1px;
@@ -75,25 +74,25 @@ const Burguer = styled('button')<SideBarState>`
     display: block;
     margin-top: -1px;
     ::before {
-      transition-delay:${({ open }) => open ? '0' : '0.0s'};
-      opacity:${({ open }) => open ? '0' : '1'};
+      transition-delay: ${({ open }) => (open ? '0' : '0.0s')};
+      opacity: ${({ open }) => (open ? '0' : '1')};
       top: 6px;
       transition: opacity 0.125s 0.175s ease;
       content: '';
       display: block;
       width: 24px;
       height: 2px;
-      background-color: #3e82f7;;
+      background-color: #3e82f7;
       border-radius: 10px;
       position: absolute;
     }
     ::after {
-      transition-delay:${({ open }) => open ? '0.075s' : ''};
-      transform:${({ open }) => open ?
-    'translate3d(0, -12px, 0) rotate(-270deg)' : ''};
+      transition-delay: ${({ open }) => (open ? '0.075s' : '')};
+      transform: ${({ open }) =>
+    open ? 'translate3d(0, -12px, 0) rotate(-270deg)' : ''};
       width: 24px;
       height: 2px;
-      background-color: #3e82f7;;
+      background-color: #3e82f7;
       border-radius: 10px;
       position: absolute;
       content: '';

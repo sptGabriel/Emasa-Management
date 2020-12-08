@@ -1,13 +1,8 @@
-/** @jsxImportSource @emotion/react */
 import React from 'react'
 import styled from '@emotion/styled/macro'
-import { css } from '@emotion/react'
-import { GiHamburgerMenu } from 'react-icons/gi'
-import { flex } from 'styled-system'
 import { observer } from 'mobx-react-lite'
 import { Container } from './FlexBox'
 import Search from './SearchBox'
-import MenuBurguer from './Hamburguer'
 import { useRootStore } from '../infra/mobx'
 import ToolsNav from './ToolsNav'
 /* SideBar Styles Start */
@@ -20,7 +15,7 @@ const Nav = styled(Container)<SideBarState>`
   transition: all 0.2s ease;
   height: 100%;
 `
-const navLeft = css`
+const NavLeft = styled('div')`
   width: 100%;
   height: 100%;
   display: flex;
@@ -35,7 +30,7 @@ const navLeft = css`
 //   display: flex;
 //   background: red;
 // `
-const navLi = css`
+const NavLi = styled('li')`
   width: 100%;
   height: 100%;
   padding: 0 1rem;
@@ -46,11 +41,11 @@ const NavBar: React.FC = observer(() => {
   const { layoutStore } = useRootStore()
   return (
     <Nav justify="space-between" open={layoutStore.sideBar}>
-      <div css={navLeft}>
-        <li css={navLi}>
+      <NavLeft>
+        <NavLi>
           <Search />
-        </li>
-      </div>
+        </NavLi>
+      </NavLeft>
       <ToolsNav />
     </Nav>
   )
