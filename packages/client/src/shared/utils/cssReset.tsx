@@ -101,7 +101,7 @@ const GlobalStyle: React.FC = () => {
     <Global
       styles={css`
         @import url('https://fonts.googleapis.com/css?family=Poppins&display=swap');
-        @import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap');
         @import url('https://fonts.googleapis.com/css2?family=Lato&display=swap');
         @import url('https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;1,300&display=swap');
         @import url('https://fonts.googleapis.com/css2?family=Syne+Mono&display=swap');

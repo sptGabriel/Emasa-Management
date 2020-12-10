@@ -37,7 +37,7 @@ const LogoWrapper = styled(Container)<SideBarState>`
   }
 `
 const AppHeader = styled(Container)<SideBarState>`
-  width: ${({ open }) => (open ? '250px' : '60px')};
+  width: ${({ open }) => (open ? '280px' : '60px')};
   height: 70px;
   padding: 0 1.5rem;
   background-color: transparent;

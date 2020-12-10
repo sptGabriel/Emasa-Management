@@ -64,7 +64,7 @@ const Burguer = styled('button') <SideBarState>`
     transition-delay: ${({ open }) => (open ? '0.075s' : '')};
     width: 24px;
     height: 2px;
-    background-color: #3e82f7;
+    background-color: #bde0fe;
     border-radius: 10px;
     position: absolute;
     top: 1px;
@@ -92,7 +92,7 @@ const Burguer = styled('button') <SideBarState>`
     open ? 'translate3d(0, -12px, 0) rotate(-270deg)' : ''};
       width: 24px;
       height: 2px;
-      background-color: #3e82f7;
+      background: ${({ open }) => (open ? '#3e82f7' : '#BDE0FE')};
       border-radius: 10px;
       position: absolute;
       content: '';

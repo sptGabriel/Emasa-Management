@@ -44,33 +44,10 @@ const TitleItem = styled.div<{ open: boolean }>`
 const MenuList = styled.ul<IMenu>`
   position: relative;
   background: #fff;
-  overflow-y: scroll;
   padding: ${({ open }) => (open ? '0' : '1rem 0')};
   color: transparent;
   margin-top: 20px;
   margin-bottom: 30px;
-  ::-webkit-scrollbar {
-    width: 10px;
-    height: 18px;
-  }
-  ::-webkit-scrollbar-thumb {
-    height: 6px;
-    border: 2px solid rgba(0, 0, 0, 0);
-    background-clip: padding-box;
-    -webkit-border-radius: 7px;
-    background-color: rgba(242, 242, 242, 0.9);
-  }
-  ::-webkit-scrollbar-button {
-    width: 0;
-    height: 0;
-    display: none;
-  }
-  ::-webkit-scrollbar-corner {
-    background-color: transparent;
-  }
-  ::-webkit-scrollbar-track {
-    margin-bottom: 40vh;
-  }
 `
 
 const OpenedStyled = styled.ul<IDropDown>`
@@ -101,8 +78,8 @@ const OpenedStyled = styled.ul<IDropDown>`
     :hover {
       border-radius: 0.25rem;
       a {
-        font-weight: bold;
-        color: #3e82f7 !important;
+        font-weight: 500;
+        color: #10387e !important;
       }
     }
     margin-top: 2px;
@@ -111,12 +88,11 @@ const OpenedStyled = styled.ul<IDropDown>`
     }
   }
   a {
-    font-weight: bold;
-    font-family: Poppins;
-    font-size: 14px;
-    font-weight: 400;
-    text-decoration: none;
-    color: rgba(26, 51, 83, 0.85);
+    color: #2c323f;
+    letter-spacing: 0.7px;
+    font-family: Roboto;
+    text-transform: capitalize;
+    font-weight: 500;
   }
   & .li-open:hover > .icon-li-drop {
     color: orange;
@@ -178,19 +154,20 @@ const ListWrap = styled.div<IListWrap>`
   align-items: center;
   position: relative;
   border-radius: 10px;
-  background-color: ${({ tagActive }) => (tagActive ? '#dad6ff' : '#fff')};
+  background: ${({ tagActive, open }) =>
+    tagActive && open ? 'rgb(202 240 248 / 0.4)' : '#fff'};
   transition: all 0.5s ease;
-  padding: 12px 15px;
+  padding: 12px 10px;
   :hover {
-    background-color: rgb(116 102 255 / 0.12);
+    background: ${({ open }) => (open ? 'rgb(202 240 248 / 0.3)' : '')};
     a {
       svg {
-        fill: rgba(115, 102, 255, 1);
-        stroke: #7366ff;
+        fill: #10387e;
+        stroke: #10387e;
         transition: all 0.3s ease;
       }
       span {
-        color: #7366ff;
+        color: #10387e;
       }
     }
   }
@@ -198,13 +175,12 @@ const ListWrap = styled.div<IListWrap>`
     display: flex;
     align-items: center;
     span {
-      color: ${({ tagActive }) => (tagActive ? '#7366ff' : '#2c323f')};
+      color: ${({ tagActive }) => (tagActive ? '#10387e' : '#2c323f')};
       margin-bottom: -2px;
     }
     svg {
-      color: ${({ tagActive }) => (tagActive ? '#7366ff' : '#2c323f')};
+      fill: ${({ tagActive }) => (tagActive ? '#10387e' : '#2c323f')};
       margin-right: ${({ open }) => (open ? '10px' : '0')};
-      stroke-width: 2.3px;
       transition: all 0.5s cubic-bezier(0, 1, 0, 1);
     }
   }
@@ -214,7 +190,7 @@ const ListWrap = styled.div<IListWrap>`
   & .down-up_svg,
   .li-name {
     display: ${({ open }) => (open ? 'space-between' : 'none')};
-    color: ${({ tagActive }) => (tagActive ? '#7366ff' : '#2c323f')};
+    color: ${({ tagActive }) => (tagActive ? '#10387e' : '#2c323f')};
     letter-spacing: 0.7px;
     font-family: Roboto;
     text-transform: capitalize;
@@ -229,53 +205,13 @@ const ListItem = styled.li<IListItem>`
   display: flex;
   flex-direction: column;
   position: relative;
-  padding: 0 20px;
+  padding-left: ${({ open }) => (open ? '20px' : '15px')};
+  padding-right: 15px;
   justify-content: ${({ open }) => (open ? 'space-between' : 'center')};
   cursor: pointer;
   margin-bottom: 8px;
-  ::after {
-    border-left: 0px solid #3e82f7;
-    position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    transform: scaleY(0.0001);
-    opacity: ${({ active }) => (active ? '1' : '0')};
-    transform: ${({ active }) => (active ? 'scaleY(1)' : '')};
-    content: '';
-    transition: transform 0.15s cubic-bezier(0.215, 0.61, 0.355, 1),
-      opacity 0.15s cubic-bezier(0.215, 0.61, 0.355, 1),
-      -webkit-transform 0.15s cubic-bezier(0.215, 0.61, 0.355, 1);
-  }
-  &:hover ${ListWrap} {
-    svg {
-      color: ${({ open }) => (open ? '' : '#3e82f7')};
-      opacity: 1;
-    }
-  }
-
   &:hover ${ClosedStyled} {
     display: block;
-  }
-
-  &:hover {
-    border-right: ${({ open }) => (open ? '' : '3px #3e82f7 solid')};
-    ${ListWrap} {
-      :after {
-        content: '';
-        position: absolute;
-        display: ${({ isDropDown, open }) =>
-          isDropDown && open === false ? 'block' : 'none'};
-        right: 0px;
-        width: 0;
-        overflow: hidden;
-        height: 0;
-        border-top: 10px solid transparent;
-        border-bottom: 10px solid transparent;
-        clear: both;
-        z-index: 11;
-      }
-    }
   }
 `
 /* Styles */

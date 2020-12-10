@@ -1,28 +1,31 @@
 import React from 'react'
 import styled from '@emotion/styled/macro'
+import { observer } from 'mobx-react-lite'
+import { useRootStore } from '../infra/mobx'
 import { Container } from './FlexBox'
 import SideMenu from './SideMenu'
 
 interface IsHover {
   isHover: boolean
+  sideisOpen: boolean
 }
 const SideBarContainer = styled(Container)<IsHover>`
   width: 100%;
   position: relative;
-  /* border-right: 1px solid rgba(0, 0, 0, 0.12);
+  /* border-right: 1px solid rgba(0, 0, 0, 0.12); */
+  box-shadow: 0 0 21px 0 rgba(89, 102, 122, 0.1);
   background: #fff;
-  overflow-y: scroll;
-  padding: 2px 1.5rem 1.5rem;
+  overflow-y: ${({ sideisOpen }) => (sideisOpen ? 'auto' : 'hidden')};
   ::-webkit-scrollbar {
-    width: 10px;
+    width: 6px;
     height: 18px;
   }
-  ::-webkit-scrollbar-thumb {
+  ::-webkit-scrollbar-thumb:vertical {
     height: 6px;
-    border: 2px solid rgba(0, 0, 0, 0);
+    border: 1px solid rgba(0, 0, 0, 0);
     background-clip: padding-box;
-    -webkit-border-radius: 7px;
-    background-color: rgba(242, 242, 242, 0.9);
+    -webkit-border-radius: 100vh;
+    background: ${({ isHover }) => (isHover ? '#BDE0FE' : '#fff')};
   }
   ::-webkit-scrollbar-button {
     width: 0;
@@ -33,18 +36,27 @@ const SideBarContainer = styled(Container)<IsHover>`
     background-color: transparent;
   }
   ::-webkit-scrollbar-track {
-    margin-bottom: 40vh;
-  } */
+    background-clip: content-box;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    /* margin-bottom: 40vh; */
+  }
 `
 
-const SideBar: React.FC = () => {
-  const [isHover] = React.useState(false)
-
+const SideBar: React.FC = observer(() => {
+  const [isHover, setHovered] = React.useState(false)
+  const { layoutStore } = useRootStore()
   return (
-    <SideBarContainer flexColumn isHover={isHover}>
+    <SideBarContainer
+      flexColumn
+      isHover={isHover}
+      sideisOpen={layoutStore.sideBar}
+      onMouseOver={() => setHovered(true)}
+      onMouseOut={() => setHovered(false)}
+    >
       <SideMenu />
     </SideBarContainer>
   )
-}
+})
 
 export default SideBar

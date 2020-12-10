@@ -25,7 +25,7 @@ const LogoutWidget = styled('div')`
   svg {
     color: #3e82f7;
     :hover {
-      color: #ff0000;
+      color: #bde0fe;
       opacity: 0.6;
     }
   }

@@ -36,7 +36,7 @@
       }
     ],
     "indent": [
-      "error",
+      "warn",
       2
     ],
     "@typescript-eslint/explicit-module-boundary-types": "off",

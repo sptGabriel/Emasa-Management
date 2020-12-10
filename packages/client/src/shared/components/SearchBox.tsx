@@ -15,15 +15,15 @@ export const SearchWrapper = styled.div<SearchState>`
     height: 42px;
     width: ${(props) => (props.isOpen ? '290px' : '42px')};
     background: ${(props) =>
-    props.isOpen ? ' rgba(0,0,0,0.05)' : 'rgba(255,255,255,0)'};
+      props.isOpen ? ' rgba(0,0,0,0.05)' : 'rgba(255,255,255,0)'};
     overflow: hidden;
     border-radius: ${(props) => (props.isOpen ? '50px' : '')};
     overflow: hidden;
     position: relative;
     transition: ${(props) =>
-    props.isOpen
-      ? 'all .5s cubic-bezier(0.000, 0.105, 0.035, 1.570)'
-      : 'all 0.3s ease-in-out'};
+      props.isOpen
+        ? 'all .5s cubic-bezier(0.000, 0.105, 0.035, 1.570)'
+        : 'all 0.3s ease-in-out'};
   }
   .search-input {
     width: 100%;
@@ -38,7 +38,7 @@ export const SearchWrapper = styled.div<SearchState>`
     outline: none;
     color: #455560;
     transform: ${(props) =>
-    props.isOpen ? 'translate(0, 11px)' : 'translate(0, 60px)'};
+      props.isOpen ? 'translate(0, 11px)' : 'translate(0, 60px)'};
     transition: all 0.3s cubic-bezier(0, 0.105, 0.035, 1.57);
     transition-delay: 0.3s;
     font-size: 0.88rem;
@@ -60,14 +60,14 @@ export const SearchWrapper = styled.div<SearchState>`
     box-sizing: border-box;
     text-transform: none;
     ${(props) =>
-    props.isOpen
-      ? css`
+      props.isOpen
+        ? css`
             width: 42px;
             height: 42px;
             margin: 0;
             border-radius: 30px;
           `
-      : ''};
+        : ''};
     :hover {
       svg {
         opacity: 0.7;
@@ -85,7 +85,7 @@ export const SearchWrapper = styled.div<SearchState>`
       vertical-align: middle;
       position: relative;
       transform: ${(props) =>
-    props.isOpen ? 'rotate(-45deg)' : 'rotate(45deg)'};
+        props.isOpen ? 'rotate(-45deg)' : 'rotate(45deg)'};
       transition: all 0.4s cubic-bezier(0.65, -0.6, 0.24, 1.65);
       cursor: pointer;
       ::after {
@@ -123,9 +123,9 @@ export const SearchWrapper = styled.div<SearchState>`
     opacity: 0 !important;
     transform: rotate(-180deg);
     transition: ${(props) =>
-    props.isOpen
-      ? 'all 0.6s cubic-bezier(0, 0.105, 0.035, 1.57)'
-      : 'all 0.2s cubic-bezier(0.285, -0.45, 0.935, 0.11)'};
+      props.isOpen
+        ? 'all 0.6s cubic-bezier(0, 0.105, 0.035, 1.57)'
+        : 'all 0.2s cubic-bezier(0.285, -0.45, 0.935, 0.11)'};
     transition-delay: ${(props) => (props.isOpen ? '0.5s' : '0.1s')};
     padding: 0;
     background-color: transparent;
@@ -139,13 +139,13 @@ export const SearchWrapper = styled.div<SearchState>`
     text-shadow: 0 1px 0 #fff;
     outline: none !important;
     ${(props) =>
-    props.isOpen
-      ? css`
+      props.isOpen
+        ? css`
             left: 300px;
             opacity: 1 !important;
             transform: rotate(45deg);
           `
-      : ''};
+        : ''};
     :hover::before {
       opacity: 0.5;
     }
@@ -159,7 +159,7 @@ export const SearchWrapper = styled.div<SearchState>`
       top: 0;
       position: absolute;
       content: '';
-      background: #ff0000;
+      background: #BDE0FE;
       border-radius: 2px;
     }
     ::after {
@@ -169,7 +169,7 @@ export const SearchWrapper = styled.div<SearchState>`
       top: 9px;
       position: absolute;
       content: '';
-      background: #ff0000;
+      background: #78A8F9;
       border-radius: 2px;
     }
   }

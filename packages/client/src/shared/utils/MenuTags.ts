@@ -1,19 +1,20 @@
 import { IconType } from 'react-icons'
-import { SiGoogleanalytics } from 'react-icons/si'
 import {
   AiOutlineDashboard,
   AiOutlineShop,
   AiOutlineLineChart
 } from 'react-icons/ai'
-import { BsPersonBoundingBox } from 'react-icons/bs'
-import { GrUserWorker } from 'react-icons/gr'
-import { RiBuildingLine } from 'react-icons/ri'
+import { FaUsers, FaRegBuilding } from 'react-icons/fa'
+import { TiGroupOutline } from 'react-icons/ti'
 import {
-  FaFileContract,
-  FaHandsHelping,
-  FaTools,
-  FaUsers
-} from 'react-icons/fa'
+  BsBuilding,
+  BsLightning,
+  BsBookmarkPlus,
+  BsFileEarmarkText
+} from 'react-icons/bs'
+import { BiStoreAlt } from 'react-icons/bi'
+import { HiOutlineUserGroup } from 'react-icons/hi'
+import { RiGroupLine } from 'react-icons/ri'
 
 export interface IDropdownItems {
   Name: string
@@ -67,14 +68,14 @@ export const Tags: ITag[] = [
   {
     Name: 'Inventory',
     Link: '../dashboards',
-    Icon: AiOutlineShop,
+    Icon: BiStoreAlt,
     DropdownItems: null
   },
   {
     Title: 'Pages',
     Name: 'Employees',
     Link: '../dashboards',
-    Icon: GrUserWorker,
+    Icon: TiGroupOutline,
     DropdownItems: [
       { Name: 'Elo Boost', Link: '/eloBost' },
       { Name: 'Duo Boost', Link: '/duoBoost' },
@@ -86,7 +87,7 @@ export const Tags: ITag[] = [
   {
     Name: 'Departaments',
     Link: '../dashboards',
-    Icon: RiBuildingLine,
+    Icon: FaRegBuilding,
     DropdownItems: [
       { Name: 'Elo Boost', Link: '/eloBost' },
       { Name: 'Duo Boost', Link: '/duoBoost' },
@@ -98,7 +99,7 @@ export const Tags: ITag[] = [
   {
     Name: 'Products',
     Link: '../dashboards',
-    Icon: FaTools,
+    Icon: BsLightning,
     DropdownItems: [
       { Name: 'Elo Boost', Link: '/eloBost' },
       { Name: 'Duo Boost', Link: '/duoBoost' },
@@ -110,7 +111,7 @@ export const Tags: ITag[] = [
   {
     Name: 'Suppliers',
     Link: '../dashboards',
-    Icon: FaHandsHelping,
+    Icon: BsBookmarkPlus,
     DropdownItems: [
       { Name: 'Elo Boost', Link: '/eloBost' },
       { Name: 'Duo Boost', Link: '/duoBoost' },
@@ -122,7 +123,7 @@ export const Tags: ITag[] = [
   {
     Name: 'Contracts',
     Link: '../dashboards',
-    Icon: FaFileContract,
+    Icon: BsFileEarmarkText,
     DropdownItems: [
       { Name: 'Elo Boost', Link: '/eloBost' },
       { Name: 'Duo Boost', Link: '/duoBoost' },
@@ -134,7 +135,7 @@ export const Tags: ITag[] = [
   {
     Name: 'User List',
     Link: '../dashboards',
-    Icon: FaUsers,
+    Icon: RiGroupLine,
     DropdownItems: [
       { Name: 'Elo Boost', Link: '/eloBost' },
       { Name: 'Duo Boost', Link: '/duoBoost' },

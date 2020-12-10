@@ -20,7 +20,7 @@ const DashBoardHeader = styled('div')`
 `
 const DashBoardBody = styled('div')<SideBarState>`
   display: grid;
-  grid-template-columns: ${({ open }) => (open ? '250px' : '60px')} auto;
+  grid-template-columns: ${({ open }) => (open ? '280px' : '60px')} auto;
   overflow: hidden;
 `
 const DashBoardSide = styled('div')`

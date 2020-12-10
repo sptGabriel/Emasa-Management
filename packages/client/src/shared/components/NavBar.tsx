@@ -10,7 +10,7 @@ export interface SideBarState {
   open: boolean
 }
 const Nav = styled(Container)<SideBarState>`
-  width: ${({ open }) => (open ? 'calc(100% - 250px)' : 'calc(100% - 60px)')};
+  width: ${({ open }) => (open ? 'calc(100% - 280px)' : 'calc(100% - 60px)')};
   position: relative;
   transition: all 0.2s ease;
   height: 100%;
