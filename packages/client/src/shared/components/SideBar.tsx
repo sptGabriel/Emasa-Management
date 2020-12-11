@@ -25,7 +25,7 @@ const SideBarContainer = styled(Container)<IsHover>`
     border: 1px solid rgba(0, 0, 0, 0);
     background-clip: padding-box;
     -webkit-border-radius: 100vh;
-    background: ${({ isHover }) => (isHover ? '#BDE0FE' : '#fff')};
+    background: ${({ isHover }) => (isHover ? '#bde0fe' : '#fff')};
   }
   ::-webkit-scrollbar-button {
     width: 0;

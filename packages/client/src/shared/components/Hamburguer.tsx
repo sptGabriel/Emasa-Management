@@ -38,7 +38,7 @@ import { useRootStore } from '../infra/mobx'
 export interface SideBarState {
   open: boolean
 }
-const Burguer = styled('button') <SideBarState>`
+const Burguer = styled('button')<SideBarState>`
   padding: 0px 0px;
   display: inline-block;
   cursor: pointer;
@@ -48,6 +48,8 @@ const Burguer = styled('button') <SideBarState>`
   border: 0;
   margin: 0;
   margin-top: 5px;
+  transform: ${({ open }) => (open ?
+     'translateX(calc(100% + 0.75rem))' : 'translateX(0)')};
   overflow: visible;
   :hover {
     opacity: 0.7;
@@ -60,11 +62,11 @@ const Burguer = styled('button') <SideBarState>`
   }
   .hamburger-inner {
     transform: ${({ open }) =>
-    open ? 'translate3d(0, 6px, 0) rotate(135deg)' : ''};
+      open ? 'translate3d(0, 6px, 0) rotate(135deg)' : ''};
     transition-delay: ${({ open }) => (open ? '0.075s' : '')};
     width: 24px;
     height: 2px;
-    background-color: #bde0fe;
+    background-color: #10387e;
     border-radius: 10px;
     position: absolute;
     top: 1px;
@@ -89,10 +91,10 @@ const Burguer = styled('button') <SideBarState>`
     ::after {
       transition-delay: ${({ open }) => (open ? '0.075s' : '')};
       transform: ${({ open }) =>
-    open ? 'translate3d(0, -12px, 0) rotate(-270deg)' : ''};
+        open ? 'translate3d(0, -12px, 0) rotate(-270deg)' : ''};
       width: 24px;
       height: 2px;
-      background: ${({ open }) => (open ? '#3e82f7' : '#BDE0FE')};
+      background: ${({ open }) => (open ? '#3e82f7' : '#10387e')};
       border-radius: 10px;
       position: absolute;
       content: '';

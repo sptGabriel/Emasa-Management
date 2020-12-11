@@ -10,6 +10,7 @@ interface SearchState {
 // Search Box
 export const SearchWrapper = styled.div<SearchState>`
   position: relative;
+  padding-left: 0.75rem;
   margin-right: 0.66667rem;
   .input-holder {
     height: 42px;
@@ -75,7 +76,7 @@ export const SearchWrapper = styled.div<SearchState>`
     }
     svg {
       transform: ${({ isOpen }) => (isOpen ? 'rotate(0)' : 'rotate(90deg)')};
-      color: #3e82f7;
+      color: #10387e;
       transition: all 0.4s cubic-bezier(0.65, -0.6, 0.24, 1.65);
     }
     span {
@@ -115,13 +116,13 @@ export const SearchWrapper = styled.div<SearchState>`
     position: absolute;
     z-index: 1;
     top: 50%;
-    left: 0;
+    left: ${({isOpen}) => (isOpen ? 'calc(300px + 0.75rem)' : '0')};
     width: 20px;
     height: 20px;
     margin-top: -10px;
     cursor: pointer;
-    opacity: 0 !important;
-    transform: rotate(-180deg);
+    opacity: ${({isOpen}) => (isOpen ? '1' : '0')};
+    transform: ${({isOpen}) => (isOpen ? 'rotate(45deg)' : 'rotate(-180deg)')};
     transition: ${(props) =>
       props.isOpen
         ? 'all 0.6s cubic-bezier(0, 0.105, 0.035, 1.57)'
@@ -138,14 +139,6 @@ export const SearchWrapper = styled.div<SearchState>`
     color: #000;
     text-shadow: 0 1px 0 #fff;
     outline: none !important;
-    ${(props) =>
-      props.isOpen
-        ? css`
-            left: 300px;
-            opacity: 1 !important;
-            transform: rotate(45deg);
-          `
-        : ''};
     :hover::before {
       opacity: 0.5;
     }
@@ -159,7 +152,7 @@ export const SearchWrapper = styled.div<SearchState>`
       top: 0;
       position: absolute;
       content: '';
-      background: #BDE0FE;
+      background: #10387e;
       border-radius: 2px;
     }
     ::after {
@@ -169,7 +162,7 @@ export const SearchWrapper = styled.div<SearchState>`
       top: 9px;
       position: absolute;
       content: '';
-      background: #78A8F9;
+      background: #78a8f9;
       border-radius: 2px;
     }
   }

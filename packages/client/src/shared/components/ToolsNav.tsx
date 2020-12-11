@@ -1,19 +1,153 @@
-import React from 'react'
+import React, { useRef, useState } from 'react'
+import { css } from '@emotion/react'
+import useOnClickOutside from 'use-onclickoutside'
 import styled from '@emotion/styled/macro'
-import { observer } from 'mobx-react-lite'
+import { BiChevronDown } from 'react-icons/bi'
+import { IoIosNotificationsOutline } from 'react-icons/io'
+import { RiSettings2Line } from 'react-icons/ri'
 import { CgLogOff } from 'react-icons/cg'
+import { observer } from 'mobx-react-lite'
 import { Container } from './FlexBox'
 import { useRootStore } from '../infra/mobx'
+import userAvatar from '../../assets/user.png'
+import VerticalSplit from './Divider'
 /* SideBar Styles Start */
 export interface SideBarState {
   open: boolean
 }
+/* InterFaces Start */
+interface IUserCanvas {
+  isOpen: boolean
+}
+interface IUserProfile {
+  open: boolean
+}
+/* User Profile Styles Section */
+const UserProfile = styled('div')<IUserProfile>`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  height: 100%;
+  position: relative;
+  & .svg-arrow {
+    ${({ open }) =>
+      open
+        ? css`
+            transform: rotate(180deg);
+          `
+        : ''}
+  }
+  & .user_text {
+    cursor: pointer;
+    display: flex !important;
+    flex-direction: column;
+    padding-left: 0.75rem !important;
+    span:first-of-type {
+      font-size: 0.8rem;
+      color: #10387e !important;
+      letter-spacing: 0.7px;
+      font-family: Roboto;
+      text-transform: capitalize;
+      font-weight: 500;
+    }
+    span:last-of-type {
+      font-size: 0.8rem;
+      color: #838598 !important;
+      letter-spacing: 0.7px;
+      font-family: Roboto;
+      text-transform: capitalize;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+  }
+  & .user_avatar {
+    position: relative;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    overflow: hidden;
+    transition: border-color 0.2s;
+    img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+`
+const UserCanvas = styled.div<IUserCanvas>`
+  position: absolute;
+  width: 100%;
+  display: ${(props: IUserCanvas) => (props.isOpen ? 'block' : 'none')};
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-color: rgba(120, 130, 140, 0.13);
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.05);
+  top: 100%;
+  bottom: 0;
+  font-size: 1rem;
+  color: #212529;
+  background-color: #fff;
+  background-clip: padding-box;
+  padding: 1rem;
+  border-radius: 0.25rem;
+  height: max-content;
+  :before {
+    content: '';
+    position: absolute;
+    top: -8px;
+    right: calc(50% - 8px);
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    z-index: 1;
+    border-bottom: 8px solid rgba(0, 0, 0, 0.4);
+  }
+  :after {
+    content: '';
+    position: absolute;
+    top: -8px;
+    right: calc(50% - 8px);
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-bottom: 8px solid #fff;
+    z-index: 1;
+  }
+  & .separator {
+    height: 1px;
+    margin: 9px 0;
+    overflow: hidden;
+    background-color: rgba(120, 130, 140, 0.13);
+  }
+  & .dflex {
+    display: flex;
+    align-items: center;
+    padding: 10px 0;
+    svg {
+      color: #465464;
+    }
+    h3 {
+      margin-left: 10px;
+      font-size: 1rem;
+      color: #838598 !important;
+      font-weight: 500 !important;
+    }
+  }
+`
 const WrapperTools = styled(Container)<SideBarState>`
-  padding: 0 1rem;
+  padding: 0 2.5rem;
   display: flex;
   align-items: center;
   display: flex;
   margin-left: auto;
+  position: relative;
+  & .tool_widget {
+    cursor: pointer;
+    list-style: none;
+    color: #10387e;
+    padding: 0.4rem;
+  }
 `
 const LogoutWidget = styled('div')`
   padding: 0 1rem;
@@ -30,15 +164,46 @@ const LogoutWidget = styled('div')`
     }
   }
 `
+const UserSection: React.FC = () => {
+  const [open, setOpen] = useState(false)
+  const ref = React.useRef(null)
+  useOnClickOutside(ref, () => setOpen(false))
+  return (
+    <UserProfile ref={ref} onClick={() => setOpen(!open)} open={open}>
+      <div className="user_avatar">
+        <img src={userAvatar} alt="Logo" />
+      </div>
+      <span className="svg-arrow">
+        <BiChevronDown />
+      </span>
+      <div className="user_text">
+        <span>SpiriT</span>
+        <span>Web Developer</span>
+      </div>
+      <UserCanvas isOpen={open} />
+    </UserProfile>
+  )
+}
 const ToolsNav: React.FC = observer(() => {
   const { layoutStore } = useRootStore()
   return (
     <WrapperTools justify="space-between" open={layoutStore.sideBar}>
-      <LogoutWidget>
+      {/* <LogoutWidget>
         <button type="button">
           <CgLogOff size={32} />
         </button>
-      </LogoutWidget>
+      </LogoutWidget> */}
+      <UserSection />
+      <VerticalSplit />
+      <li className="tool_widget">
+        <RiSettings2Line size={24} />
+      </li>
+      <li className="tool_widget">
+        <IoIosNotificationsOutline size={24} />
+      </li>
+      <li className="tool_widget">
+        <CgLogOff size={24} />
+      </li>
     </WrapperTools>
   )
 })
