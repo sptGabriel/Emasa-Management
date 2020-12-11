@@ -1,16 +1,51 @@
-import React, { useRef, useState } from 'react'
-import { css } from '@emotion/react'
+import React, { useState } from 'react'
+import { css, keyframes } from '@emotion/react'
 import useOnClickOutside from 'use-onclickoutside'
 import styled from '@emotion/styled/macro'
-import { BiChevronDown } from 'react-icons/bi'
-import { IoIosNotificationsOutline } from 'react-icons/io'
-import { RiSettings2Line } from 'react-icons/ri'
-import { CgLogOff } from 'react-icons/cg'
+import { BiChevronDown, BiMoon } from 'react-icons/bi'
+import { FiBell, FiSun } from 'react-icons/fi'
+import { AiOutlineCompress } from 'react-icons/ai'
 import { observer } from 'mobx-react-lite'
 import { Container } from './FlexBox'
 import { useRootStore } from '../infra/mobx'
 import userAvatar from '../../assets/user.png'
 import VerticalSplit from './Divider'
+
+const bellAnimation = keyframes`
+  0% {
+    transform: scaleX(1);
+  }
+  10% {
+    transform: scale3d(.9,.9,.9) rotate(-3deg);
+  }
+  20% {
+    transform: scale3d(.9,.9,.9) rotate(-3deg);
+  }
+  30% {
+    transform: scale3d(1.1,1.1,1.1) rotate(3deg);
+  }
+  50% {
+    transform: scale3d(1.1,1.1,1.1) rotate(3deg);
+  }
+  70% {
+    transform: scale3d(1.1,1.1,1.1) rotate(3deg);
+  }
+  90% {
+    transform: scale3d(1.1,1.1,1.1) rotate(3deg);
+  }
+  40% {
+    transform: scale3d(1.1,1.1,1.1) rotate(-3deg);
+  }
+  60% {
+    transform: scale3d(1.1,1.1,1.1) rotate(-3deg);
+  }
+  80% {
+    transform: scale3d(1.1,1.1,1.1) rotate(-3deg);
+  }
+  100% {
+    transform: scaleX(1);
+  }
+`
 /* SideBar Styles Start */
 export interface SideBarState {
   open: boolean
@@ -30,7 +65,13 @@ const UserProfile = styled('div')<IUserProfile>`
   cursor: pointer;
   height: 100%;
   position: relative;
+  :hover {
+    span:first-of-type {
+      filter: brightness(1.75);
+    }
+  }
   & .svg-arrow {
+    color: #10387e !important;
     ${({ open }) =>
       open
         ? css`
@@ -142,11 +183,17 @@ const WrapperTools = styled(Container)<SideBarState>`
   display: flex;
   margin-left: auto;
   position: relative;
+  & .bell {
+    animation: ${bellAnimation} 1.5s ease infinite;
+  }
   & .tool_widget {
     cursor: pointer;
     list-style: none;
     color: #10387e;
     padding: 0.4rem;
+    :hover {
+      filter: brightness(1.75);
+    }
   }
 `
 const LogoutWidget = styled('div')`
@@ -188,22 +235,20 @@ const ToolsNav: React.FC = observer(() => {
   const { layoutStore } = useRootStore()
   return (
     <WrapperTools justify="space-between" open={layoutStore.sideBar}>
-      {/* <LogoutWidget>
-        <button type="button">
-          <CgLogOff size={32} />
-        </button>
-      </LogoutWidget> */}
-      <UserSection />
+      <li className="tool_widget">
+        <BiMoon size={24} />
+      </li>
+      <li className="tool_widget bell">
+        <FiBell size={24} />
+      </li>
+      <li className="tool_widget">
+        <AiOutlineCompress size={24} />
+      </li>
+      <li className="tool_widget">
+        <FiSun size={24} />
+      </li>
       <VerticalSplit />
-      <li className="tool_widget">
-        <RiSettings2Line size={24} />
-      </li>
-      <li className="tool_widget">
-        <IoIosNotificationsOutline size={24} />
-      </li>
-      <li className="tool_widget">
-        <CgLogOff size={24} />
-      </li>
+      <UserSection />
     </WrapperTools>
   )
 })
