@@ -1,9 +1,10 @@
 import React from 'react'
 import { observer } from 'mobx-react-lite'
 import { ThemeProvider } from '@emotion/react'
-import { useAppTheme } from './shared/utils/useAppTheme'
 import GlobalReset from './shared/utils/cssReset'
 import AuthenticatedApp from './shared/infra/router'
+import { useRootStore } from './shared/infra/mobx'
+import { darkTheme, lightTheme } from './shared/themes'
 // import { useComponentWillMount } from './shared/utils/useComponentWillMount'
 // import { useRootStore } from './shared/infra/mobx'
 
@@ -16,9 +17,9 @@ import AuthenticatedApp from './shared/infra/router'
 // })
 
 const App: React.FC = observer(() => {
-  const { theme } = useAppTheme()
+  const { layoutStore } = useRootStore()
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={layoutStore.isDarkMode ? darkTheme : lightTheme}>
       <GlobalReset />
       <AuthenticatedApp />
     </ThemeProvider>

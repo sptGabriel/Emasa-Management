@@ -1,9 +1,11 @@
+import React from 'react'
+import { Theme, useTheme } from '@emotion/react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
-import React from 'react'
 import Header from '../../shared/components/Header'
 import { useRootStore } from '../../shared/infra/mobx'
 import ASide from '../../shared/components/SideBar'
+import { ITheme } from '../../shared/themes'
 
 export interface SideBarState {
   open: boolean
@@ -34,8 +36,9 @@ const DashBoardSide = styled('div')`
     background: transparent;
   }
 `
-const DashBoardContent = styled('div')`
+const DashBoardContent = styled('div')<{ theme: any }>`
   border-right: 1px solid lightgrey;
+  background: ${({ theme }) => theme.backgroundSecondary || 'lightgrey'};
   overflow-y: scroll;
   ::-webkit-scrollbar-track {
     box-shadow: inset 0 0 25px 25px transparent;
@@ -52,14 +55,15 @@ const DashBoardContent = styled('div')`
 const DashBoardFooter = styled('div')`
   background: red;
 `
-const DashBoard: React.FC = observer(() => {
+const DashBoard: React.FC = observer((props) => {
   const { layoutStore } = useRootStore()
+  const theme = useTheme()
   return (
     <DashBoardContainer>
       <Header />
       <DashBoardBody open={layoutStore.sideBar}>
         <ASide />
-        <DashBoardContent>
+        <DashBoardContent theme={theme}>
           {/* <DashBoardFooter>.footer</DashBoardFooter> */}
         </DashBoardContent>
       </DashBoardBody>

@@ -34,16 +34,17 @@ const TitleItem = styled.div<{ open: boolean }>`
   align-items: center;
   position: relative;
   border-radius: 0.25rem;
-  color: rgba(26, 51, 83, 0.6);
+  color: ${({ theme }: any) =>
+    theme.sideBar.tittleTag || 'rgba(26, 51, 83, 0.6)'};
   font-size: 0.75rem;
   padding: 0.75rem 1.525rem;
-  font-weight: 700;
+  font-weight: bold;
+  font-family: Roboto, sans-serif;
   text-transform: uppercase;
   margin-top: 0.9375rem;
 `
 const MenuList = styled.ul<IMenu>`
   position: relative;
-  background: #fff;
   padding: ${({ open }) => (open ? '0' : '1rem 0')};
   color: transparent;
   margin-top: 20px;
@@ -56,7 +57,6 @@ const OpenedStyled = styled.ul<IDropDown>`
   max-height: ${({ active }) => (active ? '500px' : '0')};
   transition: max-height 0.5s, opacity 1s;
   overflow: hidden;
-  background: #fff;
   transition: padding 300ms;
   padding: 0.5em 0 0 2rem;
   :before {
@@ -64,7 +64,7 @@ const OpenedStyled = styled.ul<IDropDown>`
     height: 100%;
     opacity: 1;
     width: 3px;
-    background: #e0f3ff;
+    background: rgb(202 240 248 / 0.4);
     position: absolute;
     left: 20px;
     top: 0;
@@ -79,7 +79,7 @@ const OpenedStyled = styled.ul<IDropDown>`
       border-radius: 0.25rem;
       a {
         font-weight: 500;
-        color: #10387e !important;
+        color: ${({ theme }: any) => theme.sideBar.menuTag.activeText};
       }
     }
     margin-top: 2px;
@@ -88,7 +88,7 @@ const OpenedStyled = styled.ul<IDropDown>`
     }
   }
   a {
-    color: #2c323f;
+    color: ${({ theme }: any) => theme.sideBar.menuTag.text};
     letter-spacing: 0.7px;
     font-family: Roboto;
     text-transform: capitalize;
@@ -154,20 +154,21 @@ const ListWrap = styled.div<IListWrap>`
   align-items: center;
   position: relative;
   border-radius: 10px;
-  background: ${({ tagActive, open }) =>
-    tagActive && open ? 'rgb(202 240 248 / 0.4)' : '#fff'};
+  background: ${({ tagActive, open, theme }: any) =>
+    tagActive && open ? theme.sideBar.menuTag.background : ''};
   transition: all 0.5s ease;
   padding: 12px 10px;
   :hover {
-    background: ${({ open }) => (open ? 'rgb(202 240 248 / 0.3)' : '')};
+    background: ${({ open, theme }: any) =>
+      open ? theme.sideBar.menuTag.hoveredBackground : ''};
     a {
       svg {
-        fill: #10387e;
-        stroke: #10387e;
+        fill: ${({ theme }: any) => theme.sideBar.menuTag.activeText};
+        stroke: ${({ theme }: any) => theme.sideBar.menuTag.activeText};
         transition: all 0.3s ease;
       }
       span {
-        color: #10387e;
+        color: ${({ theme }: any) => theme.sideBar.menuTag.activeText};
       }
     }
   }
@@ -175,11 +176,17 @@ const ListWrap = styled.div<IListWrap>`
     display: flex;
     align-items: center;
     span {
-      color: ${({ tagActive }) => (tagActive ? '#10387e' : '#2c323f')};
+      color: ${({ tagActive, theme }: any) =>
+        tagActive
+          ? theme.sideBar.menuTag.activeText
+          : theme.sideBar.menuTag.text};
       margin-bottom: -2px;
     }
     svg {
-      fill: ${({ tagActive }) => (tagActive ? '#10387e' : '#2c323f')};
+      fill: ${({ tagActive, theme }: any) =>
+        tagActive
+          ? theme.sideBar.menuTag.activeText
+          : theme.sideBar.menuTag.text};
       margin-right: ${({ open }) => (open ? '10px' : '0')};
       transition: all 0.5s cubic-bezier(0, 1, 0, 1);
     }
@@ -190,14 +197,17 @@ const ListWrap = styled.div<IListWrap>`
   & .down-up_svg,
   .li-name {
     display: ${({ open }) => (open ? 'space-between' : 'none')};
-    color: ${({ tagActive }) => (tagActive ? '#10387e' : '#2c323f')};
+    color: ${({ tagActive, theme }: any) =>
+      tagActive
+        ? theme.sideBar.menuTag.activeText
+        : theme.sideBar.menuTag.text};
     letter-spacing: 0.7px;
     font-family: Roboto;
     text-transform: capitalize;
     font-weight: 500;
   }
   & .svg-arrow {
-    color: #222;
+    color: ${({ theme }: any) => (theme.type === 'dark' ? '#fff' : '#222')};
   }
 `
 

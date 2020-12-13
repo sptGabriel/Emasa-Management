@@ -71,7 +71,7 @@ const UserProfile = styled('div')<IUserProfile>`
     }
   }
   & .svg-arrow {
-    color: #10387e !important;
+    color: ${({ theme }: any) => theme.sideBar.menuTag.activeText};
     ${({ open }) =>
       open
         ? css`
@@ -86,7 +86,7 @@ const UserProfile = styled('div')<IUserProfile>`
     padding-left: 0.75rem !important;
     span:first-of-type {
       font-size: 0.8rem;
-      color: #10387e !important;
+      color: ${({ theme }: any) => theme.sideBar.menuTag.activeText};
       letter-spacing: 0.7px;
       font-family: Roboto;
       text-transform: capitalize;
@@ -187,30 +187,27 @@ const WrapperTools = styled(Container)<SideBarState>`
     animation: ${bellAnimation} 1.5s ease infinite;
   }
   & .tool_widget {
+    margin-right: 5px;
+    border: none;
+    border-radius: 5px;
+    transition: background 0.2s ease 0s;
     cursor: pointer;
     list-style: none;
-    color: #10387e;
+    width: 46px;
+    height: 46px;
+    color: ${({ theme }: any) =>
+      theme.type === 'dark' ? 'rgb(168, 168, 179)' : '#10387e'};
     padding: 0.4rem;
     :hover {
-      filter: brightness(1.75);
+      background: ${({ theme }: any) =>
+        theme.type === 'dark' ? 'rgb(20, 19, 22)' : '#f0f0f0'};
+      svg {
+        filter: brightness(1.75);
+      }
     }
   }
 `
-const LogoutWidget = styled('div')`
-  padding: 0 1rem;
-  margin: 0;
-  button {
-    display: flex;
-    align-items: center;
-  }
-  svg {
-    color: #3e82f7;
-    :hover {
-      color: #bde0fe;
-      opacity: 0.6;
-    }
-  }
-`
+
 const UserSection: React.FC = () => {
   const [open, setOpen] = useState(false)
   const ref = React.useRef(null)
@@ -235,18 +232,22 @@ const ToolsNav: React.FC = observer(() => {
   const { layoutStore } = useRootStore()
   return (
     <WrapperTools justify="space-between" open={layoutStore.sideBar}>
-      <li className="tool_widget">
-        <BiMoon size={24} />
-      </li>
-      <li className="tool_widget bell">
+      <button
+        className="tool_widget"
+        onClick={layoutStore.toggleDarkMode}
+        type="button"
+      >
+        {layoutStore.isDarkMode ? <BiMoon size={24} /> : <FiSun size={24} />}
+      </button>
+      <button className="tool_widget bell" type="button">
         <FiBell size={24} />
-      </li>
-      <li className="tool_widget">
+      </button>
+      <button className="tool_widget" type="button">
         <AiOutlineCompress size={24} />
-      </li>
-      <li className="tool_widget">
+      </button>
+      <button className="tool_widget" type="button">
         <FiSun size={24} />
-      </li>
+      </button>
       <VerticalSplit />
       <UserSection />
     </WrapperTools>

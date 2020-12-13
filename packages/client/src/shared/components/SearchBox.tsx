@@ -116,13 +116,14 @@ export const SearchWrapper = styled.div<SearchState>`
     position: absolute;
     z-index: 1;
     top: 50%;
-    left: ${({isOpen}) => (isOpen ? 'calc(300px + 0.75rem)' : '0')};
+    left: ${({ isOpen }) => (isOpen ? 'calc(300px + 0.75rem)' : '0')};
     width: 20px;
     height: 20px;
     margin-top: -10px;
     cursor: pointer;
-    opacity: ${({isOpen}) => (isOpen ? '1' : '0')};
-    transform: ${({isOpen}) => (isOpen ? 'rotate(45deg)' : 'rotate(-180deg)')};
+    opacity: ${({ isOpen }) => (isOpen ? '1' : '0')};
+    transform: ${({ isOpen }) =>
+      isOpen ? 'rotate(45deg)' : 'rotate(-180deg)'};
     transition: ${(props) =>
       props.isOpen
         ? 'all 0.6s cubic-bezier(0, 0.105, 0.035, 1.57)'

@@ -14,7 +14,7 @@ const SideBarContainer = styled(Container)<IsHover>`
   position: relative;
   /* border-right: 1px solid rgba(0, 0, 0, 0.12); */
   box-shadow: 0 0 21px 0 rgba(89, 102, 122, 0.1);
-  background: #fff;
+  background: ${({ theme }: any) => theme.background || '#fff'};
   overflow-y: ${({ sideisOpen }) => (sideisOpen ? 'auto' : 'hidden')};
   ::-webkit-scrollbar {
     width: 6px;
@@ -25,7 +25,8 @@ const SideBarContainer = styled(Container)<IsHover>`
     border: 1px solid rgba(0, 0, 0, 0);
     background-clip: padding-box;
     -webkit-border-radius: 100vh;
-    background: ${({ isHover }) => (isHover ? '#bde0fe' : '#fff')};
+    background: ${({ isHover, theme }: any) =>
+      isHover ? theme.sideBar.scrollBar : theme.background};
   }
   ::-webkit-scrollbar-button {
     width: 0;
