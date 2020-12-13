@@ -42,6 +42,13 @@ const Burguer = styled('button')<SideBarState>`
   padding: 0px 0px;
   display: inline-block;
   cursor: pointer;
+  border: none;
+  border-radius: 5px;
+  transition: background 0.2s ease 0s;
+  cursor: pointer;
+  list-style: none;
+  color: ${({ theme }: any) =>
+    theme.type === 'dark' ? 'rgb(168, 168, 179)' : '#10387e'};
   transition-property: opacity, filter;
   transition-duration: 0.15s;
   transition-timing-function: linear;
@@ -52,7 +59,7 @@ const Burguer = styled('button')<SideBarState>`
     open ? 'translateX(calc(100% + 0.75rem))' : 'translateX(0)'};
   overflow: visible;
   :hover {
-    opacity: 0.7;
+    filter: brightness(1.75); 
   }
   .hamburger-box {
     width: 24px;
@@ -66,7 +73,7 @@ const Burguer = styled('button')<SideBarState>`
     transition-delay: ${({ open }) => (open ? '0.075s' : '')};
     width: 24px;
     height: 2px;
-    background: ${({ theme }: any) => theme.primary};
+    background: ${({ theme }: any) => theme.navBar.widget};
     border-radius: 10px;
     position: absolute;
     top: 1px;
@@ -84,7 +91,7 @@ const Burguer = styled('button')<SideBarState>`
       display: block;
       width: 24px;
       height: 2px;
-      background: ${({ theme }: any) => theme.secondary};
+      background: ${({ theme }: any) => theme.navBar.widget};
       border-radius: 10px;
       position: absolute;
     }
@@ -94,7 +101,7 @@ const Burguer = styled('button')<SideBarState>`
         open ? 'translate3d(0, -12px, 0) rotate(-270deg)' : ''};
       width: 24px;
       height: 2px;
-      background: ${({ open, theme }: any) => (open ? theme.primary : theme.secondary)};
+      background: ${({ theme }: any) => theme.navBar.widget};
       border-radius: 10px;
       position: absolute;
       content: '';

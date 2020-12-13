@@ -15,6 +15,13 @@ type sideBar = {
   }
   scrollBar: string
 }
+type navBar = {
+  widget: string
+  searchBox: string
+  searchSvg: string
+  searchText: string
+  hamburguer: string
+}
 export type ITheme = {
   type: string
   primary: string
@@ -22,6 +29,7 @@ export type ITheme = {
   background: string
   backgroundSecondary: string
   sideBar: sideBar
+  navBar: navBar
 }
 
 export const lightTheme: ITheme = {
@@ -39,13 +47,20 @@ export const lightTheme: ITheme = {
       activeText: '#10387e'
     },
     scrollBar: '#bde0fe'
+  },
+  navBar: {
+    widget: '#10387e',
+    searchBox: 'rgba(0,0,0,0.05)',
+    searchSvg: 'rgba(0,0,0,0.06)',
+    searchText: '#455560',
+    hamburguer: '#10387e'
   }
 }
 
 export const darkTheme: ITheme = {
   type: 'dark',
-  primary: 'rgb(202, 240, 248, 0.4)',
-  secondary: '#3e82f7',
+  primary: '#fff',
+  secondary: 'rgb(168, 168, 179)',
   background: '#202024',
   backgroundSecondary: '#121214',
   sideBar: {
@@ -57,5 +72,12 @@ export const darkTheme: ITheme = {
       activeText: '#fff'
     },
     scrollBar: '#7d7f90'
+  },
+  navBar: {
+    widget: 'rgb(168, 168, 179)',
+    searchBox: 'rgb(20, 19, 22)',
+    searchSvg: 'rgb(168, 168, 179, 0.15)',
+    searchText: '#fff',
+    hamburguer: 'rgb(168, 168, 179)'
   }
 }

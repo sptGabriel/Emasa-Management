@@ -1,19 +1,9 @@
 import { IconType } from 'react-icons'
-import {
-  AiOutlineDashboard,
-  AiOutlineShop,
-  AiOutlineLineChart
-} from 'react-icons/ai'
-import { FaUsers, FaRegBuilding } from 'react-icons/fa'
+import { AiOutlineDashboard, AiOutlineLineChart } from 'react-icons/ai'
+import { FaRegBuilding } from 'react-icons/fa'
 import { TiGroupOutline } from 'react-icons/ti'
-import {
-  BsBuilding,
-  BsLightning,
-  BsBookmarkPlus,
-  BsFileEarmarkText
-} from 'react-icons/bs'
+import { BsLightning, BsBookmarkPlus, BsFileEarmarkText } from 'react-icons/bs'
 import { BiStoreAlt } from 'react-icons/bi'
-import { HiOutlineUserGroup } from 'react-icons/hi'
 import { RiGroupLine } from 'react-icons/ri'
 
 export interface IDropdownItems {
@@ -77,11 +67,10 @@ export const Tags: ITag[] = [
     Link: '../dashboards',
     Icon: TiGroupOutline,
     DropdownItems: [
-      { Name: 'Elo Boost', Link: '/eloBost' },
-      { Name: 'Duo Boost', Link: '/duoBoost' },
-      { Name: 'MD10', Link: '/eloBost' },
-      { Name: 'Coaching', Link: '/duoBoost' },
-      { Name: 'Vitóriais', Link: '/duoBoost' }
+      { Name: 'Employee List', Link: '/eloBost' },
+      { Name: 'View Employee', Link: '/duoBoost' },
+      { Name: 'New Employee', Link: '/eloBost' },
+      { Name: 'Any', Link: '/duoBoost' }
     ]
   },
   {

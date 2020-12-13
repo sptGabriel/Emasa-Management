@@ -10,6 +10,7 @@ import { Container } from './FlexBox'
 import { useRootStore } from '../infra/mobx'
 import userAvatar from '../../assets/user.png'
 import VerticalSplit from './Divider'
+import Search from './SearchBox'
 
 const bellAnimation = keyframes`
   0% {
@@ -232,6 +233,7 @@ const ToolsNav: React.FC = observer(() => {
   const { layoutStore } = useRootStore()
   return (
     <WrapperTools justify="space-between" open={layoutStore.sideBar}>
+      <Search />
       <button
         className="tool_widget"
         onClick={layoutStore.toggleDarkMode}
@@ -244,9 +246,6 @@ const ToolsNav: React.FC = observer(() => {
       </button>
       <button className="tool_widget" type="button">
         <AiOutlineCompress size={24} />
-      </button>
-      <button className="tool_widget" type="button">
-        <FiSun size={24} />
       </button>
       <VerticalSplit />
       <UserSection />

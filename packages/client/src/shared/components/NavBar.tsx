@@ -41,11 +41,7 @@ const NavBar: React.FC = observer(() => {
   const { layoutStore } = useRootStore()
   return (
     <Nav justify="space-between" open={layoutStore.sideBar}>
-      <NavLeft>
-        <NavLi>
-          <Search />
-        </NavLi>
-      </NavLeft>
+      <NavLeft />
       <ToolsNav />
     </Nav>
   )
