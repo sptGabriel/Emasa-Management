@@ -1,16 +1,18 @@
-import React, { useState } from 'react'
-import { css, keyframes } from '@emotion/react'
-import useOnClickOutside from 'use-onclickoutside'
-import styled from '@emotion/styled/macro'
-import { BiChevronDown, BiMoon } from 'react-icons/bi'
-import { FiBell, FiSun } from 'react-icons/fi'
-import { AiOutlineCompress } from 'react-icons/ai'
-import { observer } from 'mobx-react-lite'
-import { Container } from './FlexBox'
-import { useRootStore } from '../infra/mobx'
-import userAvatar from '../../assets/user.png'
-import VerticalSplit from './Divider'
-import Search from './SearchBox'
+import React, {useState} from 'react';
+import {css, keyframes} from '@emotion/react';
+import styled from '@emotion/styled/macro';
+import useOnClickOutside from 'use-onclickoutside';
+import {observer} from 'mobx-react-lite';
+import {BiChevronDown, BiMoon} from 'react-icons/bi';
+import {FiBell, FiSun} from 'react-icons/fi';
+import {IoIosSettings} from 'react-icons/io';
+import {CgLogOff, CgProfile} from 'react-icons/cg';
+import {AiOutlineCompress} from 'react-icons/ai';
+import {Container} from './FlexBox';
+import userAvatar from '../../assets/user.png';
+import VerticalSplit from './Divider';
+import Search from './SearchBox';
+import {useRootStore} from '../infra/mobx';
 
 const bellAnimation = keyframes`
   0% {
@@ -46,17 +48,17 @@ const bellAnimation = keyframes`
   100% {
     transform: scaleX(1);
   }
-`
+`;
 /* SideBar Styles Start */
 export interface SideBarState {
-  open: boolean
+  open: boolean;
 }
 /* InterFaces Start */
 interface IUserCanvas {
-  isOpen: boolean
+  open: boolean;
 }
 interface IUserProfile {
-  open: boolean
+  open: boolean;
 }
 /* User Profile Styles Section */
 const UserProfile = styled('div')<IUserProfile>`
@@ -67,13 +69,14 @@ const UserProfile = styled('div')<IUserProfile>`
   height: 100%;
   position: relative;
   :hover {
-    span:first-of-type {
+    .svg-arrow,
+    .user_text > span:first-of-type {
       filter: brightness(1.75);
     }
   }
   & .svg-arrow {
-    color: ${({ theme }: any) => theme.sideBar.menuTag.activeText};
-    ${({ open }) =>
+    color: ${({theme}: any) => theme.sideBar.menuTag.activeText};
+    ${({open}) =>
       open
         ? css`
             transform: rotate(180deg);
@@ -87,7 +90,7 @@ const UserProfile = styled('div')<IUserProfile>`
     padding-left: 0.75rem !important;
     span:first-of-type {
       font-size: 0.8rem;
-      color: ${({ theme }: any) => theme.sideBar.menuTag.activeText};
+      color: ${({theme}: any) => theme.sideBar.menuTag.activeText};
       letter-spacing: 0.7px;
       font-family: Roboto;
       text-transform: capitalize;
@@ -119,64 +122,60 @@ const UserProfile = styled('div')<IUserProfile>`
       object-fit: cover;
     }
   }
-`
+`;
 const UserCanvas = styled.div<IUserCanvas>`
   position: absolute;
   width: 100%;
-  display: ${(props: IUserCanvas) => (props.isOpen ? 'block' : 'none')};
-  border: 1px solid rgba(0, 0, 0, 0.15);
-  border-color: rgba(120, 130, 140, 0.13);
-  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.05);
-  top: 100%;
+  display: ${({open}) => (open ? 'flex' : 'none')};
+  flex-direction: column;
+  border: 1px solid
+    ${({theme}: any) => (theme.type === 'dark' ? '#2e2b3f' : '#f0f0f0')};
+  ${({theme}: any) =>
+    theme.type === 'light'
+      ? css`
+          box-shadow: 0 0 20px rgba(89, 102, 122, 0.1);
+        `
+      : ''};
+  transform: translateY(104%);
   bottom: 0;
   font-size: 1rem;
-  color: #212529;
-  background-color: #fff;
-  background-clip: padding-box;
-  padding: 1rem;
-  border-radius: 0.25rem;
-  height: max-content;
-  :before {
-    content: '';
-    position: absolute;
-    top: -8px;
-    right: calc(50% - 8px);
-    border-left: 8px solid transparent;
-    border-right: 8px solid transparent;
-    z-index: 1;
-    border-bottom: 8px solid rgba(0, 0, 0, 0.4);
+  color: #fff;
+  background: ${({theme}: any) => (theme.type === 'dark' ? '#232033' : '#fff')};
+  padding: 0.5rem 0;
+  border-radius: 0.3rem;
+  .header_txt {
+    padding: 0.5rem 1rem;
+    white-space: nowrap;
+    color: ${({theme}: any) => (theme.type === 'dark' ? '#fff' : '#2c323f')};
+    font-size: 0.625rem;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-family: Open Sans, sans-serif;
   }
-  :after {
-    content: '';
-    position: absolute;
-    top: -8px;
-    right: calc(50% - 8px);
-    border-left: 8px solid transparent;
-    border-right: 8px solid transparent;
-    border-bottom: 8px solid #fff;
-    z-index: 1;
-  }
-  & .separator {
-    height: 1px;
-    margin: 9px 0;
-    overflow: hidden;
-    background-color: rgba(120, 130, 140, 0.13);
-  }
-  & .dflex {
+  button {
     display: flex;
+    padding: 0.5rem 1rem;
     align-items: center;
-    padding: 10px 0;
-    svg {
-      color: #465464;
-    }
-    h3 {
-      margin-left: 10px;
-      font-size: 1rem;
-      color: #838598 !important;
-      font-weight: 500 !important;
+    color: ${({theme}: any) => theme.sideBar.menuTag.text};
+    :hover {
+      background: ${({theme}: any) =>
+        theme.type === 'dark' ? '#2e2b3f' : '#f0f0f0'};
+      color: ${({theme}: any) => theme.sideBar.menuTag.activeText};
     }
   }
-`
+  svg {
+    margin-right: 1rem;
+    font-size: 1rem;
+    vertical-align: -17%;
+  }
+  .dropdown-divider {
+    height: 0;
+    margin: 0.5rem 0;
+    overflow: hidden;
+    border-top: 1px solid
+      ${({theme}: any) => (theme.type === 'dark' ? '#2e2b3f' : '#f0f0f0')};
+  }
+`;
 const WrapperTools = styled(Container)<SideBarState>`
   padding: 0 2.5rem;
   display: flex;
@@ -196,23 +195,48 @@ const WrapperTools = styled(Container)<SideBarState>`
     list-style: none;
     width: 46px;
     height: 46px;
-    color: ${({ theme }: any) =>
+    color: ${({theme}: any) =>
       theme.type === 'dark' ? 'rgb(168, 168, 179)' : '#10387e'};
-    padding: 0.4rem;
     :hover {
-      background: ${({ theme }: any) =>
-        theme.type === 'dark' ? 'rgb(20, 19, 22)' : '#f0f0f0'};
+      background: ${({theme}: any) =>
+        theme.type === 'dark' ? '#221F2E' : '#f0f0f0'};
       svg {
         filter: brightness(1.75);
       }
     }
   }
-`
-
+`;
+const ContentUserSection: React.FC<IUserCanvas> = observer(
+  ({open}: IUserCanvas) => {
+    const {authStore} = useRootStore();
+    return (
+      <UserCanvas open={open}>
+        <div className="header_txt">Welcome !</div>
+        <button type="button" className="dropdown-itemx">
+          <CgProfile size={24} />
+          <span>My Profile</span>
+        </button>
+        <button type="button" className="dropdown-itemx">
+          <IoIosSettings size={24} />
+          <span>Settings</span>
+        </button>
+        <div className="dropdown-divider" />
+        <button
+          type="button"
+          className="dropdown-itemx"
+          onClick={() => authStore.logout()}
+        >
+          <CgLogOff className="logout" size={24} />
+          <span>Logout</span>
+        </button>
+      </UserCanvas>
+    );
+  },
+);
 const UserSection: React.FC = () => {
-  const [open, setOpen] = useState(false)
-  const ref = React.useRef(null)
-  useOnClickOutside(ref, () => setOpen(false))
+  const [open, setOpen] = useState(false);
+  const ref = React.useRef(null);
+  useOnClickOutside(ref, () => setOpen(false));
   return (
     <UserProfile ref={ref} onClick={() => setOpen(!open)} open={open}>
       <div className="user_avatar">
@@ -225,12 +249,12 @@ const UserSection: React.FC = () => {
         <span>SpiriT</span>
         <span>Web Developer</span>
       </div>
-      <UserCanvas isOpen={open} />
+      <ContentUserSection open={open} />
     </UserProfile>
-  )
-}
+  );
+};
 const ToolsNav: React.FC = observer(() => {
-  const { layoutStore } = useRootStore()
+  const {layoutStore} = useRootStore();
   return (
     <WrapperTools justify="space-between" open={layoutStore.sideBar}>
       <Search />
@@ -250,7 +274,7 @@ const ToolsNav: React.FC = observer(() => {
       <VerticalSplit />
       <UserSection />
     </WrapperTools>
-  )
-})
+  );
+});
 
-export default ToolsNav
+export default ToolsNav;

@@ -1,21 +1,23 @@
-import React from 'react'
-import styled from '@emotion/styled/macro'
-import { observer } from 'mobx-react-lite'
-import { useRootStore } from '../infra/mobx'
-import { Container } from './FlexBox'
-import SideMenu from './SideMenu'
+import React from 'react';
+import styled from '@emotion/styled/macro';
+import {observer} from 'mobx-react-lite';
+import {useRootStore} from '../infra/mobx';
+import {Container} from './FlexBox';
+import SideMenu from './SideMenu';
 
 interface IsHover {
-  isHover: boolean
-  sideisOpen: boolean
+  isHover: boolean;
+  sideisOpen: boolean;
 }
 const SideBarContainer = styled(Container)<IsHover>`
   width: 100%;
   position: relative;
-  /* border-right: 1px solid rgba(0, 0, 0, 0.12); */
-  box-shadow: 0 0 21px 0 rgba(89, 102, 122, 0.1);
-  background: ${({ theme }: any) => theme.background || '#fff'};
-  overflow-y: ${({ sideisOpen }) => (sideisOpen ? 'auto' : 'hidden')};
+  box-shadow: ${({theme}: any) =>
+    theme.type === 'dark'
+      ? '0 0 4px 0 rgba(89, 102, 122, 0.1)'
+      : '0 0 21px 0 rgba(89, 102, 122, 0.1)'};
+  background: ${({theme}: any) => theme.background || '#fff'};
+  overflow-y: ${({sideisOpen}) => (sideisOpen ? 'auto' : 'hidden')};
   ::-webkit-scrollbar {
     width: 6px;
     height: 18px;
@@ -25,7 +27,7 @@ const SideBarContainer = styled(Container)<IsHover>`
     border: 1px solid rgba(0, 0, 0, 0);
     background-clip: padding-box;
     -webkit-border-radius: 100vh;
-    background: ${({ isHover, theme }: any) =>
+    background: ${({isHover, theme}: any) =>
       isHover ? theme.sideBar.scrollBar : theme.background};
   }
   ::-webkit-scrollbar-button {
@@ -42,11 +44,11 @@ const SideBarContainer = styled(Container)<IsHover>`
     margin-bottom: 10px;
     /* margin-bottom: 40vh; */
   }
-`
+`;
 
 const SideBar: React.FC = observer(() => {
-  const [isHover, setHovered] = React.useState(false)
-  const { layoutStore } = useRootStore()
+  const [isHover, setHovered] = React.useState(false);
+  const {layoutStore} = useRootStore();
   return (
     <SideBarContainer
       flexColumn
@@ -57,7 +59,7 @@ const SideBar: React.FC = observer(() => {
     >
       <SideMenu />
     </SideBarContainer>
-  )
-})
+  );
+});
 
-export default SideBar
+export default SideBar;

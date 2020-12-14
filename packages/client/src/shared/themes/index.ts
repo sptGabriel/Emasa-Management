@@ -1,36 +1,36 @@
-/* eslint-disable prettier/prettier */
-type colors = {
-  primary: string
-  secondary: string
-  background: string
-  text: string
-}
+/*  eslint-disable prettier/prettier  */
+//  type colors = {
+//  primary: string;
+//  secondary: string;
+//  background: string;
+//  text: string;
+//  };
 type sideBar = {
-  tittleTag: string
+  tittleTag: string;
   menuTag: {
-    background: string
-    hoveredBackground: string
-    text: string
-    activeText: string
-  }
-  scrollBar: string
-}
+    background: string;
+    hoveredBackground: string;
+    text: string;
+    activeText: string;
+  };
+  scrollBar: string;
+};
 type navBar = {
-  widget: string
-  searchBox: string
-  searchSvg: string
-  searchText: string
-  hamburguer: string
-}
+  widget: string;
+  searchBox: string;
+  searchSvg: string;
+  searchText: string;
+  hamburguer: string;
+};
 export type ITheme = {
-  type: string
-  primary: string
-  secondary: string
-  background: string
-  backgroundSecondary: string
-  sideBar: sideBar
-  navBar: navBar
-}
+  type: string;
+  primary: string;
+  secondary: string;
+  background: string;
+  backgroundSecondary: string;
+  sideBar: sideBar;
+  navBar: navBar;
+};
 
 export const lightTheme: ITheme = {
   type: 'light',
@@ -44,40 +44,40 @@ export const lightTheme: ITheme = {
       background: 'rgb(202, 240, 248, 0.4)',
       hoveredBackground: 'rgb(202, 240, 248,  0.2)',
       text: '#2c323f',
-      activeText: '#10387e'
+      activeText: '#10387e',
     },
-    scrollBar: '#bde0fe'
+    scrollBar: '#bde0fe',
   },
   navBar: {
     widget: '#10387e',
     searchBox: 'rgba(0,0,0,0.05)',
     searchSvg: 'rgba(0,0,0,0.06)',
     searchText: '#455560',
-    hamburguer: '#10387e'
-  }
-}
+    hamburguer: '#10387e',
+  },
+};
 
 export const darkTheme: ITheme = {
   type: 'dark',
   primary: '#fff',
   secondary: 'rgb(168, 168, 179)',
-  background: '#202024',
-  backgroundSecondary: '#121214',
+  background: '#2E2B3F',
+  backgroundSecondary: '#221F2E',
   sideBar: {
     tittleTag: '#fff',
     menuTag: {
-      background: 'rgb(20, 19, 22);',
-      hoveredBackground: 'rgb(20, 19, 22)',
+      background: '#2E2B3F;',
+      hoveredBackground: '#221F2E',
       text: 'rgb(168, 168, 179)',
-      activeText: '#fff'
+      activeText: '#fff',
     },
-    scrollBar: '#7d7f90'
+    scrollBar: '#7d7f90',
   },
   navBar: {
     widget: 'rgb(168, 168, 179)',
-    searchBox: 'rgb(20, 19, 22)',
-    searchSvg: 'rgb(168, 168, 179, 0.15)',
+    searchBox: '#221F2E',
+    searchSvg: '#2E2B3F',
     searchText: '#fff',
-    hamburguer: 'rgb(168, 168, 179)'
-  }
-}
+    hamburguer: 'rgb(168, 168, 179)',
+  },
+};

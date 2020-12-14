@@ -1,1 +1,1 @@
-export type APIErrorMessage = string
+export type APIErrorMessage = string;

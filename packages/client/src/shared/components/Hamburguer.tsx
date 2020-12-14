@@ -1,8 +1,8 @@
 /* eslint-disable prettier/prettier */
-import React from 'react'
-import styled from '@emotion/styled'
-import { observer } from 'mobx-react-lite'
-import { useRootStore } from '../infra/mobx'
+import React from 'react';
+import styled from '@emotion/styled';
+import {observer} from 'mobx-react-lite';
+import {useRootStore} from '../infra/mobx';
 
 // const burguer = css`
 //   width: 25px;
@@ -36,7 +36,7 @@ import { useRootStore } from '../infra/mobx'
 //   }
 // }
 export interface SideBarState {
-  open: boolean
+  open: boolean;
 }
 const Burguer = styled('button')<SideBarState>`
   padding: 0px 0px;
@@ -47,7 +47,7 @@ const Burguer = styled('button')<SideBarState>`
   transition: background 0.2s ease 0s;
   cursor: pointer;
   list-style: none;
-  color: ${({ theme }: any) =>
+  color: ${({theme}: any) =>
     theme.type === 'dark' ? 'rgb(168, 168, 179)' : '#10387e'};
   transition-property: opacity, filter;
   transition-duration: 0.15s;
@@ -55,11 +55,11 @@ const Burguer = styled('button')<SideBarState>`
   border: 0;
   margin: 0;
   margin-top: 5px;
-  transform: ${({ open }) =>
+  transform: ${({open}) =>
     open ? 'translateX(calc(100% + 0.75rem))' : 'translateX(0)'};
   overflow: visible;
   :hover {
-    filter: brightness(1.75); 
+    filter: brightness(1.75);
   }
   .hamburger-box {
     width: 24px;
@@ -68,12 +68,12 @@ const Burguer = styled('button')<SideBarState>`
     position: relative;
   }
   .hamburger-inner {
-    transform: ${({ open }) =>
+    transform: ${({open}) =>
       open ? 'translate3d(0, 6px, 0) rotate(135deg)' : ''};
-    transition-delay: ${({ open }) => (open ? '0.075s' : '')};
+    transition-delay: ${({open}) => (open ? '0.075s' : '')};
     width: 24px;
     height: 2px;
-    background: ${({ theme }: any) => theme.navBar.widget};
+    background: ${({theme}: any) => theme.navBar.widget};
     border-radius: 10px;
     position: absolute;
     top: 1px;
@@ -83,25 +83,25 @@ const Burguer = styled('button')<SideBarState>`
     display: block;
     margin-top: -1px;
     ::before {
-      transition-delay: ${({ open }) => (open ? '0' : '0.0s')};
-      opacity: ${({ open }) => (open ? '0' : '1')};
+      transition-delay: ${({open}) => (open ? '0' : '0.0s')};
+      opacity: ${({open}) => (open ? '0' : '1')};
       top: 6px;
       transition: opacity 0.125s 0.175s ease;
       content: '';
       display: block;
       width: 24px;
       height: 2px;
-      background: ${({ theme }: any) => theme.navBar.widget};
+      background: ${({theme}: any) => theme.navBar.widget};
       border-radius: 10px;
       position: absolute;
     }
     ::after {
-      transition-delay: ${({ open }) => (open ? '0.075s' : '')};
-      transform: ${({ open }) =>
+      transition-delay: ${({open}) => (open ? '0.075s' : '')};
+      transform: ${({open}) =>
         open ? 'translate3d(0, -12px, 0) rotate(-270deg)' : ''};
       width: 24px;
       height: 2px;
-      background: ${({ theme }: any) => theme.navBar.widget};
+      background: ${({theme}: any) => theme.navBar.widget};
       border-radius: 10px;
       position: absolute;
       content: '';
@@ -111,10 +111,10 @@ const Burguer = styled('button')<SideBarState>`
       transition: transform 0.275s cubic-bezier(0.68, -0.55, 0.265, 1.55);
     }
   }
-`
+`;
 
 const MenuBurguer: React.FC = observer(() => {
-  const { layoutStore } = useRootStore()
+  const {layoutStore} = useRootStore();
   return (
     <Burguer
       open={layoutStore.sideBar}
@@ -124,7 +124,7 @@ const MenuBurguer: React.FC = observer(() => {
         <span className="hamburger-inner" />
       </span>
     </Burguer>
-  )
-})
+  );
+});
 
-export default MenuBurguer
+export default MenuBurguer;

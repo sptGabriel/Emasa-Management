@@ -1,14 +1,14 @@
-import { action, makeObservable, runInAction } from 'mobx'
-import { RootStore } from './rootStore'
+import {action, makeObservable, runInAction} from 'mobx';
+import {RootStore} from './rootStore';
 
 export class AuthStore {
-  isAuth = false
+  isAuth = false;
 
-  inProgress = false
+  inProgress = false;
 
-  errors = undefined
+  errors = undefined;
 
-  rootStore: RootStore
+  rootStore: RootStore;
 
   constructor(rootStore: RootStore) {
     makeObservable(this, {
@@ -17,54 +17,54 @@ export class AuthStore {
       isAuth: true,
       inProgress: true,
       errors: true,
-      rootStore: true
-    })
-    this.rootStore = rootStore
+      rootStore: true,
+    });
+    this.rootStore = rootStore;
   }
 
   public refreshToken = async (): Promise<void> => {
-    this.inProgress = true
+    this.inProgress = true;
     try {
       await this.rootStore.AxiosStore.get('/users/me/refresh-token')
         .then(() => {
-          this.rootStore.currentUserStore.pullUser()
+          this.rootStore.currentUserStore.pullUser();
         })
         .then(() => {
-          this.isAuth = true
-        })
+          this.isAuth = true;
+        });
     } catch (error) {
       runInAction(() => {
-        this.rootStore.authStore.isAuth = false
-      })
-      throw error
+        this.rootStore.authStore.isAuth = false;
+      });
+      throw error;
     } finally {
-      this.inProgress = false
+      this.inProgress = false;
     }
-  }
+  };
 
   public login = async (login: string, password: string): Promise<void> => {
-    this.inProgress = true
-    this.errors = undefined
+    this.inProgress = true;
+    this.errors = undefined;
     try {
       await this.rootStore.AxiosStore.post('/login', {
         login,
-        password
-      }).then(() => this.rootStore.currentUserStore.pullUser())
-      this.isAuth = true
+        password,
+      }).then(() => this.rootStore.currentUserStore.pullUser());
+      this.isAuth = true;
     } catch (error) {
       this.errors =
-        error.response && error.response.body && error.response.body.errors
-      throw error
+        error.response && error.response.body && error.response.body.errors;
+      throw error;
     } finally {
-      this.inProgress = false
+      this.inProgress = false;
     }
-  }
+  };
 
   public logout = (): Promise<void> => {
-    this.rootStore.currentUserStore.currentUser = null
-    this.rootStore.cookieStore.removeToken('eid')
-    this.rootStore.cookieStore.removeToken('@Emasa/Refresh-Token')
-    this.rootStore.cookieStore.removeToken('@Emasa/Access-Token')
-    return Promise.resolve()
-  }
+    this.rootStore.currentUserStore.currentUser = null;
+    this.rootStore.cookieStore.removeToken('eid');
+    this.rootStore.cookieStore.removeToken('@Emasa/Refresh-Token');
+    this.rootStore.cookieStore.removeToken('@Emasa/Access-Token');
+    return Promise.resolve();
+  };
 }

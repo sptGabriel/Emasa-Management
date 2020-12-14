@@ -1,40 +1,37 @@
-/* eslint-disable indent */
-import React, { useState, useEffect, MouseEvent } from 'react'
-import { css } from '@emotion/react'
-import styled from '@emotion/styled/macro'
-import { observer } from 'mobx-react-lite'
-import { shade } from 'polished'
-import { IconType } from 'react-icons'
-import { FaGhost } from 'react-icons/fa'
-import { VscChevronDown, VscChevronUp } from 'react-icons/vsc'
-import { useRootStore } from '../infra/mobx'
-import { ITag, IDropdownItems, Tags } from '../utils/MenuTags'
+import React, {useState, useEffect, MouseEvent} from 'react';
+import styled from '@emotion/styled/macro';
+import {observer} from 'mobx-react-lite';
+import {IconType} from 'react-icons';
+import {FaGhost} from 'react-icons/fa';
+import {VscChevronDown, VscChevronUp} from 'react-icons/vsc';
+import {useRootStore} from '../infra/mobx';
+import {ITag, IDropdownItems, Tags} from '../utils/MenuTags';
 /* Styles */
 type IMenu = {
-  open: boolean
-}
+  open: boolean;
+};
 type IDropDown = {
-  active?: boolean
-}
+  active?: boolean;
+};
 interface IListWrap {
-  open: boolean
-  isDropDown?: boolean
-  tagActive?: boolean
+  open: boolean;
+  isDropDown?: boolean;
+  tagActive?: boolean;
 }
 interface IListItem {
-  open: boolean
-  isDropDown?: boolean
-  active?: boolean
+  open: boolean;
+  isDropDown?: boolean;
+  active?: boolean;
 }
-const TitleItem = styled.div<{ open: boolean }>`
-  display: ${({ open }) => (open ? 'block' : 'none')};
-  visibility: ${({ open }) => (open ? 'visible' : 'hidden')};
-  opacity: ${({ open }) => (open ? '1' : '0')};
+const TitleItem = styled.div<{open: boolean}>`
+  display: ${({open}) => (open ? 'block' : 'none')};
+  visibility: ${({open}) => (open ? 'visible' : 'hidden')};
+  opacity: ${({open}) => (open ? '1' : '0')};
   transition: all 0.5s cubic-bezier(0, 1, 0, 1);
   align-items: center;
   position: relative;
   border-radius: 0.25rem;
-  color: ${({ theme }: any) =>
+  color: ${({theme}: any) =>
     theme.sideBar.tittleTag || 'rgba(26, 51, 83, 0.6)'};
   font-size: 0.75rem;
   padding: 0.75rem 1.525rem;
@@ -42,19 +39,19 @@ const TitleItem = styled.div<{ open: boolean }>`
   font-family: Roboto, sans-serif;
   text-transform: uppercase;
   margin-top: 0.9375rem;
-`
+`;
 const MenuList = styled.ul<IMenu>`
   position: relative;
-  padding: ${({ open }) => (open ? '0' : '1rem 0')};
+  padding: ${({open}) => (open ? '0' : '1rem 0')};
   color: transparent;
   margin-top: 20px;
   margin-bottom: 30px;
-`
+`;
 
 const OpenedStyled = styled.ul<IDropDown>`
   position: relative;
-  opacity: ${({ active }) => (active ? '1' : '0')};
-  max-height: ${({ active }) => (active ? '500px' : '0')};
+  opacity: ${({active}) => (active ? '1' : '0')};
+  max-height: ${({active}) => (active ? '500px' : '0')};
   transition: max-height 0.5s, opacity 1s;
   overflow: hidden;
   transition: padding 300ms;
@@ -79,7 +76,7 @@ const OpenedStyled = styled.ul<IDropDown>`
       border-radius: 0.25rem;
       a {
         font-weight: 500;
-        color: ${({ theme }: any) => theme.sideBar.menuTag.activeText};
+        color: ${({theme}: any) => theme.sideBar.menuTag.activeText};
       }
     }
     margin-top: 2px;
@@ -88,7 +85,7 @@ const OpenedStyled = styled.ul<IDropDown>`
     }
   }
   a {
-    color: ${({ theme }: any) => theme.sideBar.menuTag.text};
+    color: ${({theme}: any) => theme.sideBar.menuTag.text};
     letter-spacing: 0.7px;
     font-family: Roboto;
     text-transform: capitalize;
@@ -101,7 +98,7 @@ const OpenedStyled = styled.ul<IDropDown>`
   & .icon-li-drop {
     margin-right: 10px;
   }
-`
+`;
 
 const ClosedStyled = styled('ul')`
   display: none;
@@ -143,32 +140,32 @@ const ClosedStyled = styled('ul')`
     text-decoration: none;
     color: #949e98;
   }
-`
+`;
 
 const ListWrap = styled.div<IListWrap>`
-  padding: ${({ open }) =>
+  padding: ${({open}) =>
     open ? '8px 1rem 8px 1.2rem' : '8px 1rem 8px 1.2rem'};
   display: flex;
   transition: all 0.5s cubic-bezier(0, 1, 0, 1);
-  justify-content: ${({ open }) => (open ? 'space-between' : 'center')};
+  justify-content: ${({open}) => (open ? 'space-between' : 'center')};
   align-items: center;
   position: relative;
   border-radius: 10px;
-  background: ${({ tagActive, open, theme }: any) =>
+  background: ${({tagActive, open, theme}: any) =>
     tagActive && open ? theme.sideBar.menuTag.background : ''};
   transition: all 0.5s ease;
   padding: 12px 10px;
   :hover {
-    background: ${({ open, theme }: any) =>
+    background: ${({open, theme}: any) =>
       open ? theme.sideBar.menuTag.hoveredBackground : ''};
     a {
       svg {
-        fill: ${({ theme }: any) => theme.sideBar.menuTag.activeText};
-        stroke: ${({ theme }: any) => theme.sideBar.menuTag.activeText};
+        fill: ${({theme}: any) => theme.sideBar.menuTag.activeText};
+        stroke: ${({theme}: any) => theme.sideBar.menuTag.activeText};
         transition: all 0.3s ease;
       }
       span {
-        color: ${({ theme }: any) => theme.sideBar.menuTag.activeText};
+        color: ${({theme}: any) => theme.sideBar.menuTag.activeText};
       }
     }
   }
@@ -176,18 +173,18 @@ const ListWrap = styled.div<IListWrap>`
     display: flex;
     align-items: center;
     span {
-      color: ${({ tagActive, theme }: any) =>
+      color: ${({tagActive, theme}: any) =>
         tagActive
           ? theme.sideBar.menuTag.activeText
           : theme.sideBar.menuTag.text};
       margin-bottom: -2px;
     }
     svg {
-      fill: ${({ tagActive, theme }: any) =>
+      fill: ${({tagActive, theme}: any) =>
         tagActive
           ? theme.sideBar.menuTag.activeText
           : theme.sideBar.menuTag.text};
-      margin-right: ${({ open }) => (open ? '10px' : '0')};
+      margin-right: ${({open}) => (open ? '10px' : '0')};
       transition: all 0.5s cubic-bezier(0, 1, 0, 1);
     }
   }
@@ -196,8 +193,8 @@ const ListWrap = styled.div<IListWrap>`
   }
   & .down-up_svg,
   .li-name {
-    display: ${({ open }) => (open ? 'space-between' : 'none')};
-    color: ${({ tagActive, theme }: any) =>
+    display: ${({open}) => (open ? 'space-between' : 'none')};
+    color: ${({tagActive, theme}: any) =>
       tagActive
         ? theme.sideBar.menuTag.activeText
         : theme.sideBar.menuTag.text};
@@ -207,43 +204,43 @@ const ListWrap = styled.div<IListWrap>`
     font-weight: 500;
   }
   & .svg-arrow {
-    color: ${({ theme }: any) => (theme.type === 'dark' ? '#fff' : '#222')};
+    color: ${({theme}: any) => (theme.type === 'dark' ? '#fff' : '#222')};
   }
-`
+`;
 
 const ListItem = styled.li<IListItem>`
   display: flex;
   flex-direction: column;
   position: relative;
-  padding-left: ${({ open }) => (open ? '20px' : '15px')};
+  padding-left: ${({open}) => (open ? '20px' : '15px')};
   padding-right: 15px;
-  justify-content: ${({ open }) => (open ? 'space-between' : 'center')};
+  justify-content: ${({open}) => (open ? 'space-between' : 'center')};
   cursor: pointer;
   margin-bottom: 8px;
   &:hover ${ClosedStyled} {
     display: block;
   }
-`
+`;
 /* Styles */
 export type TSideBar = {
-  open: boolean
-}
-type ClickHandler = (tag: ITag) => (e: MouseEvent) => void
-type ShowHideDropItem = (tag: ITag) => void
+  open: boolean;
+};
+type ClickHandler = (tag: ITag) => (e: MouseEvent) => void;
+type ShowHideDropItem = (tag: ITag) => void;
 interface IDrop {
-  active?: boolean
-  isOpen: boolean
-  dropItems: IDropdownItems[]
-  setVisible: ClickHandler
-  Icon: IconType
+  active?: boolean;
+  isOpen: boolean;
+  dropItems: IDropdownItems[];
+  setVisible: ClickHandler;
+  Icon: IconType;
 }
 interface ITagList {
-  clickHandler: ClickHandler
-  sideBarStatus: boolean
-  tag: ITag
+  clickHandler: ClickHandler;
+  sideBarStatus: boolean;
+  tag: ITag;
 }
 const TagList: React.FC<ITagList> = observer(
-  ({ sideBarStatus, tag, clickHandler }) => {
+  ({sideBarStatus, tag, clickHandler}) => {
     return (
       <>
         {sideBarStatus === true ? (
@@ -274,11 +271,11 @@ const TagList: React.FC<ITagList> = observer(
           </ListWrap>
         )}
       </>
-    )
-  }
-)
+    );
+  },
+);
 
-const Drop: React.FC<IDrop> = observer(({ active, dropItems, isOpen }) => {
+const Drop: React.FC<IDrop> = observer(({active, dropItems, isOpen}) => {
   return (
     <>
       {isOpen === true ? (
@@ -300,42 +297,41 @@ const Drop: React.FC<IDrop> = observer(({ active, dropItems, isOpen }) => {
         </ClosedStyled>
       )}
     </>
-  )
-})
-interface IMenuTags {
-  open: boolean
-}
+  );
+});
 const MenuTags: React.FC = observer(() => {
-  const { layoutStore } = useRootStore()
-  const [tags, setTags] = useState<ITag[]>(Tags)
+  const {layoutStore} = useRootStore();
+  const [tags, setTags] = useState<ITag[]>(Tags);
   const showHideDropItem: ShowHideDropItem = (tag) => {
     setTags((items) =>
       items.map((item) => ({
         ...item,
-        Active: item.Name === tag.Name ? tag.Active !== true : false
-      }))
-    )
-  }
+        Active: item.Name === tag.Name ? tag.Active !== true : false,
+      })),
+    );
+  };
   useEffect(() => {
     setTags((items) =>
       items.map((item) => ({
         ...item,
-        Active: false
-      }))
-    )
-  }, [layoutStore.sideBar])
+        Active: false,
+      })),
+    );
+  }, [layoutStore.sideBar]);
 
   const clickHandler: ClickHandler = (tag) => (e) => {
-    e.preventDefault()
-    showHideDropItem(tag)
-  }
+    e.preventDefault();
+    showHideDropItem(tag);
+  };
 
   return (
     <MenuList open={layoutStore.sideBar}>
-      {tags.map((item, index) => (
+      {tags.map((item) => (
         <>
           {item.Title ? (
-            <TitleItem open={layoutStore.sideBar}>{item.Title}</TitleItem>
+            <TitleItem key={item.Title} open={layoutStore.sideBar}>
+              {item.Title}
+            </TitleItem>
           ) : (
             ''
           )}
@@ -352,6 +348,7 @@ const MenuTags: React.FC = observer(() => {
             />
             {item.DropdownItems ? (
               <Drop
+                key={item.Name}
                 active={item.Active}
                 dropItems={item.DropdownItems}
                 Icon={item.Icon}
@@ -365,7 +362,7 @@ const MenuTags: React.FC = observer(() => {
         </>
       ))}
     </MenuList>
-  )
-})
+  );
+});
 
-export default MenuTags
+export default MenuTags;

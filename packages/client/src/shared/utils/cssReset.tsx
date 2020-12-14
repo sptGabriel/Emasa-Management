@@ -1,5 +1,5 @@
-import React from 'react'
-import { Global, css } from '@emotion/react'
+import React from 'react';
+import {Global, css} from '@emotion/react';
 // export const CSSReset = createGlobalStyle`
 //         @import url('https://fonts.googleapis.com/css?family=Poppins&display=swap');
 //         @import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
@@ -106,6 +106,7 @@ const GlobalStyle: React.FC = () => {
         @import url('https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;1,300&display=swap');
         @import url('https://fonts.googleapis.com/css2?family=Syne+Mono&display=swap');
         @import url('https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600&display=swap');
         body > #emasa {
           height: 100%;
         }
@@ -192,7 +193,7 @@ const GlobalStyle: React.FC = () => {
         }
       `}
     />
-  )
-}
+  );
+};
 
-export default GlobalStyle
+export default GlobalStyle;
