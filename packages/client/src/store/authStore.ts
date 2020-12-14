@@ -1,6 +1,10 @@
-import {action, makeObservable, runInAction} from 'mobx';
+import {action, configure, makeObservable, runInAction} from 'mobx';
+import {LoginModel} from '../models/loginModel';
 import {RootStore} from './rootStore';
 
+configure({
+  enforceActions: 'never',
+});
 export class AuthStore {
   isAuth = false;
 
@@ -10,6 +14,8 @@ export class AuthStore {
 
   rootStore: RootStore;
 
+  loginModel = new LoginModel();
+
   constructor(rootStore: RootStore) {
     makeObservable(this, {
       login: action,
@@ -18,6 +24,7 @@ export class AuthStore {
       inProgress: true,
       errors: true,
       rootStore: true,
+      loginModel: true,
     });
     this.rootStore = rootStore;
   }
@@ -42,19 +49,19 @@ export class AuthStore {
     }
   };
 
-  public login = async (login: string, password: string): Promise<void> => {
+  public login = async (): Promise<void> => {
     this.inProgress = true;
     this.errors = undefined;
     try {
       await this.rootStore.AxiosStore.post('/login', {
-        login,
-        password,
+        login: this.loginModel.login,
+        password: this.loginModel.password,
       }).then(() => this.rootStore.currentUserStore.pullUser());
       this.isAuth = true;
     } catch (error) {
       this.errors =
-        error.response && error.response.body && error.response.body.errors;
-      throw error;
+        error.response && error.response.data && error.response.data.message;
+      throw error.response.data.message;
     } finally {
       this.inProgress = false;
     }

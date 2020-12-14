@@ -1,13 +1,16 @@
 import styled from '@emotion/styled/macro';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {keyframes} from '@emotion/react';
 import {GiPadlock} from 'react-icons/gi';
 import {FaUser} from 'react-icons/fa';
+import {observer} from 'mobx-react-lite';
 import {Container} from '../../shared/components/FlexBox';
 import logo from '../../assets/logo_emasa.png';
 import one from '../../assets/one.png';
 import satelite from '../../assets/satelite.png';
 import two from '../../assets/two.png';
+import BoundInput from '../../shared/components/Input';
+import {useRootStore} from '../../shared/infra/mobx';
 
 const emasaAnimation = keyframes`
 	2%,64%{
@@ -90,7 +93,7 @@ const FormContainer = styled.form`
   max-width: 480px;
   .separator {
     align-items: center;
-    border-bottom: 0.1px solid #0996dd;
+    border-bottom: 0.1px solid #dddfe2;
     display: flex;
     margin: 20px 16px;
     text-align: center;
@@ -100,15 +103,7 @@ const FormContainer = styled.form`
     display: block;
     border: none;
     height: 1px;
-    background: #202024;
-    background: linear-gradient(
-      to right,
-      #202024,
-      #0071b9,
-      #26abff,
-      #0071b9,
-      #202024
-    );
+    background: #dddfe2;
   }
   a {
     width: 100%;
@@ -124,6 +119,17 @@ const FormContainer = styled.form`
   form {
     display: flex;
     flex-direction: column;
+  }
+  .forgot {
+    display: flex;
+    justify-content: center;
+    padding-right: 16px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #0996dd;
+    opacity: 0.8;
+    transition: opacity 0.2s ease 0s;
+    font-family: Rubik, sans-serif;
   }
 `;
 const SecInputs = styled.section`
@@ -208,14 +214,15 @@ const StyledInput = styled.div`
 `;
 const LoginButton = styled.button`
   &:disabled {
-    background: #0996dd;
-    color: rgb(255, 255, 255);
+    background: rgb(72, 131, 161);
+    color: rgba(255, 255, 255, 0.35);
     /* background: rgb(65, 53, 107); */
     /* color: rgba(255, 255, 255, 0.35); */
     cursor: not-allowed;
   }
   margin: 15px 0px 15px;
-  background: #166fe5;
+  background: #0996dd;
+  color: #fff;
   font-size: 16px;
   font-weight: bold;
   padding: 0.8rem 0;
@@ -230,7 +237,8 @@ const WrapRegister = styled.div`
   color: #898989;
   text-align: center;
 `;
-const Inputs: React.FunctionComponent = () => {
+const Inputs: React.FunctionComponent = observer(() => {
+  const {authStore} = useRootStore();
   return (
     <SecInputs>
       <h1> Digite o seu login </h1>
@@ -238,9 +246,11 @@ const Inputs: React.FunctionComponent = () => {
         <div>
           <div>
             <FaUser size={18} />
-            <input
-              name="login"
-              type="text"
+            <BoundInput
+              model={authStore.loginModel}
+              property="login"
+              required
+              autoComplete="off"
               id="login"
               placeholder="Digite o seu usuário "
             />
@@ -252,27 +262,48 @@ const Inputs: React.FunctionComponent = () => {
         <div>
           <div>
             <GiPadlock size={18} />
-            <input
-              name="password"
-              type="text"
+            <BoundInput
+              model={authStore.loginModel}
+              property="password"
+              type="password"
+              required
+              autoComplete="off"
               id="password"
-              aria-label="senha"
-              placeholder="Digite a sua senha"
+              placeholder="Digite a sua senha "
             />
           </div>
         </div>
       </StyledInput>
     </SecInputs>
   );
-};
-const Form: React.FunctionComponent = () => {
+});
+
+const Form: React.FunctionComponent = observer(() => {
+  const {authStore} = useRootStore();
+  const {password, login} = authStore.loginModel;
   return (
-    <FormContainer>
+    <FormContainer
+      onSubmit={(event) => {
+        event.preventDefault();
+        authStore.login();
+      }}
+    >
       <Inputs />
-      <LoginButton disabled type="submit">
+      <LoginButton
+        disabled={
+          !login ||
+          login.length < 1 ||
+          !password ||
+          password.length < 1 ||
+          false
+        }
+        type="submit"
+      >
         Entrar
       </LoginButton>
-      <a href="#/">Esqueci minha senha</a>
+      <a className="forgot" href="#/">
+        Esqueci minha senha
+      </a>
       <hr className="gradient-line" />
       <WrapRegister>
         Não tem uma conta?
@@ -280,11 +311,11 @@ const Form: React.FunctionComponent = () => {
       </WrapRegister>
     </FormContainer>
   );
-};
+});
 const Login: React.FC = () => {
   return (
     <ContainerFluid>
-      <Row wrap flexColumn>
+      <Row wrap="true" flexColumn>
         <Col>
           <LoginCard align="center" justify="center" flexColumn>
             <div>

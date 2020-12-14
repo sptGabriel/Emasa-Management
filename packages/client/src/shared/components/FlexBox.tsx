@@ -3,7 +3,7 @@ import {css} from '@emotion/react';
 
 export type flexDynamic = {
   flexColumn?: boolean;
-  wrap?: boolean;
+  wrap?: string;
   justify?: string;
   align?: string;
   isHidden?: boolean;

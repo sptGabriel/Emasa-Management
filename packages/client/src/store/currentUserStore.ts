@@ -27,7 +27,7 @@ export class CurrentUserStore {
         this.currentUser = null;
         this.rootStore.authStore.isAuth = false;
       });
-      throw error;
+      throw error.response.data.message;
     } finally {
       this.loadingUser = false;
     }

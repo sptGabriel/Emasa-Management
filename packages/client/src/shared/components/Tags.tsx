@@ -6,6 +6,7 @@ import {FaGhost} from 'react-icons/fa';
 import {VscChevronDown, VscChevronUp} from 'react-icons/vsc';
 import {useRootStore} from '../infra/mobx';
 import {ITag, IDropdownItems, Tags} from '../utils/MenuTags';
+import {generateKey} from '../utils/generateKeys';
 /* Styles */
 type IMenu = {
   open: boolean;
@@ -238,11 +239,41 @@ interface ITagList {
   clickHandler: ClickHandler;
   sideBarStatus: boolean;
   tag: ITag;
+  open: boolean;
 }
+
+const Drop: React.FC<IDrop> = observer(({active, dropItems, isOpen}) => {
+  return (
+    <>
+      {isOpen === true ? (
+        <OpenedStyled active={active}>
+          {dropItems.map((item) => (
+            <li className="li-open" key={generateKey(item.toString())}>
+              <a href="#/">{item.Name}</a>
+            </li>
+          ))}
+        </OpenedStyled>
+      ) : (
+        <ClosedStyled>
+          {dropItems.map((item) => (
+            <li className="li-closed" key={generateKey(item.toString())}>
+              <FaGhost size={18} />
+              <a href="#/">{item.Name}</a>
+            </li>
+          ))}
+        </ClosedStyled>
+      )}
+    </>
+  );
+});
 const TagList: React.FC<ITagList> = observer(
-  ({sideBarStatus, tag, clickHandler}) => {
+  ({sideBarStatus, tag, clickHandler, open}) => {
     return (
-      <>
+      <ListItem
+        open={open}
+        isDropDown={!!tag.DropdownItems}
+        active={tag.Active}
+      >
         {sideBarStatus === true ? (
           <ListWrap
             open={sideBarStatus}
@@ -270,35 +301,21 @@ const TagList: React.FC<ITagList> = observer(
             </a>
           </ListWrap>
         )}
-      </>
+        {tag.DropdownItems ? (
+          <Drop
+            active={tag.Active}
+            dropItems={tag.DropdownItems}
+            Icon={tag.Icon}
+            isOpen={open}
+            setVisible={clickHandler}
+          />
+        ) : (
+          ''
+        )}
+      </ListItem>
     );
   },
 );
-
-const Drop: React.FC<IDrop> = observer(({active, dropItems, isOpen}) => {
-  return (
-    <>
-      {isOpen === true ? (
-        <OpenedStyled active={active}>
-          {dropItems.map((item) => (
-            <li className="li-open" key={item.Name}>
-              <a href="#/">{item.Name}</a>
-            </li>
-          ))}
-        </OpenedStyled>
-      ) : (
-        <ClosedStyled>
-          {dropItems.map((item) => (
-            <li className="li-closed" key={item.Name}>
-              <FaGhost size={18} />
-              <a href="#/">{item.Name}</a>
-            </li>
-          ))}
-        </ClosedStyled>
-      )}
-    </>
-  );
-});
 const MenuTags: React.FC = observer(() => {
   const {layoutStore} = useRootStore();
   const [tags, setTags] = useState<ITag[]>(Tags);
@@ -326,39 +343,22 @@ const MenuTags: React.FC = observer(() => {
 
   return (
     <MenuList open={layoutStore.sideBar}>
-      {tags.map((item) => (
+      {tags.map((item, index) => (
         <>
           {item.Title ? (
-            <TitleItem key={item.Title} open={layoutStore.sideBar}>
+            <TitleItem key={2} open={layoutStore.sideBar}>
               {item.Title}
             </TitleItem>
           ) : (
             ''
           )}
-          <ListItem
-            key={item.Name}
+          <TagList
             open={layoutStore.sideBar}
-            isDropDown={!!item.DropdownItems}
-            active={item.Active}
-          >
-            <TagList
-              sideBarStatus={layoutStore.sideBar}
-              tag={item}
-              clickHandler={clickHandler}
-            />
-            {item.DropdownItems ? (
-              <Drop
-                key={item.Name}
-                active={item.Active}
-                dropItems={item.DropdownItems}
-                Icon={item.Icon}
-                isOpen={layoutStore.sideBar}
-                setVisible={clickHandler}
-              />
-            ) : (
-              ''
-            )}
-          </ListItem>
+            key={1}
+            sideBarStatus={layoutStore.sideBar}
+            tag={item}
+            clickHandler={clickHandler}
+          />
         </>
       ))}
     </MenuList>

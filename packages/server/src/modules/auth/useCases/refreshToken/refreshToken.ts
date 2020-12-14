@@ -6,7 +6,7 @@ import { refreshTokenDTO } from './refreshTokenDTO';
 import { UserRepository } from '@modules/users/persistence/userRepositoryImpl';
 import { IUserRepository } from '@modules/users/persistence/userRepository';
 import { JWT } from '@modules/users/domain/jwt';
-import { isValidOrExpiredToken, promisifyDecode } from '@shared/helpers/jwt';
+import { promisifyDecode } from '@shared/helpers/jwt';
 import { wrap } from '@mikro-orm/core';
 import jwtConfig from '@config/jwt.config';
 import { JsonWebTokenError, TokenExpiredError } from 'jsonwebtoken';
