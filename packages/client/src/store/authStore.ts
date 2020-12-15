@@ -1,5 +1,8 @@
+import jwtDecode, {JwtPayload} from 'jwt-decode';
 import {action, configure, makeObservable, runInAction} from 'mobx';
+import {decode} from 'punycode';
 import {LoginModel} from '../models/loginModel';
+import {TUser, UserModel} from '../models/userModel';
 import {RootStore} from './rootStore';
 
 configure({
@@ -32,18 +35,17 @@ export class AuthStore {
   public refreshToken = async (): Promise<void> => {
     this.inProgress = true;
     try {
-      await this.rootStore.AxiosStore.get('/users/me/refresh-token')
-        .then(() => {
+      await this.rootStore.AxiosStore.get('/users/me/refresh-token').then(
+        (res) => {
+          this.rootStore.currentUserStore.accessToken = res.data.access_token;
           this.rootStore.currentUserStore.pullUser();
-        })
-        .then(() => {
-          this.isAuth = true;
-        });
+        },
+      );
+      this.isAuth = true;
     } catch (error) {
       runInAction(() => {
-        this.rootStore.authStore.isAuth = false;
+        this.isAuth = false;
       });
-      throw error;
     } finally {
       this.inProgress = false;
     }
@@ -56,22 +58,29 @@ export class AuthStore {
       await this.rootStore.AxiosStore.post('/login', {
         login: this.loginModel.login,
         password: this.loginModel.password,
-      }).then(() => this.rootStore.currentUserStore.pullUser());
+      }).then((res) => {
+        const decoded: any = jwtDecode(res.data.access_token);
+        this.rootStore.currentUserStore.currentUser = new UserModel({
+          ...decoded,
+          id: decoded.sub,
+        });
+      });
       this.isAuth = true;
     } catch (error) {
       this.errors =
         error.response && error.response.data && error.response.data.message;
-      throw error.response.data.message;
     } finally {
       this.inProgress = false;
     }
   };
 
-  public logout = (): Promise<void> => {
-    this.rootStore.currentUserStore.currentUser = null;
-    this.rootStore.cookieStore.removeToken('eid');
-    this.rootStore.cookieStore.removeToken('@Emasa/Refresh-Token');
-    this.rootStore.cookieStore.removeToken('@Emasa/Access-Token');
-    return Promise.resolve();
+  public logout = async (): Promise<void> => {
+    return this.rootStore.AxiosStore.get('/users/me/logout').finally(() => {
+      this.isAuth = false;
+      this.inProgress = false;
+      this.rootStore.currentUserStore.currentUser = null;
+      this.rootStore.cookieStore.removeToken('emsi');
+      this.rootStore.cookieStore.removeToken('@Emasa/Refresh-Token');
+    });
   };
 }

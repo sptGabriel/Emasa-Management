@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {ThemeProvider} from '@emotion/react';
 import GlobalReset from './shared/utils/cssReset';
@@ -9,11 +9,13 @@ import {useComponentWillMount} from './shared/utils/useComponentWillMount';
 import Login from './pages/login';
 
 const AuthApp = observer(() => {
-  const {currentUserStore, cookieStore} = useRootStore();
+  const {authStore, currentUserStore, cookieStore} = useRootStore();
   useComponentWillMount(() => {
-    if (cookieStore.getToken('@Emasa/Access-Token'))
-      currentUserStore.pullUser();
+    authStore.refreshToken();
   });
+  //  useEffect(() => {
+  //  console.log(authStore.isAuth);
+  //  }, [authStore.isAuth]);
   return <>{currentUserStore.currentUser ? <AuthenticatedApp /> : <Login />}</>;
 });
 

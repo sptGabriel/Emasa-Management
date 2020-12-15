@@ -11,6 +11,8 @@ export class CurrentUserStore {
 
   updatingUserErrors = false;
 
+  accessToken!: string;
+
   constructor(public rootStore: RootStore) {
     makeAutoObservable(this, {pullUser: action});
     this.rootStore = rootStore;
@@ -19,15 +21,12 @@ export class CurrentUserStore {
   public pullUser = async (): Promise<void> => {
     this.loadingUser = true;
     try {
-      const callApi = await this.rootStore.AxiosStore.get('/users/me');
-      this.currentUser = new UserModel(callApi.data);
-    } catch (error) {
-      runInAction(() => {
-        this.loadingUser = false;
-        this.currentUser = null;
-        this.rootStore.authStore.isAuth = false;
+      if (!this.accessToken) return this.rootStore.authStore.logout();
+      return this.rootStore.AxiosStore.get('/users/me').then((res) => {
+        this.currentUser = new UserModel(res.data);
       });
-      throw error.response.data.message;
+    } catch (error) {
+      return this.rootStore.authStore.logout();
     } finally {
       this.loadingUser = false;
     }

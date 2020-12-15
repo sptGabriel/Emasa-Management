@@ -24,29 +24,29 @@ interface IListItem {
   isDropDown?: boolean;
   active?: boolean;
 }
-const TitleItem = styled.div<{open: boolean}>`
-  display: ${({open}) => (open ? 'block' : 'none')};
-  visibility: ${({open}) => (open ? 'visible' : 'hidden')};
-  opacity: ${({open}) => (open ? '1' : '0')};
-  transition: all 0.5s cubic-bezier(0, 1, 0, 1);
-  align-items: center;
-  position: relative;
-  border-radius: 0.25rem;
-  color: ${({theme}: any) =>
-    theme.sideBar.tittleTag || 'rgba(26, 51, 83, 0.6)'};
-  font-size: 0.75rem;
-  padding: 0.75rem 1.525rem;
-  font-weight: bold;
-  font-family: Roboto, sans-serif;
-  text-transform: uppercase;
-  margin-top: 0.9375rem;
-`;
 const MenuList = styled.ul<IMenu>`
   position: relative;
   padding: ${({open}) => (open ? '0' : '1rem 0')};
   color: transparent;
   margin-top: 20px;
   margin-bottom: 30px;
+  .title_tagList {
+    display: ${({open}) => (open ? 'block' : 'none')};
+    visibility: ${({open}) => (open ? 'visible' : 'hidden')};
+    opacity: ${({open}) => (open ? '1' : '0')};
+    transition: all 0.5s cubic-bezier(0, 1, 0, 1);
+    align-items: center;
+    position: relative;
+    border-radius: 0.25rem;
+    color: ${({theme}: any) =>
+      theme.sideBar.tittleTag || 'rgba(26, 51, 83, 0.6)'};
+    font-size: 0.75rem;
+    padding: 0.75rem 1.525rem;
+    font-weight: bold;
+    font-family: Roboto, sans-serif;
+    text-transform: uppercase;
+    margin-top: 0.9375rem;
+  }
 `;
 
 const OpenedStyled = styled.ul<IDropDown>`
@@ -248,7 +248,7 @@ const Drop: React.FC<IDrop> = observer(({active, dropItems, isOpen}) => {
       {isOpen === true ? (
         <OpenedStyled active={active}>
           {dropItems.map((item) => (
-            <li className="li-open" key={generateKey(item.toString())}>
+            <li className="li-open" key={JSON.stringify(item.Name)}>
               <a href="#/">{item.Name}</a>
             </li>
           ))}
@@ -256,7 +256,7 @@ const Drop: React.FC<IDrop> = observer(({active, dropItems, isOpen}) => {
       ) : (
         <ClosedStyled>
           {dropItems.map((item) => (
-            <li className="li-closed" key={generateKey(item.toString())}>
+            <li className="li-closed" key={JSON.stringify(item.Name)}>
               <FaGhost size={18} />
               <a href="#/">{item.Name}</a>
             </li>
@@ -343,23 +343,16 @@ const MenuTags: React.FC = observer(() => {
 
   return (
     <MenuList open={layoutStore.sideBar}>
-      {tags.map((item, index) => (
-        <>
-          {item.Title ? (
-            <TitleItem key={2} open={layoutStore.sideBar}>
-              {item.Title}
-            </TitleItem>
-          ) : (
-            ''
-          )}
+      {tags.map((item) => (
+        <div key={JSON.stringify(item.Name)}>
+          {item.Title ? <div className="title_tagList">{item.Title}</div> : ''}
           <TagList
             open={layoutStore.sideBar}
-            key={1}
             sideBarStatus={layoutStore.sideBar}
             tag={item}
             clickHandler={clickHandler}
           />
-        </>
+        </div>
       ))}
     </MenuList>
   );

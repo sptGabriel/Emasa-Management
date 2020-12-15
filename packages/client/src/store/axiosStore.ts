@@ -25,6 +25,10 @@ export class AxiosStore {
   public get = async (url: string): Promise<any> => {
     return this.axiosInstance.get(url, {
       withCredentials: true,
+      // prettier-ignore
+      headers: {
+        'Authorization': `bearer ${this.rootStore.currentUserStore.accessToken}`,
+      },
     });
   };
 
@@ -52,20 +56,19 @@ export class AxiosStore {
         if (status !== 401) throw error;
         if (
           originalRequest.url !== 'users/me/refresh-token/' &&
+          originalRequest.url !== 'users/me/logout/' &&
           !originalRequest._retry
         ) {
           originalRequest._retry = true;
           this.rootStore.authStore
             .refreshToken()
             .then(() => axios(originalRequest))
-            .catch((err) => {
+            .catch(() => {
               this.rootStore.authStore.logout();
-              throw err;
             });
         }
         // Any status codes that falls outside the range of 2xx cause this function to trigger
         // Do something with response error
-
         return Promise.reject(error);
       },
     );

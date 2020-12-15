@@ -2,13 +2,12 @@
 import {makeAutoObservable} from 'mobx';
 import {LoginModel} from './loginModel';
 
-type TUser = {
+export type TUser = {
   id: string;
   name: string;
   departament_id: string;
   matricula: string;
   position: string;
-  user: LoginModel;
 };
 export class UserModel implements TUser {
   id: string;
@@ -21,8 +20,6 @@ export class UserModel implements TUser {
 
   position: string;
 
-  user!: LoginModel;
-
   constructor(props: TUser) {
     makeAutoObservable(this);
     this.id = props.id;
@@ -30,6 +27,5 @@ export class UserModel implements TUser {
     this.departament_id = props.departament_id;
     this.matricula = props.matricula;
     this.position = props.position;
-    this.user = props.user;
   }
 }

@@ -18,29 +18,6 @@ export interface ITag {
   DropdownItems: IDropdownItems[] | null;
   Active?: boolean;
 }
-
-// export const DashBoardTags: ITag[] = [
-//   {
-//     Title: 'DashBoard',
-//     Name: 'Default',
-//     Link: '../dashboards',
-//     Icon: AiOutlineDashboard,
-//     DropdownItems: null
-//   },
-//   {
-//     Name: 'Analytic',
-//     Link: '../dashboards',
-//     Icon: SiGoogleanalytics,
-//     DropdownItems: null
-//   },
-//   {
-//     Name: 'Inventory Management',
-//     Link: '../dashboards',
-//     Icon: AiOutlineShop,
-//     DropdownItems: null
-//   }
-// ]
-
 export const Tags: ITag[] = [
   {
     Title: 'DashBoard',

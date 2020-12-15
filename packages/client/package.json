@@ -13,6 +13,7 @@
     "class-validator": "^0.12.2",
     "history": "^5.0.0",
     "jsonwebtoken": "^8.5.1",
+    "jwt-decode": "^3.1.2",
     "lodash.get": "^4.4.2",
     "mobx": "^6.0.4",
     "mobx-react-lite": "2.2.2",
