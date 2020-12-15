@@ -3,6 +3,7 @@ import { EntityManager } from '@mikro-orm/postgresql';
 import { Pagination } from '@shared/core/pagination';
 import { IBootstrap } from '@shared/infra/bootstrap';
 import { inject, injectable } from 'tsyringe';
+import { AllowedUserIPV4 } from '../domain/allowedUserIPS.entity';
 import { User } from '../domain/user.entity';
 import { IUserRepository } from './userRepository';
 @injectable()
@@ -41,25 +42,37 @@ export class UserRepository implements IUserRepository {
     return user;
   };
   public setRFToken = async (user: User): Promise<User> => {
-    await this.em
-      .createQueryBuilder(User)
-      .update({ ref_token: user.ref_token, updated_at: new Date() })
-      .where({
-        employee: { id: user.employee.id },
-      })
-      .execute();
+    await this.em.persistAndFlush(user);
+    // await this.em
+    //   .createQueryBuilder(User)
+    //   .update({ ref_token: user.ref_token, active: user.active, updated_at: new Date() })
+    //   .where({
+    //     employee: { id: user.employee.id },
+    //   })
+    //   .execute();
     return user;
   };
   public all = async (pagination: Pagination): Promise<User[]> => {
     return await this.em.find(User, {});
   };
   public byId = async (id: string): Promise<User | undefined> => {
-    const user = await this.em.findOne(User, { employee: { id } }, ['employee']);
+    const user = await this.em.findOne(User, { employee: { id } }, [
+      'employee',
+    ]);
     if (!user) return;
     return user;
   };
+  public validIPV4 = async(ipV4:string): Promise<User | undefined> => {
+    const allowedIPV4 = await this.em.findOne(AllowedUserIPV4, { ip_address:ipV4 }, [
+      'user',
+    ]);
+    if (!allowedIPV4) return;
+    return allowedIPV4.user;
+  }
   public byLogin = async (login: string): Promise<User | undefined> => {
-    const user = await this.em.findOne(User, { login }, ['employee']);
+    const user = await this.em.findOne(User, { login }, [
+      'employee',
+    ]);
     if (!user) return;
     return user;
   };

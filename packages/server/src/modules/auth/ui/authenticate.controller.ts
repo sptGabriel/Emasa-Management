@@ -29,7 +29,7 @@ export class AuthController extends BaseController {
   ) => {
     try {
       const dto: loginDTO = request.body;
-      dto.recent_ip = ensure(getRequestIpAddress(request))
+      dto.ip = ensure(getRequestIpAddress(request))
       const result = await container.resolve(LoginUseCase).execute(dto);
       if (result.isLeft()) return next(result.value);
       response.cookie('eid', result.value.user.id);

@@ -33,10 +33,10 @@ export class ChangePasswordUseCase
     }
     const user = await this.userRepository.byMatricula(matricula);
     if (!user) throw new Error(`This employee doesn't have user.`);
-    if (!User.DecryptPassword(old_password, user.password)) {
+    if (!user.DecryptPassword(old_password, user.password)) {
       throw new Error(`Old password is invalid `);
     }
-    user.password = await User.EncryptPassword(password);
+    user.password = await user.EncryptPassword(password);
     const updatedUser = await this.userRepository.updatePassword(user);
     return right(updatedUser);
   };

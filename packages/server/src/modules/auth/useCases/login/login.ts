@@ -10,6 +10,7 @@ import { promisifyDecode } from '@shared/helpers/jwt';
 import { wrap } from '@mikro-orm/core';
 import { ensure } from '@utils/ensure';
 import jwtConfig from '@config/jwt.config';
+import { User } from '@modules/users/domain/user.entity';
 export interface loginResult {
   refresh: string;
   access: string;
@@ -29,24 +30,29 @@ export class LoginUseCase
   }: loginDTO) => {
     const user = await this.userRepository.byLogin(login);
     if (!user) throw new Error(`User doesn't exists`);
-    if(user.ip_address !== recent_ip){ 
-      throw new Error(`Please check your email to grant access again.`)
-    }
     const hasValidToken = user.ref_token
       ? await promisifyDecode(user.ref_token, jwtConfig.rfSecret)
       : false;
     if (!(hasValidToken instanceof Error) && hasValidToken) return user;
     const renewToken = await JWT.buildRefreshToken(user.employee.id);
-    wrap(user).assign({ ref_token: renewToken.token });
+    wrap(user).assign({ ref_token: renewToken.token, active: true });
     return await this.userRepository.setRFToken(user);
   };
-  
+  private validateUserAccess = async (plainData:loginDTO, user:User) => {
+
+    if (user.DecryptPassword(plainData.password, user.password)) {
+      throw new Error(`Incorrect Password`);
+    }
+  }
   public execute = async ({
     login,
     password,
-    recent_ip
+    ip
   }: loginDTO): Promise<Either<AppError, loginResult>> => {
-    const user = await this.validateUser({ login, password, recent_ip });
+    const hasuser = await this.userRepository.byLogin(login);
+    if (!hasuser) throw new Error(`User doesn't exists`);
+    await this.validateUserAccess({login,password,ip},hasuser);
+    const user = await this.validateUser({ login, password, ip });
     const acessToken = JWT.buildAcessToken(
       { sub: user.employee.matricula },
       user.getJWTPayload,

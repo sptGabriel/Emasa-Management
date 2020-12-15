@@ -4,6 +4,7 @@ import { validate } from 'uuid';
 import { hash, genSaltSync, compareSync } from 'bcryptjs';
 import { isHashedRegex } from '@utils/isHashed';
 import { IJWTAcessPayload } from './jwt';
+import { AllowedUserIPV4 } from './allowedUserIPS.entity';
 export interface userContainer {
   employee: Employee;
   login: string;
@@ -32,6 +33,12 @@ export class User {
   public ip_address: string;
   @Property({ default: false })
   public active: boolean;
+  @OneToOne({
+    entity: () => AllowedUserIPV4,
+    mappedBy: 'user',
+    cascade: [Cascade.ALL],
+  })
+  public allowedIps: AllowedUserIPV4;
   @Property({ name: 'payload', persist:false })
   public get getJWTPayload(): IJWTAcessPayload {
     return {
@@ -56,10 +63,10 @@ export class User {
     if (!(typeof login === 'string')) throw new Error(`Login doesn't string`);
     this.login = login;
   };
-  public static DecryptPassword = (plain_pass: string, old_pass: string) => {
+  public DecryptPassword = (plain_pass: string, old_pass: string) => {
     return compareSync(plain_pass, old_pass);
   };
-  public static EncryptPassword = async (password: string) => {
+  public EncryptPassword = async (password: string) => {
     return await hash(password, genSaltSync(10)).catch(err => {
       throw err;
     });
@@ -77,7 +84,9 @@ export class User {
     if (password.length == 60 && password.match(isHashedRegex)) {
       throw new Error(`This password has been encrypted`);
     }
-    password = await User.EncryptPassword(password);
+    password = await hash(password, genSaltSync(10)).catch(err => {
+      throw err;
+    });
     return new User({ employee, login, password, active, ip_address, ref_token});
   };
 }
