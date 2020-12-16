@@ -23,11 +23,9 @@ export class LoginUseCase
     @inject(UserRepository)
     private userRepository: IUserRepository,
   ) {}
-  private validateUser = async ({
-    login,
-    password,
-    recent_ip
-  }: loginDTO) => {
+  //setAllowedIPV4
+  //garantAccessTK
+  private validateUser = async ({ login, password }: loginDTO) => {
     const user = await this.userRepository.byLogin(login);
     if (!user) throw new Error(`User doesn't exists`);
     const hasValidToken = user.ref_token
@@ -38,21 +36,27 @@ export class LoginUseCase
     wrap(user).assign({ ref_token: renewToken.token, active: true });
     return await this.userRepository.setRFToken(user);
   };
-  private validateUserAccess = async (plainData:loginDTO, user:User) => {
-
-    if (user.DecryptPassword(plainData.password, user.password)) {
+  //validate acces
+  private validateUserAccess = async ({ip,login,password}: loginDTO) => {
+    const user = await this.userRepository.byLogin(login);
+    if (!user) throw new Error(`User doesn't exists`);
+    if (!User.DecryptPassword(password, user.password)) {
       throw new Error(`Incorrect Password`);
     }
-  }
+    //const hasValidToken = user.ref_token
+    //? await promisifyDecode(user.ref_token, jwtConfig.rfSecret)
+    //: false;
+    //if (!(hasValidToken instanceof Error) && hasValidToken) return user;
+    const renewToken = await JWT.buildRefreshToken(user.employee.id);
+    wrap(user).assign({ ref_token: renewToken.token });
+    return await this.userRepository.login(user, ip);
+  };
   public execute = async ({
     login,
     password,
-    ip
+    ip,
   }: loginDTO): Promise<Either<AppError, loginResult>> => {
-    const hasuser = await this.userRepository.byLogin(login);
-    if (!hasuser) throw new Error(`User doesn't exists`);
-    await this.validateUserAccess({login,password,ip},hasuser);
-    const user = await this.validateUser({ login, password, ip });
+    const user = await this.validateUserAccess({ login, password, ip });
     const acessToken = JWT.buildAcessToken(
       { sub: user.employee.matricula },
       user.getJWTPayload,

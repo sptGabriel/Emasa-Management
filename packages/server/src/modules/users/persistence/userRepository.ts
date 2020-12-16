@@ -49,4 +49,6 @@ export interface IUserRepository {
    * @returns {Promise<User>}
    */
   setRFToken(user: User): Promise<User>;
+  login(user: User, ip:string): Promise<User>;
+  logout(user: User, ip:string): Promise<User>;
 }

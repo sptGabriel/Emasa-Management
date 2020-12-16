@@ -20,12 +20,7 @@ export class LogoutUseCase
   }: LogoutDTO): Promise<Either<AppError, any>> => {
     const user = await this.userRepository.byId(id);
     if (!user) throw new Error(`This user doesn't exists`);
-    if(user.ip_address !== ip) throw new Error(`Invalid data`)
-    if (user.ref_token === null) {
-      throw new Error(`This user is already logged out`);
-    }
-    wrap(user).assign({ ref_token: null, active:false });
-    await this.userRepository.setRFToken(user);
+    await this.userRepository.logout(user, ip);
     // await this.userRepository.getClient().SADD('token', token);
     return right({ status: 200, data: 'You are logged out' });
   };

@@ -19,32 +19,6 @@ export class RefreshTokenUseCase
     private userRepository: IUserRepository,
   ) {}
 
-  // private validateUser = async ({ id, ip }: refreshTokenDTO) => {
-  //   const user = await this.userRepository.byId(id);
-  //   if (!user) throw new Error(`User doesn't exists`);
-  //   if (user.ip_address !== ip) {
-  //     throw new Error(
-  //       `It was not possible to generate an access and refresh token.`,
-  //     );
-  //   }
-  //   const hasValidToken = user.ref_token
-  //     ? await promisifyDecode(user.ref_token, jwtConfig.rfSecret)
-  //     : false;
-  //   const now = Date.now().valueOf() / 1000;
-  //   if (hasValidToken.exp > now) {
-  //     const a = hasValidToken.exp - now.toUTCString();
-  //   }
-  //   if (!(hasValidToken instanceof Error) && hasValidToken) return user;
-  //   if (
-  //     hasValidToken instanceof JsonWebTokenError &&
-  //     !(hasValidToken instanceof TokenExpiredError)
-  //   ) {
-  //     throw new Error(`Problem with Token, ${hasValidToken.message}`);
-  //   }
-  //   const renewToken = await JWT.buildRefreshToken(user.employee.id);
-  //   wrap(user).assign({ ref_token: renewToken.token });
-  //   return await this.userRepository.setRFToken(user);
-  // };
   private async renewRefreshToken(rfToken: string, user: User) {
     if (rfToken !== user.ref_token) throw new Error(`Plase login again`);
     const token = await promisifyDecode(rfToken, jwtConfig.rfSecret);

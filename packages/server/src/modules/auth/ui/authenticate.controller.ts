@@ -16,7 +16,7 @@ export class AuthController extends BaseController {
   protected initRouter() {
     this.router.get(`${this.path}`, this.index);
     this.router.post(`/login`, this.login);
-    this.router.get(`/logout`, this.logout);
+    this.router.get(`/users/me/logout`, this.logout);
     this.router.get(`/users/me/refresh-token`, this.refreshToken);
   }
   private index = async (arg0: string, index: any) => {

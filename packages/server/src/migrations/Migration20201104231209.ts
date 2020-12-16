@@ -8,7 +8,7 @@ export class Migration20201104231209 extends Migration {
         return this.getKnex()
           .schema // **** udpate
           .createTable('lastaccess_users', async table => {
-            table.uuid('employee_id').primary().notNullable();
+            table.uuid('employee_id').notNullable();
             table.string('ip_address');
             table.timestamp('accessed_at').defaultTo(this.getKnex().fn.now());
           });

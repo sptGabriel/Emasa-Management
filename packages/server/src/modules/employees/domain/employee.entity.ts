@@ -1,20 +1,22 @@
 import {
   Cascade,
+  Collection,
   Entity,
   Enum,
+  LoadStrategy,
   ManyToOne,
+  OneToMany,
   OneToOne,
   PrimaryKey,
   Property,
   Unique,
 } from '@mikro-orm/core';
 import { Departament } from '@modules/departaments/domain/departament.entity';
-import { User, userContainer } from '@modules/users/domain/user.entity';
+import { User } from '@modules/users/domain/user.entity';
 import { v4, validate } from 'uuid';
 interface employeeUser {
   login: string;
   password: string;
-  ip_address: string;
 }
 export interface EmployeeContainer {
   id?: string;
@@ -98,8 +100,7 @@ export class Employee {
       active: false,
       employee: employee,
       login: userProps.login,
-      password: userProps.password,
-      ip_address: userProps.ip_address,
+      password: userProps.password
     });
     return new Employee({
       id,
