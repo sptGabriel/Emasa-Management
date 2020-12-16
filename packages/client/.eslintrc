@@ -38,10 +38,10 @@
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "@typescript-eslint/no-explicit-any": "off",
     "react-hooks/rules-of-hooks": "error",
-    "no-use-before-define": "off",
-    "@typescript-eslint/no-use-before-define": [
-      "error"
-    ],
+    "no-empty-function": "off",
+    "@typescript-eslint/no-empty-function": ["off"],
+    "no-use-before-define": [0],
+    "@typescript-eslint/no-use-before-define": [1],
     "react-hooks/exhaustive-deps": "warn",
     "react/jsx-filename-extension": [
       1,

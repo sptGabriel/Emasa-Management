@@ -10,7 +10,7 @@ import Login from './pages/login';
 
 const AuthApp = observer(() => {
   const {authStore, currentUserStore, cookieStore} = useRootStore();
-  useComponentWillMount(() => {
+  useEffect(() => {
     authStore.refreshToken();
   });
   //  useEffect(() => {
@@ -21,6 +21,7 @@ const AuthApp = observer(() => {
 
 const App: React.FC = observer(() => {
   const {layoutStore} = useRootStore();
+  console.log('a');
   return (
     <ThemeProvider theme={layoutStore.isDarkMode ? darkTheme : lightTheme}>
       <GlobalReset />
