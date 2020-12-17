@@ -1,4 +1,5 @@
 import { BaseController } from '@shared/core/baseController';
+import { IBootstrap } from '@shared/infra/bootstrap';
 import { ensure } from '@utils/ensure';
 import { getRequestIpAddress } from '@utils/getIpAddres';
 import { NextFunction, Request, Response } from 'express';
@@ -14,28 +15,55 @@ export class AuthController extends BaseController {
     this.initRouter();
   }
   protected initRouter() {
-    this.router.get(`${this.path}`, this.index);
+    this.router.get(`/`, this.index);
     this.router.post(`/login`, this.login);
     this.router.get(`/users/me/logout`, this.logout);
     this.router.get(`/users/me/refresh-token`, this.refreshToken);
   }
-  private index = async (arg0: string, index: any) => {
-    throw new Error('Method not implemented.');
+  private index = async (
+    request: Request,
+    response: Response,
+    next: NextFunction,
+  ) => {
+    try {
+      const server = container.resolve<IBootstrap>('bootstrap');
+      if(!server.getDatabaseORM().getConnection().isConnected())
+      throw new Error(`Internal Error`)
+      const id = request.cookies['emsi'];
+      const refreshToken = request.cookies['@Emasa/Refresh-Token'];
+      if(!refreshToken) {
+        return response.status(200).send();
+      }
+      const result = await container
+        .resolve(RefreshTokenUseCase)
+        .execute({ refreshToken, id });
+      if (result.isLeft()) return response.status(401);
+      response.cookie('emsi', result.value.user_id);
+      response.cookie('@Emasa/Refresh-Token', result.value.refreshToken, {
+        httpOnly: true,
+      });
+      return response.status(200).send({access_token: result.value.accessToken});
+    } catch (error) {
+      console.log(error);
+      next(error);
+    }
   };
+  
   private login = async (
     request: Request,
     response: Response,
     next: NextFunction,
   ) => {
     try {
+      console.log('a')
       const dto: loginDTO = request.body;
+      console.log(dto)
       dto.ip = ensure(getRequestIpAddress(request));
       const result = await container.resolve(LoginUseCase).execute(dto);
       if (result.isLeft()) return next(result.value);
       response.cookie('emsi', result.value.user.id);
       response.cookie('@Emasa/Refresh-Token', result.value.refresh, {
         httpOnly: true,
-        path: '/api/v1/users/me',
       });
       return response.json({access_token: result.value.access});
     } catch (error) {
@@ -52,9 +80,7 @@ export class AuthController extends BaseController {
       const refreshToken = request.cookies['@Emasa/Refresh-Token'];
       const ip = ensure(getRequestIpAddress(request));
       response.clearCookie('emsi');
-      response.clearCookie('@Emasa/Refresh-Token', {
-        path: '/api/v1/users/me',
-      });
+      response.clearCookie('@Emasa/Refresh-Token');
       const result = await container
         .resolve(LogoutUseCase)
         .execute({ refreshToken, id, ip });
@@ -80,7 +106,6 @@ export class AuthController extends BaseController {
       response.cookie('emsi', result.value.user_id);
       response.cookie('@Emasa/Refresh-Token', result.value.refreshToken, {
         httpOnly: true,
-        path: '/api/v1/users/me',
       });
       return response.json({
         message: result.value.message,

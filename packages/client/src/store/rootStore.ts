@@ -1,4 +1,6 @@
-import {makeAutoObservable} from 'mobx';
+import jwtDecode from 'jwt-decode';
+import {makeAutoObservable, runInAction} from 'mobx';
+import {UserModel} from '../models/userModel';
 import {AuthStore} from './authStore';
 import {AxiosStore} from './axiosStore';
 import {CookieStore} from './cookieStore';

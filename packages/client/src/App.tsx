@@ -5,19 +5,22 @@ import GlobalReset from './shared/utils/cssReset';
 import AuthenticatedApp from './shared/infra/router';
 import {useRootStore} from './shared/infra/mobx';
 import {darkTheme, lightTheme} from './shared/themes';
-import {useComponentWillMount} from './shared/utils/useComponentWillMount';
 import Login from './pages/login';
 
 const AuthApp = observer(() => {
-  const {authStore, currentUserStore, cookieStore} = useRootStore();
-  console.error('a');
+  const {currentUserStore, authStore} = useRootStore();
   useEffect(() => {
-    authStore.refreshToken();
+    if (!currentUserStore.accessToken || !authStore.isAuth) authStore.initApi();
   });
-  //  useEffect(() => {
-  //  console.log(authStore.isAuth);
-  //  }, [authStore.isAuth]);
-  return <>{currentUserStore.currentUser ? <AuthenticatedApp /> : <Login />}</>;
+  return (
+    <>
+      {authStore.isAuth && currentUserStore.currentUser ? (
+        <AuthenticatedApp />
+      ) : (
+        <Login />
+      )}
+    </>
+  );
 });
 
 const App: React.FC = observer(() => {

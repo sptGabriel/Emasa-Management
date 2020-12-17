@@ -20,6 +20,7 @@ export class RefreshTokenUseCase
   ) {}
 
   private async renewRefreshToken(rfToken: string, user: User) {
+    console.log(rfToken === user.ref_token)
     if (user.ref_token !== null && rfToken !== user.ref_token)
       throw new Error(`Plase login again`);
     const token = await promisifyDecode(rfToken, jwtConfig.rfSecret);
@@ -45,7 +46,6 @@ export class RefreshTokenUseCase
       refreshToken,
       jwtConfig.rfSecret,
     );
-    console.log(decoded);
     const user = await this.userRepository.byId(id);
     if (!user) throw new Error(`This user doesn't exists`);
     if (user.employee.id !== decoded.sub)
@@ -58,7 +58,7 @@ export class RefreshTokenUseCase
     );
     return right({
       refreshToken: renewRefreshToken.ref_token,
-      user_id: user.employee.id,
+      user_id: renewRefreshToken.employee.id,
       accessToken: renewAccessToken.token,
       message: 'Token refreshed successfully',
     });

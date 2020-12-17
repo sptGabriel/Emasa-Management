@@ -12,9 +12,13 @@ export const SearchWrapper = styled.div<SearchState>`
   position: relative;
   padding-left: 0.75rem;
   margin-right: 0.66667rem;
+  display: flex;
+  align-items: center;
   .input-holder {
     height: 46px;
     width: ${(props) => (props.isOpen ? '290px' : '46px')};
+    display: flex;
+    align-items: center;
     background: ${({isOpen, theme}: any) =>
       isOpen ? theme.navBar.searchBox : 'rgba(255,255,255,0)'};
     overflow: hidden;
@@ -30,9 +34,12 @@ export const SearchWrapper = styled.div<SearchState>`
     width: 100%;
     padding: 0 70px 0 20px;
     opacity: ${(props) => (props.isOpen ? '1' : '0')};
-    position: absolute;
-    top: 0;
-    left: 0;
+    ${({isOpen}) =>
+      !isOpen
+        ? css`
+            position: absolute;
+          `
+        : ''}
     background: transparent;
     box-sizing: border-box;
     border: none;
@@ -65,9 +72,8 @@ export const SearchWrapper = styled.div<SearchState>`
       color: ${({theme}: any) => theme.navBar.searchText};
     }
     transform: ${(props) =>
-      props.isOpen ? 'translate(0, 11px)' : 'translate(0, 60px)'};
+      props.isOpen ? '' : 'translate(0, 60px)'};
     transition: all 0.3s cubic-bezier(0, 0.105, 0.035, 1.57);
-    transition-delay: 0.3s;
     font-size: 0.88rem;
   }
   .search-icon {

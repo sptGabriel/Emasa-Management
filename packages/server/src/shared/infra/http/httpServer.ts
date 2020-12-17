@@ -8,13 +8,12 @@ import { container } from 'tsyringe';
 import { BaseController } from '@shared/core/baseController';
 import { RequestContext } from '@mikro-orm/core';
 import { EntityManager } from '@mikro-orm/postgresql';
-import { serverStatRouter } from './serverStatRouter';
-const corstOpts =  cors({
-    credentials: true,
-    origin: 'http://localhost:3000',
-    methods: ['POST', 'PUT', 'GET', 'OPTIONS', 'HEAD'],
-    exposedHeaders: ['eid', 'Access-Token'],
-  })
+const corstOpts = cors({
+  credentials: true,
+  origin: 'http://localhost:3000',
+  methods: ['POST', 'PUT', 'GET', 'OPTIONS', 'HEAD'],
+  exposedHeaders: ['eid', 'Access-Token'],
+});
 export class ExpressServer implements IHttpServer {
   private server: express.Application;
   private em: EntityManager;
@@ -22,7 +21,6 @@ export class ExpressServer implements IHttpServer {
     this.server = express();
   }
   private initializeRouter = () => {
-    this.server.use('/api/v1', serverStatRouter);
     container.resolveAll<BaseController>('Controllers').forEach(controller => {
       this.server.use('/api/v1', controller.getRouter());
     });
@@ -57,37 +55,23 @@ export class ExpressServer implements IHttpServer {
   //    next();
   private initializeMiddlewares = () => {
     this.server.use(cookieParser());
-    this.server.use(corstOpts);
-    this.server.use((req: Request, res: Response, next) => {
-      var oneof = false;
-      if (req.headers.origin) {
-        res.header('Access-Control-Allow-Origin', req.headers.origin);
-        oneof = true;
-      }
-      if (req.headers['access-control-request-method']) {
-        res.header(
-          'Access-Control-Allow-Methods',
-          req.headers['access-control-request-method'],
-        );
-        oneof = true;
-      }
-      if (req.headers['access-control-request-headers']) {
-        res.header(
-          'Access-Control-Allow-Headers',
-          req.headers['access-control-request-headers'],
-        );
-        oneof = true;
-      }
-      if (oneof) {
-        res.header('Access-Control-Max-Age', '60 * 60 * 24 * 365');
-      }
-
-      // intercept OPTIONS method
-      if (oneof && req.method == 'OPTIONS') {
-        res.send(200);
-      } else {
-        next();
-      }
+    this.server.use(cors({
+      credentials: true,
+      origin: 'http://localhost:3000',
+      optionsSuccessStatus: 200,
+      methods: ['POST', 'PUT', 'GET', 'OPTIONS', 'HEAD'],
+      exposedHeaders: ["eid", "Access-Token"],},
+      ));
+    this.server.use(function (req, res, next) {
+      res.header('Content-Type', 'application/json;charset=UTF-8');
+      res.header('Access-Control-Allow-Headers', 'Set-Cookie');
+      res.setHeader('Access-Control-Allow-Credentials', true);
+      res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+      res.header(
+        'Access-Control-Allow-Headers',
+        'Origin, X-Requested-With, Content-Type, Accept',
+      );
+      next();
     });
     this.server.use(express.json());
     this.server.use(bodyParser.json());

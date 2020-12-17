@@ -21,6 +21,7 @@ export class AuthStore {
   constructor(rootStore: RootStore) {
     makeObservable(this, {
       login: action,
+      initApi: action,
       logout: action,
       isAuth: true,
       inProgress: true,
@@ -30,6 +31,41 @@ export class AuthStore {
     });
     this.rootStore = rootStore;
   }
+
+  public initApi = async (): Promise<void> => {
+    this.rootStore.authStore.inProgress = true;
+    try {
+      await this.rootStore.AxiosStore.get('/')
+        .then((res) => {
+          const decoded: any = jwtDecode(res.data.access_token);
+          runInAction(() => {
+            if (!(decoded instanceof Error)) {
+              this.rootStore.currentUserStore.accessToken =
+                res.data.access_token;
+              this.rootStore.currentUserStore.currentUser = new UserModel({
+                ...decoded,
+                id: decoded.sub,
+              });
+            }
+          });
+        })
+        .then(() =>
+          runInAction(() => {
+            this.rootStore.authStore.isAuth = true;
+          }),
+        );
+    } catch (error) {
+      console.log(error);
+      const mute = error;
+      runInAction(() => {
+        this.rootStore.authStore.isAuth = false;
+      });
+    } finally {
+      runInAction(() => {
+        this.rootStore.authStore.inProgress = false;
+      });
+    }
+  };
 
   public refreshToken = async (): Promise<void> => {
     this.inProgress = true;
@@ -67,6 +103,7 @@ export class AuthStore {
       });
       this.isAuth = true;
     } catch (error) {
+      console.log(error);
       this.errors =
         error.response && error.response.data && error.response.data.message;
       const mute = error;

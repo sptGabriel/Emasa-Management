@@ -4,9 +4,9 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import {RootStoreProvider} from './shared/infra/mobx';
 
-if (process.env.NODE_ENV === 'development') {
-  console.error = () => {};
-}
+// if (process.env.NODE_ENV === 'development') {
+//   console.error = () => {};
+// }
 
 ReactDOM.render(
   <React.StrictMode>
