@@ -1,8 +1,7 @@
-import jwtDecode, {JwtPayload} from 'jwt-decode';
+import jwtDecode from 'jwt-decode';
 import {action, configure, makeObservable, runInAction} from 'mobx';
-import {decode} from 'punycode';
 import {LoginModel} from '../models/loginModel';
-import {TUser, UserModel} from '../models/userModel';
+import {UserModel} from '../models/userModel';
 import {RootStore} from './rootStore';
 
 configure({
@@ -43,6 +42,7 @@ export class AuthStore {
       );
       this.isAuth = true;
     } catch (error) {
+      const mute = error;
       runInAction(() => {
         this.isAuth = false;
       });
@@ -69,6 +69,7 @@ export class AuthStore {
     } catch (error) {
       this.errors =
         error.response && error.response.data && error.response.data.message;
+      const mute = error;
     } finally {
       this.inProgress = false;
     }

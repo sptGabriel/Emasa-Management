@@ -1,5 +1,5 @@
 export interface LogoutDTO {
   id: string;
-  accToken: string;
+  refreshToken: string;
   ip:string;
 }

@@ -9,7 +9,7 @@ import { JWT } from '@modules/users/domain/jwt';
 import { promisifyDecode } from '@shared/helpers/jwt';
 import { wrap } from '@mikro-orm/core';
 import jwtConfig from '@config/jwt.config';
-import { JsonWebTokenError, TokenExpiredError } from 'jsonwebtoken';
+import { JsonWebTokenError, TokenExpiredError, verify } from 'jsonwebtoken';
 import { User } from '@modules/users/domain/user.entity';
 @injectable()
 export class RefreshTokenUseCase
@@ -20,7 +20,8 @@ export class RefreshTokenUseCase
   ) {}
 
   private async renewRefreshToken(rfToken: string, user: User) {
-    if (rfToken !== user.ref_token) throw new Error(`Plase login again`);
+    if (user.ref_token !== null && rfToken !== user.ref_token)
+      throw new Error(`Plase login again`);
     const token = await promisifyDecode(rfToken, jwtConfig.rfSecret);
     if (!(token instanceof Error) && token) return user;
     if (
@@ -29,30 +30,36 @@ export class RefreshTokenUseCase
     ) {
       throw new Error(`Invalid Refresh Token`);
     }
-    if(user.employee.id !== token.id) throw new Error(`Invalid Refresh Token`);
+    if (user.employee.id !== token.id) throw new Error(`Invalid Refresh Token`);
     const renewToken = await JWT.buildRefreshToken(user.employee.id);
     wrap(user).assign({ ref_token: renewToken.token });
     return await this.userRepository.setRFToken(user);
   }
 
   public execute = async ({
-    id,
-    ip,
     refreshToken,
+    id
   }: refreshTokenDTO): Promise<Either<AppError, any>> => {
-    console.log('refresh token')
+    if (!refreshToken) throw new Error(`Invalid credentials`);
+    const decoded: any = await promisifyDecode(
+      refreshToken,
+      jwtConfig.rfSecret,
+    );
+    console.log(decoded);
     const user = await this.userRepository.byId(id);
     if (!user) throw new Error(`This user doesn't exists`);
-    if(user.ip_address !== ip) throw new Error(`Invalid Address`)
+    if (user.employee.id !== decoded.sub)
+      throw new Error(`Invalid Credentials`);
     const renewRefreshToken = await this.renewRefreshToken(refreshToken, user);
     // const user = await this.validateUser({ id, ip });
-    const renewAcessToken = JWT.buildAcessToken(
+    const renewAccessToken = JWT.buildAcessToken(
       { sub: user.employee.id },
       user.getJWTPayload,
     );
     return right({
       refreshToken: renewRefreshToken.ref_token,
-      acessToken: renewAcessToken.token,
+      user_id: user.employee.id,
+      accessToken: renewAccessToken.token,
       message: 'Token refreshed successfully',
     });
   };

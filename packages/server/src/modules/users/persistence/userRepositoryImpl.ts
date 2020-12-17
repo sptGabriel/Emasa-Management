@@ -120,10 +120,11 @@ export class UserRepository implements IUserRepository {
       const isLogged: any = await IPV4QB.getKnex()
         .select('*')
         .where({ ip_address: ip, employee_id: user.employee.id })
-        .andWhere({ active: false })
         .returning('*')
         .then(row => row[0]);
-      if (isLogged) throw new Error(`This already logged out on this device`);
+      if(!isLogged) throw new Error(`Invalid Credentials`);
+      if (isLogged && !isLogged.active)
+        throw new Error(`This already logged out on this device`);
       await UserQB.update({ ref_token: null })
         .where({
           employee: { id: user.employee.id },

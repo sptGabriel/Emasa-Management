@@ -53,7 +53,7 @@ export class JWT {
     // authConfig.tokenExpiryTimeInSeconds
     const token = encode(payload, ensure(authConfig.secret), {
       subject: props.sub,
-      expiresIn: '60s',
+      expiresIn: '60m',
     });
     return token;
   };

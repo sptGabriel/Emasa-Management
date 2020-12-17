@@ -57,13 +57,13 @@ export class LoginUseCase
     ip,
   }: loginDTO): Promise<Either<AppError, loginResult>> => {
     const user = await this.validateUserAccess({ login, password, ip });
-    const acessToken = JWT.buildAcessToken(
-      { sub: user.employee.matricula },
+    const accessToken = JWT.buildAcessToken(
+      { sub: user.employee.id },
       user.getJWTPayload,
     );
     return right({
       refresh: ensure(user.ref_token),
-      access: acessToken.token,
+      access: accessToken.token,
       user: user.getJWTPayload,
     });
   };

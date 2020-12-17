@@ -23,13 +23,17 @@ export class AxiosStore {
   }
 
   public get = async (url: string): Promise<any> => {
-    return this.axiosInstance.get(url, {
-      withCredentials: true,
-      // prettier-ignore
-      headers: {
+    return this.axiosInstance
+      .get(url, {
+        withCredentials: true,
+        // prettier-ignore
+        headers: {
         'Authorization': `bearer ${this.rootStore.currentUserStore.accessToken}`,
       },
-    });
+      })
+      .catch((err) => {
+        const mute = err;
+      });
   };
 
   public post = async (url: string, data?: any): Promise<any> => {
