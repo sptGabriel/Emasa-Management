@@ -1,28 +1,28 @@
-import React, {useState, useEffect, MouseEvent} from 'react';
-import styled from '@emotion/styled/macro';
-import {observer} from 'mobx-react-lite';
-import {IconType} from 'react-icons';
-import {FaGhost} from 'react-icons/fa';
-import {VscChevronDown, VscChevronUp} from 'react-icons/vsc';
-import {useRootStore} from '../infra/mobx';
-import {ITag, IDropdownItems, Tags} from '../utils/MenuTags';
-import {generateKey} from '../utils/generateKeys';
+import React, {useState, useEffect, MouseEvent} from 'react'
+import styled from '@emotion/styled/macro'
+import {observer} from 'mobx-react-lite'
+import {IconType} from 'react-icons'
+import {FaGhost} from 'react-icons/fa'
+import {VscChevronDown, VscChevronUp} from 'react-icons/vsc'
+import {useRootStore} from '../infra/mobx'
+import {ITag, IDropdownItems, Tags} from '../utils/MenuTags'
+import {generateKey} from '../utils/generateKeys'
 /* Styles */
 type IMenu = {
-  open: boolean;
-};
+  open: boolean
+}
 type IDropDown = {
-  active?: boolean;
-};
+  active?: boolean
+}
 interface IListWrap {
-  open: boolean;
-  isDropDown?: boolean;
-  tagActive?: boolean;
+  open: boolean
+  isDropDown?: boolean
+  tagActive?: boolean
 }
 interface IListItem {
-  open: boolean;
-  isDropDown?: boolean;
-  active?: boolean;
+  open: boolean
+  isDropDown?: boolean
+  active?: boolean
 }
 const MenuList = styled.ul<IMenu>`
   position: relative;
@@ -47,7 +47,7 @@ const MenuList = styled.ul<IMenu>`
     text-transform: uppercase;
     margin-top: 0.9375rem;
   }
-`;
+`
 
 const OpenedStyled = styled.ul<IDropDown>`
   position: relative;
@@ -99,7 +99,7 @@ const OpenedStyled = styled.ul<IDropDown>`
   & .icon-li-drop {
     margin-right: 10px;
   }
-`;
+`
 
 const ClosedStyled = styled('ul')`
   display: none;
@@ -141,7 +141,7 @@ const ClosedStyled = styled('ul')`
     text-decoration: none;
     color: #949e98;
   }
-`;
+`
 
 const ListWrap = styled.div<IListWrap>`
   padding: ${({open}) =>
@@ -207,7 +207,7 @@ const ListWrap = styled.div<IListWrap>`
   & .svg-arrow {
     color: ${({theme}: any) => (theme.type === 'dark' ? '#fff' : '#222')};
   }
-`;
+`
 
 const ListItem = styled.li<IListItem>`
   display: flex;
@@ -221,25 +221,25 @@ const ListItem = styled.li<IListItem>`
   &:hover ${ClosedStyled} {
     display: block;
   }
-`;
+`
 /* Styles */
 export type TSideBar = {
-  open: boolean;
-};
-type ClickHandler = (tag: ITag) => (e: MouseEvent) => void;
-type ShowHideDropItem = (tag: ITag) => void;
+  open: boolean
+}
+type ClickHandler = (tag: ITag) => (e: MouseEvent) => void
+type ShowHideDropItem = (tag: ITag) => void
 interface IDrop {
-  active?: boolean;
-  isOpen: boolean;
-  dropItems: IDropdownItems[];
-  setVisible: ClickHandler;
-  Icon: IconType;
+  active?: boolean
+  isOpen: boolean
+  dropItems: IDropdownItems[]
+  setVisible: ClickHandler
+  Icon: IconType
 }
 interface ITagList {
-  clickHandler: ClickHandler;
-  sideBarStatus: boolean;
-  tag: ITag;
-  open: boolean;
+  clickHandler: ClickHandler
+  sideBarStatus: boolean
+  tag: ITag
+  open: boolean
 }
 
 const Drop: React.FC<IDrop> = observer(({active, dropItems, isOpen}) => {
@@ -264,8 +264,8 @@ const Drop: React.FC<IDrop> = observer(({active, dropItems, isOpen}) => {
         </ClosedStyled>
       )}
     </>
-  );
-});
+  )
+})
 const TagList: React.FC<ITagList> = observer(
   ({sideBarStatus, tag, clickHandler, open}) => {
     return (
@@ -313,33 +313,33 @@ const TagList: React.FC<ITagList> = observer(
           ''
         )}
       </ListItem>
-    );
+    )
   },
-);
+)
 const MenuTags: React.FC = observer(() => {
-  const {layoutStore} = useRootStore();
-  const [tags, setTags] = useState<ITag[]>(Tags);
+  const {layoutStore} = useRootStore()
+  const [tags, setTags] = useState<ITag[]>(Tags)
   const showHideDropItem: ShowHideDropItem = (tag) => {
     setTags((items) =>
       items.map((item) => ({
         ...item,
         Active: item.Name === tag.Name ? tag.Active !== true : false,
       })),
-    );
-  };
+    )
+  }
   useEffect(() => {
     setTags((items) =>
       items.map((item) => ({
         ...item,
         Active: false,
       })),
-    );
-  }, [layoutStore.sideBar]);
+    )
+  }, [layoutStore.sideBar])
 
   const clickHandler: ClickHandler = (tag) => (e) => {
-    e.preventDefault();
-    showHideDropItem(tag);
-  };
+    e.preventDefault()
+    showHideDropItem(tag)
+  }
 
   return (
     <MenuList open={layoutStore.sideBar}>
@@ -355,7 +355,7 @@ const MenuTags: React.FC = observer(() => {
         </div>
       ))}
     </MenuList>
-  );
-});
+  )
+})
 
-export default MenuTags;
+export default MenuTags

@@ -1,13 +1,13 @@
-import React from 'react';
-import styled from '@emotion/styled/macro';
-import {observer} from 'mobx-react-lite';
-import {useRootStore} from '../infra/mobx';
-import {Container} from './FlexBox';
-import SideMenu from './SideMenu';
+import React from 'react'
+import styled from '@emotion/styled/macro'
+import {observer} from 'mobx-react-lite'
+import {useRootStore} from '../infra/mobx'
+import {Container} from './FlexBox'
+import SideMenu from './SideMenu'
 
 interface IsHover {
-  isHover: boolean;
-  sideisOpen: boolean;
+  isHover: boolean
+  sideisOpen: boolean
 }
 const SideBarContainer = styled(Container)<IsHover>`
   width: 100%;
@@ -44,11 +44,11 @@ const SideBarContainer = styled(Container)<IsHover>`
     margin-bottom: 10px;
     /* margin-bottom: 40vh; */
   }
-`;
+`
 
 const SideBar: React.FC = observer(() => {
-  const [isHover, setHovered] = React.useState(false);
-  const {layoutStore} = useRootStore();
+  const [isHover, setHovered] = React.useState(false)
+  const {layoutStore} = useRootStore()
   return (
     <SideBarContainer
       flexColumn
@@ -59,7 +59,7 @@ const SideBar: React.FC = observer(() => {
     >
       <SideMenu />
     </SideBarContainer>
-  );
-});
+  )
+})
 
-export default SideBar;
+export default SideBar

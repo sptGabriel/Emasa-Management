@@ -58,6 +58,7 @@
         "children": "never"
       }
     ],
+    "react/jsx-wrap-multilines": [0],
     "lines-between-class-members": [
       "error",
       "always",

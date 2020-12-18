@@ -6,36 +6,36 @@
 //  text: string;
 //  };
 type sideBar = {
-  tittleTag: string;
+  tittleTag: string
   menuTag: {
-    background: string;
-    hoveredBackground: string;
-    text: string;
-    activeText: string;
-  };
-  scrollBar: string;
-};
+    background: string
+    hoveredBackground: string
+    text: string
+    activeText: string
+  }
+  scrollBar: string
+}
 type navBar = {
-  widget: string;
-  searchBox: string;
-  searchSvg: string;
-  searchText: string;
-  hamburguer: string;
-};
+  widget: string
+  searchBox: string
+  searchSvg: string
+  searchText: string
+  hamburguer: string
+}
 export type ITheme = {
-  type: string;
-  primary: string;
-  secondary: string;
-  background: string;
-  backgroundSecondary: string;
-  sideBar: sideBar;
-  navBar: navBar;
-};
+  type: string
+  primary: string
+  secondary: string
+  background: string
+  backgroundSecondary: string
+  sideBar: sideBar
+  navBar: navBar
+}
 
 export const lightTheme: ITheme = {
   type: 'light',
-  primary: '#10387e',
-  secondary: '#3e82f7',
+  primary: '#078af5',
+  secondary: '#0079db ',
   background: '#FFF',
   backgroundSecondary: '#FAFAFB',
   sideBar: {
@@ -44,18 +44,18 @@ export const lightTheme: ITheme = {
       background: 'rgb(202, 240, 248, 0.4)',
       hoveredBackground: 'rgb(202, 240, 248,  0.2)',
       text: '#2c323f',
-      activeText: '#10387e',
+      activeText: '#0079db',
     },
     scrollBar: '#bde0fe',
   },
   navBar: {
-    widget: '#10387e',
+    widget: '#0079db',
     searchBox: 'rgba(0,0,0,0.05)',
     searchSvg: 'rgba(0,0,0,0.06)',
     searchText: '#455560',
-    hamburguer: '#10387e',
+    hamburguer: '#0079db',
   },
-};
+}
 
 export const darkTheme: ITheme = {
   type: 'dark',
@@ -80,4 +80,4 @@ export const darkTheme: ITheme = {
     searchText: '#fff',
     hamburguer: 'rgb(168, 168, 179)',
   },
-};
+}

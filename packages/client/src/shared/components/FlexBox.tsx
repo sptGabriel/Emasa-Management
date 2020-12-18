@@ -1,14 +1,14 @@
-import styled from '@emotion/styled';
-import {css} from '@emotion/react';
+import styled from '@emotion/styled'
+import {css} from '@emotion/react'
 
 export type flexDynamic = {
-  flexColumn?: boolean;
-  wrap?: string;
-  justify?: string;
-  align?: string;
-  isHidden?: boolean;
-  width?: string;
-};
+  flexColumn?: boolean
+  wrap?: string
+  justify?: string
+  align?: string
+  isHidden?: boolean
+  width?: string
+}
 
 export const FlexDynamicCSS = (props: flexDynamic) => css`
   display: 'flex';
@@ -17,7 +17,7 @@ export const FlexDynamicCSS = (props: flexDynamic) => css`
   justify-content: ${props.justify || 'flex-start'};
   align-items: ${props.align || 'stretch'};
   overflow: ${props.isHidden ? 'hidden' : 'visible'};
-`;
+`
 
 export const Container = styled('div')((props: flexDynamic) => ({
   display: 'flex',
@@ -26,4 +26,4 @@ export const Container = styled('div')((props: flexDynamic) => ({
   justifyContent: props.justify || 'flex-start',
   alignItems: props.align || 'stretch',
   overflow: props.isHidden ? 'hidden' : 'visible',
-}));
+}))

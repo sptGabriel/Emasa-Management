@@ -1,22 +1,22 @@
-import {IconType} from 'react-icons';
-import {AiOutlineDashboard, AiOutlineLineChart} from 'react-icons/ai';
-import {FaRegBuilding} from 'react-icons/fa';
-import {TiGroupOutline} from 'react-icons/ti';
-import {BsLightning, BsBookmarkPlus, BsFileEarmarkText} from 'react-icons/bs';
-import {BiStoreAlt} from 'react-icons/bi';
-import {RiGroupLine} from 'react-icons/ri';
+import {IconType} from 'react-icons'
+import {AiOutlineDashboard, AiOutlineLineChart} from 'react-icons/ai'
+import {FaRegBuilding} from 'react-icons/fa'
+import {TiGroupOutline} from 'react-icons/ti'
+import {BsLightning, BsBookmarkPlus, BsFileEarmarkText} from 'react-icons/bs'
+import {BiStoreAlt} from 'react-icons/bi'
+import {RiGroupLine} from 'react-icons/ri'
 
 export interface IDropdownItems {
-  Name: string;
-  Link: string;
+  Name: string
+  Link: string
 }
 export interface ITag {
-  Title?: string;
-  Name: string;
-  Link: string;
-  Icon: IconType;
-  DropdownItems: IDropdownItems[] | null;
-  Active?: boolean;
+  Title?: string
+  Name: string
+  Link: string
+  Icon: IconType
+  DropdownItems: IDropdownItems[] | null
+  Active?: boolean
 }
 export const Tags: ITag[] = [
   {
@@ -110,4 +110,4 @@ export const Tags: ITag[] = [
       {Name: 'Vitóriais', Link: '/duoBoost'},
     ],
   },
-];
+]

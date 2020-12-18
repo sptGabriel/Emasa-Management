@@ -1,18 +1,18 @@
-import styled from '@emotion/styled/macro';
-import React, {useEffect, useState} from 'react';
-import {keyframes} from '@emotion/react';
-import {GiPadlock} from 'react-icons/gi';
-import {FaUser} from 'react-icons/fa';
-import {observer} from 'mobx-react-lite';
-import {Container} from '../../shared/components/FlexBox';
-import logo from '../../assets/logo_emasa.png';
-import one from '../../assets/one.png';
-import satelite from '../../assets/satelite.png';
-import two from '../../assets/two.png';
-import BoundInput from '../../shared/components/Input';
-import {useRootStore} from '../../shared/infra/mobx';
+import styled from '@emotion/styled/macro'
+import React, {useEffect, useState} from 'react'
+import {keyframes} from '@emotion/react'
+import {GiPadlock} from 'react-icons/gi'
+import {FaUser} from 'react-icons/fa'
+import {observer} from 'mobx-react-lite'
+import {Container} from '../../shared/components/FlexBox'
+import logo from '../../assets/logo_emasa.png'
+import one from '../../assets/one.png'
+import satelite from '../../assets/satelite.png'
+import two from '../../assets/two.png'
+import BoundInput from '../../shared/components/Input'
+import {useRootStore} from '../../shared/infra/mobx'
 
-const emasaAnimation = keyframes`
+export const emasaAnimation = keyframes`
 	2%,64%{
 		transform: translate(2px,0) skew(0deg);
 	}
@@ -22,15 +22,15 @@ const emasaAnimation = keyframes`
 	62%{
 		transform: translate(0,0) skew(50deg); 
 	}
-`;
+`
 const ContainerFluid = styled('div')`
   width: 100%;
   margin-right: auto;
   margin-left: auto;
   padding: 0 !important;
   background-color: #f2fcff;
-`;
-const Row = styled(Container)``;
+`
+const Row = styled(Container)``
 const Col = styled('div')`
   flex: 0 0 100%;
   max-width: 100%;
@@ -38,7 +38,7 @@ const Col = styled('div')`
   width: 100%;
   padding-right: 15px;
   padding-left: 15px;
-`;
+`
 const LoginCard = styled(Container)`
   min-height: 100vh;
   margin: 0 auto;
@@ -71,7 +71,7 @@ const LoginCard = styled(Container)`
       border-style: none;
     }
   }
-`;
+`
 const LoginMain = styled('div')`
   position: relative;
   border-top-left-radius: 0;
@@ -82,10 +82,10 @@ const LoginMain = styled('div')`
   width: 450px;
   padding: 40px;
   border-radius: 10px;
-`;
+`
 const LoginContent = styled('div')`
   height: auto;
-`;
+`
 const FormContainer = styled.form`
   display: flex;
   flex-direction: column;
@@ -131,7 +131,7 @@ const FormContainer = styled.form`
     transition: opacity 0.2s ease 0s;
     font-family: Rubik, sans-serif;
   }
-`;
+`
 const SecInputs = styled.section`
   display: grid;
   grid-auto-flow: row;
@@ -141,7 +141,7 @@ const SecInputs = styled.section`
   h1 {
     margin-top: 1rem;
   }
-`;
+`
 const StyledInput = styled.div`
   & > div:first-of-type {
     display: flex;
@@ -211,7 +211,7 @@ const StyledInput = styled.div`
     font-family: Rubik, sans-serif;
     transition: border 0.2s ease 0s;
   }
-`;
+`
 const LoginButton = styled.button`
   &:disabled {
     background: rgb(72, 131, 161);
@@ -230,15 +230,15 @@ const LoginButton = styled.button`
   text-transform: uppercase;
   border-radius: 6px;
   border: 0px;
-`;
+`
 const WrapRegister = styled.div`
   font-size: 14px;
   padding-top: 6px;
   color: #898989;
   text-align: center;
-`;
+`
 const Inputs: React.FunctionComponent = observer(() => {
-  const {authStore} = useRootStore();
+  const {authStore} = useRootStore()
   return (
     <SecInputs>
       <h1> Digite o seu login </h1>
@@ -275,17 +275,17 @@ const Inputs: React.FunctionComponent = observer(() => {
         </div>
       </StyledInput>
     </SecInputs>
-  );
-});
+  )
+})
 
 const Form: React.FunctionComponent = observer(() => {
-  const {authStore} = useRootStore();
-  const {password, login} = authStore.loginModel;
+  const {authStore} = useRootStore()
+  const {password, login} = authStore.loginModel
   return (
     <FormContainer
       onSubmit={(event) => {
-        event.preventDefault();
-        authStore.login();
+        event.preventDefault()
+        authStore.login()
       }}
     >
       <Inputs />
@@ -310,8 +310,8 @@ const Form: React.FunctionComponent = observer(() => {
         <a href="#/"> Registre-se</a>
       </WrapRegister>
     </FormContainer>
-  );
-});
+  )
+})
 const Login: React.FC = () => {
   return (
     <ContainerFluid>
@@ -335,7 +335,7 @@ const Login: React.FC = () => {
         </Col>
       </Row>
     </ContainerFluid>
-  );
-};
+  )
+}
 
-export default Login;
+export default Login

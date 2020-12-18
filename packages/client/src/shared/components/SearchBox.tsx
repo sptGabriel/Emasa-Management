@@ -1,11 +1,11 @@
 /* eslint-disable prettier/prettier */
-import React, {useState} from 'react';
-import styled from '@emotion/styled/macro';
-import {BiSearchAlt} from 'react-icons/bi';
-import {css} from '@emotion/react';
+import React, {useState} from 'react'
+import styled from '@emotion/styled/macro'
+import {BiSearchAlt} from 'react-icons/bi'
+import {css} from '@emotion/react'
 
 interface SearchState {
-  isOpen: boolean;
+  isOpen: boolean
 }
 // Search Box
 export const SearchWrapper = styled.div<SearchState>`
@@ -31,8 +31,8 @@ export const SearchWrapper = styled.div<SearchState>`
         : 'all 0.3s ease-in-out'};
   }
   .search-input {
-    width: 100%;
-    padding: 0 70px 0 20px;
+    width: calc(100% - 50px);
+    padding: 0 0px 0 20px;
     opacity: ${(props) => (props.isOpen ? '1' : '0')};
     ${({isOpen}) =>
       !isOpen
@@ -71,8 +71,7 @@ export const SearchWrapper = styled.div<SearchState>`
       /* Most modern browsers support this now. */
       color: ${({theme}: any) => theme.navBar.searchText};
     }
-    transform: ${(props) =>
-      props.isOpen ? '' : 'translate(0, 60px)'};
+    transform: ${(props) => (props.isOpen ? '' : 'translate(0, 60px)')};
     transition: all 0.3s cubic-bezier(0, 0.105, 0.035, 1.57);
     font-size: 0.88rem;
   }
@@ -199,10 +198,10 @@ export const SearchWrapper = styled.div<SearchState>`
       border-radius: 2px;
     }
   }
-`;
+`
 
 const Search: React.FC = () => {
-  const [isOpen, setOpen] = useState(false);
+  const [isOpen, setOpen] = useState(false)
   return (
     <SearchWrapper isOpen={isOpen}>
       <div className="input-holder">
@@ -222,7 +221,7 @@ const Search: React.FC = () => {
         onClick={() => setOpen(!isOpen)}
       />
     </SearchWrapper>
-  );
-};
+  )
+}
 
-export default Search;
+export default Search

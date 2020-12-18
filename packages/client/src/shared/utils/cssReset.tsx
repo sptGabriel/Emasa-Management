@@ -1,5 +1,5 @@
-import React from 'react';
-import {Global, css} from '@emotion/react';
+import React from 'react'
+import {Global, css} from '@emotion/react'
 // export const CSSReset = createGlobalStyle`
 //         @import url('https://fonts.googleapis.com/css?family=Poppins&display=swap');
 //         @import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
@@ -193,7 +193,7 @@ const GlobalStyle: React.FC = () => {
         }
       `}
     />
-  );
-};
+  )
+}
 
-export default GlobalStyle;
+export default GlobalStyle

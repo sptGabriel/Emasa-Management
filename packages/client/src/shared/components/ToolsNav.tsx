@@ -1,18 +1,18 @@
-import React, {useState} from 'react';
-import {css, keyframes} from '@emotion/react';
-import styled from '@emotion/styled/macro';
-import useOnClickOutside from 'use-onclickoutside';
-import {observer} from 'mobx-react-lite';
-import {BiChevronDown, BiMoon} from 'react-icons/bi';
-import {FiBell, FiSun} from 'react-icons/fi';
-import {IoIosSettings} from 'react-icons/io';
-import {CgLogOff, CgProfile} from 'react-icons/cg';
-import {AiOutlineCompress} from 'react-icons/ai';
-import {Container} from './FlexBox';
-import userAvatar from '../../assets/user.png';
-import VerticalSplit from './Divider';
-import Search from './SearchBox';
-import {useRootStore} from '../infra/mobx';
+import React, {useState} from 'react'
+import {css, keyframes} from '@emotion/react'
+import styled from '@emotion/styled/macro'
+import useOnClickOutside from 'use-onclickoutside'
+import {observer} from 'mobx-react-lite'
+import {BiChevronDown, BiMoon} from 'react-icons/bi'
+import {FiBell, FiSun} from 'react-icons/fi'
+import {IoIosSettings} from 'react-icons/io'
+import {CgLogOff, CgProfile} from 'react-icons/cg'
+import {AiOutlineCompress} from 'react-icons/ai'
+import {Container} from './FlexBox'
+import userAvatar from '../../assets/user.png'
+import VerticalSplit from './Divider'
+import Search from './SearchBox'
+import {useRootStore} from '../infra/mobx'
 
 const bellAnimation = keyframes`
   0% {
@@ -48,17 +48,17 @@ const bellAnimation = keyframes`
   100% {
     transform: scaleX(1);
   }
-`;
+`
 /* SideBar Styles Start */
 export interface SideBarState {
-  open: boolean;
+  open: boolean
 }
 /* InterFaces Start */
 interface IUserCanvas {
-  open: boolean;
+  open: boolean
 }
 interface IUserProfile {
-  open: boolean;
+  open: boolean
 }
 /* User Profile Styles Section */
 const UserProfile = styled('div')<IUserProfile>`
@@ -71,7 +71,7 @@ const UserProfile = styled('div')<IUserProfile>`
   :hover {
     .svg-arrow,
     .user_text > span:first-of-type {
-      filter: brightness(1.75);
+      filter: brightness(1.2);
     }
   }
   & .svg-arrow {
@@ -122,7 +122,7 @@ const UserProfile = styled('div')<IUserProfile>`
       object-fit: cover;
     }
   }
-`;
+`
 const UserCanvas = styled.div<IUserCanvas>`
   position: absolute;
   width: 100%;
@@ -175,7 +175,7 @@ const UserCanvas = styled.div<IUserCanvas>`
     border-top: 1px solid
       ${({theme}: any) => (theme.type === 'dark' ? '#2e2b3f' : '#f0f0f0')};
   }
-`;
+`
 const WrapperTools = styled(Container)<SideBarState>`
   padding: 0 2.5rem;
   display: flex;
@@ -196,19 +196,19 @@ const WrapperTools = styled(Container)<SideBarState>`
     width: 46px;
     height: 46px;
     color: ${({theme}: any) =>
-      theme.type === 'dark' ? 'rgb(168, 168, 179)' : '#10387e'};
+      theme.type === 'dark' ? 'rgb(168, 168, 179)' : '#0079db'};
     :hover {
       background: ${({theme}: any) =>
         theme.type === 'dark' ? '#221F2E' : '#f0f0f0'};
       svg {
-        filter: brightness(1.75);
+        filter: brightness(1.5);
       }
     }
   }
-`;
+`
 const ContentUserSection: React.FC<IUserCanvas> = observer(
   ({open}: IUserCanvas) => {
-    const {authStore} = useRootStore();
+    const {authStore} = useRootStore()
     return (
       <UserCanvas open={open}>
         <div className="header_txt">Welcome !</div>
@@ -230,13 +230,13 @@ const ContentUserSection: React.FC<IUserCanvas> = observer(
           <span>Logout</span>
         </button>
       </UserCanvas>
-    );
+    )
   },
-);
+)
 const UserSection: React.FC = () => {
-  const [open, setOpen] = useState(false);
-  const ref = React.useRef(null);
-  useOnClickOutside(ref, () => setOpen(false));
+  const [open, setOpen] = useState(false)
+  const ref = React.useRef(null)
+  useOnClickOutside(ref, () => setOpen(false))
   return (
     <UserProfile ref={ref} onClick={() => setOpen(!open)} open={open}>
       <div className="user_avatar">
@@ -251,10 +251,10 @@ const UserSection: React.FC = () => {
       </div>
       <ContentUserSection open={open} />
     </UserProfile>
-  );
-};
+  )
+}
 const ToolsNav: React.FC = observer(() => {
-  const {layoutStore} = useRootStore();
+  const {layoutStore} = useRootStore()
   return (
     <WrapperTools justify="space-between" open={layoutStore.sideBar}>
       <Search />
@@ -274,7 +274,7 @@ const ToolsNav: React.FC = observer(() => {
       <VerticalSplit />
       <UserSection />
     </WrapperTools>
-  );
-});
+  )
+})
 
-export default ToolsNav;
+export default ToolsNav

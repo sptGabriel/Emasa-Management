@@ -1,5 +1,5 @@
-import React from 'react';
-import {observer} from 'mobx-react-lite';
+import React from 'react'
+import {observer} from 'mobx-react-lite'
 
 type InputProps = Omit<
   React.DetailedHTMLProps<
@@ -7,13 +7,13 @@ type InputProps = Omit<
     HTMLInputElement
   >,
   'property'
->;
+>
 
 interface BoundInputProps<TModel, TProp extends keyof TModel> {
-  model: TModel;
-  property: TProp;
-  formatter?(value: TModel[TProp]): string;
-  parser?(value: string): TModel[TProp];
+  model: TModel
+  property: TProp
+  formatter?(value: TModel[TProp]): string
+  parser?(value: string): TModel[TProp]
 }
 
 const BoundInput = observer(
@@ -24,8 +24,8 @@ const BoundInput = observer(
     parser,
     ...props
   }: BoundInputProps<TModel, TProp> & InputProps) => {
-    const format = formatter || ((val) => String(val));
-    const parse = parser || ((val) => (val as any) as TModel[TProp]);
+    const format = formatter || ((val) => String(val))
+    const parse = parser || ((val) => (val as any) as TModel[TProp])
 
     return (
       <input
@@ -34,12 +34,12 @@ const BoundInput = observer(
         name={property as string}
         value={model[property] ? format(model[property]) : ''}
         onChange={(e) => {
-          model[property] = parse(e.target.value);
+          model[property] = parse(e.target.value)
         }}
         {...props}
       />
-    );
+    )
   },
-);
+)
 
-export default BoundInput;
+export default BoundInput

@@ -1,8 +1,8 @@
 /* eslint-disable prettier/prettier */
-import React from 'react';
-import styled from '@emotion/styled';
-import {observer} from 'mobx-react-lite';
-import {useRootStore} from '../infra/mobx';
+import React from 'react'
+import styled from '@emotion/styled'
+import {observer} from 'mobx-react-lite'
+import {useRootStore} from '../infra/mobx'
 
 // const burguer = css`
 //   width: 25px;
@@ -36,7 +36,7 @@ import {useRootStore} from '../infra/mobx';
 //   }
 // }
 export interface SideBarState {
-  open: boolean;
+  open: boolean
 }
 const Burguer = styled('button')<SideBarState>`
   padding: 0px 0px;
@@ -111,10 +111,10 @@ const Burguer = styled('button')<SideBarState>`
       transition: transform 0.275s cubic-bezier(0.68, -0.55, 0.265, 1.55);
     }
   }
-`;
+`
 
 const MenuBurguer: React.FC = observer(() => {
-  const {layoutStore} = useRootStore();
+  const {layoutStore} = useRootStore()
   return (
     <Burguer
       open={layoutStore.sideBar}
@@ -124,7 +124,7 @@ const MenuBurguer: React.FC = observer(() => {
         <span className="hamburger-inner" />
       </span>
     </Burguer>
-  );
-});
+  )
+})
 
-export default MenuBurguer;
+export default MenuBurguer

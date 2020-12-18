@@ -1,6 +1,6 @@
-import React from 'react';
-import {Route} from 'react-router-dom';
-import DashBoard from '../../../pages/dashboard';
+import React from 'react'
+import {Route} from 'react-router-dom'
+import DashBoard from '../../../pages/dashboard'
 
 const AppRoutes = () => {
   return (
@@ -9,11 +9,11 @@ const AppRoutes = () => {
       <Route path="about" element={<> Dash About</>} />
       <Route path="test" element={<>Dash test </>} />
     </Route>
-  );
-};
+  )
+}
 
 const Authenticated = (): JSX.Element => {
-  return <AppRoutes />;
-};
+  return <AppRoutes />
+}
 
-export default Authenticated;
+export default Authenticated

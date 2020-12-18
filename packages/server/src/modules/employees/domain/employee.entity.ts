@@ -29,9 +29,10 @@ export interface EmployeeContainer {
   userProps?: employeeUser;
 }
 export enum Positions {
-  diretor = 'diretor',
-  gerente = 'gerente',
-  tecnico = 'tecnico',
+  diretor = 'Diretor',
+  gerente = 'Gerente',
+  tecnico = 'Tecnico',
+  coordenador = 'Coordenador',
 }
 @Entity({ tableName: 'employees' })
 @Unique({ properties: ['position', 'departament'] })
@@ -97,7 +98,6 @@ export class Employee {
     });
     if (!userProps) return employee;
     const userDomain = await User.build({
-      active: false,
       employee: employee,
       login: userProps.login,
       password: userProps.password

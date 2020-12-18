@@ -1,13 +1,13 @@
-import React from 'react';
-import {useTheme} from '@emotion/react';
-import styled from '@emotion/styled';
-import {observer} from 'mobx-react-lite';
-import Header from '../../shared/components/Header';
-import {useRootStore} from '../../shared/infra/mobx';
-import ASide from '../../shared/components/SideBar';
+import React from 'react'
+import {useTheme} from '@emotion/react'
+import styled from '@emotion/styled'
+import {observer} from 'mobx-react-lite'
+import Header from '../../shared/components/Header'
+import {useRootStore} from '../../shared/infra/mobx'
+import ASide from '../../shared/components/SideBar'
 
 export interface SideBarState {
-  open: boolean;
+  open: boolean
 }
 const DashBoardContainer = styled('div')`
   display: grid;
@@ -15,12 +15,12 @@ const DashBoardContainer = styled('div')`
   grid-template-rows: 70px 1fr;
   height: 100vh;
   width: 100vw;
-`;
+`
 const DashBoardBody = styled('div')<SideBarState>`
   display: grid;
   grid-template-columns: ${({open}) => (open ? '280px' : '60px')} auto;
   overflow: hidden;
-`;
+`
 const DashBoardContent = styled('div')<{theme: any}>`
   background: ${({theme}) => theme.backgroundSecondary || 'lightgrey'};
   overflow-y: auto;
@@ -35,11 +35,11 @@ const DashBoardContent = styled('div')<{theme: any}>`
   p {
     max-width: 600px;
   }
-`;
+`
 
 const DashBoard: React.FC = observer(() => {
-  const {layoutStore} = useRootStore();
-  const theme = useTheme();
+  const {layoutStore} = useRootStore()
+  const theme = useTheme()
   return (
     <DashBoardContainer>
       <Header />
@@ -50,7 +50,7 @@ const DashBoard: React.FC = observer(() => {
         </DashBoardContent>
       </DashBoardBody>
     </DashBoardContainer>
-  );
-});
+  )
+})
 
-export default DashBoard;
+export default DashBoard

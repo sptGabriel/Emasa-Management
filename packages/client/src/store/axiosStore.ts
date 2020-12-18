@@ -1,25 +1,25 @@
 /* eslint-disable no-underscore-dangle */
-import axios, {AxiosInstance} from 'axios';
-import {makeAutoObservable} from 'mobx';
-import {apiConfig} from '../config/api';
-import {RootStore} from './rootStore';
+import axios, {AxiosInstance} from 'axios'
+import {makeAutoObservable} from 'mobx'
+import {apiConfig} from '../config/api'
+import {RootStore} from './rootStore'
 
 export class AxiosStore {
-  axiosInstance: AxiosInstance;
+  axiosInstance: AxiosInstance
 
-  isAlreadyFetchingAccessToken = false;
+  isAlreadyFetchingAccessToken = false
 
-  subscribers: any = [];
+  subscribers: any = []
 
   constructor(public rootStore: RootStore) {
-    makeAutoObservable(this);
-    this.rootStore = rootStore;
-    this.axiosInstance = axios.create({baseURL: apiConfig.baseUrl});
-    this.axiosInstance.defaults.withCredentials = true;
+    makeAutoObservable(this)
+    this.rootStore = rootStore
+    this.axiosInstance = axios.create({baseURL: apiConfig.baseUrl})
+    this.axiosInstance.defaults.withCredentials = true
   }
 
   public get AxiosInstance(): AxiosInstance {
-    return this.axiosInstance;
+    return this.axiosInstance
   }
 
   public get = async (url: string): Promise<any> => {
@@ -32,9 +32,9 @@ export class AxiosStore {
       },
       })
       .catch((err) => {
-        const mute = err;
-      });
-  };
+        const mute = err
+      })
+  }
 
   public post = async (url: string, data?: any): Promise<any> => {
     return this.axiosInstance.post(url, data, {
@@ -43,38 +43,38 @@ export class AxiosStore {
         crossDomain: true,
         'Content-Type': 'application/json',
       },
-    });
-  };
+    })
+  }
 
   public enableInterceptors = async (): Promise<void> => {
     this.axiosInstance.interceptors.response.use(
       (response: any) => {
-        return response;
+        return response
       },
       (error: any) => {
         const {
           config,
           response: {status},
-        } = error;
-        const originalRequest = config;
-        if (status !== 401) throw error;
+        } = error
+        const originalRequest = config
+        if (status !== 401) throw error
         if (
           originalRequest.url !== 'users/me/refresh-token/' &&
           originalRequest.url !== 'users/me/logout/' &&
           !originalRequest._retry
         ) {
-          originalRequest._retry = true;
+          originalRequest._retry = true
           this.rootStore.authStore
             .refreshToken()
             .then(() => axios(originalRequest))
             .catch(() => {
-              this.rootStore.authStore.logout();
-            });
+              this.rootStore.authStore.logout()
+            })
         }
         // Any status codes that falls outside the range of 2xx cause this function to trigger
         // Do something with response error
-        return Promise.reject(error);
+        return Promise.reject(error)
       },
-    );
-  };
+    )
+  }
 }

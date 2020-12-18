@@ -1,19 +1,19 @@
-import CookieUniversal from 'universal-cookie';
-import {RootStore} from './rootStore';
+import CookieUniversal from 'universal-cookie'
+import {RootStore} from './rootStore'
 
 export class CookieStore {
-  private cookie: CookieUniversal;
+  private cookie: CookieUniversal
 
   constructor(private rootStore: RootStore) {
-    this.rootStore = rootStore;
-    this.cookie = new CookieUniversal();
+    this.rootStore = rootStore
+    this.cookie = new CookieUniversal()
   }
 
   public getToken = (key: string): string => {
-    return this.cookie.get(key);
-  };
+    return this.cookie.get(key)
+  }
 
   public removeToken = (key: string): void => {
-    return this.cookie.remove(key);
-  };
+    return this.cookie.remove(key)
+  }
 }
