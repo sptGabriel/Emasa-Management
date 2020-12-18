@@ -35,16 +35,17 @@ export class RootStore {
   public initApi = async (): Promise<void> => {
     this.appState = 'pending'
     try {
-      const {data} = await this.AxiosStore.get('/')
-      if (!data.access_token) {
+      const api = await this.AxiosStore.get('/')
+      if (!api) throw new Error('Server Unavaliable')
+      if (api && !api.data.access_token) {
         return runInAction(() => {
           this.appState = 'fulfilled'
         })
       }
-      const decoded: any = jwtDecode(data.access_token)
+      const decoded: any = jwtDecode(api.data.access_token)
       if (decoded instanceof Error) Promise.reject()
       return runInAction(() => {
-        this.currentUserStore.accessToken = data.access_token
+        this.currentUserStore.accessToken = api.data.access_token
         this.currentUserStore.currentUser = new UserModel({
           ...decoded,
           id: decoded.sub,
@@ -53,9 +54,10 @@ export class RootStore {
         this.authStore.isAuth = true
       })
     } catch (error) {
-      return runInAction(() => {
+      runInAction(() => {
         this.appState = 'error'
       })
+      throw error
     }
   }
 }

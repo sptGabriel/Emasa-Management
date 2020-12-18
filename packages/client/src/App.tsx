@@ -1,10 +1,11 @@
 import React, {lazy, Suspense, useEffect} from 'react'
 import {observer} from 'mobx-react-lite'
 import {ThemeProvider} from '@emotion/react'
+import {ErrorBoundary} from 'react-error-boundary'
 import GlobalReset from './shared/utils/cssReset'
 import {useRootStore} from './shared/infra/mobx'
 import {darkTheme, lightTheme} from './shared/themes'
-import Db from './shared/infra/router'
+import ErrorFallback from './shared/components/ErrorFallBack'
 
 const LoginPage = lazy(
   () => import(/* webpackChunkName: "LoginPage" */ './pages/login'),
@@ -14,8 +15,7 @@ const DashBoard = lazy(
 )
 const AuthApp: React.FC<{
   isAuth: boolean
-  currentUser: any
-}> = observer(({currentUser, isAuth}) => {
+}> = observer(({isAuth}) => {
   return (
     <>
       {isAuth ? (
@@ -45,14 +45,9 @@ const App: React.FC = observer(() => {
   return (
     <ThemeProvider theme={layoutStore.isDarkMode ? darkTheme : lightTheme}>
       <GlobalReset />
-      {appState === 'fulfilled' ? (
-        <AuthApp
-          isAuth={authStore.isAuth}
-          currentUser={currentUserStore.currentUser}
-        />
-      ) : (
-        ''
-      )}
+      <ErrorBoundary FallbackComponent={ErrorFallback}>
+        {appState === 'fulfilled' ? <AuthApp isAuth={authStore.isAuth} /> : ''}
+      </ErrorBoundary>
     </ThemeProvider>
   )
 })

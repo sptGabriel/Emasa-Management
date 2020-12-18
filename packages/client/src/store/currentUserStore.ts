@@ -17,7 +17,7 @@ export class CurrentUserStore {
     makeAutoObservable(this, {pullUser: action})
     this.rootStore = rootStore
   }
-  
+
   public pullUser = async (): Promise<void> => {
     this.loadingUser = true
     try {
