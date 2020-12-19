@@ -27,9 +27,13 @@ export class UserController extends BaseController {
     next: NextFunction,
   ) => {
     try {
-      const ip =  ensure(getRequestIpAddress(request))
-      const id = request.cookies['eid'];
-      const accessToken = request.cookies['@Emasa/Access-Token']
+      const ip = ensure(getRequestIpAddress(request));
+      const id = request.cookies['emsi'];
+      const accessToken = ensure(
+        request.headers.authorization &&
+          request.headers.authorization.split(' ')[1],
+      );
+      console.log(accessToken);
       const result = await container
         .resolve(getCurrentUserCase)
         .execute({ accessToken, ip });

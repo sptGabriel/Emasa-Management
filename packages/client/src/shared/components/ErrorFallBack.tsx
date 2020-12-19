@@ -1,11 +1,13 @@
 import React from 'react'
 import styled from '@emotion/styled'
+import {observer} from 'mobx-react-lite'
+import {useRootStore} from '../infra/mobx'
 import {Container} from './FlexBox'
 import errorSvg from '../../assets/error.svg'
 import errorBg from '../../assets/bgerror.svg'
 
-export const ErrorBoundaryContainer = styled(Container)`
-  min-height: 100vh;
+export const ErrorBoundaryContainer = styled(Container)<{isAuth: boolean}>`
+  min-height: ${({isAuth}) => (isAuth ? 'calc(100vh - 130px)' : '100vh')};
   width: 500px;
   margin: 0 auto;
   border-radius: 8px;
@@ -74,13 +76,14 @@ export const ErrorBoundaryContainer = styled(Container)`
     margin-bottom: 5px;
   }
 `
-const ContainerFluid = styled('div')`
+const ContainerFluid = styled('div')<{isAuth: boolean}>`
   width: 100%;
   margin-right: auto;
   margin-left: auto;
   padding: 0 !important;
-  background: #fff;
-  /* background: url(${errorBg}), #fff;
+  background: ${({theme, isAuth}: any) =>
+    isAuth ? theme.backgroundSecondary : '#fff'};
+  /* background: url(${errorBg}), ${({theme}: any) => theme.background};
   background-repeat: no-repeat;
   background-size: 100% 100%; */
 `
@@ -95,12 +98,18 @@ const Col = styled('div')`
   padding-left: 15px;
 `
 
-const ErrorFallback = ({error, componentStack, resetErrorBoundary}: any) => {
+const ErrorFallback = observer(() => {
+  const {authStore} = useRootStore()
   return (
-    <ContainerFluid>
+    <ContainerFluid isAuth={authStore.isAuth}>
       <Row wrap="true" flexColumn>
         <Col>
-          <ErrorBoundaryContainer align="center" justify="center" flexColumn>
+          <ErrorBoundaryContainer
+            isAuth={authStore.isAuth}
+            align="center"
+            justify="center"
+            flexColumn
+          >
             <img src={errorSvg} alt="error" />
             <h1 className="title_wrong">Something went wrong!</h1>
             <p className="subtittle_wrong">
@@ -123,5 +132,5 @@ const ErrorFallback = ({error, componentStack, resetErrorBoundary}: any) => {
       </Row>
     </ContainerFluid>
   )
-}
+})
 export default ErrorFallback

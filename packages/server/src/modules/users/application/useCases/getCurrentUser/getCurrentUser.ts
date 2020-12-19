@@ -17,13 +17,12 @@ export class getCurrentUserCase
     private userRepository: IUserRepository,
   ) {}
   public execute = async ({
-    ip,accessToken
+    accessToken
   }: currentUserDTO): Promise<Either<AppError, User>> => {
     const decoded = await promisifyDecode(accessToken,jwtConfig.secret)
     if(decoded instanceof Error) throw decoded;
     const user = await this.userRepository.byId(decoded.id);
     if (!user) throw new Error(`This user doesn't exist`);
-    if(ip !== user.ip_address) throw new Error(`Invalid User IP Addres`)
     return right(user);
   };
 }

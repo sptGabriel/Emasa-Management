@@ -4,6 +4,9 @@ import {keyframes} from '@emotion/react'
 import {GiPadlock} from 'react-icons/gi'
 import {FaUser} from 'react-icons/fa'
 import {observer} from 'mobx-react-lite'
+import {ToastContainer, toast} from 'react-toastify'
+import {PuffLoader} from 'react-spinners'
+import {useErrorHandler} from 'react-error-boundary'
 import {Container} from '../../shared/components/FlexBox'
 import logo from '../../assets/logo_emasa.png'
 import one from '../../assets/one.png'
@@ -11,6 +14,7 @@ import satelite from '../../assets/satelite.png'
 import two from '../../assets/two.png'
 import BoundInput from '../../shared/components/Input'
 import {useRootStore} from '../../shared/infra/mobx'
+import 'react-toastify/dist/ReactToastify.css'
 
 export const emasaAnimation = keyframes`
 	2%,64%{
@@ -213,6 +217,8 @@ const StyledInput = styled.div`
   }
 `
 const LoginButton = styled.button`
+  display: flex;
+  justify-content: center;
   &:disabled {
     background: rgb(72, 131, 161);
     color: rgba(255, 255, 255, 0.35);
@@ -279,15 +285,32 @@ const Inputs: React.FunctionComponent = observer(() => {
 })
 
 const Form: React.FunctionComponent = observer(() => {
-  const {authStore} = useRootStore()
+  const {authStore, currentUserStore} = useRootStore()
+  const [loading, setLoading] = useState(false)
   const {password, login} = authStore.loginModel
+  const handleError = useErrorHandler()
+
+  const loginHanlder = (event: any) => {
+    event.preventDefault()
+    setLoading(true)
+    authStore
+      .login()
+      .then(() => {
+        setTimeout(() => {
+          currentUserStore.pullUser()
+          setLoading(false)
+        }, 1000)
+      })
+      .catch((err) => {
+        if (err.response.status === 404) handleError(err)
+        setTimeout(() => {
+          setLoading(false)
+          toast.error(err.response.data.message)
+        }, 1000)
+      })
+  }
   return (
-    <FormContainer
-      onSubmit={(event) => {
-        event.preventDefault()
-        authStore.login()
-      }}
-    >
+    <FormContainer onSubmit={(event) => loginHanlder(event)}>
       <Inputs />
       <LoginButton
         disabled={
@@ -295,11 +318,16 @@ const Form: React.FunctionComponent = observer(() => {
           login.length < 1 ||
           !password ||
           password.length < 1 ||
+          loading ||
           false
         }
         type="submit"
       >
-        Entrar
+        {loading ? (
+          <PuffLoader size={18} color={'#fff'} loading={loading} />
+        ) : (
+          'Entrar'
+        )}
       </LoginButton>
       <a className="forgot" href="#/">
         Esqueci minha senha
@@ -315,6 +343,7 @@ const Form: React.FunctionComponent = observer(() => {
 const Login: React.FC = () => {
   return (
     <ContainerFluid>
+      <ToastContainer />
       <Row wrap="true" flexColumn>
         <Col>
           <LoginCard align="center" justify="center" flexColumn>

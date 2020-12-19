@@ -23,30 +23,13 @@ export class LoginUseCase
     @inject(UserRepository)
     private userRepository: IUserRepository,
   ) {}
-  //setAllowedIPV4
-  //garantAccessTK
-  private validateUser = async ({ login, password }: loginDTO) => {
-    const user = await this.userRepository.byLogin(login);
-    if (!user) throw new Error(`User doesn't exists`);
-    const hasValidToken = user.ref_token
-      ? await promisifyDecode(user.ref_token, jwtConfig.rfSecret)
-      : false;
-    if (!(hasValidToken instanceof Error) && hasValidToken) return user;
-    const renewToken = await JWT.buildRefreshToken(user.employee.id);
-    wrap(user).assign({ ref_token: renewToken.token, active: true });
-    return await this.userRepository.setRFToken(user);
-  };
   //validate acces
   private validateUserAccess = async ({ip,login,password}: loginDTO) => {
     const user = await this.userRepository.byLogin(login);
-    if (!user) throw new Error(`User doesn't exists`);
+    if (!user) throw new Error(`User not found`);
     if (!User.DecryptPassword(password, user.password)) {
       throw new Error(`Incorrect Password`);
     }
-    //const hasValidToken = user.ref_token
-    //? await promisifyDecode(user.ref_token, jwtConfig.rfSecret)
-    //: false;
-    //if (!(hasValidToken instanceof Error) && hasValidToken) return user;
     const renewToken = await JWT.buildRefreshToken(user.employee.id);
     wrap(user).assign({ ref_token: renewToken.token });
     return await this.userRepository.login(user, ip);

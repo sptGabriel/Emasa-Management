@@ -55,9 +55,7 @@ export class AuthController extends BaseController {
     next: NextFunction,
   ) => {
     try {
-      console.log('a')
       const dto: loginDTO = request.body;
-      console.log(dto)
       dto.ip = ensure(getRequestIpAddress(request));
       const result = await container.resolve(LoginUseCase).execute(dto);
       if (result.isLeft()) return next(result.value);

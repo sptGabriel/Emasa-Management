@@ -1,5 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import {BrowserRouter} from 'react-router-dom'
 import App from './App'
 import reportWebVitals from './reportWebVitals'
 import {RootStoreProvider} from './shared/infra/mobx'
@@ -9,11 +10,13 @@ import {RootStoreProvider} from './shared/infra/mobx'
 // }
 
 ReactDOM.render(
-  <React.StrictMode>
-    <RootStoreProvider>
-      <App />
-    </RootStoreProvider>
-  </React.StrictMode>,
+  <BrowserRouter>
+    <React.StrictMode>
+      <RootStoreProvider>
+        <App />
+      </RootStoreProvider>
+    </React.StrictMode>
+  </BrowserRouter>,
   document.getElementById('emasa'),
 )
 

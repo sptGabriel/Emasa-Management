@@ -1,19 +1,54 @@
-import React from 'react'
-import {Route} from 'react-router-dom'
+import {observer} from 'mobx-react-lite'
+import React, {useEffect} from 'react'
+import {useErrorHandler} from 'react-error-boundary'
+import {Route, Routes, Navigate} from 'react-router-dom'
 import DashBoard from '../../../pages/dashboard'
+import Login from '../../../pages/login'
+import ErrorFallback from '../../components/ErrorFallBack'
+import {useRootStore} from '../mobx'
+import {PrivateRoute} from './privateRoute'
 
-const AppRoutes = () => {
+const DashRoutes: React.FC<{isAuth: boolean}> = observer(({isAuth}) => {
   return (
-    <Route path="dashboard" element={<DashBoard />}>
-      <Route path="/" element={<> Dash home</>} />
-      <Route path="about" element={<> Dash About</>} />
-      <Route path="test" element={<>Dash test </>} />
-    </Route>
+    <Routes>
+      <PrivateRoute
+        redirectTo="/"
+        path="/"
+        component={DashBoard}
+        isAuth={isAuth}
+      >
+        <Route path="/" element={<div> Dash home</div>} />
+        <Route path="about" element={<div> Dash About</div>} />
+        <Route path="test" element={<div>Dash test </div>} />
+        <Route path="*" element={<ErrorFallback />} />
+      </PrivateRoute>
+    </Routes>
   )
-}
-
-const Authenticated = (): JSX.Element => {
-  return <AppRoutes />
-}
+})
+const AppRoutes: React.FC<{isAuth: boolean}> = observer(({isAuth}) => {
+  return (
+    <>
+      {isAuth ? (
+        <DashRoutes isAuth={isAuth} />
+      ) : (
+        <Routes>
+          <Route path="/" element={<Login />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      )}
+    </>
+  )
+})
+const Authenticated = observer(() => {
+  const {appState, initApi, authStore} = useRootStore()
+  //  useEffect(() => {
+  //  if (appState !== 'fulfilled') initApi().catch((error) => handleError(error))
+  //}, [])
+  return (
+    <>
+      {appState === 'fulfilled' ? <AppRoutes isAuth={authStore.isAuth} /> : ''}
+    </>
+  )
+})
 
 export default Authenticated

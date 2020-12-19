@@ -21,14 +21,21 @@ export class CurrentUserStore {
   public pullUser = async (): Promise<void> => {
     this.loadingUser = true
     try {
-      if (!this.accessToken) return this.rootStore.authStore.logout()
-      return this.rootStore.AxiosStore.get('/users/me').then((res) => {
-        this.currentUser = new UserModel(res.data)
+      if (!this.accessToken) return
+      const user = await this.rootStore.AxiosStore.get('/users/me')
+      return runInAction(() => {
+        this.currentUser = new UserModel(user.data)
+        if (this.currentUser) this.rootStore.authStore.isAuth = true
       })
     } catch (error) {
-      return this.rootStore.authStore.logout()
+      runInAction(() => {
+        this.rootStore.authStore.isAuth = false
+      })
+      throw error
     } finally {
-      this.loadingUser = false
+      runInAction(() => {
+        this.loadingUser = false
+      })
     }
   }
 }
