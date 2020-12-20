@@ -22,26 +22,26 @@ export const Tags: ITag[] = [
   {
     Title: 'DashBoard',
     Name: 'Default',
-    Link: '../dashboards',
+    Link: '../about',
     Icon: AiOutlineDashboard,
     DropdownItems: null,
   },
   {
     Name: 'Analytic',
-    Link: '../dashboards',
+    Link: '../test',
     Icon: AiOutlineLineChart,
     DropdownItems: null,
   },
   {
     Name: 'Inventory',
-    Link: '../dashboards',
+    Link: '../dasdasdas',
     Icon: BiStoreAlt,
     DropdownItems: null,
   },
   {
     Title: 'Pages',
     Name: 'Employees',
-    Link: '../dashboards',
+    Link: '../dasas',
     Icon: TiGroupOutline,
     DropdownItems: [
       {Name: 'Employee List', Link: '/eloBost'},

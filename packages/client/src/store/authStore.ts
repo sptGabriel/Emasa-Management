@@ -60,6 +60,7 @@ export class AuthStore {
     return this.rootStore.AxiosStore.get('/users/me/logout').finally(() => {
       this.isAuth = false
       this.rootStore.currentUserStore.currentUser = null
+      this.rootStore.currentUserStore.accessToken = null
       this.rootStore.cookieStore.removeToken('emsi')
       this.rootStore.cookieStore.removeToken('@Emasa/Refresh-Token')
     })

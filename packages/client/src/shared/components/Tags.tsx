@@ -4,9 +4,10 @@ import {observer} from 'mobx-react-lite'
 import {IconType} from 'react-icons'
 import {FaGhost} from 'react-icons/fa'
 import {VscChevronDown, VscChevronUp} from 'react-icons/vsc'
+import {Navigate, NavLink} from 'react-router-dom'
 import {useRootStore} from '../infra/mobx'
 import {ITag, IDropdownItems, Tags} from '../utils/MenuTags'
-import {generateKey} from '../utils/generateKeys'
+
 /* Styles */
 type IMenu = {
   open: boolean
@@ -221,6 +222,69 @@ const ListItem = styled.li<IListItem>`
   &:hover ${ClosedStyled} {
     display: block;
   }
+  .tag-wrapper {
+    padding: ${({open}) =>
+      open ? '8px 1rem 8px 1.2rem' : '8px 1rem 8px 1.2rem'};
+    display: flex;
+    transition: all 0.5s cubic-bezier(0, 1, 0, 1);
+    justify-content: ${({open}) => (open ? 'space-between' : 'center')};
+    align-items: center;
+    position: relative;
+    border-radius: 10px;
+    background: ${({active, open, theme}: any) =>
+      active && open ? theme.sideBar.menuTag.background : ''};
+    transition: all 0.5s ease;
+    padding: 12px 10px;
+    :hover {
+      background: ${({open, theme}: any) =>
+        open ? theme.sideBar.menuTag.hoveredBackground : ''};
+      .menu_txt {
+        svg {
+          fill: ${({theme}: any) => theme.sideBar.menuTag.activeText};
+          stroke: ${({theme}: any) => theme.sideBar.menuTag.activeText};
+          transition: all 0.3s ease;
+        }
+        span {
+          color: ${({theme}: any) => theme.sideBar.menuTag.activeText};
+        }
+      }
+    }
+    .menu_txt {
+      display: flex;
+      align-items: center;
+      span {
+        color: ${({active, theme}: any) =>
+          active
+            ? theme.sideBar.menuTag.activeText
+            : theme.sideBar.menuTag.text};
+        margin-bottom: -2px;
+      }
+      svg {
+        fill: ${({active, theme}: any) =>
+          active
+            ? theme.sideBar.menuTag.activeText
+            : theme.sideBar.menuTag.text};
+        margin-right: ${({open}) => (open ? '10px' : '0')};
+        transition: all 0.5s cubic-bezier(0, 1, 0, 1);
+      }
+    }
+    & .icon-li {
+      margin-right: 10px;
+    }
+    & .down-up_svg,
+    .li-name {
+      display: ${({open}) => (open ? 'space-between' : 'none')};
+      color: ${({active, theme}: any) =>
+        active ? theme.sideBar.menuTag.activeText : theme.sideBar.menuTag.text};
+      letter-spacing: 0.7px;
+      font-family: Roboto;
+      text-transform: capitalize;
+      font-weight: 500;
+    }
+    & .svg-arrow {
+      color: ${({theme}: any) => (theme.type === 'dark' ? '#fff' : '#222')};
+    }
+  }
 `
 /* Styles */
 export type TSideBar = {
@@ -273,18 +337,14 @@ const TagList: React.FC<ITagList> = observer(
         open={open}
         isDropDown={!!tag.DropdownItems}
         active={tag.Active}
+        onClick={tag.Active !== undefined ? clickHandler(tag) : undefined}
       >
         {sideBarStatus === true ? (
-          <ListWrap
-            open={sideBarStatus}
-            onClick={tag.Active !== undefined ? clickHandler(tag) : undefined}
-            tagActive={tag.Active}
-            isDropDown={!!tag.DropdownItems}
-          >
-            <a href="#/">
+          <NavLink className="tag-wrapper" to={tag.Link}>
+            <div className="menu_txt">
               <tag.Icon size={22} />
               <span className="li-name">{tag.Name}</span>
-            </a>
+            </div>
             {tag.DropdownItems ? (
               <span className="svg-arrow">
                 {tag.Active === true ? <VscChevronUp /> : <VscChevronDown />}
@@ -292,14 +352,14 @@ const TagList: React.FC<ITagList> = observer(
             ) : (
               ''
             )}
-          </ListWrap>
+          </NavLink>
         ) : (
-          <ListWrap open={sideBarStatus}>
-            <a href="#/">
+          <NavLink className="tag-wrapper" to={tag.Link}>
+            <div className="menu_txt">
               <tag.Icon size={24} />
               <span className="li-name">{tag.Name}</span>
-            </a>
-          </ListWrap>
+            </div>
+          </NavLink>
         )}
         {tag.DropdownItems ? (
           <Drop

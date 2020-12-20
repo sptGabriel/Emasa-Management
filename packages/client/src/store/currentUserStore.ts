@@ -11,7 +11,7 @@ export class CurrentUserStore {
 
   updatingUserErrors = false
 
-  accessToken!: string
+  accessToken: string | null = null
 
   constructor(public rootStore: RootStore) {
     makeAutoObservable(this, {pullUser: action})

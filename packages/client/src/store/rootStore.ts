@@ -30,20 +30,23 @@ export class RootStore {
     this.currentUserStore = new CurrentUserStore(this)
     this.authStore = new AuthStore(this)
     this.layoutStore = new LayoutUIStore(this)
-    //  this.initApi()
+    this.initApi()
   }
 
   public initApi = async (): Promise<void> => {
     this.appState = 'pending'
     try {
       const response = await this.AxiosStore.get('/')
-      if (!response) return Promise.reject(new Error('Service Unavaliable'))
+      if (!response) throw Error('Service Unavaliable')
       return runInAction(async () => {
+        if(!response.data.access_token) {
+          this.authStore.isAuth = false;
+          this.appState = 'fulfilled'
+        }
         if (response.data.access_token) {
           this.currentUserStore.accessToken = response.data.access_token
-          //  await this.currentUserStore.pullUser()
+          this.appState = 'fulfilled'
         }
-        this.appState = 'fulfilled'
       })
     } catch (error) {
       runInAction(() => {

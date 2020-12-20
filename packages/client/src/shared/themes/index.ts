@@ -66,7 +66,7 @@ export const darkTheme: ITheme = {
   sideBar: {
     tittleTag: '#fff',
     menuTag: {
-      background: '#2E2B3F;',
+      background: '#221F2E',
       hoveredBackground: '#221F2E',
       text: 'rgb(168, 168, 179)',
       activeText: '#fff',

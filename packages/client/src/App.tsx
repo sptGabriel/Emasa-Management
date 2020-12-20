@@ -6,7 +6,7 @@ import GlobalReset from './shared/utils/cssReset'
 import {useRootStore} from './shared/infra/mobx'
 import {darkTheme, lightTheme} from './shared/themes'
 import ErrorFallback from './shared/components/ErrorFallBack'
-import AppRoutes from './shared/infra/router/index'
+import ApplicationRouter from './shared/infra/router/index'
 //  const AuthApp: React.FC = observer(() => {
 //  const {appState, initApi, authStore} = useRootStore()
 //  const handleError = useErrorHandler()
@@ -33,12 +33,21 @@ const App: React.FC = observer(() => {
   return (
     <ThemeProvider theme={layoutStore.isDarkMode ? darkTheme : lightTheme}>
       <GlobalReset />
-      <ErrorBoundary FallbackComponent={ErrorFallback}>
-        <AppRoutes />
-      </ErrorBoundary>
+      <ApplicationRouter />
     </ThemeProvider>
   )
 })
 
 export default App
-//  {appState === 'fulfilled' ? <AuthApp isAuth={authStore.isAuth} /> : 'b'}
+
+//  const App: React.FC = observer(() => {
+//  const {layoutStore} = useRootStore()
+//  return (
+//    <ThemeProvider theme={layoutStore.isDarkMode ? darkTheme : lightTheme}>
+//      <GlobalReset />
+//      <ErrorBoundary FallbackComponent={ErrorFallback}>
+//        <ApplicationRouter />
+//      </ErrorBoundary>
+//    </ThemeProvider>
+//  )
+//  })

@@ -293,21 +293,19 @@ const Form: React.FunctionComponent = observer(() => {
   const loginHanlder = (event: any) => {
     event.preventDefault()
     setLoading(true)
-    authStore
-      .login()
-      .then(() => {
-        setTimeout(() => {
+    setTimeout(() => {
+      authStore
+        .login()
+        .then(() => {
           currentUserStore.pullUser()
           setLoading(false)
-        }, 1000)
-      })
-      .catch((err) => {
-        if (err.response.status === 404) handleError(err)
-        setTimeout(() => {
+        })
+        .catch((err) => {
+          if (err.response.status === 404) handleError(err)
           setLoading(false)
           toast.error(err.response.data.message)
-        }, 1000)
-      })
+        })
+    }, 1000)
   }
   return (
     <FormContainer onSubmit={(event) => loginHanlder(event)}>
