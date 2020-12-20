@@ -30,7 +30,6 @@ export class RootStore {
     this.currentUserStore = new CurrentUserStore(this)
     this.authStore = new AuthStore(this)
     this.layoutStore = new LayoutUIStore(this)
-    this.initApi()
   }
 
   public initApi = async (): Promise<void> => {

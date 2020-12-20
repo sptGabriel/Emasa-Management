@@ -1,5 +1,5 @@
 import {observer} from 'mobx-react-lite'
-import React, {useEffect, useState} from 'react'
+import React, {Suspense, useEffect, useState} from 'react'
 import {ErrorBoundary, useErrorHandler} from 'react-error-boundary'
 import {Route, Routes, Navigate} from 'react-router-dom'
 import DashBoard from '../../../pages/dashboard'
@@ -26,6 +26,14 @@ const DashRoutes: React.FC<{isAuth: boolean}> = observer(({isAuth}) => {
     </Routes>
   )
 })
+const LoginRoutes: React.FC = observer(() => {
+  return (
+    <Routes>
+      <Route path="/" element={<Login />} />
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
+  )
+})
 const AppRoutes: React.FC = observer(() => {
   const {authStore, currentUserStore} = useRootStore()
   const [loadingUser, setLoading] = useState(
@@ -41,7 +49,7 @@ const AppRoutes: React.FC = observer(() => {
           .catch((error) => handleError(error))
       }, 2000)
     }
-  }, [currentUserStore])
+  }, [])
   return (
     <>
       {loadingUser ? (
@@ -57,42 +65,22 @@ const AppRoutes: React.FC = observer(() => {
           <ESpinner />
         </div>
       ) : !(authStore.isAuth && currentUserStore.currentUser) ? (
-        <Routes>
-          <Route path="/" element={<Login />} />
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
+        <LoginRoutes />
       ) : (
         <DashRoutes isAuth={authStore.isAuth} />
       )}
     </>
-    //  <>
-    //  {authStore.isAuth ? (
-    //    <DashRoutes isAuth={authStore.isAuth} />
-    //  ) : (
-    //    <Routes>
-    //      <Route path="/" element={<Login />} />
-    //      <Route path="*" element={<Navigate to="/" replace />} />
-    //    </Routes>
-    //  )}
-    //  </>
   )
 })
-const ApplicationRouter = observer(() => {
-  const {appState} = useRootStore()
-  return (
-    <>
-      {appState === 'error' ? (
-        <ErrorFallback />
-      ) : appState === 'fulfilled' ? (
-        <ErrorBoundary FallbackComponent={ErrorFallback}>
-          <AppRoutes />
-        </ErrorBoundary>
-      ) : (
-        ''
-      )}
-    </>
-  )
-})
+const ApplicationRouter: React.FC<{appState: string}> = observer(
+  ({appState}) => {
+    return (
+      <Suspense fallback={<h1>loading...</h1>}>
+        {appState === 'fulfilled' && <AppRoutes />}
+      </Suspense>
+    )
+  },
+)
 
 export default ApplicationRouter
 

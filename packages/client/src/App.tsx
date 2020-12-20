@@ -1,7 +1,7 @@
-import React from 'react'
+import React, {Suspense, useEffect} from 'react'
 import {observer} from 'mobx-react-lite'
 import {ThemeProvider} from '@emotion/react'
-import {ErrorBoundary} from 'react-error-boundary'
+import {ErrorBoundary, useErrorHandler} from 'react-error-boundary'
 import GlobalReset from './shared/utils/cssReset'
 import {useRootStore} from './shared/infra/mobx'
 import {darkTheme, lightTheme} from './shared/themes'
@@ -27,13 +27,16 @@ import ApplicationRouter from './shared/infra/router/index'
 //    </>
 //  )
 //  })
-
 const App: React.FC = observer(() => {
-  const {layoutStore} = useRootStore()
+  const {layoutStore, initApi, appState} = useRootStore()
+  const handleError = useErrorHandler()
+  useEffect(() => {
+    initApi()
+  }, [])
   return (
     <ThemeProvider theme={layoutStore.isDarkMode ? darkTheme : lightTheme}>
       <GlobalReset />
-      <ApplicationRouter />
+      <ApplicationRouter appState={appState} />
     </ThemeProvider>
   )
 })

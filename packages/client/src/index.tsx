@@ -1,8 +1,10 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import {ErrorBoundary} from 'react-error-boundary'
 import {BrowserRouter} from 'react-router-dom'
 import App from './App'
 import reportWebVitals from './reportWebVitals'
+import ErrorFallback from './shared/components/ErrorFallBack'
 import {RootStoreProvider} from './shared/infra/mobx'
 
 // if (process.env.NODE_ENV === 'development') {
@@ -13,7 +15,9 @@ ReactDOM.render(
   <BrowserRouter>
     <React.StrictMode>
       <RootStoreProvider>
-        <App />
+        <ErrorBoundary FallbackComponent={ErrorFallback}>
+          <App />
+        </ErrorBoundary>
       </RootStoreProvider>
     </React.StrictMode>
   </BrowserRouter>,
