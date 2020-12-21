@@ -1,23 +1,31 @@
-import { observable } from 'mobx';
+/* eslint-disable camelcase */
+import {makeAutoObservable} from 'mobx'
+import {LoginModel} from './loginModel'
 
-type TUser = {
-  id: string;
-  name: string;
-  departament_id: string;
-  matricula: string;
-  position: string;
-};
+export type TUser = {
+  id: string
+  name: string
+  departament_id: string
+  matricula: string
+  position: string
+}
 export class UserModel implements TUser {
-  @observable id: string;
-  @observable name: string;
-  @observable departament_id: string;
-  @observable matricula: string;
-  @observable position: string;
+  id: string
+
+  name: string
+
+  departament_id: string
+
+  matricula: string
+
+  position: string
+
   constructor(props: TUser) {
-    this.id = props.id;
-    this.name = props.name;
-    this.departament_id = props.departament_id;
-    this.matricula = props.matricula;
-    this.position = props.position;
+    makeAutoObservable(this)
+    this.id = props.id
+    this.name = props.name
+    this.departament_id = props.departament_id
+    this.matricula = props.matricula
+    this.position = props.position
   }
 }

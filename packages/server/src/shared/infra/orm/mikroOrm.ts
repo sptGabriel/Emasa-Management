@@ -28,7 +28,6 @@ export class MikroOrmClient implements IDatabaseORM {
   public start = async () => {
     try {
       this.connection = await MikroORM.init(this.options);
-      container.registerInstance('Connection', this.getConnection());
       container.registerInstance<EntityManager>(
         'EntityManager',
         this.getEntityManager(),

@@ -41,20 +41,111 @@ export class UserRepository implements IUserRepository {
     return user;
   };
   public setRFToken = async (user: User): Promise<User> => {
-    await this.em
-      .createQueryBuilder(User)
-      .update({ ref_token: user.ref_token, updated_at: new Date() })
-      .where({
-        employee: { id: user.employee.id },
-      })
-      .execute();
+    await this.em.persistAndFlush(user);
+    // await this.em
+    //   .createQueryBuilder(User)
+    //   .update({ ref_token: user.ref_token, active: user.active, updated_at: new Date() })
+    //   .where({
+    //     employee: { id: user.employee.id },
+    //   })
+    //   .execute();
     return user;
+  };
+  public login = async (user: User, ip: string): Promise<User> => {
+    const em = await this.em.fork();
+    await em.begin();
+    try {
+      const IPV4QB = em.createQueryBuilder('ipv4_access_status');
+      const UserQB = em.createQueryBuilder(User);
+      const LastAccessQB = em.createQueryBuilder('lastaccess_users');
+      const isLogged: any = await IPV4QB.getKnex()
+        .select('*')
+        .where({ ip_address: ip, employee_id: user.employee.id })
+        .returning('*')
+        .then(row => row[0]);
+      if (isLogged && isLogged.active) {
+        throw new Error(`This user has been logged`);
+      }
+      if (!isLogged) {
+        await IPV4QB.insert({
+          employee_id: user.employee.id,
+          ip_address: ip,
+          active: true,
+          created_at: new Date(),
+          updated_at: new Date(),
+        }).execute();
+      }
+      if (isLogged && !isLogged.active) {
+        await IPV4QB.update({ active: true, updated_at: new Date() })
+          .where({
+            employee_id: user.employee.id,
+            ip_address: ip,
+          })
+          .execute();
+      }
+      await UserQB.update({
+        ref_token: user.ref_token,
+        updated_at: new Date(),
+      })
+        .where({
+          employee: { id: user.employee.id },
+        })
+        .execute();
+      await LastAccessQB.insert({
+        employee_id: user.employee.id,
+        ip_address: ip,
+        accessed_at: new Date(),
+      }).execute();
+      await em.commit();
+      return user;
+    } catch (e) {
+      console.log(e, 'error');
+      await em.rollback();
+      throw e;
+    }
+    // await this.em
+    //   .createQueryBuilder(User)
+    //   .update({ ref_token: user.ref_token, active: user.active, updated_at: new Date() })
+    //   .where({
+    //     employee: { id: user.employee.id },
+    //   })
+    //   .execute();
+  };
+  public logout = async (user: User, ip: string): Promise<User> => {
+    const em = await this.em.fork();
+    await em.begin();
+    try {
+      const UserQB = em.createQueryBuilder(User);
+      const IPV4QB = em.createQueryBuilder('ipv4_access_status');
+      const isLogged: any = await IPV4QB.getKnex()
+        .select('*')
+        .where({ ip_address: ip, employee_id: user.employee.id })
+        .returning('*')
+        .then(row => row[0]);
+      if(!isLogged) throw new Error(`Invalid Credentials`);
+      if (isLogged && !isLogged.active)
+        throw new Error(`This already logged out on this device`);
+      await UserQB.update({ ref_token: null })
+        .where({
+          employee: { id: user.employee.id },
+        })
+        .execute();
+      await IPV4QB.update({ active: false, updated_at: new Date() }).execute();
+      await em.commit();
+      return user;
+    } catch (e) {
+      console.log(e, 'error');
+      await em.rollback();
+      throw e;
+    }
   };
   public all = async (pagination: Pagination): Promise<User[]> => {
     return await this.em.find(User, {});
   };
   public byId = async (id: string): Promise<User | undefined> => {
-    const user = await this.em.findOne(User, { employee: { id } }, ['employee']);
+    const user = await this.em.findOne(User, { employee: { id } }, [
+      'employee',
+    ]);
     if (!user) return;
     return user;
   };

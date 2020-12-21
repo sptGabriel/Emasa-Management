@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import authConfig from '@config/jwt.config';
-import { decode, promisifyDecode,isTokenNOTExpired } from '@shared/helpers/jwt';
+import { promisifyDecode } from '@shared/helpers/jwt';
 export const jwtMiddleware = (
   error: any,
   req: Request,

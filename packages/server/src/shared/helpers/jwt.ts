@@ -1,5 +1,9 @@
-import { Secret, sign, verify, VerifyErrors } from 'jsonwebtoken';
+import { JsonWebTokenError, Secret, sign, TokenExpiredError, verify, VerifyErrors } from 'jsonwebtoken';
+import instance from 'tsyringe/dist/typings/dependency-container';
 const now = Date.now().valueOf() / 1000;
+export function isExpiredTokenERROR(error:Error) {
+  return error instanceof TokenExpiredError
+}
 export const encode = (args: any, secret: Secret, options: object) => {
   return sign(args, secret, options) as any;
 };
@@ -33,3 +37,8 @@ export const isTokenNOTExpired = (decodedToken: any) => {
   }
   return true;
 };
+
+export async function isValidOrExpiredToken (error: Error){
+  if(!isExpiredTokenERROR(error) || error instanceof Error) return false; 
+  return true;
+} 

@@ -1,61 +1,74 @@
-import { action, observable, reaction } from 'mobx';
-import { UserModel } from '../models/userModel';
-import { RootStore } from './rootStore';
-import { apiSecret } from '../config/api';
-import { JWTType } from '../models/JWTModel';
-import { verify } from 'jsonwebtoken';
-import { BaseAPI } from '../shared/infra/services/baseApi';
-import CookieUniversal from 'universal-cookie';
-import { APIResponse } from '../shared/infra/services/APIResponse';
-import { right } from '../shared/core/either';
-const Cookie = new CookieUniversal();
-export class AuthStore extends BaseAPI {
-  @observable token = Cookie.get('Access-Token');
-  @observable isAuth = false;
-  @observable inProgress = false;
-  @observable errors = undefined;
+import jwtDecode from 'jwt-decode'
+import {action, configure, makeObservable, runInAction} from 'mobx'
+import {LoginModel} from '../models/loginModel'
+import {UserModel} from '../models/userModel'
+import {RootStore} from './rootStore'
+
+configure({
+  enforceActions: 'never',
+})
+export class AuthStore {
+  isAuth = false
+
+  errors = undefined
+
+  rootStore: RootStore
+
+  loginModel = new LoginModel()
+
   constructor(rootStore: RootStore) {
-    super(rootStore);
-    reaction(
-      () => this.isAuth,
-      (value) => {
-        if (!value) return this.remove();
-        const decoded: any = verify(this.token, apiSecret);
-        if (!decoded) return this.remove();
-      }
-    );
-  }
-  @action async login(
-    username: string,
-    password: string
-  ): Promise<APIResponse<UserModel>> {
-    this.inProgress = true;
-    this.errors = undefined;
-    const response: UserModel = await this.post('/users/login', {
-      username,
-      password
+    makeObservable(this, {
+      login: action,
+      logout: action,
+      isAuth: true,
+      errors: true,
+      rootStore: true,
+      loginModel: true,
     })
-      .then((result) => this.rootStore.userStore.pullUser())
-      .catch(
-        action((err) => {
-          this.errors =
-            err.response && err.response.body && err.response.body.errors;
-          throw err;
-        })
+    this.rootStore = rootStore
+  }
+
+  public refreshToken = async (): Promise<void> => {
+    try {
+      await this.rootStore.AxiosStore.get('/users/me/refresh-token').then(
+        (res) => {
+          this.rootStore.currentUserStore.accessToken = res.data.access_token
+          this.rootStore.currentUserStore.pullUser()
+        },
       )
-      .finally(
-        action(() => {
-          this.inProgress = false;
-        })
-      );
-    return right(response);
+      this.isAuth = true
+    } catch (error) {
+      const mute = error
+      runInAction(() => {
+        this.isAuth = false
+      })
+    }
   }
-  @action logout(): Promise<void> {
-    this.remove();
-    return Promise.resolve();
+
+  public login = async (): Promise<void> => {
+    return this.rootStore.AxiosStore.post('/login', {
+      login: this.loginModel.login,
+      password: this.loginModel.password,
+    }).then((response) =>
+      runInAction(() => {
+        console.log(response, 'response')
+        this.rootStore.authStore.isAuth = true
+        this.rootStore.currentUserStore.accessToken = response.data.token
+        this.rootStore.currentUserStore.currentUser = new UserModel(
+          response.data.user,
+        )
+      }),
+    )
   }
-  @action remove(): void {
-    Cookie.remove('Access-Token');
-    this.rootStore.userStore.currentUser = null;
+
+  public logout = async (): Promise<void> => {
+    console.log('on logout')
+    return this.rootStore.AxiosStore.get('/users/me/logout').finally(() => {
+      this.isAuth = false
+      this.rootStore.currentUserStore.currentUser = null
+      this.rootStore.currentUserStore.accessToken = null
+      this.rootStore.cookieStore.removeToken('emsi')
+      this.rootStore.cookieStore.removeToken('@Emasa/Refresh-Token')
+    })
   }
 }

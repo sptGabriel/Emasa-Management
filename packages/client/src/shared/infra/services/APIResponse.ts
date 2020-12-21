@@ -1,4 +1,4 @@
-import { APIErrorMessage } from './APIErrorMessage';
-import { Either } from '../../core/either';
+import {APIErrorMessage} from './APIErrorMessage'
+import {Either} from '../../core/either'
 
-export type APIResponse<T> = Either<APIErrorMessage, T>;
+export type APIResponse<T> = Either<APIErrorMessage, T>

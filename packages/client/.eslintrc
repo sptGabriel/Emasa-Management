@@ -1,57 +1,96 @@
 {
-  "plugins": ["@typescript-eslint", "react-hooks"],
+  "env": {
+    "browser": true,
+    "es6": true
+  },
   "extends": [
     "plugin:react/recommended",
+    "airbnb",
     "plugin:@typescript-eslint/recommended",
-    "plugin:react-hooks/recommended",
     "prettier/@typescript-eslint",
     "plugin:prettier/recommended"
   ],
+  "globals": {
+    "Atomics": "readonly",
+    "SharedArrayBuffer": "readonly"
+  },
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
-    "project": "./tsconfig.json"
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": 2018,
+    "sourceType": "module"
   },
-  "settings": {
-    "import/resolver": {
-      "typescript": {
-        "alwaysTryTypes": true
-      }
-    }
-  },
+  "plugins": [
+    "react",
+    "react-hooks",
+    "@typescript-eslint",
+    "prettier"
+  ],
   "rules": {
     "prettier/prettier": [
       "error",
-      {"singleQuote": true, "bracketSpacing": true,"trailingComma": "none","endOfLine": "auto"}
-    ],
-    "@typescript-eslint/member-delimiter-style": "off",
-    "@typescript-eslint/naming-convention": [
-      "error",
       {
-        "selector": "interface",
-        "format": ["PascalCase"],
-        "custom": {
-          "regex": "^I[A-Z]",
-          "match": true
-        }
+        "endOfLine": "auto"
       }
     ],
-    "@typescript-eslint/explicit-function-return-type": [
-      "error",
-      {
-        "allowExpressions": true,
-        "allowTypedFunctionExpressions": true,
-        "allowHigherOrderFunctions": true
-      }
-    ],
+    "@typescript-eslint/explicit-module-boundary-types": "off",
     "@typescript-eslint/no-explicit-any": "off",
-    "react/jsx-key": "error",
-    "react/jsx-props-no-spreading": "off",
+    "react-hooks/rules-of-hooks": "error",
+    "no-empty-function": "off",
+    "@typescript-eslint/no-empty-function": ["off"],
+    "no-use-before-define": [0],
+    "@typescript-eslint/no-use-before-define": [1],
+    "react-hooks/exhaustive-deps": [0],
+    "react/jsx-filename-extension": [
+      1,
+      {
+        "extensions": [
+          ".tsx"
+        ]
+      }
+    ],
+    "react/jsx-curly-newline": [0],
+    "react/forbid-prop-types": [0],
+    "react/no-unused-state": [0],
+    "no-nested-ternary": [0],
+    "react/static-property-placement": [0],
+    "react/state-in-constructor": [0],
+    "react/no-unknown-property": [0],
+    "no-unneeded-ternary": [0],
+    "react/jsx-curly-brace-presence": [
+      "warn",
+      {
+        "props": "never",
+        "children": "never"
+      }
+    ],
+    "react/no-array-index-key": [0],
+    "react/jsx-wrap-multilines": [0],
+    "no-shadow": [0],
+    "consistent-return": [0],
+    "lines-between-class-members": [
+      "error",
+      "always",
+      { "exceptAfterSingleLine": true }
+    ],
     "import/prefer-default-export": "off",
-    "react/jsx-boolean-value": "off",
-    "react/prop-types": "off",
-    "react/no-unescaped-entities": "off",
-    "react/jsx-one-expression-per-line": "off",
-    "react/jsx-wrap-multilines": "off",
-    "react/destructuring-assignment": "off"
+    "react/jsx-props-no-spreading": "off",
+    "no-param-reassign": [2, { "props": false }],
+    "jsx-a11y/label-has-associated-control": "off",
+    "import/extensions": [
+      "error",
+      "ignorePackages",
+      {
+        "ts": "never",
+        "tsx": "never"
+      }
+    ]
+  },
+  "settings": {
+    "import/resolver": {
+      "typescript": {}
+    }
   }
-  }
+}

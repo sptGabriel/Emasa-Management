@@ -5,8 +5,8 @@ import { inject, injectable } from 'tsyringe';
 import { LogoutDTO } from './logoutDTO';
 import { UserRepository } from '@modules/users/persistence/userRepositoryImpl';
 import { IUserRepository } from '@modules/users/persistence/userRepository';
-import { wrap } from '@mikro-orm/core';
-import { JWT } from '@modules/users/domain/jwt';
+import { promisifyDecode } from '@shared/helpers/jwt';
+import jwtConfig from '@config/jwt.config';
 @injectable()
 export class LogoutUseCase
   implements IUseCase<LogoutDTO, Promise<Either<AppError, any>>> {
@@ -16,16 +16,15 @@ export class LogoutUseCase
   ) {}
   public execute = async ({
     id,
-    ip
+    ip,
+    refreshToken      
   }: LogoutDTO): Promise<Either<AppError, any>> => {
+    if(!id || !refreshToken) throw new Error(`Invalid credentials`)
+    const decoded:any = await promisifyDecode(refreshToken, jwtConfig.rfSecret);
     const user = await this.userRepository.byId(id);
     if (!user) throw new Error(`This user doesn't exists`);
-    if(user.ip_address !== ip) throw new Error(`Invalid data`)
-    if (user.ref_token === null) {
-      throw new Error(`This user is already logged out`);
-    }
-    wrap(user).assign({ ref_token: null, active:false });
-    await this.userRepository.setRFToken(user);
+    if(decoded.sub !== user.employee.id) throw new Error(`Invalid credentials`);
+    await this.userRepository.logout(user, ip);
     // await this.userRepository.getClient().SADD('token', token);
     return right({ status: 200, data: 'You are logged out' });
   };

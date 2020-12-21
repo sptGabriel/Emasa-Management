@@ -3,6 +3,9 @@ import { NextFunction, Request, Response } from 'express';
 import { container, singleton } from 'tsyringe';
 import { newUserDTO } from '../application/useCases/newUser/newUser_DTO';
 import { NewUserUseCase } from '../application/useCases/newUser/addNewUser';
+import { getRequestIpAddress } from '@utils/getIpAddres';
+import { ensure } from '@utils/ensure';
+import { getCurrentUserCase } from '../application/useCases/getCurrentUser/getCurrentUser';
 @singleton()
 export class UserController extends BaseController {
   constructor() {
@@ -12,10 +15,33 @@ export class UserController extends BaseController {
   }
   protected initRouter() {
     this.router.get(`${this.path}`, this.index);
+    this.router.get(`${this.path}/me`, this.Me);
     this.router.post(`${this.path}/add`, this.addUser);
   }
   private index = async (arg0: string, index: any) => {
     throw new Error('Method not implemented.');
+  };
+  private Me = async (
+    request: Request,
+    response: Response,
+    next: NextFunction,
+  ) => {
+    try {
+      const ip = ensure(getRequestIpAddress(request));
+      const id = request.cookies['emsi'];
+      const accessToken = ensure(
+        request.headers.authorization &&
+          request.headers.authorization.split(' ')[1],
+      );
+      console.log(accessToken);
+      const result = await container
+        .resolve(getCurrentUserCase)
+        .execute({ accessToken, ip });
+      if (result.isLeft()) return next(result.value);
+      return response.json(result.value.getJWTPayload);
+    } catch (error) {
+      next(error);
+    }
   };
   private addUser = async (
     request: Request,
