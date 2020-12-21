@@ -12,13 +12,11 @@ export interface SideBarState {
   open: boolean
 }
 const HeaderBox = styled(Container)`
-  background-color: ${({theme}: any) => theme.background || 'lightgrey'};
+  background-color: ${({theme}: any) => '#f5f5fa' || 'lightgrey'};
   padding: 0;
   width: 100%;
   height: 100%;
   position: relative;
-  box-shadow: 0 1px 4px -1px rgba(0, 0, 0, 0.15);
-  transition: all 0.2s;
   z-index: 100;
 `
 const LogoWrapper = styled(Container)<SideBarState>`
@@ -49,9 +47,9 @@ const AppHeader = styled(Container)<SideBarState>`
   width: ${({open}) => (open ? '280px' : '60px')};
   height: 70px;
   padding: 0 1.5rem;
-  background-color: transparent;
-  transition: width 0.2s;
+  background: #fff;
   visibility: visible;
+  border-right: 1px solid rgba(0, 0, 0, 0.06);
 `
 const AppHeaderLogo: React.FC = observer(() => {
   const {layoutStore} = useRootStore()
@@ -59,7 +57,7 @@ const AppHeaderLogo: React.FC = observer(() => {
     <AppHeader
       open={layoutStore.sideBar}
       align="center"
-      justify="space-between"
+      justify={layoutStore.sideBar ? 'space-between' : 'center'}
     >
       <LogoWrapper open={layoutStore.sideBar}>
         <img src={logo} alt="Emasa Logo" />

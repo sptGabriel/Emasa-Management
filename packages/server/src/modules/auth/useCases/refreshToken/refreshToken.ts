@@ -58,7 +58,7 @@ export class RefreshTokenUseCase
     );
     return right({
       refreshToken: renewRefreshToken.ref_token,
-      user_id: renewRefreshToken.employee.id,
+      user: renewRefreshToken.getJWTPayload,
       accessToken: renewAccessToken.token,
       message: 'Token refreshed successfully',
     });

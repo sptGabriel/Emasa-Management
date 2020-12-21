@@ -37,7 +37,7 @@ export const lightTheme: ITheme = {
   primary: '#078af5',
   secondary: '#0079db ',
   background: '#FFF',
-  backgroundSecondary: '#FAFAFB',
+  backgroundSecondary: '#F5F5FA',
   sideBar: {
     tittleTag: 'rgba(26, 51, 83, 0.6)',
     menuTag: {

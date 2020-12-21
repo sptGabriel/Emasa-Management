@@ -51,12 +51,18 @@ export class AuthStore {
       password: this.loginModel.password,
     }).then((response) =>
       runInAction(() => {
-        this.rootStore.currentUserStore.accessToken = response.data.access_token
+        console.log(response, 'response')
+        this.rootStore.authStore.isAuth = true
+        this.rootStore.currentUserStore.accessToken = response.data.token
+        this.rootStore.currentUserStore.currentUser = new UserModel(
+          response.data.user,
+        )
       }),
     )
   }
 
   public logout = async (): Promise<void> => {
+    console.log('on logout')
     return this.rootStore.AxiosStore.get('/users/me/logout').finally(() => {
       this.isAuth = false
       this.rootStore.currentUserStore.currentUser = null

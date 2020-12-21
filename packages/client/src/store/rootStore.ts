@@ -10,7 +10,7 @@ import {LayoutUIStore} from './layoutUiStore'
 export class RootStore {
   appName = 'Emasa'
 
-  appState = 'peding'
+  appState = 'pending'
 
   currentUserStore: CurrentUserStore
 
@@ -22,10 +22,12 @@ export class RootStore {
 
   layoutStore: LayoutUIStore
 
+  accessToken: string | null = null
+
   constructor() {
     makeAutoObservable(this)
     this.AxiosStore = new AxiosStore(this)
-    this.AxiosStore.enableInterceptors()
+    this.AxiosStore.enableInterceptors().then(() => this.initApi())
     this.cookieStore = new CookieStore(this)
     this.currentUserStore = new CurrentUserStore(this)
     this.authStore = new AuthStore(this)
@@ -36,23 +38,40 @@ export class RootStore {
     this.appState = 'pending'
     try {
       const response = await this.AxiosStore.get('/')
-      if (!response) throw Error('Service Unavaliable')
-      return runInAction(async () => {
-        if(!response.data.access_token) {
-          this.authStore.isAuth = false;
-          this.appState = 'fulfilled'
-        }
-        if (response.data.access_token) {
-          this.currentUserStore.accessToken = response.data.access_token
-          this.appState = 'fulfilled'
+      runInAction(() => {
+        this.appState = 'done'
+        if (!response.data.token) this.authStore.isAuth = false
+        if (response.data.token && response.data.user) {
+          this.currentUserStore.currentUser = new UserModel(response.data.user)
+          this.currentUserStore.accessToken = response.data.token
+          this.authStore.isAuth = true
         }
       })
-    } catch (error) {
+    } catch (e) {
       runInAction(() => {
         this.appState = 'error'
+        this.authStore.logout()
       })
-      return Promise.reject(error)
     }
+    // try {
+    //   const response = await this.AxiosStore.get('/')
+    //   if (!response) throw Error('Service Unavaliable')
+    //   return runInAction(async () => {
+    //     if(!response.data.access_token) {
+    //       this.authStore.isAuth = false;
+    //       this.appState = 'fulfilled'
+    //     }
+    //     if (response.data.access_token) {
+    //       this.currentUserStore.accessToken = response.data.access_token
+    //       this.appState = 'fulfilled'
+    //     }
+    //   })
+    // } catch (error) {
+    //   runInAction(() => {
+    //     this.appState = 'error'
+    //   })
+    //   return Promise.reject(error)
+    // }
   }
 }
 

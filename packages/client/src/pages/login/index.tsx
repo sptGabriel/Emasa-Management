@@ -7,6 +7,7 @@ import {observer} from 'mobx-react-lite'
 import {ToastContainer, toast} from 'react-toastify'
 import {PuffLoader} from 'react-spinners'
 import {useErrorHandler} from 'react-error-boundary'
+import {useNavigate} from 'react-router-dom'
 import {Container} from '../../shared/components/FlexBox'
 import logo from '../../assets/logo_emasa.png'
 import one from '../../assets/one.png'
@@ -285,11 +286,11 @@ const Inputs: React.FunctionComponent = observer(() => {
 })
 
 const Form: React.FunctionComponent = observer(() => {
-  const {authStore, currentUserStore} = useRootStore()
+  const navigate = useNavigate()
+  const {authStore} = useRootStore()
   const [loading, setLoading] = useState(false)
   const {password, login} = authStore.loginModel
   const handleError = useErrorHandler()
-
   const loginHanlder = (event: any) => {
     event.preventDefault()
     setLoading(true)
@@ -297,7 +298,7 @@ const Form: React.FunctionComponent = observer(() => {
       authStore
         .login()
         .then(() => {
-          currentUserStore.pullUser()
+          navigate('../dashboard', {replace: true})
           setLoading(false)
         })
         .catch((err) => {

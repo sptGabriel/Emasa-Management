@@ -7,36 +7,34 @@ import {useRootStore} from './shared/infra/mobx'
 import {darkTheme, lightTheme} from './shared/themes'
 import ErrorFallback from './shared/components/ErrorFallBack'
 import ApplicationRouter from './shared/infra/router/index'
-//  const AuthApp: React.FC = observer(() => {
-//  const {appState, initApi, authStore} = useRootStore()
-//  const handleError = useErrorHandler()
-//  useEffect(() => {
-//    if (appState !== 'fulfilled') initApi().catch((error) => handleError(error))
-//  }, [])
-//  return (
-//    <>
-//      {authStore.isAuth ? (
-//        <Suspense fallback={<h1>fb</h1>}>
-//          <DashBoard />
-//        </Suspense>
-//      ) : (
-//        <Suspense fallback={<h1>login</h1>}>
-//          <LoginPage />
-//        </Suspense>
-//      )}
-//    </>
-//  )
-//  })
+import ESpinner from './shared/components/Spinner'
+import ApplicationRoutes from './shared/infra/router/routes2'
+
 const App: React.FC = observer(() => {
-  const {layoutStore, initApi, appState} = useRootStore()
-  const handleError = useErrorHandler()
+  const {layoutStore, appState, authStore} = useRootStore()
   useEffect(() => {
-    initApi()
-  }, [])
+    console.log(authStore.isAuth)
+  }, [authStore.isAuth])
   return (
     <ThemeProvider theme={layoutStore.isDarkMode ? darkTheme : lightTheme}>
       <GlobalReset />
-      <ApplicationRouter appState={appState} />
+      {appState === 'pending' ? (
+        <div
+          style={{
+            height: '100vh',
+            width: '100%',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <ESpinner />
+        </div>
+      ) : appState === 'error' ? (
+        <ErrorFallback />
+      ) : (
+        <ApplicationRoutes isLoggedIn={authStore.isAuth} />
+      )}
     </ThemeProvider>
   )
 })

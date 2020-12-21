@@ -22,26 +22,26 @@ export const Tags: ITag[] = [
   {
     Title: 'DashBoard',
     Name: 'Default',
-    Link: '../about',
+    Link: 'about',
     Icon: AiOutlineDashboard,
     DropdownItems: null,
   },
   {
     Name: 'Analytic',
-    Link: '../test',
+    Link: 'test',
     Icon: AiOutlineLineChart,
     DropdownItems: null,
   },
   {
     Name: 'Inventory',
-    Link: '../dasdasdas',
+    Link: 'dasdasdas',
     Icon: BiStoreAlt,
     DropdownItems: null,
   },
   {
     Title: 'Pages',
     Name: 'Employees',
-    Link: '../dasas',
+    Link: 'dasas',
     Icon: TiGroupOutline,
     DropdownItems: [
       {Name: 'Employee List', Link: '/eloBost'},
@@ -52,7 +52,7 @@ export const Tags: ITag[] = [
   },
   {
     Name: 'Departaments',
-    Link: '../dashboards',
+    Link: 'defaults2',
     Icon: FaRegBuilding,
     DropdownItems: [
       {Name: 'Elo Boost', Link: '/eloBost'},
@@ -64,7 +64,7 @@ export const Tags: ITag[] = [
   },
   {
     Name: 'Products',
-    Link: '../dashboards',
+    Link: 'default',
     Icon: BsLightning,
     DropdownItems: [
       {Name: 'Elo Boost', Link: '/eloBost'},
@@ -76,7 +76,7 @@ export const Tags: ITag[] = [
   },
   {
     Name: 'Suppliers',
-    Link: '../dashboards',
+    Link: 'dashboards',
     Icon: BsBookmarkPlus,
     DropdownItems: [
       {Name: 'Elo Boost', Link: '/eloBost'},
@@ -88,7 +88,7 @@ export const Tags: ITag[] = [
   },
   {
     Name: 'Contracts',
-    Link: '../dashboards',
+    Link: 'dashboards',
     Icon: BsFileEarmarkText,
     DropdownItems: [
       {Name: 'Elo Boost', Link: '/eloBost'},
@@ -100,7 +100,7 @@ export const Tags: ITag[] = [
   },
   {
     Name: 'User List',
-    Link: '../dashboards',
+    Link: 'dashboards',
     Icon: RiGroupLine,
     DropdownItems: [
       {Name: 'Elo Boost', Link: '/eloBost'},
