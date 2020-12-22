@@ -7,10 +7,10 @@ import {VscChevronDown, VscChevronUp} from 'react-icons/vsc'
 import {Navigate, NavLink} from 'react-router-dom'
 import {useRootStore} from '../infra/mobx'
 import {ITag, IDropdownItems, Tags} from '../utils/MenuTags'
-
 /* Styles */
 type IMenu = {
   open: boolean
+  hover: boolean
 }
 type IDropDown = {
   active?: boolean
@@ -29,12 +29,42 @@ const MenuList = styled.ul<IMenu>`
   position: relative;
   padding: ${({open}) => (open ? '0' : '1rem 0')};
   color: transparent;
-  margin-top: 20px;
-  margin-bottom: 30px;
+  height: 100%;
+  overflow-y: auto;
+  transition: 0.2s;
+  transition-timing-function: ease;
+  transition-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
+  scrollbar-color: auto;
+  scrollbar-width: thin;
+  &::-webkit-scrollbar {
+    width: 6px;
+    height: 18px;
+  }
+  &::-webkit-scrollbar-thumb:vertical {
+    height: 6px;
+    //border: 4px solid ${({theme}: any) => theme.background};
+    background-clip: padding-box;
+    background: ${({hover, theme}: any) =>
+      hover ? theme.sideBar.scrollBar : theme.background};
+    border-radius: 100vh;
+  }
+  &::-webkit-scrollbar-button {
+    width: 0;
+    height: 0;
+    display: none;
+  }
+  &::-webkit-scrollbar-corner {
+    background-color: red;
+  }
+  &::-webkit-scrollbar-track {
+    background-clip: content-box;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    /* margin-bottom: 40vh; */
+  }
   .title_tagList {
     display: ${({open}) => (open ? 'block' : 'none')};
-    visibility: ${({open}) => (open ? 'visible' : 'hidden')};
-    opacity: ${({open}) => (open ? '1' : '0')};
+    padding: 12px 18px;
     transition: all 0.5s cubic-bezier(0, 1, 0, 1);
     align-items: center;
     position: relative;
@@ -42,11 +72,9 @@ const MenuList = styled.ul<IMenu>`
     color: ${({theme}: any) =>
       theme.sideBar.tittleTag || 'rgba(26, 51, 83, 0.6)'};
     font-size: 0.75rem;
-    padding: 0.75rem 1.525rem;
     font-weight: bold;
     font-family: Roboto, sans-serif;
     text-transform: uppercase;
-    margin-top: 0.9375rem;
   }
 `
 
@@ -144,100 +172,51 @@ const ClosedStyled = styled('ul')`
   }
 `
 
-const ListWrap = styled.div<IListWrap>`
-  padding: ${({open}) =>
-    open ? '8px 1rem 8px 1.2rem' : '8px 1rem 8px 1.2rem'};
-  display: flex;
-  transition: all 0.5s cubic-bezier(0, 1, 0, 1);
-  justify-content: ${({open}) => (open ? 'space-between' : 'center')};
-  align-items: center;
-  position: relative;
-  border-radius: 10px;
-  background: ${({tagActive, open, theme}: any) =>
-    tagActive && open ? theme.sideBar.menuTag.background : ''};
-  transition: all 0.5s ease;
-  padding: 12px 10px;
-  :hover {
-    background: ${({open, theme}: any) =>
-      open ? theme.sideBar.menuTag.hoveredBackground : ''};
-    a {
-      svg {
-        fill: ${({theme}: any) => theme.sideBar.menuTag.activeText};
-        stroke: ${({theme}: any) => theme.sideBar.menuTag.activeText};
-        transition: all 0.3s ease;
-      }
-      span {
-        color: ${({theme}: any) => theme.sideBar.menuTag.activeText};
-      }
-    }
-  }
-  a {
-    display: flex;
-    align-items: center;
-    span {
-      color: ${({tagActive, theme}: any) =>
-        tagActive
-          ? theme.sideBar.menuTag.activeText
-          : theme.sideBar.menuTag.text};
-      margin-bottom: -2px;
-    }
-    svg {
-      fill: ${({tagActive, theme}: any) =>
-        tagActive
-          ? theme.sideBar.menuTag.activeText
-          : theme.sideBar.menuTag.text};
-      margin-right: ${({open}) => (open ? '10px' : '0')};
-      transition: all 0.5s cubic-bezier(0, 1, 0, 1);
-    }
-  }
-  & .icon-li {
-    margin-right: 10px;
-  }
-  & .down-up_svg,
-  .li-name {
-    display: ${({open}) => (open ? 'space-between' : 'none')};
-    color: ${({tagActive, theme}: any) =>
-      tagActive
-        ? theme.sideBar.menuTag.activeText
-        : theme.sideBar.menuTag.text};
-    letter-spacing: 0.7px;
-    font-family: Roboto;
-    text-transform: capitalize;
-    font-weight: 500;
-  }
-  & .svg-arrow {
-    color: ${({theme}: any) => (theme.type === 'dark' ? '#fff' : '#222')};
-  }
-`
-
 const ListItem = styled.li<IListItem>`
   display: flex;
   flex-direction: column;
   position: relative;
-  padding-left: ${({open}) => (open ? '20px' : '15px')};
-  padding-right: 15px;
   justify-content: ${({open}) => (open ? 'space-between' : 'center')};
   cursor: pointer;
-  margin-bottom: 8px;
+  width: 100%;
   &:hover ${ClosedStyled} {
     display: block;
   }
   .tag-wrapper {
-    padding: ${({open}) =>
-      open ? '8px 1rem 8px 1.2rem' : '8px 1rem 8px 1.2rem'};
     display: flex;
-    transition: all 0.5s cubic-bezier(0, 1, 0, 1);
-    justify-content: ${({open}) => (open ? 'space-between' : 'center')};
+    justify-content: ${({open}) => (open ? 'flex-start' : 'center')};
+    height: 48px;
+    //transition: all 0.5s cubic-bezier(0, 1, 0, 1);
     align-items: center;
     position: relative;
-    border-radius: 10px;
-    background: ${({active, open, theme}: any) =>
-      active && open ? theme.sideBar.menuTag.background : ''};
-    transition: all 0.5s ease;
-    padding: 12px 10px;
+    transition: all 0.1s ease;
+    padding: 0 24px;
+    .svg-main {
+      width: 24px;
+      height: 24px;
+      fill: ${({active, theme}: any) =>
+        active ? theme.sideBar.menuTag.activeText : theme.sideBar.menuTag.text};
+      margin-right: ${({open}) => (open ? '24px' : '0')};
+      transition: all 0.5s cubic-bezier(0, 1, 0, 1);
+    }
+    .tag-name {
+      display: ${({open}) => (open ? 'space-between' : 'none')};
+      color: ${({active, theme}: any) =>
+        active ? theme.sideBar.menuTag.activeText : theme.sideBar.menuTag.text};
+      line-height: 1.8rem;
+      letter-spacing: 0.7px;
+      font-family: Roboto;
+      text-transform: capitalize;
+      font-weight: 400;
+    }
+    .svg-arrow {
+      position: absolute;
+      left: 240px;
+      color: ${({active, theme}: any) =>
+        active ? theme.sideBar.menuTag.activeText : theme.sideBar.menuTag.text};
+    }
     :hover {
-      background: ${({open, theme}: any) =>
-        open ? theme.sideBar.menuTag.hoveredBackground : ''};
+      background: ${({open, theme}: any) => (open ? '#e7e7e7' : '')};
       .menu_txt {
         svg {
           fill: ${({theme}: any) => theme.sideBar.menuTag.activeText};
@@ -280,9 +259,6 @@ const ListItem = styled.li<IListItem>`
       font-family: Roboto;
       text-transform: capitalize;
       font-weight: 500;
-    }
-    & .svg-arrow {
-      color: ${({theme}: any) => (theme.type === 'dark' ? '#fff' : '#222')};
     }
   }
 `
@@ -341,13 +317,15 @@ const TagList: React.FC<ITagList> = observer(
       >
         {sideBarStatus === true ? (
           <NavLink className="tag-wrapper" to={tag.Link}>
-            <div className="menu_txt">
-              <tag.Icon size={22} />
-              <span className="li-name">{tag.Name}</span>
-            </div>
+            <tag.Icon className="svg-main" size={22} />
+            <span className="tag-name">{tag.Name}</span>
             {tag.DropdownItems ? (
               <span className="svg-arrow">
-                {tag.Active === true ? <VscChevronUp /> : <VscChevronDown />}
+                {tag.Active === true ? (
+                  <VscChevronDown />
+                ) : (
+                  <VscChevronDown style={{transform: 'rotate(280deg)'}} />
+                )}
               </span>
             ) : (
               ''
@@ -377,6 +355,7 @@ const TagList: React.FC<ITagList> = observer(
   },
 )
 const MenuTags: React.FC = observer(() => {
+  const [isHover, setHovered] = React.useState(false)
   const {layoutStore} = useRootStore()
   const [tags, setTags] = useState<ITag[]>(Tags)
   const showHideDropItem: ShowHideDropItem = (tag) => {
@@ -402,7 +381,12 @@ const MenuTags: React.FC = observer(() => {
   }
 
   return (
-    <MenuList open={layoutStore.sideBar}>
+    <MenuList
+      open={layoutStore.sideBar}
+      hover={isHover}
+      onMouseOver={() => setHovered(true)}
+      onMouseOut={() => setHovered(false)}
+    >
       {tags.map((item) => (
         <div key={JSON.stringify(item.Name)}>
           {item.Title ? <div className="title_tagList">{item.Title}</div> : ''}

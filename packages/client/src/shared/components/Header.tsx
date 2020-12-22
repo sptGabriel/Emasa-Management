@@ -1,9 +1,11 @@
-import React from 'react'
+import React, {useState} from 'react'
 import styled from '@emotion/styled/macro'
 import {observer} from 'mobx-react-lite'
+import Switch from 'react-switch'
+import {css} from '@emotion/react'
+import {Divide as Hamburger} from 'hamburger-react'
 import {Container} from './FlexBox'
 import logo from '../../assets/logoem.svg'
-import NavBar from './NavBar'
 import MenuBurguer from './Hamburguer'
 import {useRootStore} from '../infra/mobx'
 import {emasaAnimation} from '../../pages/login'
@@ -25,7 +27,7 @@ const LogoWrapper = styled(Container)<SideBarState>`
   .text-5 {
     color: #0189cf;
     text-transform: uppercase;
-    font-size: 1.5rem;
+    font-size: 1rem;
     font-weight: bold;
     font-family: 'Montserrat', sans-serif;
     animation: ${emasaAnimation} 1s linear infinite;
@@ -38,7 +40,7 @@ const LogoWrapper = styled(Container)<SideBarState>`
     text-transform: uppercase;
   }
   img {
-    width: 60px;
+    width: 50px;
     vertical-align: middle;
     border-style: none;
   }
@@ -46,13 +48,18 @@ const LogoWrapper = styled(Container)<SideBarState>`
 const AppHeader = styled(Container)<SideBarState>`
   width: ${({open}) => (open ? '280px' : '60px')};
   height: 70px;
-  padding: 0 1.5rem;
-  background: #fff;
-  visibility: visible;
+  ${({open}) =>
+    open
+      ? css`
+          padding: 0 0.5rem 0 0.5rem;
+        `
+      : ''}
+  background: ${({theme}: any) => theme.background};
   border-right: 1px solid rgba(0, 0, 0, 0.06);
 `
 const AppHeaderLogo: React.FC = observer(() => {
   const {layoutStore} = useRootStore()
+  const [checked, setChecked] = useState(true)
   return (
     <AppHeader
       open={layoutStore.sideBar}
@@ -65,17 +72,32 @@ const AppHeaderLogo: React.FC = observer(() => {
           <span>Emasa</span>
         </div>
       </LogoWrapper>
-      <MenuBurguer />
+      <Hamburger
+        distance="sm"
+        size={18}
+        rounded
+        label="Show menu"
+        toggled={layoutStore.sideBar}
+        onToggle={() => layoutStore.toggleSideBar()}
+      />
+      {/* <Switch
+        onChange={() => layoutStore.toggleSideBar()}
+        checked={layoutStore.sideBar}
+        offColor="#86889A"
+        offHandleColor="#F5F5FA"
+        onColor="#2693e6"
+        onHandleColor="#86d3ff"
+        handleDiameter={20}
+        uncheckedIcon={false}
+        checkedIcon={false}
+        boxShadow="0px 2px 1px -1px rgba(0, 0, 0, 0.06),0px 1px 1px 0px rgba(0, 0, 0, 0.042),0px 1px 3px 0px rgba(0, 0, 0, 0.036)"
+        activeBoxShadow="0px 0px 1px 8px rgba(215, 215, 224, 0.2)"
+        height={14}
+        width={34}
+        className="react-switch"
+        id="material-switch"
+      />  */}
     </AppHeader>
   )
 })
-
-const Header: React.FC = () => {
-  return (
-    <HeaderBox align="center">
-      <AppHeaderLogo />
-      <NavBar />
-    </HeaderBox>
-  )
-}
-export default Header
+export default AppHeaderLogo

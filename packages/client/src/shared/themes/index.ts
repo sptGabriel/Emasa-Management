@@ -46,7 +46,7 @@ export const lightTheme: ITheme = {
       text: '#2c323f',
       activeText: '#0079db',
     },
-    scrollBar: '#bde0fe',
+    scrollBar: '#727cf5',
   },
   navBar: {
     widget: '#0079db',

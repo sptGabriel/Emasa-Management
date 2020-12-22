@@ -181,7 +181,7 @@ const WrapperTools = styled(Container)<SideBarState>`
   display: flex;
   align-items: center;
   display: flex;
-  margin-left: auto;
+  width: 100%;
   position: relative;
   & .bell {
     animation: ${bellAnimation} 1.5s ease infinite;
@@ -256,7 +256,7 @@ const UserSection: React.FC = () => {
 const ToolsNav: React.FC = observer(() => {
   const {layoutStore} = useRootStore()
   return (
-    <WrapperTools justify="space-between" open={layoutStore.sideBar}>
+    <WrapperTools open={layoutStore.sideBar} justify="flex-end">
       <Search />
       <button
         className="tool_widget"

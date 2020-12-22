@@ -55,8 +55,6 @@ const Burguer = styled('button')<SideBarState>`
   border: 0;
   margin: 0;
   margin-top: 5px;
-  transform: ${({open}) =>
-    open ? 'translateX(calc(100% + 0.75rem))' : 'translateX(0)'};
   overflow: visible;
   :hover {
     filter: brightness(1.75);
