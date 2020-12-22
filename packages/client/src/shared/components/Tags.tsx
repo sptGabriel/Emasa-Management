@@ -5,6 +5,7 @@ import {IconType} from 'react-icons'
 import {FaGhost} from 'react-icons/fa'
 import {VscChevronDown, VscChevronUp} from 'react-icons/vsc'
 import {Navigate, NavLink} from 'react-router-dom'
+import {runInAction} from 'mobx'
 import {useRootStore} from '../infra/mobx'
 import {ITag, IDropdownItems, Tags} from '../utils/MenuTags'
 /* Styles */
@@ -26,10 +27,9 @@ interface IListItem {
   active?: boolean
 }
 const MenuList = styled.ul<IMenu>`
-  position: relative;
-  padding: ${({open}) => (open ? '0' : '1rem 0')};
   color: transparent;
   height: 100%;
+  width: 100%;
   overflow-y: auto;
   transition: 0.2s;
   transition-timing-function: ease;
@@ -37,15 +37,16 @@ const MenuList = styled.ul<IMenu>`
   scrollbar-color: auto;
   scrollbar-width: thin;
   &::-webkit-scrollbar {
-    width: 6px;
-    height: 18px;
+    width: ${({open}) => (open ? '6px' : '0')};
+    height: ${({open}) => (open ? '18px ' : '0')};
   }
   &::-webkit-scrollbar-thumb:vertical {
     height: 6px;
     //border: 4px solid ${({theme}: any) => theme.background};
     background-clip: padding-box;
-    background: ${({hover, theme}: any) =>
-      hover ? theme.sideBar.scrollBar : theme.background};
+    background: transparent;
+    background: ${({hover, theme, open}: any) =>
+      open && hover ? '#ddd' : theme.background};
     border-radius: 100vh;
   }
   &::-webkit-scrollbar-button {
@@ -63,7 +64,8 @@ const MenuList = styled.ul<IMenu>`
     /* margin-bottom: 40vh; */
   }
   .title_tagList {
-    display: ${({open}) => (open ? 'block' : 'none')};
+    /* display: ${({open}) => (open ? 'block' : 'none')}; */
+    opacity: ${({open}) => (open ? '1' : '0')};
     padding: 12px 18px;
     transition: all 0.5s cubic-bezier(0, 1, 0, 1);
     align-items: center;
@@ -81,9 +83,9 @@ const MenuList = styled.ul<IMenu>`
 const OpenedStyled = styled.ul<IDropDown>`
   position: relative;
   opacity: ${({active}) => (active ? '1' : '0')};
-  max-height: ${({active}) => (active ? '500px' : '0')};
+  display: ${({active}) => (active ? 'block' : 'none')};
+  /* max-height: ${({active}) => (active ? '500px' : '0')}; */
   transition: max-height 0.5s, opacity 1s;
-  overflow: hidden;
   transition: padding 300ms;
   padding: 0.5em 0 0 2rem;
   :before {
@@ -100,7 +102,7 @@ const OpenedStyled = styled.ul<IDropDown>`
   li {
     display: flex;
     align-items: center;
-    white-space: nowrap;
+    /* white-space: nowrap; */
     padding: 8px 20px 8px 20px;
     :hover {
       border-radius: 0.25rem;
@@ -120,10 +122,6 @@ const OpenedStyled = styled.ul<IDropDown>`
     font-family: Roboto;
     text-transform: capitalize;
     font-weight: 500;
-  }
-  & .li-open:hover > .icon-li-drop {
-    color: orange;
-    transition: color 0.5s;
   }
   & .icon-li-drop {
     margin-right: 10px;
@@ -145,7 +143,7 @@ const ClosedStyled = styled('ul')`
   top: 0;
   left: 100%;
   font-weight: 400;
-  position: absolute;
+  position: relative;
   padding: 0px;
   z-index: 2;
   border-top-right-radius: 5px;
@@ -156,9 +154,6 @@ const ClosedStyled = styled('ul')`
     align-items: center;
     white-space: nowrap;
     padding: 10px 20px;
-    :hover > a {
-      color: orange;
-    }
     svg {
       margin-right: 10px;
     }
@@ -176,28 +171,27 @@ const ListItem = styled.li<IListItem>`
   display: flex;
   flex-direction: column;
   position: relative;
-  justify-content: ${({open}) => (open ? 'space-between' : 'center')};
   cursor: pointer;
   width: 100%;
+  overflow: hidden;
   &:hover ${ClosedStyled} {
     display: block;
   }
   .tag-wrapper {
     display: flex;
-    justify-content: ${({open}) => (open ? 'flex-start' : 'center')};
     height: 48px;
+    width: 100%;
     //transition: all 0.5s cubic-bezier(0, 1, 0, 1);
     align-items: center;
+    justify-content: ${({open}) => (open ? 'flex-start' : 'center')};
     position: relative;
-    transition: all 0.1s ease;
-    padding: 0 24px;
+    padding: 0 ${({open}) => (open ? '24px' : '0')};
     .svg-main {
       width: 24px;
       height: 24px;
       fill: ${({active, theme}: any) =>
         active ? theme.sideBar.menuTag.activeText : theme.sideBar.menuTag.text};
       margin-right: ${({open}) => (open ? '24px' : '0')};
-      transition: all 0.5s cubic-bezier(0, 1, 0, 1);
     }
     .tag-name {
       display: ${({open}) => (open ? 'space-between' : 'none')};
@@ -277,7 +271,6 @@ interface IDrop {
 }
 interface ITagList {
   clickHandler: ClickHandler
-  sideBarStatus: boolean
   tag: ITag
   open: boolean
 }
@@ -306,56 +299,51 @@ const Drop: React.FC<IDrop> = observer(({active, dropItems, isOpen}) => {
     </>
   )
 })
-const TagList: React.FC<ITagList> = observer(
-  ({sideBarStatus, tag, clickHandler, open}) => {
-    return (
-      <ListItem
-        open={open}
-        isDropDown={!!tag.DropdownItems}
-        active={tag.Active}
-        onClick={tag.Active !== undefined ? clickHandler(tag) : undefined}
-      >
-        {sideBarStatus === true ? (
-          <NavLink className="tag-wrapper" to={tag.Link}>
-            <tag.Icon className="svg-main" size={22} />
-            <span className="tag-name">{tag.Name}</span>
-            {tag.DropdownItems ? (
-              <span className="svg-arrow">
-                {tag.Active === true ? (
-                  <VscChevronDown />
-                ) : (
-                  <VscChevronDown style={{transform: 'rotate(280deg)'}} />
-                )}
-              </span>
-            ) : (
-              ''
-            )}
-          </NavLink>
-        ) : (
-          <NavLink className="tag-wrapper" to={tag.Link}>
-            <div className="menu_txt">
-              <tag.Icon size={24} />
-              <span className="li-name">{tag.Name}</span>
-            </div>
-          </NavLink>
-        )}
-        {tag.DropdownItems ? (
-          <Drop
-            active={tag.Active}
-            dropItems={tag.DropdownItems}
-            Icon={tag.Icon}
-            isOpen={open}
-            setVisible={clickHandler}
-          />
-        ) : (
-          ''
-        )}
-      </ListItem>
-    )
-  },
-)
-const MenuTags: React.FC = observer(() => {
-  const [isHover, setHovered] = React.useState(false)
+const TagList: React.FC<ITagList> = observer(({tag, clickHandler, open}) => {
+  return (
+    <ListItem
+      open={open}
+      isDropDown={!!tag.DropdownItems}
+      active={tag.Active}
+      onClick={tag.Active !== undefined ? clickHandler(tag) : undefined}
+    >
+      {open === true ? (
+        <NavLink className="tag-wrapper" to={tag.Link}>
+          <tag.Icon className="svg-main" size={22} />
+          <span className="tag-name">{tag.Name}</span>
+          {tag.DropdownItems ? (
+            <span className="svg-arrow">
+              {tag.Active === true ? (
+                <VscChevronDown />
+              ) : (
+                <VscChevronDown style={{transform: 'rotate(280deg)'}} />
+              )}
+            </span>
+          ) : (
+            ''
+          )}
+        </NavLink>
+      ) : (
+        <NavLink className="tag-wrapper" to={tag.Link}>
+          <tag.Icon className="svg-main" size={24} />
+          <span className="li-name">{tag.Name}</span>
+        </NavLink>
+      )}
+      {tag.DropdownItems ? (
+        <Drop
+          active={tag.Active}
+          dropItems={tag.DropdownItems}
+          Icon={tag.Icon}
+          isOpen={open}
+          setVisible={clickHandler}
+        />
+      ) : (
+        ''
+      )}
+    </ListItem>
+  )
+})
+const MenuTags: React.FC<{hover: boolean}> = observer(({hover}) => {
   const {layoutStore} = useRootStore()
   const [tags, setTags] = useState<ITag[]>(Tags)
   const showHideDropItem: ShowHideDropItem = (tag) => {
@@ -373,7 +361,7 @@ const MenuTags: React.FC = observer(() => {
         Active: false,
       })),
     )
-  }, [layoutStore.sideBar])
+  }, [layoutStore.sideBar, layoutStore.onHoverSideState])
 
   const clickHandler: ClickHandler = (tag) => (e) => {
     e.preventDefault()
@@ -382,17 +370,14 @@ const MenuTags: React.FC = observer(() => {
 
   return (
     <MenuList
-      open={layoutStore.sideBar}
-      hover={isHover}
-      onMouseOver={() => setHovered(true)}
-      onMouseOut={() => setHovered(false)}
+      open={layoutStore.sideBar || layoutStore.onHoverSideState}
+      hover={hover}
     >
       {tags.map((item) => (
         <div key={JSON.stringify(item.Name)}>
           {item.Title ? <div className="title_tagList">{item.Title}</div> : ''}
           <TagList
-            open={layoutStore.sideBar}
-            sideBarStatus={layoutStore.sideBar}
+            open={layoutStore.sideBar || layoutStore.onHoverSideState}
             tag={item}
             clickHandler={clickHandler}
           />

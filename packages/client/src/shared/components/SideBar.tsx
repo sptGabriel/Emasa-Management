@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from '@emotion/styled/macro'
 import {observer} from 'mobx-react-lite'
+import {runInAction} from 'mobx'
 import {useRootStore} from '../infra/mobx'
 import {Container} from './FlexBox'
 import SideMenu from './SideMenu'
@@ -23,13 +24,26 @@ const SideBarContainer = styled(Container)<sideStat>`
 
 const SideBar: React.FC = observer(() => {
   const {layoutStore} = useRootStore()
+  const [isHover, setHovered] = React.useState(false)
   return (
     <SideBarContainer
       flexColumn
       sideisOpen={layoutStore.sideBar}
+      onMouseOver={() => {
+        setHovered(true)
+        runInAction(() => {
+          if (!layoutStore.sideBar) layoutStore.onHoverSideState = true
+        })
+      }}
+      onMouseOut={() => {
+        setHovered(false)
+        runInAction(() => {
+          if (!layoutStore.sideBar) layoutStore.onHoverSideState = false
+        })
+      }}
     >
       <AppHeaderLogo />
-      <SideMenu />
+      <SideMenu hover={isHover} />
     </SideBarContainer>
   )
 })

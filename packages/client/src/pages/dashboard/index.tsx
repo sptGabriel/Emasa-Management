@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import {useTheme} from '@emotion/react'
 import {Outlet} from 'react-router-dom'
 import styled from '@emotion/styled'
@@ -20,10 +20,11 @@ export interface SideBarState {
 //  `
 const DashBoardContainer = styled('div')<SideBarState>`
   display: grid;
-  grid-template-columns: ${({open}) => (open ? '280px' : '60px')} auto;
+  grid-template-columns: ${({open}) => (open ? '280px' : '72px')} auto;
   height: 100vh;
   width: 100vw;
   overflow: hidden;
+  position: relative;
 `
 const DashBoardMain = styled('div')<SideBarState>`
   background: ${({theme}: any) => theme.backgroundSecondary || 'lightgrey'};
@@ -60,8 +61,13 @@ const Content = styled('div')`
 const DashBoard: React.FC = observer(() => {
   const {layoutStore} = useRootStore()
   const theme = useTheme()
+  useEffect(() => {
+    console.log(layoutStore.onHoverSideState)
+  }, [layoutStore.onHoverSideState])
   return (
-    <DashBoardContainer open={layoutStore.sideBar}>
+    <DashBoardContainer
+      open={layoutStore.sideBar || layoutStore.onHoverSideState}
+    >
       <ASide />
       <DashBoardMain open={layoutStore.sideBar} theme={theme}>
         <ToolsNav />

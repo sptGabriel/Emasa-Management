@@ -4,6 +4,8 @@ import {RootStore} from './rootStore'
 export class LayoutUIStore {
   sideBar = true
 
+  onHoverSideState = false
+
   isDarkMode: boolean
 
   constructor(private rootStore: RootStore) {

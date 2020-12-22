@@ -12,9 +12,6 @@ import ApplicationRoutes from './shared/infra/router/routes2'
 
 const App: React.FC = observer(() => {
   const {layoutStore, appState, authStore} = useRootStore()
-  useEffect(() => {
-    console.log(authStore.isAuth)
-  }, [authStore.isAuth])
   return (
     <ThemeProvider theme={layoutStore.isDarkMode ? darkTheme : lightTheme}>
       <GlobalReset />

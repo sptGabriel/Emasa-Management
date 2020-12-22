@@ -1,26 +1,16 @@
 import React, {useState} from 'react'
 import styled from '@emotion/styled/macro'
 import {observer} from 'mobx-react-lite'
-import Switch from 'react-switch'
 import {css} from '@emotion/react'
-import {Divide as Hamburger} from 'hamburger-react'
+import {Sling as Hamburger} from 'hamburger-react'
 import {Container} from './FlexBox'
 import logo from '../../assets/logoem.svg'
-import MenuBurguer from './Hamburguer'
 import {useRootStore} from '../infra/mobx'
 import {emasaAnimation} from '../../pages/login'
 /* SideBar Styles Start */
 export interface SideBarState {
   open: boolean
 }
-const HeaderBox = styled(Container)`
-  background-color: ${({theme}: any) => '#f5f5fa' || 'lightgrey'};
-  padding: 0;
-  width: 100%;
-  height: 100%;
-  position: relative;
-  z-index: 100;
-`
 const LogoWrapper = styled(Container)<SideBarState>`
   display: ${({open}) => (open ? 'flex' : 'none')};
   align-items: center;
@@ -46,12 +36,48 @@ const LogoWrapper = styled(Container)<SideBarState>`
   }
 `
 const AppHeader = styled(Container)<SideBarState>`
-  width: ${({open}) => (open ? '280px' : '60px')};
+  width: ${({open}) => (open ? '280px' : '72px')};
   height: 70px;
+  .hamburger-react {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 100vh;
+    position: relative;
+    padding: 0;
+    width: 35px !important;
+    height: 35px !important;
+    margin-right: ${({open}) => (open ? '16px' : '0')};
+    ${({open}) =>
+      open
+        ? css`
+            transform: translateX(-10px) !important;
+          `
+        : ''};
+    :hover {
+      color: #00d4ff;
+    }
+    :active {
+      background: #eee;
+    }
+    & > div {
+      left: calc(50% - 9.5px) !important;
+      right: 0;
+    }
+    div:nth-child(1) {
+      top: calc(50% - 6px) !important;
+    }
+    div:nth-child(2) {
+      top: calc(50% - 1px) !important;
+    }
+    div:nth-child(3) {
+      top: calc(50% + 4px) !important;
+    }
+  }
   ${({open}) =>
     open
       ? css`
-          padding: 0 0.5rem 0 0.5rem;
+          padding: 0 24px 0 24px;
         `
       : ''}
   background: ${({theme}: any) => theme.background};
@@ -62,24 +88,29 @@ const AppHeaderLogo: React.FC = observer(() => {
   const [checked, setChecked] = useState(true)
   return (
     <AppHeader
-      open={layoutStore.sideBar}
+      open={layoutStore.sideBar || layoutStore.onHoverSideState}
       align="center"
-      justify={layoutStore.sideBar ? 'space-between' : 'center'}
+      justify={
+        layoutStore.sideBar || layoutStore.onHoverSideState
+          ? 'flex-start'
+          : 'center'
+      }
     >
-      <LogoWrapper open={layoutStore.sideBar}>
+      <Hamburger
+        distance="sm"
+        color="#0079db"
+        size={20}
+        rounded
+        label="Show menu"
+        toggled={layoutStore.sideBar || layoutStore.onHoverSideState}
+        onToggle={() => layoutStore.toggleSideBar()}
+      />
+      <LogoWrapper open={layoutStore.sideBar || layoutStore.onHoverSideState}>
         <img src={logo} alt="Emasa Logo" />
         <div className="text-5 text tooltip">
           <span>Emasa</span>
         </div>
       </LogoWrapper>
-      <Hamburger
-        distance="sm"
-        size={18}
-        rounded
-        label="Show menu"
-        toggled={layoutStore.sideBar}
-        onToggle={() => layoutStore.toggleSideBar()}
-      />
       {/* <Switch
         onChange={() => layoutStore.toggleSideBar()}
         checked={layoutStore.sideBar}
