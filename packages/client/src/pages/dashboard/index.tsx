@@ -7,6 +7,7 @@ import {useRootStore} from '../../shared/infra/mobx'
 import ASide from '../../shared/components/SideBar'
 import DashBoardFooter from '../../shared/components/Footer'
 import ToolsNav from '../../shared/components/ToolsNav'
+import GearTheming from '../../shared/components/GearButton'
 
 export interface SideBarState {
   open: boolean
@@ -68,6 +69,7 @@ const DashBoard: React.FC = observer(() => {
     <DashBoardContainer
       open={layoutStore.sideBar || layoutStore.onHoverSideState}
     >
+      <GearTheming />
       <ASide />
       <DashBoardMain open={layoutStore.sideBar} theme={theme}>
         <ToolsNav />

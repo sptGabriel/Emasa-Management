@@ -4,6 +4,7 @@ import {Navigate, Outlet, useRoutes} from 'react-router-dom'
 import DashBoard from '../../../pages/dashboard'
 import Login from '../../../pages/login'
 import ErrorFallback from '../../components/ErrorFallBack'
+import GearTheming from '../../components/GearButton'
 
 const ApplicationRoutes: React.FC<{isLoggedIn: boolean}> = observer(
   ({isLoggedIn}) => {

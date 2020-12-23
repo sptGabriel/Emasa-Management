@@ -39,6 +39,7 @@ const LogoWrapper = styled(Container)<SideBarState>`
 const AppHeader = styled(Container)<SideBarState>`
   width: ${({open}) => (open ? '280px' : '72px')};
   height: 70px;
+  margin-bottom: 20px !important;
   .hamburger-react {
     display: flex;
     justify-content: center;

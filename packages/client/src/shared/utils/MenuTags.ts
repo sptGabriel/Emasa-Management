@@ -1,9 +1,8 @@
 import {IconType} from 'react-icons'
-import {AiOutlineDashboard, AiOutlineLineChart} from 'react-icons/ai'
+import {AiOutlineDashboard} from 'react-icons/ai'
 import {FaRegBuilding} from 'react-icons/fa'
 import {TiGroupOutline} from 'react-icons/ti'
 import {BsLightning, BsBookmarkPlus, BsFileEarmarkText} from 'react-icons/bs'
-import {BiStoreAlt} from 'react-icons/bi'
 import {RiGroupLine} from 'react-icons/ri'
 
 export interface IDropdownItems {
@@ -24,7 +23,7 @@ export const Tags: ITag[] = [
     Icon: AiOutlineDashboard,
     DropdownItems: [
       {Name: 'Analytics', Link: '../dashboard'},
-      {Name: 'Inventory', Link: 'inventory'},
+      {Name: 'Inventory', Link: '../dashboard/inventory'},
     ],
   },
   {
