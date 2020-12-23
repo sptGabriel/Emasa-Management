@@ -2,7 +2,7 @@
 /* eslint-disable max-classes-per-file */
 /* eslint-disable prettier/prettier */
 export type Either<L, A> = Left<L, A> | Right<L, A>
-
+//initon position:988347618
 export class Left<L, A> {
   readonly value: L
 

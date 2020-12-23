@@ -2,10 +2,9 @@ import React, {useState, useEffect, MouseEvent} from 'react'
 import styled from '@emotion/styled/macro'
 import {observer} from 'mobx-react-lite'
 import {IconType} from 'react-icons'
-import {FaGhost} from 'react-icons/fa'
-import {VscChevronDown, VscChevronUp} from 'react-icons/vsc'
-import {Navigate, NavLink} from 'react-router-dom'
-import {runInAction} from 'mobx'
+import {VscChevronDown} from 'react-icons/vsc'
+import {NavLink} from 'react-router-dom'
+import {GiSelect} from 'react-icons/gi'
 import {useRootStore} from '../infra/mobx'
 import {ITag, IDropdownItems, Tags} from '../utils/MenuTags'
 /* Styles */
@@ -15,12 +14,13 @@ type IMenu = {
 }
 type IDropDown = {
   active?: boolean
-}
-interface IListWrap {
   open: boolean
-  isDropDown?: boolean
-  tagActive?: boolean
 }
+//  interface IListWrap {
+//  open: boolean
+//  isDropDown?: boolean
+//  tagActive?: boolean
+//  }
 interface IListItem {
   open: boolean
   isDropDown?: boolean
@@ -36,6 +36,7 @@ const MenuList = styled.ul<IMenu>`
   transition-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
   scrollbar-color: auto;
   scrollbar-width: thin;
+  padding: 0 15px;
   &::-webkit-scrollbar {
     width: ${({open}) => (open ? '6px' : '0')};
     height: ${({open}) => (open ? '18px ' : '0')};
@@ -64,7 +65,7 @@ const MenuList = styled.ul<IMenu>`
     /* margin-bottom: 40vh; */
   }
   .title_tagList {
-    /* display: ${({open}) => (open ? 'block' : 'none')}; */
+    display: ${({open}) => (open ? 'block' : 'none')};
     opacity: ${({open}) => (open ? '1' : '0')};
     padding: 12px 18px;
     transition: all 0.5s cubic-bezier(0, 1, 0, 1);
@@ -73,58 +74,58 @@ const MenuList = styled.ul<IMenu>`
     border-radius: 0.25rem;
     color: ${({theme}: any) =>
       theme.sideBar.tittleTag || 'rgba(26, 51, 83, 0.6)'};
-    font-size: 0.75rem;
-    font-weight: bold;
-    font-family: Roboto, sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    font-family: Montserrat, Helvetica, Arial, sans-serif;
     text-transform: uppercase;
+    color: #999;
   }
 `
 
 const OpenedStyled = styled.ul<IDropDown>`
   position: relative;
+  display: ${({open}) => (open ? 'flex' : 'none')};
+  flex-direction: column;
   opacity: ${({active}) => (active ? '1' : '0')};
-  display: ${({active}) => (active ? 'block' : 'none')};
-  /* max-height: ${({active}) => (active ? '500px' : '0')}; */
+  max-height: ${({active}) => (active ? 'none' : '0')};
   transition: max-height 0.5s, opacity 1s;
   transition: padding 300ms;
-  padding: 0.5em 0 0 2rem;
-  :before {
-    content: '';
-    height: 100%;
-    opacity: 1;
-    width: 3px;
-    background: rgb(202 240 248 / 0.4);
-    position: absolute;
-    left: 20px;
-    top: 0;
-    border-radius: 15px;
-  }
-  li {
-    display: flex;
-    align-items: center;
-    /* white-space: nowrap; */
-    padding: 8px 20px 8px 20px;
-    :hover {
-      border-radius: 0.25rem;
-      a {
-        font-weight: 500;
-        color: ${({theme}: any) => theme.sideBar.menuTag.activeText};
+  .dropdown-wrap {
+    &:hover {
+      .svg-drop,
+      .tag-optname {
+        transform: translateX(5px);
       }
     }
-    margin-top: 2px;
-    svg {
-      margin-right: 20px;
-    }
   }
-  a {
+  .dropdown-tag {
+    display: flex;
+    align-items: center;
+    color: #000;
+    -webkit-transition: none;
+    border-radius: 4px;
+    padding: 10px 15px 10px 20px;
+  }
+  .tag-optname {
+    display: block
     color: ${({theme}: any) => theme.sideBar.menuTag.text};
+    line-height: 1.8rem;
     letter-spacing: 0.7px;
     font-family: Roboto;
     text-transform: capitalize;
-    font-weight: 500;
+    font-weight: 400;
+    transition: transform 0.25s ease, -webkit-transform 0.25s ease;
+    transition: -webkit-transform 0.25s ease;
+    transition: transform 0.25s ease;
   }
-  & .icon-li-drop {
-    margin-right: 10px;
+  .svg-drop {
+    width: 10.5px;
+    height: 10.5px;
+    fill: ${({theme}: any) => theme.sideBar.menuTag.text};
+    margin-right: 20px;
+    transition: transform 0.25s ease, -webkit-transform 0.25s ease;
+    transition: -webkit-transform 0.25s ease;
+    transition: transform 0.25s ease;
   }
 `
 
@@ -168,94 +169,73 @@ const ClosedStyled = styled('ul')`
 `
 
 const ListItem = styled.li<IListItem>`
-  display: flex;
-  flex-direction: column;
+  display: block;
   position: relative;
   cursor: pointer;
   width: 100%;
   overflow: hidden;
+  :focus {
+    outline: none; /* no outline - for most browsers */
+    box-shadow: none; /* no box shadow - for some browsers or if you are using Bootstrap */
+  }
+  &:hover {
+    .svg-main,
+    .tag-name {
+      transform: translateX(5px);
+    }
+  }
   &:hover ${ClosedStyled} {
     display: block;
+  }
+  .tag-container {
+    width: 100%;
+  }
+  .active-dropheader {
+    background: rgba(0, 0, 0, 0.1);
+  }
+  .active {
+    background: rgba(0, 0, 0, 0.1);
+  }
+  .svg-arrow {
+    position: absolute;
+    left: 220px;
+    color: ${({theme}: any) => theme.sideBar.menuTag.text};
+  }
+  .tag-name {
+    display: ${({open}) => (open ? 'space-between' : 'none')};
+    color: ${({theme}: any) => theme.sideBar.menuTag.text};
+    line-height: 1.8rem;
+    letter-spacing: 0.7px;
+    font-family: Roboto;
+    text-transform: capitalize;
+    font-weight: 400;
+    transition: transform 0.25s ease, -webkit-transform 0.25s ease;
+    transition: -webkit-transform 0.25s ease;
+    transition: transform 0.25s ease;
+  }
+  .svg-main {
+    width: 24px;
+    height: 24px;
+    fill: ${({theme}: any) => theme.sideBar.menuTag.text};
+    margin-right: ${({open}) => (open ? '14px' : '0')};
+    transition: transform 0.25s ease, -webkit-transform 0.25s ease;
+    transition: -webkit-transform 0.25s ease;
+    transition: transform 0.25s ease;
   }
   .tag-wrapper {
     display: flex;
     height: 48px;
     width: 100%;
-    //transition: all 0.5s cubic-bezier(0, 1, 0, 1);
+    border-radius: 4px;
+    padding: ${({open}) => (open ? '10px 14px' : '0')};
     align-items: center;
+    background: ${({active, isDropDown}) =>
+      active && isDropDown ? '#f6f6f6' : ''};
     justify-content: ${({open}) => (open ? 'flex-start' : 'center')};
     position: relative;
-    padding: 0 ${({open}) => (open ? '24px' : '0')};
-    .svg-main {
-      width: 24px;
-      height: 24px;
-      fill: ${({active, theme}: any) =>
-        active ? theme.sideBar.menuTag.activeText : theme.sideBar.menuTag.text};
-      margin-right: ${({open}) => (open ? '24px' : '0')};
-    }
-    .tag-name {
-      display: ${({open}) => (open ? 'space-between' : 'none')};
-      color: ${({active, theme}: any) =>
-        active ? theme.sideBar.menuTag.activeText : theme.sideBar.menuTag.text};
-      line-height: 1.8rem;
-      letter-spacing: 0.7px;
-      font-family: Roboto;
-      text-transform: capitalize;
-      font-weight: 400;
-    }
-    .svg-arrow {
-      position: absolute;
-      left: 240px;
-      color: ${({active, theme}: any) =>
-        active ? theme.sideBar.menuTag.activeText : theme.sideBar.menuTag.text};
-    }
-    :hover {
-      background: ${({open, theme}: any) => (open ? '#e7e7e7' : '')};
-      .menu_txt {
-        svg {
-          fill: ${({theme}: any) => theme.sideBar.menuTag.activeText};
-          stroke: ${({theme}: any) => theme.sideBar.menuTag.activeText};
-          transition: all 0.3s ease;
-        }
-        span {
-          color: ${({theme}: any) => theme.sideBar.menuTag.activeText};
-        }
-      }
-    }
-    .menu_txt {
-      display: flex;
-      align-items: center;
-      span {
-        color: ${({active, theme}: any) =>
-          active
-            ? theme.sideBar.menuTag.activeText
-            : theme.sideBar.menuTag.text};
-        margin-bottom: -2px;
-      }
-      svg {
-        fill: ${({active, theme}: any) =>
-          active
-            ? theme.sideBar.menuTag.activeText
-            : theme.sideBar.menuTag.text};
-        margin-right: ${({open}) => (open ? '10px' : '0')};
-        transition: all 0.5s cubic-bezier(0, 1, 0, 1);
-      }
-    }
-    & .icon-li {
-      margin-right: 10px;
-    }
-    & .down-up_svg,
-    .li-name {
-      display: ${({open}) => (open ? 'space-between' : 'none')};
-      color: ${({active, theme}: any) =>
-        active ? theme.sideBar.menuTag.activeText : theme.sideBar.menuTag.text};
-      letter-spacing: 0.7px;
-      font-family: Roboto;
-      text-transform: capitalize;
-      font-weight: 500;
-    }
   }
 `
+
 /* Styles */
 export type TSideBar = {
   open: boolean
@@ -277,41 +257,54 @@ interface ITagList {
 
 const Drop: React.FC<IDrop> = observer(({active, dropItems, isOpen}) => {
   return (
-    <>
-      {isOpen === true ? (
-        <OpenedStyled active={active}>
-          {dropItems.map((item) => (
-            <li className="li-open" key={JSON.stringify(item.Name)}>
-              <a href="#/">{item.Name}</a>
-            </li>
-          ))}
-        </OpenedStyled>
-      ) : (
-        <ClosedStyled>
-          {dropItems.map((item) => (
-            <li className="li-closed" key={JSON.stringify(item.Name)}>
-              <FaGhost size={18} />
-              <a href="#/">{item.Name}</a>
-            </li>
-          ))}
-        </ClosedStyled>
-      )}
-    </>
+    <OpenedStyled active={active} open={isOpen}>
+      {dropItems.map((item) => (
+        <li className="dropdown-wrap" key={JSON.stringify(item.Name)}>
+          <NavLink
+            to={item.Link}
+            className="dropdown-tag"
+            activeClassName="active-dropheader"
+          >
+            <GiSelect className="svg-drop" size={12} />
+            <span className="tag-optname">{item.Name}</span>
+          </NavLink>
+        </li>
+      ))}
+    </OpenedStyled>
   )
 })
 const TagList: React.FC<ITagList> = observer(({tag, clickHandler, open}) => {
+  const tagHandleClick = (e: any) => {
+    console.log('enter on handler children')
+    e.preventDefault()
+    if (tag.Active !== undefined) clickHandler(tag)
+  }
   return (
-    <ListItem
-      open={open}
-      isDropDown={!!tag.DropdownItems}
-      active={tag.Active}
-      onClick={tag.Active !== undefined ? clickHandler(tag) : undefined}
-    >
-      {open === true ? (
-        <NavLink className="tag-wrapper" to={tag.Link}>
-          <tag.Icon className="svg-main" size={22} />
-          <span className="tag-name">{tag.Name}</span>
-          {tag.DropdownItems ? (
+    <ListItem open={open} isDropDown={!!tag.DropdownItems} active={tag.Active}>
+      {tag.Link ? (
+        <div
+          className="tag-container"
+          role="presentation"
+          onClick={tag.Active !== undefined ? clickHandler(tag) : undefined}
+        >
+          <NavLink
+            className="tag-wrapper"
+            activeClassName="active"
+            to={tag.Link}
+          >
+            <tag.Icon className="svg-main" size={22} />
+            <span className="tag-name">{tag.Name}</span>
+          </NavLink>
+        </div>
+      ) : (
+        <div
+          className="tag-container"
+          role="presentation"
+          onClick={tag.Active !== undefined ? clickHandler(tag) : undefined}
+        >
+          <div className="tag-wrapper">
+            <tag.Icon className="svg-main" size={22} />
+            <span className="tag-name">{tag.Name}</span>
             <span className="svg-arrow">
               {tag.Active === true ? (
                 <VscChevronDown />
@@ -319,15 +312,8 @@ const TagList: React.FC<ITagList> = observer(({tag, clickHandler, open}) => {
                 <VscChevronDown style={{transform: 'rotate(280deg)'}} />
               )}
             </span>
-          ) : (
-            ''
-          )}
-        </NavLink>
-      ) : (
-        <NavLink className="tag-wrapper" to={tag.Link}>
-          <tag.Icon className="svg-main" size={24} />
-          <span className="li-name">{tag.Name}</span>
-        </NavLink>
+          </div>
+        </div>
       )}
       {tag.DropdownItems ? (
         <Drop
@@ -345,7 +331,14 @@ const TagList: React.FC<ITagList> = observer(({tag, clickHandler, open}) => {
 })
 const MenuTags: React.FC<{hover: boolean}> = observer(({hover}) => {
   const {layoutStore} = useRootStore()
-  const [tags, setTags] = useState<ITag[]>(Tags)
+  const [tags, setTags] = useState<ITag[]>(
+    Tags.map((tag) => {
+      return {
+        ...tag,
+        Active: tag.Name === 'Dashboard' ? true : false,
+      }
+    }),
+  )
   const showHideDropItem: ShowHideDropItem = (tag) => {
     setTags((items) =>
       items.map((item) => ({
@@ -354,16 +347,17 @@ const MenuTags: React.FC<{hover: boolean}> = observer(({hover}) => {
       })),
     )
   }
-  useEffect(() => {
-    setTags((items) =>
-      items.map((item) => ({
-        ...item,
-        Active: false,
-      })),
-    )
-  }, [layoutStore.sideBar, layoutStore.onHoverSideState])
+  //  useEffect(() => {
+  //  setTags((items) =>
+  //    items.map((item) => ({
+  //      ...item,
+  //      Active: false,
+  //    })),
+  //  )
+  //  }, [])
 
   const clickHandler: ClickHandler = (tag) => (e) => {
+    console.log('a')
     e.preventDefault()
     showHideDropItem(tag)
   }

@@ -1,6 +1,7 @@
 import React, {useState} from 'react'
 import styled from '@emotion/styled/macro'
 import {observer} from 'mobx-react-lite'
+import Switch from 'react-switch'
 import {css} from '@emotion/react'
 import {Sling as Hamburger} from 'hamburger-react'
 import {Container} from './FlexBox'
@@ -64,13 +65,13 @@ const AppHeader = styled(Container)<SideBarState>`
       left: calc(50% - 9.5px) !important;
       right: 0;
     }
-    div:nth-child(1) {
+    div:nth-of-type(1) {
       top: calc(50% - 6px) !important;
     }
-    div:nth-child(2) {
+    div:nth-of-type(2) {
       top: calc(50% - 1px) !important;
     }
-    div:nth-child(3) {
+    div:nth-of-type(3) {
       top: calc(50% + 4px) !important;
     }
   }
@@ -85,7 +86,6 @@ const AppHeader = styled(Container)<SideBarState>`
 `
 const AppHeaderLogo: React.FC = observer(() => {
   const {layoutStore} = useRootStore()
-  const [checked, setChecked] = useState(true)
   return (
     <AppHeader
       open={layoutStore.sideBar || layoutStore.onHoverSideState}

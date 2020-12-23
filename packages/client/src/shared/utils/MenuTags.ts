@@ -13,101 +13,79 @@ export interface IDropdownItems {
 export interface ITag {
   Title?: string
   Name: string
-  Link: string
+  Link?: string
   Icon: IconType
   DropdownItems: IDropdownItems[] | null
   Active?: boolean
 }
 export const Tags: ITag[] = [
   {
-    Title: 'DashBoard',
-    Name: 'Default',
-    Link: 'about',
+    Name: 'Dashboard',
     Icon: AiOutlineDashboard,
-    DropdownItems: null,
-  },
-  {
-    Name: 'Analytic',
-    Link: 'test',
-    Icon: AiOutlineLineChart,
-    DropdownItems: null,
-  },
-  {
-    Name: 'Inventory',
-    Link: 'dasdasdas',
-    Icon: BiStoreAlt,
-    DropdownItems: null,
+    DropdownItems: [
+      {Name: 'Analytics', Link: '../dashboard'},
+      {Name: 'Inventory', Link: 'inventory'},
+    ],
   },
   {
     Title: 'Pages',
     Name: 'Employees',
-    Link: 'dasas',
     Icon: TiGroupOutline,
     DropdownItems: [
-      {Name: 'Employee List', Link: '/eloBost'},
-      {Name: 'View Employee', Link: '/duoBoost'},
-      {Name: 'New Employee', Link: '/eloBost'},
-      {Name: 'Any', Link: '/duoBoost'},
+      {Name: 'Employee List', Link: 'dsad'},
+      {Name: 'View Employee', Link: 'dasas'},
+      {Name: 'New Employee', Link: 'dasd'},
+      {Name: 'Any', Link: 'about'},
     ],
   },
   {
     Name: 'Departaments',
-    Link: 'defaults2',
     Icon: FaRegBuilding,
     DropdownItems: [
-      {Name: 'Elo Boost', Link: '/eloBost'},
-      {Name: 'Duo Boost', Link: '/duoBoost'},
-      {Name: 'MD10', Link: '/eloBost'},
-      {Name: 'Coaching', Link: '/duoBoost'},
-      {Name: 'Vitóriais', Link: '/duoBoost'},
+      {Name: 'Employee List', Link: 'sadasd'},
+      {Name: 'View Employee', Link: 'xx'},
+      {Name: 'New Employee', Link: 'xxx'},
+      {Name: 'Any', Link: 'dad'},
     ],
   },
   {
     Name: 'Products',
-    Link: 'default',
     Icon: BsLightning,
     DropdownItems: [
-      {Name: 'Elo Boost', Link: '/eloBost'},
-      {Name: 'Duo Boost', Link: '/duoBoost'},
-      {Name: 'MD10', Link: '/eloBost'},
-      {Name: 'Coaching', Link: '/duoBoost'},
-      {Name: 'Vitóriais', Link: '/duoBoost'},
+      {Name: 'Employee List', Link: 'asdaw'},
+      {Name: 'View Employee', Link: 'adaewd'},
+      {Name: 'New Employee', Link: 'fsafasd'},
+      {Name: 'Any', Link: 'dasdasxc'},
     ],
   },
   {
     Name: 'Suppliers',
-    Link: 'dashboards',
     Icon: BsBookmarkPlus,
     DropdownItems: [
-      {Name: 'Elo Boost', Link: '/eloBost'},
-      {Name: 'Duo Boost', Link: '/duoBoost'},
-      {Name: 'MD10', Link: '/eloBost'},
-      {Name: 'Coaching', Link: '/duoBoost'},
-      {Name: 'Vitóriais', Link: '/duoBoost'},
+      {Name: 'Employee List', Link: 'xcxv'},
+      {Name: 'View Employee', Link: 'dasd'},
+      {Name: 'New Employee', Link: 'xxe'},
+      {Name: 'Any', Link: 'about'},
     ],
   },
   {
     Name: 'Contracts',
-    Link: 'dashboards',
     Icon: BsFileEarmarkText,
     DropdownItems: [
-      {Name: 'Elo Boost', Link: '/eloBost'},
-      {Name: 'Duo Boost', Link: '/duoBoost'},
-      {Name: 'MD10', Link: '/eloBost'},
-      {Name: 'Coaching', Link: '/duoBoost'},
-      {Name: 'Vitóriais', Link: '/duoBoost'},
+      {Name: 'Employee List', Link: 'eqweq'},
+      {Name: 'View Employee', Link: 'sdadwq'},
+      {Name: 'New Employee', Link: 'dasdqw'},
+      {Name: 'Any', Link: 'sdaqw'},
     ],
   },
   {
     Name: 'User List',
-    Link: 'dashboards',
     Icon: RiGroupLine,
     DropdownItems: [
-      {Name: 'Elo Boost', Link: '/eloBost'},
-      {Name: 'Duo Boost', Link: '/duoBoost'},
-      {Name: 'MD10', Link: '/eloBost'},
-      {Name: 'Coaching', Link: '/duoBoost'},
-      {Name: 'Vitóriais', Link: '/duoBoost'},
+      {Name: 'Employee List', Link: 'dasd'},
+      {Name: 'View Employee', Link: 'eqwe'},
+      {Name: 'New Employee', Link: 'aboudawqt'},
+      {Name: 'Any', Link: 'wqeqw'},
     ],
   },
 ]

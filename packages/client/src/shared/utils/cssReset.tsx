@@ -114,6 +114,7 @@ const GlobalStyle: React.FC = () => {
           margin: 0px;
           padding: 0px;
           box-sizing: border-box;
+          -webkit-tap-highlight-color: transparent;
         }
         /* *,
         *::before,
@@ -122,7 +123,8 @@ const GlobalStyle: React.FC = () => {
         } */
         *:focus {
           outline: 0;
-          outline: none;
+          outline: none !important;
+          box-shadow: none;
         }
         input:-webkit-autofill,
         input:-webkit-autofill:hover,
@@ -180,6 +182,8 @@ const GlobalStyle: React.FC = () => {
           margin: 0;
         }
         html {
+          line-height: 1.5;
+          letter-spacing: 0.01rem;
         }
         body {
           overflow: hidden;
