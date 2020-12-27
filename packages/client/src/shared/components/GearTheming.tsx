@@ -1,29 +1,28 @@
-import React from 'react'
+import React, {useCallback, useEffect} from 'react'
 import styled from '@emotion/styled'
 import {BsGear} from 'react-icons/bs'
 import {RiSettings2Line} from 'react-icons/ri'
 import {useSpring, animated} from 'react-spring'
+import {observer} from 'mobx-react-lite'
 import {useHover} from '../utils/useHoover'
+import {useRootStore} from '../infra/mobx'
 
-const GearWrap = styled('div')`
+const GearWrap = styled(animated.div)`
   position: absolute;
-  right: 0;
-  bottom: 150px;
+  top: calc(50% - 42px);
   z-index: 99;
 `
 const GearButton = styled('button')`
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0 15px;
-  font-size: 18px;
-  height: 42px;
-  line-height: 42px;
+  width: 45px;
+  height: 45px;
+  background: linear-gradient(to right, #0189cf, #0080c0);
   cursor: pointer;
   margin: 0;
-  box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.05);
+  box-shadow: -4px 0 8px rgba(255, 182, 77, 0.16), -6px 0 8px rgba(0, 0, 0, 0.1);
   border-radius: 30px 0 0 30px;
-  background: -webkit-linear-gradient(left, #0189cf, #0080c0);
   border: 0 none;
   svg {
     color: #fff !important;
@@ -31,8 +30,9 @@ const GearButton = styled('button')`
   }
 `
 
-const GearTheming: React.FC = () => {
+const GearTheming: React.FC = observer(() => {
   const [hoverRef, isHovered] = useHover()
+  const {layoutStore} = useRootStore()
   const {rotateZ} = useSpring({
     pause: isHovered,
     from: {
@@ -44,9 +44,24 @@ const GearTheming: React.FC = () => {
     loop: true,
     config: {duration: 1000},
   })
+  const gearAnimate = useSpring({
+    config: {duration: 200},
+    to: {
+      right: layoutStore.themeSideBar ? 400 : 0,
+    },
+    from: {right: 0},
+  })
+
+  const toggleSideTheme = useCallback(() => {
+    layoutStore.toggleThemeSideBar()
+  }, [])
   // style={{transform: rotateZ.interpolate((z) => `rotateZ(${z}deg)`)}}
   return (
-    <GearWrap ref={hoverRef}>
+    <GearWrap
+      ref={hoverRef}
+      onClick={toggleSideTheme}
+      style={gearAnimate as any}
+    >
       <GearButton>
         <animated.svg
           xmlns="http://www.w3.org/2000/svg"
@@ -60,6 +75,6 @@ const GearTheming: React.FC = () => {
       </GearButton>
     </GearWrap>
   )
-}
+})
 
 export default GearTheming

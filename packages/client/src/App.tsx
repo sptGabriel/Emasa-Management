@@ -1,17 +1,21 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import {observer} from 'mobx-react-lite'
 import {ThemeProvider} from '@emotion/react'
 import GlobalReset from './shared/utils/cssReset'
 import {useRootStore} from './shared/infra/mobx'
-import {darkTheme, lightTheme} from './shared/themes'
+
 import ErrorFallback from './shared/components/ErrorFallBack'
 import ESpinner from './shared/components/Spinner'
 import ApplicationRoutes from './shared/infra/router/routes2'
+import {LightTheme} from './shared/themes/lightTheme'
 
 const App: React.FC = observer(() => {
-  const {layoutStore, appState, authStore} = useRootStore()
+  const {layoutStore, appState, authStore, initApi} = useRootStore()
+  useEffect(() => {
+    initApi()
+  }, [])
   return (
-    <ThemeProvider theme={layoutStore.isDarkMode ? darkTheme : lightTheme}>
+    <ThemeProvider theme={layoutStore.theme ? layoutStore.theme : LightTheme}>
       <GlobalReset />
       {appState === 'pending' ? (
         <div

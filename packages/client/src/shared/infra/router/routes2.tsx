@@ -1,10 +1,9 @@
 import {observer} from 'mobx-react-lite'
 import React from 'react'
-import {Navigate, Outlet, useRoutes} from 'react-router-dom'
+import {Navigate, useRoutes} from 'react-router-dom'
 import DashBoard from '../../../pages/dashboard'
 import Login from '../../../pages/login'
 import ErrorFallback from '../../components/ErrorFallBack'
-import GearTheming from '../../components/GearButton'
 
 const ApplicationRoutes: React.FC<{isLoggedIn: boolean}> = observer(
   ({isLoggedIn}) => {

@@ -27,11 +27,11 @@ export class RootStore {
   constructor() {
     makeAutoObservable(this)
     this.AxiosStore = new AxiosStore(this)
-    this.AxiosStore.enableInterceptors().then(() => this.initApi())
+    this.layoutStore = new LayoutUIStore(this)
+    this.AxiosStore.enableInterceptors()
     this.cookieStore = new CookieStore(this)
     this.currentUserStore = new CurrentUserStore(this)
     this.authStore = new AuthStore(this)
-    this.layoutStore = new LayoutUIStore(this)
   }
 
   public initApi = async (): Promise<void> => {

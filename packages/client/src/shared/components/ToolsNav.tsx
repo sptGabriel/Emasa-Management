@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import {css, keyframes} from '@emotion/react'
 import styled from '@emotion/styled/macro'
 import useOnClickOutside from 'use-onclickoutside'
@@ -75,7 +75,7 @@ const UserProfile = styled('div')<IUserProfile>`
     }
   }
   & .svg-arrow {
-    color: ${({theme}: any) => theme.sideBar.menuTag.activeText};
+    color: ${({theme}: any) => theme.text} !important;
     ${({open}) =>
       open
         ? css`
@@ -90,7 +90,7 @@ const UserProfile = styled('div')<IUserProfile>`
     padding-left: 0.75rem !important;
     span:first-of-type {
       font-size: 0.8rem;
-      color: ${({theme}: any) => theme.sideBar.menuTag.activeText};
+      color: ${({theme}: any) => theme.textActive} !important;
       letter-spacing: 0.7px;
       font-family: Roboto;
       text-transform: capitalize;
@@ -98,7 +98,7 @@ const UserProfile = styled('div')<IUserProfile>`
     }
     span:last-of-type {
       font-size: 0.8rem;
-      color: #838598 !important;
+      color: ${({theme}: any) => theme.text} !important;
       letter-spacing: 0.7px;
       font-family: Roboto;
       text-transform: capitalize;
@@ -128,25 +128,19 @@ const UserCanvas = styled.div<IUserCanvas>`
   width: 100%;
   display: ${({open}) => (open ? 'flex' : 'none')};
   flex-direction: column;
-  border: 1px solid
-    ${({theme}: any) => (theme.type === 'dark' ? '#2e2b3f' : '#f0f0f0')};
-  ${({theme}: any) =>
-    theme.type === 'light'
-      ? css`
-          box-shadow: 0 0 20px rgba(89, 102, 122, 0.1);
-        `
-      : ''};
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 5px 25px 0 rgba(0, 0, 0, 0.1);
   transform: translateY(104%);
   bottom: 0;
   font-size: 1rem;
-  color: #fff;
-  background: ${({theme}: any) => (theme.type === 'dark' ? '#232033' : '#fff')};
-  padding: 0.5rem 0;
+  background: ${({theme}: any) => theme.background} !important;
+  z-index: 999;
+  padding: 0.5rem 0.2rem;
   border-radius: 0.3rem;
   .header_txt {
     padding: 0.5rem 1rem;
     white-space: nowrap;
-    color: ${({theme}: any) => (theme.type === 'dark' ? '#fff' : '#2c323f')};
+    color: ${({theme}: any) => theme.text} !important;
     font-size: 0.625rem;
     text-transform: uppercase;
     font-weight: bold;
@@ -156,11 +150,10 @@ const UserCanvas = styled.div<IUserCanvas>`
     display: flex;
     padding: 0.5rem 1rem;
     align-items: center;
-    color: ${({theme}: any) => theme.sideBar.menuTag.text};
+    color: ${({theme}: any) => theme.text} !important;
     :hover {
-      background: ${({theme}: any) =>
-        theme.type === 'dark' ? '#2e2b3f' : '#f0f0f0'};
-      color: ${({theme}: any) => theme.sideBar.menuTag.activeText};
+      background: ${({theme}: any) => `rgb(${theme.primary})`} !important;
+      color: #fff !important;
     }
   }
   svg {
@@ -172,8 +165,7 @@ const UserCanvas = styled.div<IUserCanvas>`
     height: 0;
     margin: 0.5rem 0;
     overflow: hidden;
-    border-top: 1px solid
-      ${({theme}: any) => (theme.type === 'dark' ? '#2e2b3f' : '#f0f0f0')};
+    border-top: 1px solid #f0f0f0;
   }
 `
 const WrapperTools = styled(Container)<SideBarState>`
@@ -181,8 +173,8 @@ const WrapperTools = styled(Container)<SideBarState>`
   display: flex;
   align-items: center;
   display: flex;
-  width: 100%;
-  position: relative;
+  width: ${({open}) => (open ? 'calc(100% - 280px)' : 'calc(100% - 72px)')};
+  background: ${({theme}: any) => theme.background};
   & .bell {
     animation: ${bellAnimation} 1.5s ease infinite;
   }
@@ -195,29 +187,33 @@ const WrapperTools = styled(Container)<SideBarState>`
     list-style: none;
     width: 46px;
     height: 46px;
-    color: ${({theme}: any) =>
-      theme.type === 'dark' ? 'rgb(168, 168, 179)' : '#0079db'};
+    svg {
+      color: ${({theme}: any) => theme.header.svg} !important;
+    }
     :hover {
-      background: ${({theme}: any) =>
-        theme.type === 'dark' ? '#221F2E' : '#f0f0f0'};
+      background: ${({theme}: any) => `rgb(${theme.backgroundSecondary})`};
       svg {
-        filter: brightness(1.5);
+        color: ${({theme}: any) => `rgb(${theme.primary})`} !important;
       }
     }
   }
 `
 const ContentUserSection: React.FC<IUserCanvas> = observer(
   ({open}: IUserCanvas) => {
-    const {authStore} = useRootStore()
+    const {authStore, layoutStore} = useRootStore()
+    useEffect(() => {
+      console.log(layoutStore.theme.primary)
+      console.log(layoutStore.theme.header.svg)
+    }, [layoutStore.theme])
     return (
       <UserCanvas open={open}>
         <div className="header_txt">Welcome !</div>
         <button type="button" className="dropdown-itemx">
-          <CgProfile size={24} />
+          <CgProfile size={18} />
           <span>My Profile</span>
         </button>
         <button type="button" className="dropdown-itemx">
-          <IoIosSettings size={24} />
+          <IoIosSettings size={18} />
           <span>Settings</span>
         </button>
         <div className="dropdown-divider" />
@@ -226,7 +222,7 @@ const ContentUserSection: React.FC<IUserCanvas> = observer(
           className="dropdown-itemx"
           onClick={() => authStore.logout()}
         >
-          <CgLogOff className="logout" size={24} />
+          <CgLogOff className="logout" size={18} />
           <span>Logout</span>
         </button>
       </UserCanvas>
@@ -260,10 +256,14 @@ const ToolsNav: React.FC = observer(() => {
       <Search />
       <button
         className="tool_widget"
-        onClick={layoutStore.toggleDarkMode}
+        onClick={layoutStore.setDarkTheme}
         type="button"
       >
-        {layoutStore.isDarkMode ? <BiMoon size={24} /> : <FiSun size={24} />}
+        {layoutStore.theme.type === 'dark' ? (
+          <BiMoon size={24} />
+        ) : (
+          <FiSun size={24} />
+        )}
       </button>
       <button className="tool_widget bell" type="button">
         <FiBell size={24} />

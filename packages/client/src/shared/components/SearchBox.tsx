@@ -20,9 +20,9 @@ export const SearchWrapper = styled.div<SearchState>`
     display: flex;
     align-items: center;
     background: ${({isOpen, theme}: any) =>
-      isOpen ? theme.navBar.searchBox : 'rgba(255,255,255,0)'};
+      isOpen ? `rgb(${theme.backgroundSecondary})` : theme.background};
     overflow: hidden;
-    border-radius: ${(props) => (props.isOpen ? '50px' : '')};
+    border-radius: ${(props) => (props.isOpen ? '100vh' : '')};
     overflow: hidden;
     position: relative;
     transition: ${(props) =>
@@ -44,32 +44,32 @@ export const SearchWrapper = styled.div<SearchState>`
     box-sizing: border-box;
     border: none;
     outline: none;
-    color: ${({theme}: any) => theme.navBar.searchText};
+    color: ${({theme}: any) => theme.textActive};
     ::-webkit-input-placeholder {
       /* WebKit, Blink, Edge */
-      color: ${({theme}: any) => theme.navBar.searchText};
+      color: ${({theme}: any) => theme.textActive};
     }
     :-moz-placeholder {
       /* Mozilla Firefox 4 to 18 */
-      color: ${({theme}: any) => theme.navBar.searchText};
+      color: ${({theme}: any) => theme.textActive};
       opacity: 1;
     }
     ::-moz-placeholder {
       /* Mozilla Firefox 19+ */
-      color: ${({theme}: any) => theme.navBar.searchText};
+      color: ${({theme}: any) => theme.textActive};
       opacity: 1;
     }
     :-ms-input-placeholder {
       /* Internet Explorer 10-11 */
-      color: ${({theme}: any) => theme.navBar.searchText};
+      color: ${({theme}: any) => theme.textActive};
     }
     ::-ms-input-placeholder {
       /* Microsoft Edge */
-      color: ${({theme}: any) => theme.navBar.searchText};
+      color: ${({theme}: any) => theme.textActive};
     }
     ::placeholder {
       /* Most modern browsers support this now. */
-      color: ${({theme}: any) => theme.navBar.searchText};
+      color: ${({theme}: any) => theme.textActive};
     }
     transform: ${(props) => (props.isOpen ? '' : 'translate(0, 60px)')};
     transition: all 0.3s cubic-bezier(0, 0.105, 0.035, 1.57);
@@ -100,15 +100,14 @@ export const SearchWrapper = styled.div<SearchState>`
           `
         : ''};
     :hover {
-      background: ${({theme}: any) =>
-        theme.type === 'dark' ? '#221F2E' : '#F2F2F2'};
+      background: ${({theme}: any) => `rgb(${theme.backgroundSecondary})`};
       svg {
-        filter: brightness(1.75);
+        color: ${({theme}: any) => `rgb(${theme.primary})`} !important;
       }
     }
     svg {
       transform: ${({isOpen}) => (isOpen ? 'rotate(0)' : 'rotate(90deg)')};
-      color: ${({theme}: any) => theme.navBar.widget};
+      color: ${({theme}: any) => theme.header.svg};
       transition: all 0.4s cubic-bezier(0.65, -0.6, 0.24, 1.65);
     }
     span {
@@ -168,14 +167,14 @@ export const SearchWrapper = styled.div<SearchState>`
     font-size: 1.5rem;
     font-weight: 700;
     line-height: 1;
-    color: #000;
+    color: ${({theme}: any) => theme.header.svg};
     text-shadow: 0 1px 0 #fff;
     outline: none !important;
     :hover::before {
-      filter: brightness(1.75);
+      background: ${({theme}: any) => `rgb(${theme.primary})`} !important;
     }
     :hover::after {
-      filter: brightness(1.75);
+      background: ${({theme}: any) => `rgb(${theme.primary})`} !important;
     }
     ::before {
       width: 2px;
@@ -184,7 +183,7 @@ export const SearchWrapper = styled.div<SearchState>`
       top: 0;
       position: absolute;
       content: '';
-      background: ${({theme}: any) => theme.navBar.widget};
+      background: ${({theme}: any) => theme.header.svg};
       border-radius: 2px;
     }
     ::after {
@@ -194,7 +193,7 @@ export const SearchWrapper = styled.div<SearchState>`
       top: 9px;
       position: absolute;
       content: '';
-      background: ${({theme}: any) => theme.navBar.widget};
+      background: ${({theme}: any) => theme.header.svg};
       border-radius: 2px;
     }
   }

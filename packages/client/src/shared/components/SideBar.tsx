@@ -12,14 +12,41 @@ interface sideStat {
 }
 const SideBarContainer = styled(Container)<sideStat>`
   width: 100%;
-  height: 100vh;
+  height: 100%;
   position: relative;
-  border-right: 1px solid rgba(0, 0, 0, 0.06);
-  /* box-shadow: ${({theme}: any) =>
-    theme.type === 'dark'
-      ? '0 0 4px 0 rgba(89, 102, 122, 0.1)'
-      : '0 0 15px 0 rgba(0,0,0,.05)'}; */
-  background: ${({theme}: any) => theme.background || '#fff'};
+  background: ${({theme}: any) => `rgb(${theme.background})`};
+  overflow-y: auto;
+  transition: 0.2s;
+  transition-timing-function: ease;
+  transition-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
+  scrollbar-color: auto;
+  scrollbar-width: thin;
+  padding: 0 15px;
+  &::-webkit-scrollbar {
+    width: ${({sideisOpen}) => (sideisOpen ? '10px' : '0')};
+    height: ${({sideisOpen}) => (sideisOpen ? '14px ' : '0')};
+  }
+  &::-webkit-scrollbar-thumb:vertical {
+    height: 6px;
+    border: 3px solid ${({theme}: any) => `rgba(${theme.background})`};
+    background-clip: padding-box;
+    background: ${({theme}: any) => `rgba(${theme.backgroundSecondary})`};
+    border-radius: 100vh;
+  }
+  &::-webkit-scrollbar-button {
+    width: 0;
+    height: 0;
+    display: none;
+  }
+  &::-webkit-scrollbar-corner {
+    background-color: red;
+  }
+  &::-webkit-scrollbar-track {
+    background-clip: content-box;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    /* margin-bottom: 40vh; */
+  }
 `
 
 const SideBar: React.FC = observer(() => {
@@ -42,7 +69,6 @@ const SideBar: React.FC = observer(() => {
         })
       }}
     >
-      <AppHeaderLogo />
       <SideMenu hover={isHover} />
     </SideBarContainer>
   )
