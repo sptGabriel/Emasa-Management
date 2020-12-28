@@ -5,7 +5,6 @@ import {runInAction} from 'mobx'
 import {useRootStore} from '../infra/mobx'
 import {Container} from './FlexBox'
 import SideMenu from './SideMenu'
-import AppHeaderLogo from './Header'
 
 interface sideStat {
   sideisOpen: boolean
@@ -21,7 +20,7 @@ const SideBarContainer = styled(Container)<sideStat>`
   transition-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
   scrollbar-color: auto;
   scrollbar-width: thin;
-  padding: 0 15px;
+  padding: 10px 15px;
   &::-webkit-scrollbar {
     width: ${({sideisOpen}) => (sideisOpen ? '10px' : '0')};
     height: ${({sideisOpen}) => (sideisOpen ? '14px ' : '0')};

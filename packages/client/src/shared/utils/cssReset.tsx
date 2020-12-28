@@ -186,7 +186,7 @@ const GlobalStyle: React.FC = () => {
           letter-spacing: 0.01rem;
         }
         body {
-          overflow: hidden;
+          overflow-x: hidden;
           font-family: Roboto, sans-serif, Poppins;
           background-color: #fafafb;
           text-rendering: optimizelegibility !important;

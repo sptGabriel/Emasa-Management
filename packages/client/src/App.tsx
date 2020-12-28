@@ -1,9 +1,10 @@
 import React, {useEffect} from 'react'
 import {observer} from 'mobx-react-lite'
 import {ThemeProvider} from '@emotion/react'
+import {useLocation} from 'react-router-dom'
 import GlobalReset from './shared/utils/cssReset'
 import {useRootStore} from './shared/infra/mobx'
-
+import CustomizerTheme from './shared/components/ThemeSideBox'
 import ErrorFallback from './shared/components/ErrorFallBack'
 import ESpinner from './shared/components/Spinner'
 import ApplicationRoutes from './shared/infra/router/routes2'
@@ -11,12 +12,18 @@ import {LightTheme} from './shared/themes/lightTheme'
 
 const App: React.FC = observer(() => {
   const {layoutStore, appState, authStore, initApi} = useRootStore()
+  const location = useLocation()
   useEffect(() => {
     initApi()
   }, [])
   return (
     <ThemeProvider theme={layoutStore.theme ? layoutStore.theme : LightTheme}>
       <GlobalReset />
+      {authStore.isAuth && location.pathname === '/dashboard' ? (
+        <CustomizerTheme />
+      ) : (
+        ''
+      )}
       {appState === 'pending' ? (
         <div
           style={{

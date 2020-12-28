@@ -8,9 +8,12 @@ import {Container} from './FlexBox'
 import logo from '../../assets/logoem.svg'
 import {useRootStore} from '../infra/mobx'
 import {emasaAnimation} from '../../pages/login'
-import ToolsNav from './ToolsNav'
+import {VerticalWidgets} from './Widgets'
+import Logo from './Logo'
+import Search from './SearchBox'
+import UserProfile from './UserProfile'
 /* SideBar Styles Start */
-export interface SideBarState {
+interface SideBarState {
   open: boolean
 }
 const LogoWrapper = styled(Container)<SideBarState>`
@@ -92,6 +95,13 @@ const LogoHeader = styled(Container)<SideBarState>`
       : ''}
   background: ${({theme}: any) => theme.background};
 `
+const WrapperTools = styled(Container)<SideBarState>`
+  padding: 0 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: ${({open}) => (open ? 'calc(100% - 280px)' : 'calc(100% - 72px)')};
+`
 const Header: React.FC = observer(() => {
   const {layoutStore} = useRootStore()
   return (
@@ -113,14 +123,13 @@ const Header: React.FC = observer(() => {
           toggled={layoutStore.sideBar || layoutStore.onHoverSideState}
           onToggle={() => layoutStore.toggleSideBar()}
         />
-        <LogoWrapper open={layoutStore.sideBar || layoutStore.onHoverSideState}>
-          <img src={logo} alt="Emasa Logo" />
-          <div className="text-5 text tooltip">
-            <span>Emasa</span>
-          </div>
-        </LogoWrapper>
+        <Logo open={layoutStore.sideBar || layoutStore.onHoverSideState} />
       </LogoHeader>
-      <ToolsNav />
+      <WrapperTools open={layoutStore.sideBar || layoutStore.onHoverSideState}>
+        <Search />
+        <VerticalWidgets />
+        <UserProfile />
+      </WrapperTools>
     </NavBar>
   )
 })

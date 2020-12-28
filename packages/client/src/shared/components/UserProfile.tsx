@@ -1,67 +1,22 @@
-import React, {useEffect, useState} from 'react'
-import {css, keyframes} from '@emotion/react'
+import React, { useEffect, useRef,useState} from 'react'
+import { css } from '@emotion/react'
 import styled from '@emotion/styled/macro'
-import useOnClickOutside from 'use-onclickoutside'
-import {observer} from 'mobx-react-lite'
-import {BiChevronDown, BiMoon} from 'react-icons/bi'
-import {FiBell, FiSun} from 'react-icons/fi'
-import {IoIosSettings} from 'react-icons/io'
-import {CgLogOff, CgProfile} from 'react-icons/cg'
-import {AiOutlineCompress} from 'react-icons/ai'
-import {Container} from './FlexBox'
+import { observer } from 'mobx-react-lite'
 import userAvatar from '../../assets/user.png'
-import VerticalSplit from './Divider'
-import Search from './SearchBox'
-import {useRootStore} from '../infra/mobx'
+import { BiChevronDown } from 'react-icons/bi'
+import { CgLogOff, CgProfile } from 'react-icons/cg'
+import { IoIosSettings } from 'react-icons/io'
+import useOnClickOutside from "use-onclickoutside"
+import { useRootStore } from '../infra/mobx'
 
-const bellAnimation = keyframes`
-  0% {
-    transform: scaleX(1);
-  }
-  10% {
-    transform: scale3d(.9,.9,.9) rotate(-3deg);
-  }
-  20% {
-    transform: scale3d(.9,.9,.9) rotate(-3deg);
-  }
-  30% {
-    transform: scale3d(1.1,1.1,1.1) rotate(3deg);
-  }
-  50% {
-    transform: scale3d(1.1,1.1,1.1) rotate(3deg);
-  }
-  70% {
-    transform: scale3d(1.1,1.1,1.1) rotate(3deg);
-  }
-  90% {
-    transform: scale3d(1.1,1.1,1.1) rotate(3deg);
-  }
-  40% {
-    transform: scale3d(1.1,1.1,1.1) rotate(-3deg);
-  }
-  60% {
-    transform: scale3d(1.1,1.1,1.1) rotate(-3deg);
-  }
-  80% {
-    transform: scale3d(1.1,1.1,1.1) rotate(-3deg);
-  }
-  100% {
-    transform: scaleX(1);
-  }
-`
-/* SideBar Styles Start */
-export interface SideBarState {
-  open: boolean
-}
-/* InterFaces Start */
-interface IUserCanvas {
-  open: boolean
-}
 interface IUserProfile {
   open: boolean
 }
+interface IUserCanvas {
+  open: boolean
+}
 /* User Profile Styles Section */
-const UserProfile = styled('div')<IUserProfile>`
+const UserProfileContainer = styled('div')<IUserProfile>`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -168,36 +123,6 @@ const UserCanvas = styled.div<IUserCanvas>`
     border-top: 1px solid #f0f0f0;
   }
 `
-const WrapperTools = styled(Container)<SideBarState>`
-  padding: 0 2.5rem;
-  display: flex;
-  align-items: center;
-  display: flex;
-  width: ${({open}) => (open ? 'calc(100% - 280px)' : 'calc(100% - 72px)')};
-  background: ${({theme}: any) => theme.background};
-  & .bell {
-    animation: ${bellAnimation} 1.5s ease infinite;
-  }
-  & .tool_widget {
-    margin-right: 5px;
-    border: none;
-    border-radius: 5px;
-    transition: background 0.2s ease 0s;
-    cursor: pointer;
-    list-style: none;
-    width: 46px;
-    height: 46px;
-    svg {
-      color: ${({theme}: any) => theme.header.svg} !important;
-    }
-    :hover {
-      background: ${({theme}: any) => `rgb(${theme.backgroundSecondary})`};
-      svg {
-        color: ${({theme}: any) => `rgb(${theme.primary})`} !important;
-      }
-    }
-  }
-`
 const ContentUserSection: React.FC<IUserCanvas> = observer(
   ({open}: IUserCanvas) => {
     const {authStore, layoutStore} = useRootStore()
@@ -229,12 +154,13 @@ const ContentUserSection: React.FC<IUserCanvas> = observer(
     )
   },
 )
-const UserSection: React.FC = () => {
+
+const UserProfile: React.FC = () => {
   const [open, setOpen] = useState(false)
-  const ref = React.useRef(null)
+  const ref = useRef(null)
   useOnClickOutside(ref, () => setOpen(false))
   return (
-    <UserProfile ref={ref} onClick={() => setOpen(!open)} open={open}>
+    <UserProfileContainer ref={ref} onClick={() => setOpen(!open)} open={open}>
       <div className="user_avatar">
         <img src={userAvatar} alt="Logo" />
       </div>
@@ -246,35 +172,7 @@ const UserSection: React.FC = () => {
         <span>Web Developer</span>
       </div>
       <ContentUserSection open={open} />
-    </UserProfile>
+    </UserProfileContainer>
   )
 }
-const ToolsNav: React.FC = observer(() => {
-  const {layoutStore} = useRootStore()
-  return (
-    <WrapperTools open={layoutStore.sideBar} justify="flex-end">
-      <Search />
-      <button
-        className="tool_widget"
-        onClick={layoutStore.setDarkTheme}
-        type="button"
-      >
-        {layoutStore.theme.type === 'dark' ? (
-          <BiMoon size={24} />
-        ) : (
-          <FiSun size={24} />
-        )}
-      </button>
-      <button className="tool_widget bell" type="button">
-        <FiBell size={24} />
-      </button>
-      <button className="tool_widget" type="button">
-        <AiOutlineCompress size={24} />
-      </button>
-      <VerticalSplit />
-      <UserSection />
-    </WrapperTools>
-  )
-})
-
-export default ToolsNav
+export default UserProfile

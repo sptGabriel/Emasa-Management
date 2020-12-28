@@ -8,8 +8,10 @@ import {useHover} from '../utils/useHoover'
 import {useRootStore} from '../infra/mobx'
 
 const GearWrap = styled(animated.div)`
-  position: absolute;
+  position: fixed;
   top: calc(50% - 42px);
+  right: 0;
+  left: auto;
   z-index: 99;
 `
 const GearButton = styled('button')`
