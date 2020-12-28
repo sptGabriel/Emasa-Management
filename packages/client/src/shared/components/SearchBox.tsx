@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React, {useState} from 'react'
+import React, {useCallback, useState} from 'react'
 import styled from '@emotion/styled/macro'
 import {BiSearchAlt} from 'react-icons/bi'
 import {css} from '@emotion/react'
@@ -201,15 +201,14 @@ export const SearchWrapper = styled.div<SearchState>`
 
 const Search: React.FC = () => {
   const [isOpen, setOpen] = useState(false)
+  const clickHandler = useCallback(() => {
+    setOpen(!isOpen)
+  }, [isOpen])
   return (
     <SearchWrapper isOpen={isOpen}>
       <div className="input-holder">
         <input type="text" className="search-input" placeholder="Search ..." />
-        <button
-          className="search-icon"
-          type="button"
-          onClick={() => setOpen(!isOpen)}
-        >
+        <button className="search-icon" type="button" onClick={clickHandler}>
           <BiSearchAlt size={32} />
         </button>
       </div>
@@ -217,7 +216,7 @@ const Search: React.FC = () => {
         className="close"
         type="button"
         aria-label="Close"
-        onClick={() => setOpen(!isOpen)}
+        onClick={clickHandler}
       />
     </SearchWrapper>
   )

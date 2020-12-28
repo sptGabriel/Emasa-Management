@@ -8,8 +8,7 @@ export interface SideBarState {
   open?: boolean
 }
 const LogoWrapper = styled(Container)<SideBarState>`
-  display: ${({open}) =>
-    open || open !== undefined || open !== false ? 'flex' : 'none'};
+  display: ${({open}) => (open ? 'flex' : 'none')};
   align-items: center;
   .text-5 {
     color: #0189cf;

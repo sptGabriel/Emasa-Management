@@ -47,7 +47,7 @@ const NavBar = styled('div')`
   background: ${({theme}: any) => `rgb(${theme.background})`};
 `
 const LogoHeader = styled(Container)<SideBarState>`
-  width: ${({open}) => (open ? '280px' : '72px')};
+  width: ${({open}) => (open ? '260px' : '80px')};
   height: 70px;
   margin-bottom: 20px !important;
   .hamburger-react {
@@ -100,7 +100,7 @@ const WrapperTools = styled(Container)<SideBarState>`
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  width: ${({open}) => (open ? 'calc(100% - 280px)' : 'calc(100% - 72px)')};
+  width: ${({open}) => (open ? 'calc(100% - 260px)' : 'calc(100% - 80px)')};
 `
 const Header: React.FC = observer(() => {
   const {layoutStore} = useRootStore()

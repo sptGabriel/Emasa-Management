@@ -28,6 +28,12 @@ export const Tags: ITag[] = [
   },
   {
     Title: 'Pages',
+    Name: 'Test',
+    Link: 'test2',
+    Icon: BsLightning,
+    DropdownItems: null,
+  },
+  {
     Name: 'Employees',
     Icon: TiGroupOutline,
     DropdownItems: [

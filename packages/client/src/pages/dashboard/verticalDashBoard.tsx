@@ -25,7 +25,7 @@ const DashBoardContainer = styled('div')<SideBarState>`
 const DashBoardMain = styled('div')<SideBarState>`
   background: ${({theme}: any) => `rgb(${theme.background})` || 'lightgrey'};
   display: grid;
-  grid-template-columns: ${({open}) => (open ? '280px' : '60px')} auto;
+  grid-template-columns: ${({open}) => (open ? '260px' : '80px')} auto;
   overflow: hidden;
 `
 export const OutletWrapper = styled('div')`

@@ -6,7 +6,6 @@ import App from './App'
 import reportWebVitals from './reportWebVitals'
 import ErrorFallback from './shared/components/ErrorFallBack'
 import {RootStoreProvider} from './shared/infra/mobx'
-
 // if (process.env.NODE_ENV === 'development') {
 //   console.error = () => {};
 // }
