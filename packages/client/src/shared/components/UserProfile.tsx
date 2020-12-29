@@ -150,7 +150,7 @@ const UserProfile: React.FC = () => {
   const [open, setOpen] = useState(false)
   const ref = useRef(null)
   useOnClickOutside(ref, () => setOpen(false))
-  const clickHandler = useCallback(() => setOpen(!open), [])
+  const clickHandler = () => setOpen(!open)
   return (
     <UserProfileContainer ref={ref} onClick={clickHandler} open={open}>
       <div className="user_avatar">

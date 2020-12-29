@@ -1,13 +1,11 @@
-import React, {useState} from 'react'
+import React from 'react'
 import styled from '@emotion/styled/macro'
 import {observer} from 'mobx-react-lite'
-import Switch from 'react-switch'
-import {css, useTheme} from '@emotion/react'
+import {css} from '@emotion/react'
 import {Sling as Hamburger} from 'hamburger-react'
 import {Container} from './FlexBox'
-import logo from '../../assets/logoem.svg'
 import {useRootStore} from '../infra/mobx'
-import {emasaAnimation} from '../../pages/login'
+import {emasaAnimation} from './LogoAnimation'
 import {VerticalWidgets} from './Widgets'
 import Logo from './Logo'
 import Search from './SearchBox'
@@ -16,30 +14,6 @@ import UserProfile from './UserProfile'
 interface SideBarState {
   open: boolean
 }
-const LogoWrapper = styled(Container)<SideBarState>`
-  display: ${({open}) => (open ? 'flex' : 'none')};
-  align-items: center;
-  .text-5 {
-    color: #0189cf;
-    text-transform: uppercase;
-    font-size: 1rem;
-    font-weight: bold;
-    font-family: 'Montserrat', sans-serif;
-    animation: ${emasaAnimation} 1s linear infinite;
-  }
-  h1 {
-    color: #fff;
-    font-weight: bold;
-    font-size: 1.4rem;
-    font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
-    text-transform: uppercase;
-  }
-  img {
-    width: 50px;
-    vertical-align: middle;
-    border-style: none;
-  }
-`
 const NavBar = styled('div')`
   display: flex;
   width: 100%;
@@ -123,7 +97,10 @@ const Header: React.FC = observer(() => {
           toggled={layoutStore.sideBar || layoutStore.onHoverSideState}
           onToggle={() => layoutStore.toggleSideBar()}
         />
-        <Logo open={layoutStore.sideBar || layoutStore.onHoverSideState} />
+        <Logo
+          open={layoutStore.sideBar || layoutStore.onHoverSideState}
+          orientation={layoutStore.layoutType}
+        />
       </LogoHeader>
       <WrapperTools open={layoutStore.sideBar || layoutStore.onHoverSideState}>
         <Search />

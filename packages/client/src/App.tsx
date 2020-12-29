@@ -12,18 +12,12 @@ import {LightTheme} from './shared/themes/lightTheme'
 
 const App: React.FC = observer(() => {
   const {layoutStore, appState, authStore, initApi} = useRootStore()
-  const location = useLocation()
   useEffect(() => {
     initApi()
   }, [])
   return (
     <ThemeProvider theme={layoutStore.theme ? layoutStore.theme : LightTheme}>
       <GlobalReset />
-      {authStore.isAuth && location.pathname === '/dashboard' ? (
-        <CustomizerTheme />
-      ) : (
-        ''
-      )}
       {appState === 'pending' ? (
         <div
           style={{

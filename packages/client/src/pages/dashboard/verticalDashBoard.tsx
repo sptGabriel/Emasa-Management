@@ -7,6 +7,7 @@ import {useRootStore} from '../../shared/infra/mobx'
 import ASide from '../../shared/components/SideBar'
 import DashBoardFooter from '../../shared/components/Footer'
 import Header from '../../shared/components/Header'
+import CustomizerTheme from '../../shared/components/ThemeSideBox'
 
 interface SideBarState {
   open: boolean
@@ -61,6 +62,7 @@ export const VerticalDashBoard: React.FC = observer(() => {
       orientation={layoutStore.layoutType}
       open={layoutStore.sideBar || layoutStore.onHoverSideState}
     >
+      <CustomizerTheme />
       <Header />
       <DashBoardMain
         orientation={layoutStore.layoutType}

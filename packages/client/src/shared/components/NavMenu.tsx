@@ -5,83 +5,60 @@ import {observer} from 'mobx-react-lite'
 import {NavLink} from 'react-router-dom'
 import {FaAngleDown} from 'react-icons/fa'
 import {animated, useSpring} from 'react-spring'
+import {css, keyframes} from '@emotion/react'
 import {useRootStore} from '../infra/mobx'
-import {ITag, IDropdownItems, Tags} from '../utils/MenuTags'
+import {ITag, IDropdownItems, Tags, TagHorizontal} from '../utils/MenuTags'
 import {useHeight} from '../utils/useHeight'
+import {Container} from './FlexBox'
 /* Styles */
-type IMenu = {
-  open: boolean
-  hover: boolean
-}
 type IDropDown = {
   activetag: any
   open: boolean
 }
-
+export const navAnimation = keyframes`
+	0%{
+		height: 90px;
+	}
+	100%{
+		height: 70px;
+	}
+`
 interface IListItem {
   open: boolean
   isDropDown?: boolean
   activetag: any
 }
-const MenuList = styled.ul<IMenu>`
-  color: transparent;
-  height: 100vh;
-  width: inherit;
-  padding-right: 11px;
-  padding-left: 11px;
-  overflow-y: scroll;
-  transition: 0.2s;
-  transition-timing-function: ease;
-  transition-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
-  scrollbar-color: auto;
-  scrollbar-width: thin;
-  &::-webkit-scrollbar {
-    width: ${({open}) => (open ? '6px' : '0')};
-  }
-  &::-webkit-scrollbar-thumb {
-    border-radius: 10px;
-  }
-  &::-webkit-scrollbar-thumb:vertical {
-    border-radius: 10px;
-    background: ${({theme, hover, open}: any) =>
-      hover && open ? `#9c9c9c` : `rgba(${theme.background})`};
-    /* border-left: 6px solid ${({theme}: any) =>
-      `rgba(${theme.background})`}; */
-    /* border-right: 2px solid ${({theme}: any) => `rgba(${theme.background})`};
-    background-clip: padding-box;
-    background: ${({theme, hover, sideisOpen}: any) =>
-      hover && sideisOpen ? `#9c9c9c` : `rgba(${theme.background})`};
-    border-radius: 4px; */
-  }
-  &::-webkit-scrollbar-button {
-    width: 0;
-    height: 0;
-    display: none;
-  }
-  &::-webkit-scrollbar-corner {
-    background-color: red;
-  }
-  &::-webkit-scrollbar-track {
-    background-clip: content-box;
-  }
-  .title_tagList {
-    display: ${({open}) => (open ? 'block' : 'none')};
-    opacity: ${({open}) => (open ? '1' : '0')};
-    padding: 12px 18px;
-    transition: all 0.5s cubic-bezier(0, 1, 0, 1);
-    align-items: center;
-    position: relative;
-    border-radius: 0.25rem;
-    color: rgba(26, 51, 83, 0.6);
-    font-size: 0.9rem;
-    font-weight: 500;
-    font-family: Montserrat, Helvetica, Arial, sans-serif;
-    text-transform: uppercase;
-    color: #999;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
-    white-space: nowrap !important;
-  }
+const Ul = styled('ul')<{isSticky: boolean}>`
+  display: flex;
+  flex-wrap: wrap;
+  align-items: ${({isSticky}) => (isSticky ? 'flex-start' : 'flex-end')};
+  padding-left: 0;
+  margin-bottom: 0;
+  list-style: none;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  z-index: 99;
+  justify-content: space-between;
+`
+const Menu = styled('div')<{isSticky: boolean}>`
+  display: flex;
+  align-items: center;
+  width: 100% !important;
+  height: 70px;
+  position: relative;
+  overflow: hidden;
+  ${({isSticky}) =>
+    isSticky
+      ? css`
+          position: fixed;
+          top: 0;
+          left: 0;
+          border-bottom: 1px solid #ebedf2;
+          background: #8176f1;
+          animation: ${navAnimation} 0.15s forwards;
+        `
+      : ''}
 `
 
 const DropDown = styled(animated.ul)<IDropDown>`
@@ -145,89 +122,25 @@ const DropDown = styled(animated.ul)<IDropDown>`
   }
 `
 
-const ListItem = styled.li<IListItem>`
-  display: block;
-  cursor: pointer;
-  margin-bottom: 7px;
-  :focus {
-    outline: none; /* no outline - for most browsers */
-    box-shadow: none; /* no box shadow - for some browsers or if you are using Bootstrap */
-  }
-  &:hover {
-    .svg-main,
-    .tag-name {
-      transform: translateX(5px);
-    }
-  }
-  .tag-container {
-    width: 100%;
-    border: none !important;
-    z-index: 1;
-  }
-  .active-dropheader {
-    background: ${({theme}: any) =>
-      `linear-gradient(118deg,rgba(${theme.primary},1),rgba(${theme.primary},0.7))`};
-    box-shadow: ${({theme}: any) => `0 0 5px 1px rgba(${theme.primary},0.7)`};
-    .tag-optname {
-      color: #fff !important;
-    }
-    .svg-drop {
-      stroke-width: 3px;
-      stroke: #fff !important;
-    }
-  }
+const NavItem = styled.li<IListItem>`
+  height: 100%;
   .active {
-    background: ${({theme}: any) =>
-      `linear-gradient(118deg,rgba(${theme.primary},1),rgba(${theme.primary},0.7))`} !important;
-    box-shadow: ${({theme}: any) =>
-      `0 0 5px 1px rgba(${theme.primary},0.7)`} !important;
-    .tag-name {
-      color: #fff !important;
-    }
-    .svg-main {
-      fill: #fff !important;
-    }
+    border-bottom: 1px solid #ebedf2;
   }
-  .svg-arrow {
-    position: absolute;
-    top: calc(50% - 8px);
-    left: 200px;
-    color: ${({theme}: any) => theme.subText};
-  }
-  .tag-name {
-    display: ${({open}) => (open ? 'space-between' : 'none')};
-    color: ${({theme}: any) => theme.text};
-    line-height: 1.8rem;
-    letter-spacing: 0.7px;
-    font-family: Roboto;
-    text-transform: capitalize;
-    font-weight: 400;
-    transition: transform 0.25s ease, -webkit-transform 0.25s ease;
-    transition: -webkit-transform 0.25s ease;
-    transition: transform 0.25s ease;
-  }
-  .svg-main {
-    width: 24px;
-    height: 24px;
-    fill: ${({theme}: any) => theme.subText};
-    margin-right: ${({open}) => (open ? '14px' : '0')};
-    transition: transform 0.25s ease, -webkit-transform 0.25s ease;
-    transition: -webkit-transform 0.25s ease;
-    transition: transform 0.25s ease;
-  }
-  .tag-wrapper {
+  .nav-link {
     display: flex;
-    height: 48px;
-    width: 100%;
-    border-radius: 4px;
-    padding: ${({open}) => (open ? '10px 9px' : '0')};
     align-items: center;
-    background: ${({theme, activetag}: any) =>
-      activetag
-        ? `rgba(${theme.backgroundSecondary}, 0.9)`
-        : `rgb(${theme.background})`};
-    justify-content: ${({open}) => (open ? 'flex-start' : 'center')};
-    position: relative;
+    color: #fff;
+    border-radius: 4px;
+    height: 100%;
+    padding: 0.5rem 0rem;
+    .tag-svg {
+      margin-right: 10px;
+    }
+    .tag-name {
+      font-size: 0.875rem;
+      font-weight: 300;
+    }
   }
 `
 
@@ -310,30 +223,30 @@ const MemoidNavLink: React.FC<{
   Active?: boolean
 }> = memo(({Icon, Link, Name, OnClick, HasChildren, Active}) => {
   return (
-    <div className="tag-container" role="presentation" onClick={OnClick}>
+    <>
       {!HasChildren && Link ? (
-        <NavLink className="tag-wrapper" activeClassName="active" to={Link} end>
-          <Icon className="svg-main" size={22} />
+        <NavLink className="nav-link" activeClassName="active" to={Link} end>
+          <Icon className="tag-svg" size={22} />
           <span className="tag-name">{Name}</span>
         </NavLink>
       ) : (
         <div className="tag-wrapper">
           <Icon className="svg-main" size={22} />
           <span className="tag-name">{Name}</span>
-          <span className="svg-arrow">
+          {/* <span className="svg-arrow">
             {Active === true ? (
               <FaAngleDown />
             ) : (
               <FaAngleDown style={{transform: 'rotate(280deg)'}} />
             )}
-          </span>
+          </span> */}
         </div>
       )}
-    </div>
+    </>
   )
 })
 //  Tag Wrapper
-const TagList: React.FC<ITagList> = observer(({tag, open, setTags}) => {
+const NavTag: React.FC<ITagList> = observer(({tag, open, setTags}) => {
   const showHideDropItem: ShowHideDropItem = useCallback((tag) => {
     setTags((items: any) =>
       items.map((item: any) => ({
@@ -350,7 +263,7 @@ const TagList: React.FC<ITagList> = observer(({tag, open, setTags}) => {
     [],
   )
   return (
-    <ListItem
+    <NavItem
       open={open}
       isDropDown={!!tag.DropdownItems}
       activetag={tag.Active ? 1 : 0}
@@ -371,7 +284,7 @@ const TagList: React.FC<ITagList> = observer(({tag, open, setTags}) => {
           HasChildren={tag.DropdownItems ? true : undefined}
         />
       )}
-      {tag.DropdownItems ? (
+      {/* {tag.DropdownItems ? (
         <DropDownItems
           active={tag.Active}
           dropItems={tag.DropdownItems}
@@ -381,41 +294,48 @@ const TagList: React.FC<ITagList> = observer(({tag, open, setTags}) => {
         />
       ) : (
         ''
-      )}
-    </ListItem>
+      )} */}
+    </NavItem>
   )
 })
-//  memoizedTags
-const MemoizedTags = memo(TagList)
 //  Menu
-const MenuTags: React.FC<{hover: boolean}> = observer(({hover}) => {
+const MenuTags: React.FC<{isSticky: boolean}> = observer(({isSticky}) => {
   const {layoutStore} = useRootStore()
-  const [tags, setTags] = useState<ITag[]>(Tags)
+  const [tags, setTags] = useState<ITag[]>(TagHorizontal)
 
   useEffect(() => {
     setTags((items) =>
       items.map((item) => ({
         ...item,
-        Active: item.Name === 'Dashboard' ? true : false,
+        Active: false,
       })),
     )
   }, [])
   return (
-    <MenuList
-      open={layoutStore.sideBar || layoutStore.onHoverSideState}
-      hover={hover}
-    >
-      {tags.map((item) => (
-        <div key={JSON.stringify(item.Name)}>
-          {item.Title ? <div className="title_tagList">{item.Title}</div> : ''}
-          <MemoizedTags
-            setTags={setTags}
-            open={layoutStore.sideBar || layoutStore.onHoverSideState}
-            tag={item}
-          />
-        </div>
-      ))}
-    </MenuList>
+    <Menu isSticky={isSticky}>
+      <Container
+        align="center"
+        style={{
+          maxWidth: '1140px',
+          width: '100%',
+          height: '100%',
+          padding: '0 12px',
+          margin: '0 auto',
+          overflow: 'hidden',
+        }}
+      >
+        <Ul isSticky={isSticky}>
+          {tags.map((item) => (
+            <NavTag
+              setTags={setTags}
+              key={JSON.stringify(item.Name)}
+              open={layoutStore.sideBar || layoutStore.onHoverSideState}
+              tag={item}
+            />
+          ))}
+        </Ul>
+      </Container>
+    </Menu>
   )
 })
 

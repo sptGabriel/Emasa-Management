@@ -21,7 +21,6 @@ const DashBoardMain = styled('div')<SideBarState>`
   min-height: calc(100vh - 60px);
   grid-template-columns: 1fr;
   grid-template-rows: 1fr 70px;
-  background: red;
 `
 export const OutletWrapper = styled('div')`
   width: 100%;
@@ -62,7 +61,6 @@ export const HorizontalDashBoard: React.FC = observer(() => {
 
   useEffect(() => {
     window.addEventListener('scroll', handleScroll)
-    console.log('ae')
     return () => {
       window.removeEventListener('scroll', () => handleScroll)
     }
@@ -77,19 +75,6 @@ export const HorizontalDashBoard: React.FC = observer(() => {
         <div style={{minHeight: '1500px'}}>test</div>
         <DashBoardFooter>.footer</DashBoardFooter>
       </DashBoardMain>
-      {/* <DashBoardMain
-        orientation={layoutStore.layoutType}
-        open={layoutStore.sideBar || layoutStore.onHoverSideState}
-        theme={theme}
-      >
-        <ASide />
-        <Content>
-          <OutletWrapper>
-            <Outlet />
-          </OutletWrapper>
-          <DashBoardFooter>.footer</DashBoardFooter>
-        </Content>
-      </DashBoardMain>  */}
     </DashBoardContainer>
   )
 })

@@ -249,7 +249,7 @@ const SideThemeBar: React.FC = observer(() => {
       if (layoutStore.themeSideBar) layoutStore.themeSideBar = false
     }),
   )
-  const sideAnimate = useSpring({
+  const customizerAnimate = useSpring({
     config: {duration: 200},
     to: {
       maxWidth: layoutStore.themeSideBar ? 400 : 0,
@@ -258,15 +258,15 @@ const SideThemeBar: React.FC = observer(() => {
   })
 
   return (
-    <Customizer>
+    <>
       <GearTheming />
-      <SideBar ref={ref} style={sideAnimate as any}>
+      <SideBar ref={ref} style={customizerAnimate as any}>
         <Wrap flexColumn>
           <CustomizerHeader />
           <CustomizerBody />
         </Wrap>
       </SideBar>
-    </Customizer>
+    </>
   )
 })
 

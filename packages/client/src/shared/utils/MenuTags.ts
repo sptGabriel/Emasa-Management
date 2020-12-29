@@ -94,3 +94,12 @@ export const Tags: ITag[] = [
     ],
   },
 ]
+
+export const TagHorizontal: ITag[] = [
+  {
+    Name: 'Dashboard',
+    Link: '../dashboard',
+    Icon: AiOutlineDashboard,
+    DropdownItems: null,
+  },
+]

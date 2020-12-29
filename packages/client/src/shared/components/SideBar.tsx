@@ -14,7 +14,7 @@ const SideBarContainer = styled(Container)<sideStat>`
   width: 100%;
   height: 100%;
   background: ${({theme}: any) => `rgb(${theme.background})`};
-  padding: 10px 6px;
+  padding: 10px 4px;
 `
 
 const SideBar: React.FC = observer(() => {

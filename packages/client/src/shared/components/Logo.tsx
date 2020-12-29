@@ -2,13 +2,15 @@ import React from 'react'
 import styled from '@emotion/styled/macro'
 import {Container} from './FlexBox'
 import logo from '../../assets/logoem.svg'
-import {emasaAnimation} from '../../pages/login'
+import { emasaAnimation } from './LogoAnimation'
 /* SideBar Styles Start */
 export interface SideBarState {
   open?: boolean
+  orientation?: string
 }
 const LogoWrapper = styled(Container)<SideBarState>`
-  display: ${({open}) => (open ? 'flex' : 'none')};
+  display: ${({open, orientation}) =>
+    open || orientation === 'horizontal' ? 'flex' : 'none'};
   align-items: center;
   .text-5 {
     color: #0189cf;
@@ -31,9 +33,12 @@ const LogoWrapper = styled(Container)<SideBarState>`
     border-style: none;
   }
 `
-const Logo: React.FC<{open?: boolean}> = ({open}) => {
+const Logo: React.FC<{open?: boolean; orientation: string}> = ({
+  open,
+  orientation,
+}) => {
   return (
-    <LogoWrapper open={open}>
+    <LogoWrapper open={open} orientation={orientation}>
       <img src={logo} alt="Emasa Logo" />
       <div className="text-5 text tooltip">
         <span>Emasa</span>

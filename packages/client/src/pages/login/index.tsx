@@ -1,6 +1,5 @@
+import React, {useState} from 'react'
 import styled from '@emotion/styled/macro'
-import React, {useEffect, useState} from 'react'
-import {keyframes} from '@emotion/react'
 import {GiPadlock} from 'react-icons/gi'
 import {FaUser} from 'react-icons/fa'
 import {observer} from 'mobx-react-lite'
@@ -8,8 +7,9 @@ import {ToastContainer, toast} from 'react-toastify'
 import {PuffLoader} from 'react-spinners'
 import {useErrorHandler} from 'react-error-boundary'
 import {useNavigate} from 'react-router-dom'
-import {Container} from '../../shared/components/FlexBox'
+import {emasaAnimation} from '../../shared/components/LogoAnimation'
 import logo from '../../assets/logo_emasa.png'
+import {Container} from '../../shared/components/FlexBox'
 import one from '../../assets/one.png'
 import satelite from '../../assets/satelite.png'
 import two from '../../assets/two.png'
@@ -17,17 +17,6 @@ import BoundInput from '../../shared/components/Input'
 import {useRootStore} from '../../shared/infra/mobx'
 import 'react-toastify/dist/ReactToastify.css'
 
-export const emasaAnimation = keyframes`
-	2%,64%{
-		transform: translate(2px,0) skew(0deg);
-	}
-	4%,60%{
-		transform: translate(-2px,0) skew(2deg);
-	}
-	62%{
-		transform: translate(0,0) skew(50deg); 
-	}
-`
 const ContainerFluid = styled('div')`
   width: 100%;
   margin-right: auto;

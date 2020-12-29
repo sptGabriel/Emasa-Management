@@ -26,7 +26,7 @@ export class LayoutUIStore {
 
   isLayoutHorizontal = false
 
-  layoutType: LayoutType = LayoutType.vertical
+  layoutType: LayoutType = LayoutType.horizontal
 
   constructor(private rootStore: RootStore) {
     makeAutoObservable(this)

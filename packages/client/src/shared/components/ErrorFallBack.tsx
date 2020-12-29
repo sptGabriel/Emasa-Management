@@ -80,6 +80,7 @@ const ContainerFluid = styled('div')<{isAuth: boolean}>`
   width: 100%;
   margin-right: auto;
   margin-left: auto;
+  overflow: hidden;
   padding: 0 !important;
   background: ${({theme, isAuth}: any) =>
     isAuth ? theme.backgroundSecondary : '#fff'};
