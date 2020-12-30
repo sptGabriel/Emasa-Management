@@ -2,7 +2,7 @@ import React from 'react'
 import styled from '@emotion/styled/macro'
 import {Container} from './FlexBox'
 import logo from '../../assets/logoem.svg'
-import { emasaAnimation } from './LogoAnimation'
+import {emasaAnimation} from './LogoAnimation'
 /* SideBar Styles Start */
 export interface SideBarState {
   open?: boolean

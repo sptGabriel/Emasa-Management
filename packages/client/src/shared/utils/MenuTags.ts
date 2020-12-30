@@ -102,4 +102,26 @@ export const TagHorizontal: ITag[] = [
     Icon: AiOutlineDashboard,
     DropdownItems: null,
   },
+  {
+    Name: 'Apps',
+    Link: 'test',
+    Icon: RiGroupLine,
+    DropdownItems: null,
+  },
+  {
+    Name: 'Test',
+    Link: 'test2',
+    Icon: BsLightning,
+    DropdownItems: null,
+  },
+  {
+    Name: 'User List',
+    Icon: RiGroupLine,
+    DropdownItems: [
+      {Name: 'Employee List', Link: 'dasd'},
+      {Name: 'View Employee', Link: 'eqwe'},
+      {Name: 'New Employee', Link: 'aboudawqt'},
+      {Name: 'Any', Link: 'wqeqw'},
+    ],
+  },
 ]

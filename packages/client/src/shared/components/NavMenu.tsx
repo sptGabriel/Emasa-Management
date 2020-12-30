@@ -39,7 +39,6 @@ const Ul = styled('ul')<{isSticky: boolean}>`
   width: 100%;
   height: 100%;
   z-index: 99;
-  justify-content: space-between;
 `
 const Menu = styled('div')<{isSticky: boolean}>`
   display: flex;
@@ -48,6 +47,7 @@ const Menu = styled('div')<{isSticky: boolean}>`
   height: 70px;
   position: relative;
   overflow: hidden;
+  background: #0088d1;
   ${({isSticky}) =>
     isSticky
       ? css`
@@ -55,7 +55,7 @@ const Menu = styled('div')<{isSticky: boolean}>`
           top: 0;
           left: 0;
           border-bottom: 1px solid #ebedf2;
-          background: #8176f1;
+          background: #0171aa;
           animation: ${navAnimation} 0.15s forwards;
         `
       : ''}
@@ -123,23 +123,28 @@ const DropDown = styled(animated.ul)<IDropDown>`
 `
 
 const NavItem = styled.li<IListItem>`
+  display: flex;
+  align-items: center;
   height: 100%;
+  margin-right: 0.75rem;
   .active {
-    border-bottom: 1px solid #ebedf2;
   }
   .nav-link {
     display: flex;
     align-items: center;
     color: #fff;
-    border-radius: 4px;
-    height: 100%;
-    padding: 0.5rem 0rem;
+    border-radius: 0.42rem;
+    padding: 0.65rem 6px;
     .tag-svg {
       margin-right: 10px;
     }
     .tag-name {
-      font-size: 0.875rem;
-      font-weight: 300;
+      color: #fff;
+      font-weight: 500;
+      font-size: 1rem;
+      line-height: 1.5;
+      text-transform: initial;
+      font-family: Poppins, Helvetica, sans-serif;
     }
   }
 `
@@ -233,13 +238,13 @@ const MemoidNavLink: React.FC<{
         <div className="tag-wrapper">
           <Icon className="svg-main" size={22} />
           <span className="tag-name">{Name}</span>
-          {/* <span className="svg-arrow">
+          <span className="svg-arrow">
             {Active === true ? (
-              <FaAngleDown />
+              <FaAngleDown style={{transform: 'rotate(0)'}} />
             ) : (
               <FaAngleDown style={{transform: 'rotate(280deg)'}} />
             )}
-          </span> */}
+          </span>
         </div>
       )}
     </>

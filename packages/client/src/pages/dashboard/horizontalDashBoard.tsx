@@ -72,7 +72,15 @@ export const HorizontalDashBoard: React.FC = observer(() => {
     >
       <NavBar isSticky={isSticky} />
       <DashBoardMain>
-        <div style={{minHeight: '1500px'}}>test</div>
+        <div
+          style={{
+            minHeight: '1500px',
+            background: 'rgb(242, 246, 249)',
+            padding: '100px 0',
+          }}
+        >
+          test
+        </div>
         <DashBoardFooter>.footer</DashBoardFooter>
       </DashBoardMain>
     </DashBoardContainer>

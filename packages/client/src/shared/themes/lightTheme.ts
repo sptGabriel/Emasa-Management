@@ -5,7 +5,7 @@ export const LightTheme: ITheme = {
   primary: '3, 132, 196',
   secondary: 'red',
   background: '255, 255, 255',
-  backgroundSecondary: '245, 245, 250',
+  backgroundSecondary: '235, 243, 245',
   dropTag: '#f6f6f6',
   header: {
     color: '#fff',

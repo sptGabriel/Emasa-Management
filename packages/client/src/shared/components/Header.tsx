@@ -19,6 +19,8 @@ const NavBar = styled('div')`
   width: 100%;
   height: 70px;
   background: ${({theme}: any) => `rgb(${theme.background})`};
+  box-shadow: 0 0 11px rgba(0, 0, 0, 0.13);
+  z-index: 3;
 `
 const LogoHeader = styled(Container)<SideBarState>`
   width: ${({open}) => (open ? '260px' : '80px')};

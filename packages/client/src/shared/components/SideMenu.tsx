@@ -30,6 +30,10 @@ const MenuList = styled.ul<IMenu>`
   padding-right: 11px;
   padding-left: 11px;
   overflow-y: scroll;
+  padding-top: 25px;
+  padding-bottom: 25px;
+  padding-left: 11px;
+  padding-right: 5px;
   transition: 0.2s;
   transition-timing-function: ease;
   transition-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
@@ -124,9 +128,9 @@ const DropDown = styled(animated.ul)<IDropDown>`
   .tag-optname {
     display: block;
     color: ${({theme}: any) => theme.text};
-    line-height: 1.8rem;
     letter-spacing: 0.7px;
     font-family: Roboto;
+    font-size: 0.9rem;
     text-transform: capitalize;
     font-weight: 400;
     transition: transform 0.25s ease, -webkit-transform 0.25s ease;

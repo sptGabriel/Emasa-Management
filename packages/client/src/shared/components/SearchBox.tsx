@@ -3,12 +3,18 @@ import React, {useCallback, useState} from 'react'
 import styled from '@emotion/styled/macro'
 import {BiSearchAlt} from 'react-icons/bi'
 import {css} from '@emotion/react'
+import {observer} from 'mobx-react-lite'
+import {useRootStore} from '../infra/mobx'
 
 interface SearchState {
   isOpen: boolean
 }
+
+const VerticalSearch = css `
+
+`
 // Search Box
-export const SearchWrapper = styled.div<SearchState>`
+const SearchWrapper = styled.div<SearchState>`
   position: relative;
   padding-left: 0.75rem;
   margin-right: 0.66667rem;
@@ -16,24 +22,24 @@ export const SearchWrapper = styled.div<SearchState>`
   align-items: center;
   .input-holder {
     height: 46px;
-    width: ${(props) => (props.isOpen ? '290px' : '46px')};
+    width: ${({isOpen}) => (isOpen ? '290px' : '46px')};
     display: flex;
     align-items: center;
     background: ${({isOpen, theme}: any) =>
       isOpen ? `rgb(${theme.backgroundSecondary})` : theme.background};
     overflow: hidden;
-    border-radius: ${(props) => (props.isOpen ? '100vh' : '')};
+    border-radius: ${({isOpen}) => (isOpen ? '100vh' : '')};
     overflow: hidden;
     position: relative;
-    transition: ${(props) =>
-      props.isOpen
+    transition: ${({isOpen}) =>
+      isOpen
         ? 'all .5s cubic-bezier(0.000, 0.105, 0.035, 1.570)'
         : 'all 0.3s ease-in-out'};
   }
   .search-input {
     width: calc(100% - 50px);
     padding: 0 0px 0 20px;
-    opacity: ${(props) => (props.isOpen ? '1' : '0')};
+    opacity: ${({isOpen}) => (isOpen ? '1' : '0')};
     ${({isOpen}) =>
       !isOpen
         ? css`
@@ -71,7 +77,7 @@ export const SearchWrapper = styled.div<SearchState>`
       /* Most modern browsers support this now. */
       color: ${({theme}: any) => theme.textActive};
     }
-    transform: ${(props) => (props.isOpen ? '' : 'translate(0, 60px)')};
+    transform: ${({isOpen}) => (isOpen ? '' : 'translate(0, 60px)')};
     transition: all 0.3s cubic-bezier(0, 0.105, 0.035, 1.57);
     font-size: 0.88rem;
   }
@@ -90,8 +96,8 @@ export const SearchWrapper = styled.div<SearchState>`
     outline: none !important;
     box-sizing: border-box;
     text-transform: none;
-    ${(props) =>
-      props.isOpen
+    ${({isOpen}) =>
+      isOpen
         ? css`
             width: 42px;
             height: 42px;
@@ -198,8 +204,7 @@ export const SearchWrapper = styled.div<SearchState>`
     }
   }
 `
-
-const Search: React.FC = () => {
+const VerticalSearch: React.FC = () => {
   const [isOpen, setOpen] = useState(false)
   const clickHandler = useCallback(() => {
     setOpen(!isOpen)
@@ -221,5 +226,14 @@ const Search: React.FC = () => {
     </SearchWrapper>
   )
 }
+
+const Search: React.FC = observer(() => {
+  const {layoutStore} = useRootStore()
+  return layoutStore.layoutType === 'vertical' ? (
+    <VerticalSearch />
+  ) : (
+    <div>horizontal</div>
+  )
+})
 
 export default Search
