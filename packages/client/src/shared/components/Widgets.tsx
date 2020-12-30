@@ -93,16 +93,16 @@ export const VerticalWidgets: React.FC = observer(() => {
         type="button"
       >
         {layoutStore.theme.type === 'dark' ? (
-          <BiMoon size={24} />
+          <BiMoon size={18} />
         ) : (
-          <FiSun size={24} />
+          <FiSun size={18} />
         )}
       </button>
       <button className="tool_widget bell" type="button">
-        <FiBell size={24} />
+        <FiBell size={18} />
       </button>
       <button className="tool_widget" type="button">
-        <AiOutlineCompress size={24} />
+        <AiOutlineCompress size={18} />
       </button>
       <VerticalSplit />
     </WrapperTools>
@@ -119,18 +119,18 @@ export const HorizontalWidgets: React.FC = observer(() => {
         type="button"
       >
         {layoutStore.theme.type === 'dark' ? (
-          <BiMoon size={24} />
+          <BiMoon size={18} />
         ) : (
-          <FiSun size={24} />
+          <FiSun size={18} />
         )}
       </button>
       <button className="tool_widget bell" type="button">
-        <FiBell size={24} />
+        <FiBell size={18} />
       </button>
       <button className="tool_widget" type="button">
-        <AiOutlineCompress size={24} />
+        <AiOutlineCompress size={18} />
       </button>
-      <VerticalSplit />
+      {/* <VerticalSplit /> */}
     </WrapperTools>
   )
 })

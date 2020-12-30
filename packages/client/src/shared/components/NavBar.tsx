@@ -16,7 +16,7 @@ export interface SideBarState {
 
 const ToolsBar = styled('div')<{isSticky: boolean}>`
   display: ${({isSticky}) => (isSticky ? 'none' : 'flex')};
-  background: #fff;
+  background: #0d3b66;
   height: 110px;
 `
 // const NavContainer = styled('div')<{isSticky: boolean}>`
@@ -51,9 +51,15 @@ const Tools: React.FC<{isSticky: boolean; orientation: string}> = observer(
             flex: '1 1 auto',
           }}
         >
-          <div style={{display: 'flex', height: '100%'}}>
+          <div
+            style={{
+              display: 'flex',
+              height: '100%',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+            }}
+          >
             <Logo orientation={orientation} />
-            <Search />
           </div>
           <div style={{display: 'flex', height: '100%'}}>
             <HorizontalWidgets />

@@ -2,6 +2,7 @@
 import React, {useCallback, useState} from 'react'
 import styled from '@emotion/styled/macro'
 import {BiSearchAlt} from 'react-icons/bi'
+import {IoIosSearch} from 'react-icons/io'
 import {css} from '@emotion/react'
 import {observer} from 'mobx-react-lite'
 import {useRootStore} from '../infra/mobx'
@@ -9,12 +10,8 @@ import {useRootStore} from '../infra/mobx'
 interface SearchState {
   isOpen: boolean
 }
-
-const VerticalSearch = css `
-
-`
 // Search Box
-const SearchWrapper = styled.div<SearchState>`
+const Vertical = styled.div<SearchState>`
   position: relative;
   padding-left: 0.75rem;
   margin-right: 0.66667rem;
@@ -204,13 +201,43 @@ const SearchWrapper = styled.div<SearchState>`
     }
   }
 `
+const Horizontal = styled('div')`
+  display: inline-flex;
+  align-items: center;
+  flex: 1 1 auto;
+  border-radius: 5px;
+  overflow: hidden;
+  padding: 0 5px;
+  margin-left: 20px;
+  border: 1px solid #ccc;
+  svg {
+    cursor: pointer;
+    margin-right: 10px;
+  }
+
+  .searchBox {
+    display: flex;
+    align-items: center;
+    border: 0;
+    padding: 0.5rem 0.5rem 0.5rem 0;
+    flex: 1;
+  }
+
+  .searchButton {
+    background: #538ac5;
+    border: 0;
+    color: white;
+    padding: 0.5rem;
+    border-radius: 0;
+  }
+`
 const VerticalSearch: React.FC = () => {
   const [isOpen, setOpen] = useState(false)
   const clickHandler = useCallback(() => {
     setOpen(!isOpen)
   }, [isOpen])
   return (
-    <SearchWrapper isOpen={isOpen}>
+    <Vertical isOpen={isOpen}>
       <div className="input-holder">
         <input type="text" className="search-input" placeholder="Search ..." />
         <button className="search-icon" type="button" onClick={clickHandler}>
@@ -223,7 +250,21 @@ const VerticalSearch: React.FC = () => {
         aria-label="Close"
         onClick={clickHandler}
       />
-    </SearchWrapper>
+    </Vertical>
+  )
+}
+
+const HorizontalSearch = () => {
+  return (
+    <Horizontal>
+      <IoIosSearch size={20} />
+      <input
+        className="searchBox"
+        type="search"
+        name="search"
+        placeholder="Search..."
+      />
+    </Horizontal>
   )
 }
 
@@ -232,7 +273,7 @@ const Search: React.FC = observer(() => {
   return layoutStore.layoutType === 'vertical' ? (
     <VerticalSearch />
   ) : (
-    <div>horizontal</div>
+    <HorizontalSearch />
   )
 })
 

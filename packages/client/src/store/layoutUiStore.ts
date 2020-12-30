@@ -1,7 +1,7 @@
 import {makeAutoObservable} from 'mobx'
 import {ITheme} from '../shared/themes'
 import {DarkTheme} from '../shared/themes/darkTheme'
-import {LightTheme} from '../shared/themes/lightTheme'
+import {HorizontalLightTheme, LightTheme} from '../shared/themes/lightTheme'
 import {getNavBarTheme} from '../shared/themes/navBarThemes'
 import {SemiDarkTheme} from '../shared/themes/semiDarkTheme'
 import {ensure} from '../shared/utils/ensure'
@@ -41,12 +41,14 @@ export class LayoutUIStore {
     const getTheme = () => {
       switch (theme) {
         case 'light':
+          if (this.layoutType === 'horizontal') return HorizontalLightTheme
           return LightTheme
         case 'dark':
           return DarkTheme
         case 'semidark':
           return SemiDarkTheme
         default:
+          if (this.layoutType === 'horizontal') return HorizontalLightTheme
           return LightTheme
       }
     }

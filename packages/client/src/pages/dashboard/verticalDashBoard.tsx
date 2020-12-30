@@ -37,6 +37,7 @@ const Content = styled('div')`
   background: ${({theme}: any) =>
     `rgb(${theme.backgroundSecondary})` || 'lightgrey'};
   width: 100%;
+  padding: 50px;
   position: relative;
   overflow-y: auto;
   //  padding-right: 30px;

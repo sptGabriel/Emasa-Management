@@ -107,14 +107,14 @@ const DropDown = styled(animated.ul)<IDropDown>`
     top: 0;
     left: 20px;
     width: 1px;
-    height: calc(100% - 1.20625rem - 4.94px);
+    height: calc(100% - 1.20625rem - 4.34px);
     background: rgba(185, 199, 212, 0.5);
   }
   .dropdown-tag {
     display: flex;
     align-items: center;
     border-radius: 4px;
-    padding: 5px 0;
+    padding: 8px 0;
     ::after {
       content: '';
       position: absolute;

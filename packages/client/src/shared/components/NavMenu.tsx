@@ -10,6 +10,7 @@ import {useRootStore} from '../infra/mobx'
 import {ITag, IDropdownItems, Tags, TagHorizontal} from '../utils/MenuTags'
 import {useHeight} from '../utils/useHeight'
 import {Container} from './FlexBox'
+import Search from './SearchBox'
 /* Styles */
 type IDropDown = {
   activetag: any
@@ -47,7 +48,8 @@ const Menu = styled('div')<{isSticky: boolean}>`
   height: 70px;
   position: relative;
   overflow: hidden;
-  background: #0088d1;
+  background: #006ba6;
+  box-shadow: 11px 0 0 rgba(0, 0, 0, 0.13);
   ${({isSticky}) =>
     isSticky
       ? css`
@@ -128,13 +130,16 @@ const NavItem = styled.li<IListItem>`
   height: 100%;
   margin-right: 0.75rem;
   .active {
+    /* background: #2a2a72; */
+    background: #0d3b66;
   }
   .nav-link {
     display: flex;
     align-items: center;
     color: #fff;
+    cursor: pointer;
     border-radius: 0.42rem;
-    padding: 0.65rem 6px;
+    padding: 0.65rem 1rem;
     .tag-svg {
       margin-right: 10px;
     }
@@ -146,6 +151,11 @@ const NavItem = styled.li<IListItem>`
       text-transform: initial;
       font-family: Poppins, Helvetica, sans-serif;
     }
+  }
+  .svg-arrow {
+    margin-left: 6px;
+    display: flex;
+    align-items: center;
   }
 `
 
@@ -235,15 +245,11 @@ const MemoidNavLink: React.FC<{
           <span className="tag-name">{Name}</span>
         </NavLink>
       ) : (
-        <div className="tag-wrapper">
-          <Icon className="svg-main" size={22} />
+        <div className="nav-link">
+          <Icon className="tag-svg" size={22} />
           <span className="tag-name">{Name}</span>
           <span className="svg-arrow">
-            {Active === true ? (
-              <FaAngleDown style={{transform: 'rotate(0)'}} />
-            ) : (
-              <FaAngleDown style={{transform: 'rotate(280deg)'}} />
-            )}
+            {Active === true ? <FaAngleDown /> : <FaAngleDown />}
           </span>
         </div>
       )}
@@ -320,6 +326,7 @@ const MenuTags: React.FC<{isSticky: boolean}> = observer(({isSticky}) => {
     <Menu isSticky={isSticky}>
       <Container
         align="center"
+        justify="space-between"
         style={{
           maxWidth: '1140px',
           width: '100%',
