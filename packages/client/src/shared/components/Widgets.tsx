@@ -72,12 +72,13 @@ const WrapperTools = styled(Container)<SideBarState>`
     width: 46px;
     height: 46px;
     svg {
-      color: ${({theme}: any) => theme.header.svg} !important;
+      color: ${({theme}: any) => `rgb(${theme.header.tools})`} !important;
     }
     :hover {
       background: ${({theme}: any) => `rgb(${theme.backgroundSecondary})`};
       svg {
-        color: ${({theme}: any) => `rgb(${theme.primary})`} !important;
+        color: ${({theme}: any) =>
+          `rgb(${theme.header.toolsHover})`} !important;
       }
     }
   }

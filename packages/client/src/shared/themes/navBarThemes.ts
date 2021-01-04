@@ -1,22 +1,22 @@
 interface IHeader {
-  color: string
-  svg: string
-  hoverSvg: string
-  text: string
+  userName: string
+  userPosition: string
+  tools: string
+  toolsHover: string
 }
 
 export const DefaultNav: IHeader = {
-  color: '#fff',
-  svg: '#626262',
-  hoverSvg: '#0079db',
-  text: '#626262',
+  userName: 'blue',
+  userPosition: 'red',
+  tools: '98, 98, 98',
+  toolsHover: '0, 108, 166',
 }
 
 export const HeaderRed: IHeader = {
-  color: '234, 84, 85',
-  svg: '#fff',
-  hoverSvg: '#fff',
-  text: '#fff',
+  userName: 'blue',
+  userPosition: 'red',
+  tools: '98, 98, 98',
+  toolsHover: '0, 108, 166',
 }
 
 export const getNavBarTheme = (color: string) => {

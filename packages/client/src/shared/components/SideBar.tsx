@@ -12,7 +12,7 @@ interface sideStat {
 }
 const SideBarContainer = styled(Container)<sideStat>`
   width: 100%;
-  height: 100%;
+  height: 100vh;
   background: ${({theme}: any) => `rgb(${theme.background})`};
   padding: 0px 4px;
   box-shadow: 0 0 11px rgba(0, 0, 0, 0.13);

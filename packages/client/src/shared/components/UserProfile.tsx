@@ -30,7 +30,7 @@ const UserProfileContainer = styled('div')<IUserProfile>`
     }
   }
   & .svg-arrow {
-    color: ${({theme}: any) => theme.text} !important;
+    color: ${({theme}: any) => `rgb(${theme.header.tools})`} !important;
     ${({open}) =>
       open
         ? css`
@@ -45,7 +45,7 @@ const UserProfileContainer = styled('div')<IUserProfile>`
     padding-left: 0.75rem !important;
     span:first-of-type {
       font-size: 0.8rem;
-      color: ${({theme}: any) => theme.textActive} !important;
+      color: ${({theme}: any) => `rgb(${theme.header.userName})`} !important;
       letter-spacing: 0.7px;
       font-family: Roboto;
       text-transform: capitalize;
@@ -53,7 +53,8 @@ const UserProfileContainer = styled('div')<IUserProfile>`
     }
     span:last-of-type {
       font-size: 0.8rem;
-      color: ${({theme}: any) => theme.text} !important;
+      color: ${({theme}: any) =>
+        `rgb(${theme.header.userPosition})`} !important;
       letter-spacing: 0.7px;
       font-family: Roboto;
       text-transform: capitalize;
@@ -88,14 +89,14 @@ const UserCanvas = styled.div<IUserCanvas>`
   transform: translateY(104%);
   bottom: 0;
   font-size: 1rem;
-  background: ${({theme}: any) => theme.background} !important;
+  background: ${({theme}: any) => `rgb(${theme.background})`} !important;
   z-index: 999;
   padding: 0.5rem 0.2rem;
   border-radius: 0.3rem;
   .header_txt {
     padding: 0.5rem 1rem;
     white-space: nowrap;
-    color: ${({theme}: any) => theme.text} !important;
+    color: ${({theme}: any) => `rgb(${theme.sideBar.tagTittle})`} !important;
     font-size: 0.625rem;
     text-transform: uppercase;
     font-weight: bold;
@@ -105,10 +106,10 @@ const UserCanvas = styled.div<IUserCanvas>`
     display: flex;
     padding: 0.5rem 1rem;
     align-items: center;
-    color: ${({theme}: any) => theme.text} !important;
+    color: ${({theme}: any) => `rgb(${theme.sideBar.tagName})`} !important;
     :hover {
       background: ${({theme}: any) => `rgb(${theme.primary})`} !important;
-      color: #fff !important;
+      color: ${({theme}: any) => `rgb(${theme.background})`} !important;
     }
   }
   svg {

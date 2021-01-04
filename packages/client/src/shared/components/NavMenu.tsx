@@ -1,29 +1,43 @@
-import React, {useState, useEffect, MouseEvent, memo, useCallback} from 'react'
+import React, {
+  useState,
+  useEffect,
+  MouseEvent,
+  useCallback,
+  useRef,
+} from 'react'
 import {IconType} from 'react-icons'
 import styled from '@emotion/styled/macro'
 import {observer} from 'mobx-react-lite'
-import {NavLink} from 'react-router-dom'
+import {NavLink, useLocation} from 'react-router-dom'
 import {FaAngleDown} from 'react-icons/fa'
-import {animated, useSpring} from 'react-spring'
-import {css, keyframes} from '@emotion/react'
+import {animated} from 'react-spring'
+import useOnClickOutside from 'use-onclickoutside'
 import {useRootStore} from '../infra/mobx'
-import {ITag, IDropdownItems, Tags, TagHorizontal} from '../utils/MenuTags'
-import {useHeight} from '../utils/useHeight'
+import {ITag, IDropdownItems, TagHorizontal} from '../utils/MenuTags'
 import {Container} from './FlexBox'
-import Search from './SearchBox'
+
 /* Styles */
 type IDropDown = {
   activetag: any
+}
+/* Styles */
+export type TSideBar = {
   open: boolean
 }
-export const navAnimation = keyframes`
-	0%{
-		height: 90px;
-	}
-	100%{
-		height: 70px;
-	}
-`
+type ClickHandler = (tag: ITag) => (e: MouseEvent) => void
+type ShowHideDropItem = (tag: ITag) => void
+interface IDrop {
+  active?: boolean
+  dropItems: IDropdownItems[]
+  baseUrl: string
+  // setVisible: ClickHandler
+  Icon: IconType
+}
+interface ITagList {
+  tag: ITag
+  open: boolean
+  setTags: any
+}
 interface IListItem {
   open: boolean
   isDropDown?: boolean
@@ -36,7 +50,6 @@ const Ul = styled('ul')<{isSticky: boolean}>`
   padding-left: 0;
   margin-bottom: 0;
   list-style: none;
-  position: relative;
   width: 100%;
   height: 100%;
   z-index: 99;
@@ -47,27 +60,21 @@ const Menu = styled('div')<{isSticky: boolean}>`
   width: 100% !important;
   height: 70px;
   position: relative;
-  overflow: hidden;
   background: #006ba6;
   box-shadow: 11px 0 0 rgba(0, 0, 0, 0.13);
-  ${({isSticky}) =>
-    isSticky
-      ? css`
-          position: fixed;
-          top: 0;
-          left: 0;
-          border-bottom: 1px solid #ebedf2;
-          background: #0171aa;
-          animation: ${navAnimation} 0.15s forwards;
-        `
-      : ''}
 `
 
 const DropDown = styled(animated.ul)<IDropDown>`
-  position: relative;
+  position: absolute;
   flex-direction: column;
-  padding: ${({activetag, open}) =>
-    activetag && open ? '0.8rem 4px 5px 2.5rem !important' : '0'};
+  display: ${({activetag}) => (activetag ? 'block' : 'none')};
+  top: 100%;
+  padding: 15px 0;
+  min-width: 215px;
+  min-height: 52px;
+  background-color: #fff;
+  box-shadow: 0 15px 50px 0 rgba(82, 63, 105, 0.15);
+  border-radius: 4px;
   .dropdown-wrap {
     &:hover {
       .svg-drop,
@@ -76,35 +83,16 @@ const DropDown = styled(animated.ul)<IDropDown>`
       }
     }
   }
-  :after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 20px;
-    width: 1px;
-    height: calc(100% - 1.20625rem - 4.94px);
-    background: rgba(185, 199, 212, 0.5);
-  }
   .dropdown-tag {
     display: flex;
     align-items: center;
-    border-radius: 4px;
-    padding: 5px 0;
-    ::after {
-      content: '';
-      position: absolute;
-      transform: translateY(-50%);
-      left: 21px;
-      width: 19px;
-      height: 1px;
-      background: rgba(185, 199, 212, 0.5);
-    }
+    cursor: pointer;
+    padding: 0.75rem 1.5rem;
   }
   .tag-optname {
     display: block;
-    color: ${({theme}: any) => theme.text};
-    line-height: 1.8rem;
-    letter-spacing: 0.7px;
+    color: #3f4254;
+    font-size: 1rem;
     font-family: Roboto;
     text-transform: capitalize;
     font-weight: 400;
@@ -116,11 +104,19 @@ const DropDown = styled(animated.ul)<IDropDown>`
     width: 10px;
     height: 10px;
     stroke: #565656;
-    margin-right: 18px;
-    margin-left: 10px;
+    margin-right: 0.75rem !important;
     transition: transform 0.25s ease, -webkit-transform 0.25s ease;
     transition: -webkit-transform 0.25s ease;
     transition: transform 0.25s ease;
+  }
+  .active-dropheader {
+    background: #f3f6f9;
+    .svg-drop {
+      stroke: #6993ff;
+    }
+    .tag-optname {
+      color: #6993ff;
+    }
   }
 `
 
@@ -158,49 +154,14 @@ const NavItem = styled.li<IListItem>`
     align-items: center;
   }
 `
-
-/* Styles */
-export type TSideBar = {
-  open: boolean
-}
-type ClickHandler = (tag: ITag) => (e: MouseEvent) => void
-type ShowHideDropItem = (tag: ITag) => void
-interface IDrop {
-  active?: boolean
-  isOpen: boolean
-  dropItems: IDropdownItems[]
-  setVisible: ClickHandler
-  Icon: IconType
-}
-interface ITagList {
-  tag: ITag
-  open: boolean
-  setTags: any
-}
 const DropDownItems: React.FC<IDrop> = observer(
-  ({active, dropItems, isOpen}) => {
-    const [heightRef] = useHeight()
-    const openedStyle = useSpring({
-      config: {duration: active && isOpen ? 600 : 10},
-      from: {padding: 0, overflow: 'hidden', opacity: 0, maxHeight: 0},
-      to: {
-        opacity: active && isOpen ? 1 : 0,
-        maxHeight: active && isOpen ? 500 : 0,
-        overflow: active && isOpen ? 'visible' : 'hidden',
-      },
-    })
-
+  ({active, dropItems, baseUrl}) => {
     return (
-      <DropDown
-        activetag={active ? 1 : 0}
-        open={isOpen}
-        ref={heightRef}
-        style={{...(openedStyle as any), overflow: 'hidden', padding: '0'}}
-      >
+      <DropDown activetag={active ? 1 : 0}>
         {dropItems.map((item) => (
           <li className="dropdown-wrap" key={JSON.stringify(item.Name)}>
             <NavLink
-              to={item.Link}
+              to={`${baseUrl}/${item.Link}`}
               className="dropdown-tag"
               activeClassName="active-dropheader"
               end
@@ -228,36 +189,56 @@ const DropDownItems: React.FC<IDrop> = observer(
     )
   },
 )
-//  tag navlink
-const MemoidNavLink: React.FC<{
-  Icon: IconType
-  Link?: string
-  Name: string
-  OnClick: any
-  HasChildren?: boolean
-  Active?: boolean
-}> = memo(({Icon, Link, Name, OnClick, HasChildren, Active}) => {
-  return (
-    <>
-      {!HasChildren && Link ? (
-        <NavLink className="nav-link" activeClassName="active" to={Link} end>
-          <Icon className="tag-svg" size={22} />
-          <span className="tag-name">{Name}</span>
-        </NavLink>
-      ) : (
-        <div className="nav-link">
-          <Icon className="tag-svg" size={22} />
-          <span className="tag-name">{Name}</span>
-          <span className="svg-arrow">
-            {Active === true ? <FaAngleDown /> : <FaAngleDown />}
-          </span>
-        </div>
-      )}
-    </>
-  )
-})
+// //  tag navlink
+// const MemoidNavLink: React.FC<{
+//   Icon: IconType
+//   Link?: string
+//   Name: string
+//   OnClick: any
+//   HasChildren?: any
+//   Active?: boolean
+//   BaseUrl?: string
+// }> = memo(({Icon, Link, Name, OnClick, HasChildren, Active, BaseUrl}) => {
+//   const location = useLocation()
+//   return (
+//     <>
+//       {!HasChildren && Link ? (
+//         <NavLink className="nav-link" activeClassName="active" to={Link} end>
+//           <Icon className="tag-svg" size={22} />
+//           <span className="tag-name">{Name}</span>
+//         </NavLink>
+//       ) : (
+//         <div
+//           className={
+//             location.pathname.split('/')[2] === BaseUrl
+//               ? `nav-link active`
+//               : `nav-link`
+//           }
+//         >
+//           <Icon className="tag-svg" size={22} />
+//           <span className="tag-name">{Name}</span>
+//           <span className="svg-arrow">
+//             {Active === true ? <FaAngleDown /> : <FaAngleDown />}
+//           </span>
+//         </div>
+//       )}
+//     </>
+//   )
+// })
 //  Tag Wrapper
 const NavTag: React.FC<ITagList> = observer(({tag, open, setTags}) => {
+  const location = useLocation()
+  const ref = useRef(null)
+  useOnClickOutside(ref, () => {
+    if (tag.DropdownItems) {
+      setTags((items: any) =>
+        items.map((item: any) => ({
+          ...item,
+          Active: false,
+        })),
+      )
+    }
+  })
   const showHideDropItem: ShowHideDropItem = useCallback((tag) => {
     setTags((items: any) =>
       items.map((item: any) => ({
@@ -276,52 +257,70 @@ const NavTag: React.FC<ITagList> = observer(({tag, open, setTags}) => {
   return (
     <NavItem
       open={open}
+      ref={tag.DropdownItems ? ref : undefined}
+      onClick={tag.Active !== undefined ? clickHandler(tag) : undefined}
       isDropDown={!!tag.DropdownItems}
       activetag={tag.Active ? 1 : 0}
     >
-      {tag.Link ? (
-        <MemoidNavLink
-          OnClick={tag.Active !== undefined ? clickHandler(tag) : undefined}
-          Icon={tag.Icon}
-          Link={tag.Link}
-          Name={tag.Name}
-        />
+      {!tag.DropdownItems && tag.Link ? (
+        <NavLink
+          className="nav-link"
+          activeClassName="active"
+          to={tag.Link}
+          end
+        >
+          <tag.Icon className="tag-svg" size={22} />
+          <span className="tag-name">{tag.Name}</span>
+        </NavLink>
       ) : (
-        <MemoidNavLink
-          OnClick={tag.Active !== undefined ? clickHandler(tag) : undefined}
-          Icon={tag.Icon}
-          Name={tag.Name}
-          Active={tag.Active}
-          HasChildren={tag.DropdownItems ? true : undefined}
-        />
+        <div
+          role="presentation"
+          className={
+            location.pathname.split('/')[2] === tag.BaseUrl
+              ? `nav-link active`
+              : `nav-link`
+          }
+        >
+          <tag.Icon className="tag-svg" size={22} />
+          <span className="tag-name">{tag.Name}</span>
+          <span className="svg-arrow">
+            {tag.Active === true ? <FaAngleDown /> : <FaAngleDown />}
+          </span>
+        </div>
       )}
-      {/* {tag.DropdownItems ? (
+      {tag.DropdownItems && tag.BaseUrl ? (
         <DropDownItems
+          baseUrl={tag.BaseUrl}
           active={tag.Active}
           dropItems={tag.DropdownItems}
           Icon={tag.Icon}
-          isOpen={open}
-          setVisible={clickHandler}
         />
       ) : (
         ''
-      )} */}
+      )}
     </NavItem>
   )
 })
 //  Menu
 const MenuTags: React.FC<{isSticky: boolean}> = observer(({isSticky}) => {
   const {layoutStore} = useRootStore()
-  const [tags, setTags] = useState<ITag[]>(TagHorizontal)
+  const [tags, setTags] = useState<ITag[]>(
+    TagHorizontal.map((item) => ({
+      ...item,
+      Active: false,
+    })),
+  )
 
   useEffect(() => {
-    setTags((items) =>
-      items.map((item) => ({
-        ...item,
-        Active: false,
-      })),
-    )
-  }, [])
+    if (isSticky) {
+      setTags((items) =>
+        items.map((item) => ({
+          ...item,
+          Active: false,
+        })),
+      )
+    }
+  }, [isSticky])
   return (
     <Menu isSticky={isSticky}>
       <Container

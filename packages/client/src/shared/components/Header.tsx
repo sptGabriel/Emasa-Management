@@ -5,7 +5,6 @@ import {css} from '@emotion/react'
 import {Sling as Hamburger} from 'hamburger-react'
 import {Container} from './FlexBox'
 import {useRootStore} from '../infra/mobx'
-import {emasaAnimation} from './LogoAnimation'
 import {VerticalWidgets} from './Widgets'
 import Logo from './Logo'
 import Search from './SearchBox'
@@ -35,7 +34,7 @@ const LogoHeader = styled(Container)<SideBarState>`
     padding: 0;
     width: 35px !important;
     height: 35px !important;
-    color: ${({theme}: any) => theme.header.svg};
+    color: ${({theme}: any) => `rgb(${theme.header.tools})`};
     margin-right: ${({open}) => (open ? '16px' : '0')};
     ${({open}) =>
       open
@@ -44,7 +43,7 @@ const LogoHeader = styled(Container)<SideBarState>`
           `
         : ''};
     :hover {
-      color: ${({theme}: any) => `rgb(${theme.primary})`} !important;
+      color: ${({theme}: any) => `rgb(${theme.header.toolsHover})`} !important;
     }
     :active {
       background: ${({theme}: any) => `rgb(${theme.backgroundSecondary})`};

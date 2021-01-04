@@ -4,6 +4,7 @@ import {observer} from 'mobx-react-lite'
 import {useRootStore} from '../../shared/infra/mobx'
 import DashBoardFooter from '../../shared/components/Footer'
 import NavBar from '../../shared/components/NavBar'
+import CustomizerTheme from '../../shared/components/ThemeSideBox'
 
 interface SideBarState {
   open?: boolean
@@ -14,11 +15,13 @@ const DashBoardContainer = styled('div')<SideBarState>`
   height: 100vh;
   width: 100vw;
   position: relative;
+  background: ${({theme}: any) => `rgb(${theme.background})` || 'lightgrey'};
 `
 const DashBoardMain = styled('div')<SideBarState>`
   width: 100%;
   display: grid;
   min-height: calc(100vh - 60px);
+  background: transparent;
   grid-template-columns: 1fr;
   grid-template-rows: 1fr 70px;
 `
@@ -27,8 +30,6 @@ export const OutletWrapper = styled('div')`
   min-height: calc(100vh - 130px);
 `
 const Content = styled('div')`
-  background: ${({theme}: any) =>
-    `rgb(${theme.backgroundSecondary})` || 'lightgrey'};
   width: 100%;
   position: relative;
   overflow-y: auto;
@@ -70,12 +71,12 @@ export const HorizontalDashBoard: React.FC = observer(() => {
       orientation={layoutStore.layoutType}
       open={layoutStore.sideBar || layoutStore.onHoverSideState}
     >
+      <CustomizerTheme />
       <NavBar isSticky={isSticky} />
       <DashBoardMain>
         <div
           style={{
             minHeight: '1500px',
-            background: 'rgb(242, 246, 249)',
             padding: '100px 0',
           }}
         >

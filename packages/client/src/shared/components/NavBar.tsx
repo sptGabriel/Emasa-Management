@@ -1,40 +1,42 @@
 import React, {useEffect} from 'react'
-import {css, useTheme} from '@emotion/react'
+import {css, keyframes, useTheme} from '@emotion/react'
 import styled from '@emotion/styled/macro'
 import {observer} from 'mobx-react-lite'
 import {useRootStore} from '../infra/mobx'
 import {Container} from './FlexBox'
 import {HorizontalWidgets} from './Widgets'
 import Logo from './Logo'
-import Search from './SearchBox'
 import UserProfile from './UserProfile'
 import MenuTags from './NavMenu'
 /* SideBar Styles Start */
-export interface SideBarState {
+interface SideBarState {
   open: boolean
 }
-
+const navAnimation = keyframes`
+	0%{
+		height: 90px;
+	}
+	100%{
+		height: 70px;
+	}
+`
 const ToolsBar = styled('div')<{isSticky: boolean}>`
-  display: ${({isSticky}) => (isSticky ? 'none' : 'flex')};
+  display: flex;
   background: #0d3b66;
   height: 110px;
+  ${({isSticky}) =>
+    isSticky
+      ? css`
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          border-bottom: 1px solid #ebedf2;
+          background: #0171aa;
+          animation: ${navAnimation} 0.15s forwards;
+        `
+      : ''}
 `
-// const NavContainer = styled('div')<{isSticky: boolean}>`
-//   display: flex;
-//   width: 100%;
-//   height: 60px;
-//   background: ${({theme}: any) => `rgb(${theme.backgroundSecondary})`};
-//   ${({isSticky}) =>
-//     isSticky
-//       ? css`
-//           position: fixed;
-//           top: 0;
-//           left: 0;
-//           border-bottom: 1px solid #ebedf2;
-//           animation: ${navAnimation} 0.15s forwards;
-//         `
-//       : ''}
-// `
 const Tools: React.FC<{isSticky: boolean; orientation: string}> = observer(
   ({isSticky, orientation}) => {
     return (
@@ -72,9 +74,6 @@ const Tools: React.FC<{isSticky: boolean; orientation: string}> = observer(
 )
 
 const Menu: React.FC<{isSticky: boolean}> = observer(({isSticky}) => {
-  useEffect(() => {
-    console.log(isSticky)
-  }, [isSticky])
   return <MenuTags isSticky={isSticky} />
 })
 

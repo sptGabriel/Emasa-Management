@@ -12,6 +12,7 @@ export interface IDropdownItems {
 export interface ITag {
   Title?: string
   Name: string
+  BaseUrl?: string
   Link?: string
   Icon: IconType
   DropdownItems: IDropdownItems[] | null
@@ -116,6 +117,7 @@ export const TagHorizontal: ITag[] = [
   },
   {
     Name: 'User List',
+    BaseUrl: 'users',
     Icon: RiGroupLine,
     DropdownItems: [
       {Name: 'Employee List', Link: 'dasd'},
