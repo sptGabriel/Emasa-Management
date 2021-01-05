@@ -14,6 +14,7 @@ interface IUserProfile {
 }
 interface IUserCanvas {
   open: boolean
+  orientation?: string
 }
 /* User Profile Styles Section */
 const UserProfileContainer = styled('div')<IUserProfile>`
@@ -30,7 +31,8 @@ const UserProfileContainer = styled('div')<IUserProfile>`
     }
   }
   & .svg-arrow {
-    color: ${({theme}: any) => `rgb(${theme.header.tools})`} !important;
+    color: ${({theme}: any) =>
+      `rgb(${theme.horizontal.header.tools})`} !important;
     ${({open}) =>
       open
         ? css`
@@ -45,7 +47,8 @@ const UserProfileContainer = styled('div')<IUserProfile>`
     padding-left: 0.75rem !important;
     span:first-of-type {
       font-size: 0.8rem;
-      color: ${({theme}: any) => `rgb(${theme.header.userName})`} !important;
+      color: ${({theme}: any) =>
+        `rgb(${theme.horizontal.header.userSection.userName})`} !important;
       letter-spacing: 0.7px;
       font-family: Roboto;
       text-transform: capitalize;
@@ -54,7 +57,7 @@ const UserProfileContainer = styled('div')<IUserProfile>`
     span:last-of-type {
       font-size: 0.8rem;
       color: ${({theme}: any) =>
-        `rgb(${theme.header.userPosition})`} !important;
+        `rgb(${theme.horizontal.header.userSection.userPosition})`} !important;
       letter-spacing: 0.7px;
       font-family: Roboto;
       text-transform: capitalize;
@@ -84,19 +87,21 @@ const UserCanvas = styled.div<IUserCanvas>`
   width: 100%;
   display: ${({open}) => (open ? 'flex' : 'none')};
   flex-direction: column;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  box-shadow: 0 5px 25px 0 rgba(0, 0, 0, 0.1);
-  transform: translateY(104%);
+  box-shadow: 0 4px 24px 0 rgba(0, 0, 0, 0.24);
+  transform: ${({orientation}) =>
+    orientation === 'vertical' ? 'translateY(104%)' : 'translateY(102%)'};
   bottom: 0;
   font-size: 1rem;
-  background: ${({theme}: any) => `rgb(${theme.background})`} !important;
+  background: ${({theme}: any) =>
+    `rgb(${theme.horizontal.header.userSection.bg})`} !important;
   z-index: 999;
-  padding: 0.5rem 0.2rem;
+  padding: 0.5rem 0.3rem;
   border-radius: 0.3rem;
   .header_txt {
     padding: 0.5rem 1rem;
     white-space: nowrap;
-    color: ${({theme}: any) => `rgb(${theme.sideBar.tagTittle})`} !important;
+    color: ${({theme}: any) =>
+      `rgb(${theme.horizontal.header.userSection.text})`} !important;
     font-size: 0.625rem;
     text-transform: uppercase;
     font-weight: bold;
@@ -106,10 +111,13 @@ const UserCanvas = styled.div<IUserCanvas>`
     display: flex;
     padding: 0.5rem 1rem;
     align-items: center;
-    color: ${({theme}: any) => `rgb(${theme.sideBar.tagName})`} !important;
+    color: ${({theme}: any) =>
+      `rgb(${theme.horizontal.header.userSection.text})`} !important;
     :hover {
-      background: ${({theme}: any) => `rgb(${theme.primary})`} !important;
-      color: ${({theme}: any) => `rgb(${theme.background})`} !important;
+      background: ${({theme}: any) =>
+        `rgb(${theme.horizontal.header.userSection.activeBg})`} !important;
+      color: ${({theme}: any) =>
+        `rgb(${theme.horizontal.header.userSection.activeText})`} !important;
     }
   }
   svg {
@@ -125,10 +133,10 @@ const UserCanvas = styled.div<IUserCanvas>`
   }
 `
 const ContentUserSection: React.FC<IUserCanvas> = observer(({open}) => {
-  const {authStore} = useRootStore()
+  const {authStore, layoutStore} = useRootStore()
   const onLogout = useCallback(() => authStore.logout(), [])
   return (
-    <UserCanvas open={open}>
+    <UserCanvas open={open} orientation={layoutStore.layoutType}>
       <div className="header_txt">Welcome !</div>
       <button type="button" className="dropdown-itemx">
         <CgProfile size={18} />

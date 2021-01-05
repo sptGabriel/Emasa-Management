@@ -47,32 +47,32 @@ const Vertical = styled.div<SearchState>`
     box-sizing: border-box;
     border: none;
     outline: none;
-    color: ${({theme}: any) => `rgb(${theme.header.tools})`};
+    color: ${({theme}: any) => `rgb(${theme.vertical.header.tools})`};
     ::-webkit-input-placeholder {
       /* WebKit, Blink, Edge */
-      color: ${({theme}: any) => `rgb(${theme.header.tools})`};
+      color: ${({theme}: any) => `rgb(${theme.vertical.header.tools})`};
     }
     :-moz-placeholder {
       /* Mozilla Firefox 4 to 18 */
-      color: ${({theme}: any) => `rgb(${theme.header.tools})`};
+      color: ${({theme}: any) => `rgb(${theme.vertical.header.tools})`};
       opacity: 1;
     }
     ::-moz-placeholder {
       /* Mozilla Firefox 19+ */
-      color: ${({theme}: any) => `rgb(${theme.header.tools})`};
+      color: ${({theme}: any) => `rgb(${theme.vertical.header.tools})`};
       opacity: 1;
     }
     :-ms-input-placeholder {
       /* Internet Explorer 10-11 */
-      color: ${({theme}: any) => `rgb(${theme.header.tools})`};
+      color: ${({theme}: any) => `rgb(${theme.vertical.header.tools})`};
     }
     ::-ms-input-placeholder {
       /* Microsoft Edge */
-      color: ${({theme}: any) => `rgb(${theme.header.tools})`};
+      color: ${({theme}: any) => `rgb(${theme.vertical.header.tools})`};
     }
     ::placeholder {
       /* Most modern browsers support this now. */
-      color: ${({theme}: any) => `rgb(${theme.header.tools})`};
+      color: ${({theme}: any) => `rgb(${theme.vertical.header.tools})`};
     }
     transform: ${({isOpen}) => (isOpen ? '' : 'translate(0, 60px)')};
     transition: all 0.3s cubic-bezier(0, 0.105, 0.035, 1.57);
@@ -110,7 +110,7 @@ const Vertical = styled.div<SearchState>`
     }
     svg {
       transform: ${({isOpen}) => (isOpen ? 'rotate(0)' : 'rotate(90deg)')};
-      color: ${({theme}: any) => `rgb(${theme.header.tools})`};
+      color: ${({theme}: any) => `rgb(${theme.vertical.header.tools})`};
       transition: all 0.4s cubic-bezier(0.65, -0.6, 0.24, 1.65);
     }
     span {
@@ -170,7 +170,7 @@ const Vertical = styled.div<SearchState>`
     font-size: 1.5rem;
     font-weight: 700;
     line-height: 1;
-    color: ${({theme}: any) => theme.header.svg};
+    color: ${({theme}: any) => theme.vertical.header.svg};
     text-shadow: 0 1px 0 #fff;
     outline: none !important;
     :hover::before {
@@ -186,7 +186,7 @@ const Vertical = styled.div<SearchState>`
       top: 0;
       position: absolute;
       content: '';
-      background: ${({theme}: any) => `rgb(${theme.header.tools})`};;
+      background: ${({theme}: any) => `rgb(${theme.vertical.header.tools})`};
       border-radius: 2px;
     }
     ::after {
@@ -196,7 +196,7 @@ const Vertical = styled.div<SearchState>`
       top: 9px;
       position: absolute;
       content: '';
-      background: ${({theme}: any) => `rgb(${theme.header.tools})`};;
+      background: ${({theme}: any) => `rgb(${theme.vertical.header.tools})`};
       border-radius: 2px;
     }
   }

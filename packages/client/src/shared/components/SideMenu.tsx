@@ -127,7 +127,7 @@ const DropDown = styled(animated.ul)<IDropDown>`
   }
   .tag-optname {
     display: block;
-    color: ${({theme}: any) => `rgb(${theme.sideBar.tagName})`};
+    color: ${({theme}: any) => `rgb(${theme.vertical.sideBar.tagName})`};
     letter-spacing: 0.7px;
     font-family: Roboto;
     font-size: 0.9rem;
@@ -140,7 +140,7 @@ const DropDown = styled(animated.ul)<IDropDown>`
   .svg-drop {
     width: 10px;
     height: 10px;
-    stroke: ${({theme}: any) => `rgb(${theme.sideBar.tagIcon})`};
+    stroke: ${({theme}: any) => `rgb(${theme.vertical.sideBar.tagIcon})`};
     margin-right: 18px;
     margin-left: 10px;
     transition: transform 0.25s ease, -webkit-transform 0.25s ease;
@@ -196,11 +196,11 @@ const ListItem = styled.li<IListItem>`
     position: absolute;
     top: calc(50% - 8px);
     left: 200px;
-    color: ${({theme}: any) => `rgb(${theme.sideBar.tagIcon})`};
+    color: ${({theme}: any) => `rgb(${theme.vertical.sideBar.tagIcon})`};
   }
   .tag-name {
     display: ${({open}) => (open ? 'space-between' : 'none')};
-    color: ${({theme}: any) => `rgb(${theme.sideBar.tagName})`};
+    color: ${({theme}: any) => `rgb(${theme.vertical.sideBar.tagName})`};
     line-height: 1.8rem;
     letter-spacing: 0.7px;
     font-family: Roboto;
@@ -213,7 +213,7 @@ const ListItem = styled.li<IListItem>`
   .svg-main {
     width: 24px;
     height: 24px;
-    fill: ${({theme}: any) => `rgb(${theme.sideBar.tagIcon})`};
+    fill: ${({theme}: any) => `rgb(${theme.vertical.sideBar.tagIcon})`};
     margin-right: ${({open}) => (open ? '14px' : '0')};
     transition: transform 0.25s ease, -webkit-transform 0.25s ease;
     transition: -webkit-transform 0.25s ease;
@@ -228,8 +228,8 @@ const ListItem = styled.li<IListItem>`
     align-items: center;
     background: ${({theme, activetag}: any) =>
       activetag
-        ? `rgba(${theme.backgroundSecondary}, 0.9)`
-        : `rgb(${theme.background})`};
+        ? `rgba(${theme.vertical.sideBar.activeDropDown}, 0.9)`
+        : `rgb(${theme.vertical.sideBar.background})`};
     justify-content: ${({open}) => (open ? 'flex-start' : 'center')};
     position: relative;
   }
@@ -395,7 +395,6 @@ const MemoizedTags = memo(TagList)
 const MenuTags: React.FC<{hover: boolean}> = observer(({hover}) => {
   const {layoutStore} = useRootStore()
   const [tags, setTags] = useState<ITag[]>(Tags)
-
   useEffect(() => {
     setTags((items) =>
       items.map((item) => ({

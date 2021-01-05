@@ -14,7 +14,7 @@ interface SideBarState {
 }
 const navAnimation = keyframes`
 	0%{
-		height: 90px;
+		height: 80px;
 	}
 	100%{
 		height: 70px;
@@ -22,17 +22,18 @@ const navAnimation = keyframes`
 `
 const ToolsBar = styled('div')<{isSticky: boolean}>`
   display: flex;
-  background: #0d3b66;
+  background: ${({theme}: any) => `rgb(${theme.backgroundSecondary})`};
   height: 110px;
-  ${({isSticky}) =>
+  ${({isSticky, theme}: any) =>
     isSticky
       ? css`
+          display: flex;
+          align-items: center;
           position: fixed;
           top: 0;
           left: 0;
           right: 0;
-          border-bottom: 1px solid #ebedf2;
-          background: #0171aa;
+          background: ${`rgb(${theme.primary})`};
           animation: ${navAnimation} 0.15s forwards;
         `
       : ''}

@@ -2,21 +2,103 @@ import {ITheme} from '.'
 
 export const DarkTheme: ITheme = {
   type: 'dark',
-  primary: '3, 132, 196',
-  secondary: 'red',
-  background: '46, 43, 63',
-  backgroundSecondary: '34, 31, 46',
-  sideBar: {
-    background: '255, 255, 255',
-    tagTittle: '153, 153, 153',
-    tagName: '98, 98, 98',
-    tagIcon: '86, 86, 86',
-    activeDropDown: '255, 255, 255',
+  primary: '0, 107, 166',
+  secondary: '13, 59, 102',
+  background: '22, 29, 49',
+  backgroundSecondary: '40, 48, 70',
+  vertical: {
+    sideBar: {
+      background: '40, 48, 70',
+      tagTittle: '103, 109, 125',
+      tagName: '208, 210, 214',
+      tagIcon: '208, 210, 214',
+      activeDropDown: '22, 29, 49',
+    },
+    header: {
+      userSection: {
+        userName: '208, 210, 214',
+        userPosition: '208, 210, 214',
+        bg: '40, 48, 70',
+        text: '255, 255, 255',
+        activeBg: '0, 107, 166',
+        activeText: '255, 255, 255',
+      },
+      background: '40, 48, 70',
+      tools: '208, 210, 214',
+      toolsHover: '0, 108, 166',
+    },
+    footer: {
+      background: '40, 48, 70',
+      text: '208, 210, 214',
+    },
   },
-  header: {
-    userName: 'blue',
-    userPosition: 'red',
-    tools: '98, 98, 98',
-    toolsHover: '0, 108, 166',
+  horizontal: {
+    header: {
+      userSection: {
+        userName: '208, 210, 214',
+        userPosition: '208, 210, 214',
+        bg: '40, 48, 70',
+        text: '255, 255, 255',
+        activeBg: '0, 107, 166',
+        activeText: '255, 255, 255',
+      },
+      background: '40, 48, 70',
+      tools: '208, 210, 214',
+      toolsHover: '0, 108, 166',
+    },
+    navBar: {
+      text: '208, 210, 214',
+      svg: '208, 210, 214',
+      activeBgButton: '22, 29, 49',
+      dropdownBg: '40, 48, 70',
+      dropdownTxt: '208, 210, 214',
+      dropdownBgOptActive: '22, 29, 49',
+      dropdownTextOptActive: '105, 147, 255',
+    },
+    footer: {
+      background: '40, 48, 70',
+      text: '208, 210, 214',
+    },
   },
 }
+
+// export const DarkTheme: ITheme = {
+//   type: 'dark',
+//   primary: '0, 107, 166',
+//   secondary: '13, 59, 102',
+//   background: '22, 29, 49',
+//   backgroundSecondary: '40, 48, 70',
+//   sideBar: {
+//     background: '40, 48, 70',
+//     tagTittle: '103, 109, 125',
+//     tagName: '208, 210, 214',
+//     tagIcon: '208, 210, 214',
+//     activeDropDown: '22, 29, 49',
+//   },
+//   header: {
+//     userSection: {
+//       userName: '208, 210, 214',
+//       userPosition: '208, 210, 214',
+//       bg: '40, 48, 70',
+//       text: '255, 255, 255',
+//       activeBg: '0, 107, 166',
+//       activeText: '255, 255, 255',
+//     },
+//     background: '40, 48, 70',
+//     tools: '208, 210, 214',
+//     toolsHover: '0, 108, 166',
+//   },
+//   navBar: {
+//     text: '208, 210, 214',
+//     svg: '208, 210, 214',
+//     activeBgButton: '22, 29, 49',
+//     dropdownBg: '40, 48, 70',
+//     dropdownTxt: '208, 210, 214',
+//     dropdownBgOptActive: '22, 29, 49',
+//     dropdownTextOptActive: '105, 147, 255',
+//   },
+//   footer: {
+//     background: '40, 48, 70',
+//     text: '208, 210, 214',
+//   },
+// }

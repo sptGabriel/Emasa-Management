@@ -13,7 +13,8 @@ const LogoWrapper = styled(Container)<SideBarState>`
     open || orientation === 'horizontal' ? 'flex' : 'none'};
   align-items: center;
   .text-5 {
-    color: #0189cf;
+    color: ${({orientation}) =>
+      orientation === 'horizontal' ? '#fff' : '#0189cf'};
     text-transform: uppercase;
     font-size: 1rem;
     font-weight: bold;

@@ -34,10 +34,9 @@ export const OutletWrapper = styled('div')`
   min-height: calc(100vh - 130px);
 `
 const Content = styled('div')`
-  background: ${({theme}: any) =>
-    `rgb(${theme.backgroundSecondary})` || 'lightgrey'};
+  background: ${({theme}: any) => `rgb(${theme.background})` || 'lightgrey'};
   width: 100%;
-  padding: 50px;
+  padding: 0 50px;
   position: relative;
   overflow-y: auto;
   //  padding-right: 30px;

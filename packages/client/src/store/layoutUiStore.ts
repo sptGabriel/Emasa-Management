@@ -1,8 +1,8 @@
 import {makeAutoObservable} from 'mobx'
 import {ITheme} from '../shared/themes'
 import {DarkTheme} from '../shared/themes/darkTheme'
-import {HorizontalLightTheme, LightTheme} from '../shared/themes/lightTheme'
-import {getNavBarTheme} from '../shared/themes/navBarThemes'
+import {LightTheme} from '../shared/themes/lightTheme'
+import {getNavBarTheme} from '../shared/themes/customThemes'
 import {SemiDarkTheme} from '../shared/themes/semiDarkTheme'
 import {ensure} from '../shared/utils/ensure'
 import {isColor} from '../shared/utils/isColor'
@@ -26,7 +26,7 @@ export class LayoutUIStore {
 
   isLayoutHorizontal = false
 
-  layoutType: LayoutType = LayoutType.horizontal
+  layoutType: LayoutType = LayoutType.vertical
 
   constructor(private rootStore: RootStore) {
     makeAutoObservable(this)
@@ -36,26 +36,26 @@ export class LayoutUIStore {
 
   initTheme = () => {
     const theme: any = JSON.parse(ensure(localStorage.getItem('theme-type')))
-    const headerColor: any = JSON.parse(ensure(localStorage.getItem('h-col')))
+    const customTheme: any = JSON.parse(ensure(localStorage.getItem('h-col')))
     const primaryColor: any = JSON.parse(ensure(localStorage.getItem('p-col')))
     const getTheme = () => {
       switch (theme) {
         case 'light':
-          if (this.layoutType === 'horizontal') return HorizontalLightTheme
           return LightTheme
         case 'dark':
           return DarkTheme
         case 'semidark':
           return SemiDarkTheme
         default:
-          if (this.layoutType === 'horizontal') return HorizontalLightTheme
           return LightTheme
       }
     }
     this.theme = getTheme()
-    this.theme.header = headerColor
-      ? getNavBarTheme(JSON.parse(headerColor))
-      : this.theme.header
+    const hasCustomTheme = getNavBarTheme(JSON.parse(customTheme))
+    if (hasCustomTheme) {
+      this.theme.vertical = hasCustomTheme.vertical
+      this.theme.horizontal = hasCustomTheme.horizontal
+    }
     this.theme.primary = isColor(primaryColor)
       ? primaryColor
       : this.theme.primary

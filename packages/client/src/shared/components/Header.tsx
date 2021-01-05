@@ -13,15 +13,18 @@ import UserProfile from './UserProfile'
 interface SideBarState {
   open: boolean
 }
-const NavBar = styled('div')`
+const NavBar = styled('div')<{orientation: string}>`
   display: flex;
   width: 100%;
   height: 70px;
-  background: ${({theme}: any) => `rgb(${theme.background})`};
+  background: ${({theme, orientation}: any) =>
+    orientation === 'horizontal'
+      ? `rgb(${theme.horizontal.header.background})`
+      : `rgb(${theme.vertical.header.background})`};
   box-shadow: 0 0 11px rgba(0, 0, 0, 0.13);
   z-index: 3;
 `
-const LogoHeader = styled(Container)<SideBarState>`
+const LogoHeader = styled(Container)<SideBarState & {orientation: string}>`
   width: ${({open}) => (open ? '260px' : '80px')};
   height: 70px;
   margin-bottom: 20px !important;
@@ -34,7 +37,10 @@ const LogoHeader = styled(Container)<SideBarState>`
     padding: 0;
     width: 35px !important;
     height: 35px !important;
-    color: ${({theme}: any) => `rgb(${theme.header.tools})`};
+    color: ${({theme, orientation}: any) =>
+      orientation === 'horizontal'
+        ? `rgb(${theme.horizontal.header.tools})`
+        : `rgb(${theme.vertical.header.tools})`};
     margin-right: ${({open}) => (open ? '16px' : '0')};
     ${({open}) =>
       open
@@ -43,7 +49,10 @@ const LogoHeader = styled(Container)<SideBarState>`
           `
         : ''};
     :hover {
-      color: ${({theme}: any) => `rgb(${theme.header.toolsHover})`} !important;
+      color: ${({theme, orientation}: any) =>
+        orientation === 'horizontal'
+          ? `rgb(${theme.horizontal.header.toolsHover})`
+          : `rgb(${theme.vertical.header.toolsHover})`};
     }
     :active {
       background: ${({theme}: any) => `rgb(${theme.backgroundSecondary})`};
@@ -80,8 +89,9 @@ const WrapperTools = styled(Container)<SideBarState>`
 const Header: React.FC = observer(() => {
   const {layoutStore} = useRootStore()
   return (
-    <NavBar>
+    <NavBar orientation={layoutStore.layoutType}>
       <LogoHeader
+        orientation={layoutStore.layoutType}
         open={layoutStore.sideBar || layoutStore.onHoverSideState}
         align="center"
         justify={

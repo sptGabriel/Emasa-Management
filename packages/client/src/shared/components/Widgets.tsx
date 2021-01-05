@@ -7,9 +7,7 @@ import {FiBell, FiSun} from 'react-icons/fi'
 import {AiOutlineCompress} from 'react-icons/ai'
 import {Container} from './FlexBox'
 import VerticalSplit from './Divider'
-import Search from './SearchBox'
 import {useRootStore} from '../infra/mobx'
-import UserProfile from './UserProfile'
 
 const bellAnimation = keyframes`
   0% {
@@ -72,13 +70,19 @@ const WrapperTools = styled(Container)<SideBarState>`
     width: 46px;
     height: 46px;
     svg {
-      color: ${({theme}: any) => `rgb(${theme.header.tools})`} !important;
+      color: ${({theme, orientation}: any) =>
+        orientation === 'horizontal'
+          ? `rgb(${theme.horizontal.header.tools})`
+          : `rgb(${theme.vertical.header.tools})`};
     }
     :hover {
-      background: ${({theme}: any) => `rgb(${theme.backgroundSecondary})`};
+      /* background: ${({theme}: any) =>
+        `rgb(${theme.backgroundSecondary})`}; */
       svg {
-        color: ${({theme}: any) =>
-          `rgb(${theme.header.toolsHover})`} !important;
+        color: ${({theme, orientation}: any) =>
+          orientation === 'horizontal'
+            ? `rgb(${theme.horizontal.header.toolsHover})`
+            : `rgb(${theme.vertical.header.toolsHover})`};
       }
     }
   }

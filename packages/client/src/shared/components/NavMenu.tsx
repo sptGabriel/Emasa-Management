@@ -60,7 +60,7 @@ const Menu = styled('div')<{isSticky: boolean}>`
   width: 100% !important;
   height: 70px;
   position: relative;
-  background: #006ba6;
+  background: ${({theme}: any) => `rgb(${theme.primary})`};
   box-shadow: 11px 0 0 rgba(0, 0, 0, 0.13);
 `
 
@@ -72,8 +72,9 @@ const DropDown = styled(animated.ul)<IDropDown>`
   padding: 15px 0;
   min-width: 215px;
   min-height: 52px;
-  background-color: #fff;
-  box-shadow: 0 15px 50px 0 rgba(82, 63, 105, 0.15);
+  background: ${({theme}: any) => `rgb(${theme.navBar.dropdownBg})`};
+  box-shadow: 0 4px 24px 0 rgba(0, 0, 0, 0.24);
+  z-index: 999;
   border-radius: 4px;
   .dropdown-wrap {
     &:hover {
@@ -91,7 +92,7 @@ const DropDown = styled(animated.ul)<IDropDown>`
   }
   .tag-optname {
     display: block;
-    color: #3f4254;
+    color: ${({theme}: any) => `rgb(${theme.navBar.dropdownTxt})`};
     font-size: 1rem;
     font-family: Roboto;
     text-transform: capitalize;
@@ -103,19 +104,22 @@ const DropDown = styled(animated.ul)<IDropDown>`
   .svg-drop {
     width: 10px;
     height: 10px;
-    stroke: #565656;
+    stroke: ${({theme}: any) => `rgb(${theme.horizontal.navBar.dropdownTxt})`};
     margin-right: 0.75rem !important;
     transition: transform 0.25s ease, -webkit-transform 0.25s ease;
     transition: -webkit-transform 0.25s ease;
     transition: transform 0.25s ease;
   }
   .active-dropheader {
-    background: #f3f6f9;
+    background: ${({theme}: any) =>
+      `rgb(${theme.horizontal.navBar.dropdownBgOptActive})`};
     .svg-drop {
-      stroke: #6993ff;
+      stroke: ${({theme}: any) =>
+        `rgb(${theme.horizontal.navBar.dropdownTextOptActive})`};
     }
     .tag-optname {
-      color: #6993ff;
+      color: ${({theme}: any) =>
+        `rgb(${theme.horizontal.navBar.dropdownTextOptActive})`};
     }
   }
 `
@@ -127,12 +131,13 @@ const NavItem = styled.li<IListItem>`
   margin-right: 0.75rem;
   .active {
     /* background: #2a2a72; */
-    background: #0d3b66;
+    background: ${({theme}: any) =>
+      `rgb(${theme.horizontal.navBar.activeBgButton})`};
   }
   .nav-link {
     display: flex;
     align-items: center;
-    color: #fff;
+    color: ${({theme}: any) => `rgb(${theme.horizontal.navBar.text})`};
     cursor: pointer;
     border-radius: 0.42rem;
     padding: 0.65rem 1rem;
@@ -140,7 +145,7 @@ const NavItem = styled.li<IListItem>`
       margin-right: 10px;
     }
     .tag-name {
-      color: #fff;
+      color: ${({theme}: any) => `rgb(${theme.horizontal.navBar.text})`};
       font-weight: 500;
       font-size: 1rem;
       line-height: 1.5;

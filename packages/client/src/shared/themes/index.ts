@@ -1,17 +1,56 @@
-interface Vertical {
+export interface VerticalDashBoard {
+  sideBar: {
+    background: string
+    tagTittle: string
+    tagName: string
+    tagIcon: string
+    activeDropDown: string
+  }
   header: {
-    color: string
-    svg: string
-    hoverSvg: string
+    userSection: {
+      userName: string
+      userPosition: string
+      bg: string
+      text: string
+      activeBg: string
+      activeText: string
+    }
+    background: string
+    tools: string
+    toolsHover: string
+  }
+  footer: {
+    background: string
     text: string
   }
-  dropTag: string
-  text: string
-  textActive: string
-  subText: string
-  subTextActive: string
-  widget: string
-  widgetActive: string
+}
+export interface HorizontalDashBoard {
+  header: {
+    userSection: {
+      userName: string
+      userPosition: string
+      bg: string
+      text: string
+      activeBg: string
+      activeText: string
+    }
+    background: string
+    tools: string
+    toolsHover: string
+  }
+  navBar: {
+    text: string
+    svg: string
+    activeBgButton: string
+    dropdownBg: string
+    dropdownTxt: string
+    dropdownBgOptActive: string
+    dropdownTextOptActive: string
+  }
+  footer: {
+    background: string
+    text: string
+  }
 }
 export type ITheme = {
   type: string
@@ -19,17 +58,6 @@ export type ITheme = {
   secondary: string
   background: string
   backgroundSecondary: string
-  sideBar?: {
-    background: string;
-    tagTittle: string;
-    tagName: string;
-    tagIcon: string;
-    activeDropDown: string;
-  }
-  header: {
-    userName: string
-    userPosition: string
-    tools: string
-    toolsHover: string
-  }
+  vertical: VerticalDashBoard
+  horizontal: HorizontalDashBoard
 }
