@@ -1,10 +1,10 @@
-import React, {useEffect} from 'react'
+import React from 'react'
 import {css, keyframes, useTheme} from '@emotion/react'
 import styled from '@emotion/styled/macro'
 import {observer} from 'mobx-react-lite'
 import {useRootStore} from '../infra/mobx'
 import {Container} from './FlexBox'
-import {HorizontalWidgets} from './Widgets'
+import Widgets from './Widgets'
 import Logo from './Logo'
 import UserProfile from './UserProfile'
 import MenuTags from './NavMenu'
@@ -38,54 +38,56 @@ const ToolsBar = styled('div')<{isSticky: boolean}>`
         `
       : ''}
 `
-const Tools: React.FC<{isSticky: boolean; orientation: string}> = observer(
-  ({isSticky, orientation}) => {
-    return (
-      <ToolsBar isSticky={isSticky}>
-        <Container
-          wrap="no-wrap"
-          justify="space-between"
+const Tools: React.FC<{isSticky: boolean; orientation: string}> = ({
+  isSticky,
+  orientation,
+}) => {
+  return (
+    <ToolsBar isSticky={isSticky}>
+      <Container
+        wrap="no-wrap"
+        justify="space-between"
+        style={{
+          maxWidth: '1140px',
+          width: '100%',
+          padding: '0 12px',
+          height: '100%',
+          margin: '0 auto',
+          flex: '1 1 auto',
+        }}
+      >
+        <div
           style={{
-            maxWidth: '1140px',
-            width: '100%',
-            padding: '0 12px',
+            display: 'flex',
             height: '100%',
-            margin: '0 auto',
-            flex: '1 1 auto',
+            alignItems: 'center',
+            justifyContent: 'space-between',
           }}
         >
-          <div
-            style={{
-              display: 'flex',
-              height: '100%',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-            }}
-          >
-            <Logo orientation={orientation} />
-          </div>
-          <div style={{display: 'flex', height: '100%'}}>
-            <HorizontalWidgets />
-            <UserProfile />
-          </div>
-        </Container>
-      </ToolsBar>
-    )
-  },
-)
+          <Logo orientation={orientation} />
+        </div>
+        <div style={{display: 'flex', height: '100%'}}>
+          <Widgets />
+          <UserProfile />
+        </div>
+      </Container>
+    </ToolsBar>
+  )
+}
 
-const Menu: React.FC<{isSticky: boolean}> = observer(({isSticky}) => {
+const Menu: React.FC<{isSticky: boolean}> = ({isSticky}) => {
   return <MenuTags isSticky={isSticky} />
-})
+}
 
-const NavBar: React.FC<{isSticky: boolean}> = observer(({isSticky}) => {
-  const {layoutStore} = useRootStore()
-  const theme: any = useTheme()
+const NavBar: React.FC<{
+  isSticky: boolean
+  orientation: string
+}> = ({isSticky, orientation}) => {
   return (
     <>
-      <Tools isSticky={isSticky} orientation={layoutStore.layoutType} />
+      <Tools isSticky={isSticky} orientation={orientation} />
       <Menu isSticky={isSticky} />
     </>
   )
-})
+}
 export default NavBar

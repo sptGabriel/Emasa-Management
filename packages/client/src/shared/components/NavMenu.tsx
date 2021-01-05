@@ -7,22 +7,16 @@ import React, {
 } from 'react'
 import {IconType} from 'react-icons'
 import styled from '@emotion/styled/macro'
-import {observer} from 'mobx-react-lite'
 import {NavLink, useLocation} from 'react-router-dom'
 import {FaAngleDown} from 'react-icons/fa'
 import {animated} from 'react-spring'
 import useOnClickOutside from 'use-onclickoutside'
-import {useRootStore} from '../infra/mobx'
 import {ITag, IDropdownItems, TagHorizontal} from '../utils/MenuTags'
 import {Container} from './FlexBox'
 
 /* Styles */
 type IDropDown = {
   activetag: any
-}
-/* Styles */
-export type TSideBar = {
-  open: boolean
 }
 type ClickHandler = (tag: ITag) => (e: MouseEvent) => void
 type ShowHideDropItem = (tag: ITag) => void
@@ -35,11 +29,9 @@ interface IDrop {
 }
 interface ITagList {
   tag: ITag
-  open: boolean
   setTags: any
 }
 interface IListItem {
-  open: boolean
   isDropDown?: boolean
   activetag: any
 }
@@ -104,22 +96,19 @@ const DropDown = styled(animated.ul)<IDropDown>`
   .svg-drop {
     width: 10px;
     height: 10px;
-    stroke: ${({theme}: any) => `rgb(${theme.horizontal.navBar.dropdownTxt})`};
+    stroke: ${({theme}: any) => `rgb(${theme.navBar.dropdownTxt})`};
     margin-right: 0.75rem !important;
     transition: transform 0.25s ease, -webkit-transform 0.25s ease;
     transition: -webkit-transform 0.25s ease;
     transition: transform 0.25s ease;
   }
   .active-dropheader {
-    background: ${({theme}: any) =>
-      `rgb(${theme.horizontal.navBar.dropdownBgOptActive})`};
+    background: ${({theme}: any) => `rgb(${theme.navBar.dropdownBgOptActive})`};
     .svg-drop {
-      stroke: ${({theme}: any) =>
-        `rgb(${theme.horizontal.navBar.dropdownTextOptActive})`};
+      stroke: ${({theme}: any) => `rgb(${theme.navBar.dropdownTextOptActive})`};
     }
     .tag-optname {
-      color: ${({theme}: any) =>
-        `rgb(${theme.horizontal.navBar.dropdownTextOptActive})`};
+      color: ${({theme}: any) => `rgb(${theme.navBar.dropdownTextOptActive})`};
     }
   }
 `
@@ -131,13 +120,12 @@ const NavItem = styled.li<IListItem>`
   margin-right: 0.75rem;
   .active {
     /* background: #2a2a72; */
-    background: ${({theme}: any) =>
-      `rgb(${theme.horizontal.navBar.activeBgButton})`};
+    background: ${({theme}: any) => `rgb(${theme.navBar.activeBgButton})`};
   }
   .nav-link {
     display: flex;
     align-items: center;
-    color: ${({theme}: any) => `rgb(${theme.horizontal.navBar.text})`};
+    color: ${({theme}: any) => `rgb(${theme.navBar.text})`};
     cursor: pointer;
     border-radius: 0.42rem;
     padding: 0.65rem 1rem;
@@ -145,7 +133,7 @@ const NavItem = styled.li<IListItem>`
       margin-right: 10px;
     }
     .tag-name {
-      color: ${({theme}: any) => `rgb(${theme.horizontal.navBar.text})`};
+      color: ${({theme}: any) => `rgb(${theme.navBar.text})`};
       font-weight: 500;
       font-size: 1rem;
       line-height: 1.5;
@@ -159,79 +147,41 @@ const NavItem = styled.li<IListItem>`
     align-items: center;
   }
 `
-const DropDownItems: React.FC<IDrop> = observer(
-  ({active, dropItems, baseUrl}) => {
-    return (
-      <DropDown activetag={active ? 1 : 0}>
-        {dropItems.map((item) => (
-          <li className="dropdown-wrap" key={JSON.stringify(item.Name)}>
-            <NavLink
-              to={`${baseUrl}/${item.Link}`}
-              className="dropdown-tag"
-              activeClassName="active-dropheader"
-              end
+const DropDownItems: React.FC<IDrop> = ({active, dropItems, baseUrl}) => {
+  return (
+    <DropDown activetag={active ? 1 : 0}>
+      {dropItems.map((item) => (
+        <li className="dropdown-wrap" key={JSON.stringify(item.Name)}>
+          <NavLink
+            to={`${baseUrl}/${item.Link}`}
+            className="dropdown-tag"
+            activeClassName="active-dropheader"
+            end
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20px"
+              height="20px"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="transpa"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="svg-drop"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="20px"
-                height="20px"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="transpa"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="svg-drop"
-              >
-                <circle cx="12" cy="12" r="10" />
-              </svg>
+              <circle cx="12" cy="12" r="10" />
+            </svg>
 
-              <span className="tag-optname">{item.Name}</span>
-            </NavLink>
-          </li>
-        ))}
-      </DropDown>
-    )
-  },
-)
-// //  tag navlink
-// const MemoidNavLink: React.FC<{
-//   Icon: IconType
-//   Link?: string
-//   Name: string
-//   OnClick: any
-//   HasChildren?: any
-//   Active?: boolean
-//   BaseUrl?: string
-// }> = memo(({Icon, Link, Name, OnClick, HasChildren, Active, BaseUrl}) => {
-//   const location = useLocation()
-//   return (
-//     <>
-//       {!HasChildren && Link ? (
-//         <NavLink className="nav-link" activeClassName="active" to={Link} end>
-//           <Icon className="tag-svg" size={22} />
-//           <span className="tag-name">{Name}</span>
-//         </NavLink>
-//       ) : (
-//         <div
-//           className={
-//             location.pathname.split('/')[2] === BaseUrl
-//               ? `nav-link active`
-//               : `nav-link`
-//           }
-//         >
-//           <Icon className="tag-svg" size={22} />
-//           <span className="tag-name">{Name}</span>
-//           <span className="svg-arrow">
-//             {Active === true ? <FaAngleDown /> : <FaAngleDown />}
-//           </span>
-//         </div>
-//       )}
-//     </>
-//   )
-// })
+            <span className="tag-optname">{item.Name}</span>
+          </NavLink>
+        </li>
+      ))}
+    </DropDown>
+  )
+}
 //  Tag Wrapper
-const NavTag: React.FC<ITagList> = observer(({tag, open, setTags}) => {
+const NavTag: React.FC<ITagList> = ({tag, setTags}) => {
   const location = useLocation()
   const ref = useRef(null)
   useOnClickOutside(ref, () => {
@@ -261,7 +211,6 @@ const NavTag: React.FC<ITagList> = observer(({tag, open, setTags}) => {
   )
   return (
     <NavItem
-      open={open}
       ref={tag.DropdownItems ? ref : undefined}
       onClick={tag.Active !== undefined ? clickHandler(tag) : undefined}
       isDropDown={!!tag.DropdownItems}
@@ -305,10 +254,9 @@ const NavTag: React.FC<ITagList> = observer(({tag, open, setTags}) => {
       )}
     </NavItem>
   )
-})
+}
 //  Menu
-const MenuTags: React.FC<{isSticky: boolean}> = observer(({isSticky}) => {
-  const {layoutStore} = useRootStore()
+const MenuTags: React.FC<{isSticky: boolean}> = ({isSticky}) => {
   const [tags, setTags] = useState<ITag[]>(
     TagHorizontal.map((item) => ({
       ...item,
@@ -345,7 +293,6 @@ const MenuTags: React.FC<{isSticky: boolean}> = observer(({isSticky}) => {
             <NavTag
               setTags={setTags}
               key={JSON.stringify(item.Name)}
-              open={layoutStore.sideBar || layoutStore.onHoverSideState}
               tag={item}
             />
           ))}
@@ -353,6 +300,6 @@ const MenuTags: React.FC<{isSticky: boolean}> = observer(({isSticky}) => {
       </Container>
     </Menu>
   )
-})
+}
 
 export default MenuTags

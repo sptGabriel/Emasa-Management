@@ -70,51 +70,19 @@ const WrapperTools = styled(Container)<SideBarState>`
     width: 46px;
     height: 46px;
     svg {
-      color: ${({theme, orientation}: any) =>
-        orientation === 'horizontal'
-          ? `rgb(${theme.horizontal.header.tools})`
-          : `rgb(${theme.vertical.header.tools})`};
+      color: ${({theme}: any) => `rgb(${theme.header.tools})`};
     }
     :hover {
       /* background: ${({theme}: any) =>
         `rgb(${theme.backgroundSecondary})`}; */
       svg {
-        color: ${({theme, orientation}: any) =>
-          orientation === 'horizontal'
-            ? `rgb(${theme.horizontal.header.toolsHover})`
-            : `rgb(${theme.vertical.header.toolsHover})`};
+        color: ${({theme}: any) => `rgb(${theme.header.toolsHover})`};
       }
     }
   }
 `
 
-export const VerticalWidgets: React.FC = observer(() => {
-  const {layoutStore} = useRootStore()
-  return (
-    <WrapperTools open={layoutStore.sideBar} justify="flex-end">
-      <button
-        className="tool_widget"
-        onClick={layoutStore.setDarkTheme}
-        type="button"
-      >
-        {layoutStore.theme.type === 'dark' ? (
-          <BiMoon size={18} />
-        ) : (
-          <FiSun size={18} />
-        )}
-      </button>
-      <button className="tool_widget bell" type="button">
-        <FiBell size={18} />
-      </button>
-      <button className="tool_widget" type="button">
-        <AiOutlineCompress size={18} />
-      </button>
-      <VerticalSplit />
-    </WrapperTools>
-  )
-})
-
-export const HorizontalWidgets: React.FC = observer(() => {
+const Widgets: React.FC = observer(() => {
   const {layoutStore} = useRootStore()
   return (
     <WrapperTools open={layoutStore.sideBar} justify="flex-end">
@@ -139,3 +107,29 @@ export const HorizontalWidgets: React.FC = observer(() => {
     </WrapperTools>
   )
 })
+export default Widgets
+//  export const HorizontalWidgets: React.FC = observer(() => {
+//  const {layoutStore} = useRootStore()
+//  return (
+//    <WrapperTools open={layoutStore.sideBar} justify="flex-end">
+//      <button
+//        className="tool_widget"
+//        onClick={layoutStore.setDarkTheme}
+//        type="button"
+//      >
+//        {layoutStore.theme.type === 'dark' ? (
+//          <BiMoon size={18} />
+//        ) : (
+//          <FiSun size={18} />
+//        )}
+//      </button>
+//      <button className="tool_widget bell" type="button">
+//        <FiBell size={18} />
+//      </button>
+//      <button className="tool_widget" type="button">
+//        <AiOutlineCompress size={18} />
+//      </button>
+//      {/* <VerticalSplit /> */}
+//    </WrapperTools>
+//  )
+//  })

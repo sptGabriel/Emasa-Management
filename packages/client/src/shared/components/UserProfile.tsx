@@ -31,8 +31,7 @@ const UserProfileContainer = styled('div')<IUserProfile>`
     }
   }
   & .svg-arrow {
-    color: ${({theme}: any) =>
-      `rgb(${theme.horizontal.header.tools})`} !important;
+    color: ${({theme}: any) => `rgb(${theme.header.tools})`} !important;
     ${({open}) =>
       open
         ? css`
@@ -48,7 +47,7 @@ const UserProfileContainer = styled('div')<IUserProfile>`
     span:first-of-type {
       font-size: 0.8rem;
       color: ${({theme}: any) =>
-        `rgb(${theme.horizontal.header.userSection.userName})`} !important;
+        `rgb(${theme.header.userSection.userName})`} !important;
       letter-spacing: 0.7px;
       font-family: Roboto;
       text-transform: capitalize;
@@ -57,7 +56,7 @@ const UserProfileContainer = styled('div')<IUserProfile>`
     span:last-of-type {
       font-size: 0.8rem;
       color: ${({theme}: any) =>
-        `rgb(${theme.horizontal.header.userSection.userPosition})`} !important;
+        `rgb(${theme.header.userSection.userPosition})`} !important;
       letter-spacing: 0.7px;
       font-family: Roboto;
       text-transform: capitalize;
@@ -93,7 +92,7 @@ const UserCanvas = styled.div<IUserCanvas>`
   bottom: 0;
   font-size: 1rem;
   background: ${({theme}: any) =>
-    `rgb(${theme.horizontal.header.userSection.bg})`} !important;
+    `rgb(${theme.header.userSection.bg})`} !important;
   z-index: 999;
   padding: 0.5rem 0.3rem;
   border-radius: 0.3rem;
@@ -101,7 +100,7 @@ const UserCanvas = styled.div<IUserCanvas>`
     padding: 0.5rem 1rem;
     white-space: nowrap;
     color: ${({theme}: any) =>
-      `rgb(${theme.horizontal.header.userSection.text})`} !important;
+      `rgb(${theme.header.userSection.text})`} !important;
     font-size: 0.625rem;
     text-transform: uppercase;
     font-weight: bold;
@@ -112,12 +111,12 @@ const UserCanvas = styled.div<IUserCanvas>`
     padding: 0.5rem 1rem;
     align-items: center;
     color: ${({theme}: any) =>
-      `rgb(${theme.horizontal.header.userSection.text})`} !important;
+      `rgb(${theme.header.userSection.text})`} !important;
     :hover {
       background: ${({theme}: any) =>
-        `rgb(${theme.horizontal.header.userSection.activeBg})`} !important;
+        `rgb(${theme.header.userSection.activeBg})`} !important;
       color: ${({theme}: any) =>
-        `rgb(${theme.horizontal.header.userSection.activeText})`} !important;
+        `rgb(${theme.header.userSection.activeText})`} !important;
     }
   }
   svg {

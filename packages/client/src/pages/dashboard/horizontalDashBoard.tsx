@@ -1,24 +1,27 @@
-import React, {useEffect, useRef, useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import styled from '@emotion/styled'
 import {observer} from 'mobx-react-lite'
 import {useRootStore} from '../../shared/infra/mobx'
 import DashBoardFooter from '../../shared/components/Footer'
 import NavBar from '../../shared/components/NavBar'
-import CustomizerTheme from '../../shared/components/ThemeSideBox'
 import {Container} from '../../shared/components/FlexBox'
 
-interface SideBarState {
-  open?: boolean
-  orientation?: string
-}
-
-const DashBoardContainer = styled('div')<SideBarState>`
+const DashBoardContainer = styled('div')`
   height: 100%;
   width: 100%;
   position: relative;
   background: ${({theme}: any) => `rgb(${theme.background})` || 'lightgrey'};
+  ::-webkit-scrollbar-track {
+    background: transparent;
+    box-shadow: inset 0 0 25px 25px transparent;
+    border: solid 3px transparent;
+  }
+  ::-webkit-scrollbar {
+    width: 0px;
+    background: transparent;
+  }
 `
-const DashBoardMain = styled('div')<SideBarState & {sticky: boolean}>`
+const DashBoardMain = styled('div')<{sticky: boolean}>`
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -32,24 +35,24 @@ export const OutletWrapper = styled('div')`
   width: 100%;
   min-height: calc(100vh - 130px);
 `
-const Content = styled('div')`
-  width: 100%;
-  position: relative;
-  overflow-y: auto;
-  //  padding-right: 30px;
-  //  padding-left: 30px;
-  ::-webkit-scrollbar-track {
-    box-shadow: inset 0 0 25px 25px transparent;
-    border: solid 3px transparent;
-  }
-  ::-webkit-scrollbar {
-    width: 0px;
-    background: transparent;
-  }
-  p {
-    max-width: 600px;
-  }
-`
+//  const Content = styled('div')`
+//  width: 100%;
+//  position: relative;
+//  overflow-y: auto;
+//  //  padding-right: 30px;
+//  //  padding-left: 30px;
+//  ::-webkit-scrollbar-track {
+//    box-shadow: inset 0 0 25px 25px transparent;
+//    border: solid 3px transparent;
+//  }
+//  ::-webkit-scrollbar {
+//    width: 0px;
+//    background: transparent;
+//  }
+//  p {
+//    max-width: 600px;
+//  }
+//  `
 
 export const HorizontalDashBoard: React.FC = observer(() => {
   const {layoutStore} = useRootStore()
@@ -70,12 +73,8 @@ export const HorizontalDashBoard: React.FC = observer(() => {
     }
   }, [])
   return (
-    <DashBoardContainer
-      orientation={layoutStore.layoutType}
-      open={layoutStore.sideBar || layoutStore.onHoverSideState}
-    >
-      <CustomizerTheme />
-      <NavBar isSticky={isSticky} />
+    <DashBoardContainer>
+      <NavBar orientation={layoutStore.layoutType} isSticky={isSticky} />
       <DashBoardMain sticky={isSticky}>
         <Container
           wrap="no-wrap"
@@ -140,7 +139,9 @@ export const HorizontalDashBoard: React.FC = observer(() => {
             test
           </div>
         </Container>
-        <DashBoardFooter>.footer</DashBoardFooter>
+        <DashBoardFooter orientation={layoutStore.layoutType}>
+          .footer
+        </DashBoardFooter>
       </DashBoardMain>
     </DashBoardContainer>
   )

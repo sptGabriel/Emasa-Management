@@ -7,7 +7,6 @@ import {useRootStore} from '../../shared/infra/mobx'
 import ASide from '../../shared/components/SideBar'
 import DashBoardFooter from '../../shared/components/Footer'
 import Header from '../../shared/components/Header'
-import CustomizerTheme from '../../shared/components/ThemeSideBox'
 
 interface SideBarState {
   open: boolean
@@ -26,7 +25,7 @@ const DashBoardContainer = styled('div')<SideBarState>`
 const DashBoardMain = styled('div')<SideBarState>`
   background: ${({theme}: any) => `rgb(${theme.background})` || 'lightgrey'};
   display: grid;
-  grid-template-columns: ${({open}) => (open ? '260px' : '80px')} auto;
+  grid-template-columns: ${({open}) => (open ? '260px' : '70px')} auto;
   overflow: hidden;
 `
 export const OutletWrapper = styled('div')`
@@ -62,7 +61,6 @@ export const VerticalDashBoard: React.FC = observer(() => {
       orientation={layoutStore.layoutType}
       open={layoutStore.sideBar || layoutStore.onHoverSideState}
     >
-      <CustomizerTheme />
       <Header />
       <DashBoardMain
         orientation={layoutStore.layoutType}
@@ -74,7 +72,9 @@ export const VerticalDashBoard: React.FC = observer(() => {
           <OutletWrapper>
             <Outlet />
           </OutletWrapper>
-          <DashBoardFooter>.footer</DashBoardFooter>
+          <DashBoardFooter orientation={layoutStore.layoutType}>
+            .footer
+          </DashBoardFooter>
         </Content>
       </DashBoardMain>
     </DashBoardContainer>

@@ -8,7 +8,7 @@ type RadioButtonProps = {
   id: string
   value: string
   checked?: boolean
-  onChange: (value: number | string) => void
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
 }
 const RadioButton = ({
   onChange,
@@ -20,9 +20,17 @@ const RadioButton = ({
   id,
 }: RadioButtonProps) => {
   return (
-    <RadioWrap label={label} color={color} onClick={() => onChange(value)}>
+    <RadioWrap label={label} color={color}>
       <span className="radio__input">
-        <input className="radio" id={id} name={name} checked={checked} />
+        <input
+          type="radio"
+          className="radio"
+          id={id}
+          name={name}
+          value={value}
+          onChange={onChange}
+          checked={checked}
+        />
         <span className="radio__control" />
       </span>
       <span className="radio__label">{label}</span>
@@ -67,7 +75,7 @@ const RadioWrap = styled('label')<{label?: string}>`
       opacity: 0;
       width: 0;
       height: 0;
-      &:focus + .radio__control {
+      &:checked + .radio__control {
         background: #0189cf;
         border-color: #0189cf;
         box-shadow: 0 3px 12px 0 rgba(1, 137, 207, 0.4);

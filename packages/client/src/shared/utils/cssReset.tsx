@@ -186,7 +186,16 @@ const GlobalStyle: React.FC = () => {
           letter-spacing: 0.01rem;
         }
         body {
-          height: 100vh;
+          height: 100%;
+          ::-webkit-scrollbar-track {
+            background: transparent;
+            box-shadow: inset 0 0 25px 25px transparent;
+            border: solid 3px transparent;
+          }
+          ::-webkit-scrollbar {
+            width: 0px;
+            background: transparent;
+          }
           overflow-x: hidden;
           font-family: Roboto, sans-serif, Poppins;
           background-color: #fafafb;

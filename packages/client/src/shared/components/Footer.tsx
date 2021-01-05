@@ -9,10 +9,7 @@ const Footer = styled('div')<{orientation: string}>`
   display: flex;
   align-items: center;
   padding: 20px 0;
-  color: ${({theme, orientation}: any) =>
-    orientation === 'horizontal'
-      ? `rgb(${theme.horizontal.footer.text})`
-      : `rgb(${theme.vertical.footer.text})`};
+  color: ${({theme}: any) => `rgb(${theme.footer.text})`};
   height: 60px;
   font-size: 0.875rem;
   font-family: Roboto;
@@ -26,11 +23,10 @@ const Footer = styled('div')<{orientation: string}>`
   }
 `
 
-const DashBoardFooter: React.FC = observer(() => {
-  const {layoutStore} = useRootStore()
+const DashBoardFooter: React.FC<{orientation: string}> = ({orientation}) => {
   return (
-    <Footer orientation={layoutStore.layoutType}>
-      {layoutStore.layoutType === 'horizontal' ? (
+    <Footer orientation={orientation}>
+      {orientation === 'horizontal' ? (
         <Container
           wrap="no-wrap"
           style={{
@@ -52,6 +48,6 @@ const DashBoardFooter: React.FC = observer(() => {
       )}
     </Footer>
   )
-})
+}
 
 export default DashBoardFooter

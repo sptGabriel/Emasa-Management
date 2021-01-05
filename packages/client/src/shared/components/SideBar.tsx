@@ -13,8 +13,8 @@ interface sideStat {
 const SideBarContainer = styled(Container)<sideStat>`
   width: 100%;
   height: calc(100vh - 70px);
-  background: ${({theme}: any) => `rgb(${theme.vertical.sideBar.background})`};
-  padding: 10px 4px 10px 4px;
+  background: ${({theme}: any) => `rgb(${theme.sideBar.background})`};
+  padding: ${({sideisOpen}) => (sideisOpen ? '10px 4px 10px 4px' : '10px 0')};
   box-shadow: 0 0 11px rgba(0, 0, 0, 0.13);
 `
 
@@ -39,7 +39,10 @@ const SideBar: React.FC = observer(() => {
         })
       }}
     >
-      <SideMenu hover={isHover} />
+      <SideMenu
+        open={layoutStore.sideBar || layoutStore.onHoverSideState}
+        hover={isHover}
+      />
     </SideBarContainer>
   )
 })

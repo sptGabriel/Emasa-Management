@@ -1,4 +1,9 @@
 export interface VerticalDashBoard {
+  type: string
+  primary: string
+  secondary: string
+  background: string
+  backgroundSecondary: string
   sideBar: {
     background: string
     tagTittle: string
@@ -25,6 +30,11 @@ export interface VerticalDashBoard {
   }
 }
 export interface HorizontalDashBoard {
+  type: string
+  primary: string
+  secondary: string
+  background: string
+  backgroundSecondary: string
   header: {
     userSection: {
       userName: string
@@ -51,13 +61,4 @@ export interface HorizontalDashBoard {
     background: string
     text: string
   }
-}
-export type ITheme = {
-  type: string
-  primary: string
-  secondary: string
-  background: string
-  backgroundSecondary: string
-  vertical: VerticalDashBoard
-  horizontal: HorizontalDashBoard
 }

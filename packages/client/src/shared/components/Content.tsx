@@ -23,20 +23,11 @@ const AppContent = styled('div')`
   background: transparent;
   position: relative;
 `
-// const Test = styled.div`
-//   display: flex;
-//   align-items: center;
-//   background-color: ${shade(0.1, '#c874d9')};
-//   margin-bottom: 25px;
-//   padding: 2.5rem 0;
-// `
-/* Content Styles End */
-
 const DashBoardContent: React.FC = ({children}) => {
   return (
     <ContentContainer>
       <AppContent>{children}</AppContent>
-      <DashBoardFooter />
+      {/* <DashBoardFooter />  */}
     </ContentContainer>
   )
 }

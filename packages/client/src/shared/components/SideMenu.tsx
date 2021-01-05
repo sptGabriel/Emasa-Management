@@ -32,11 +32,8 @@ const MenuList = styled.ul<IMenu>`
   overflow-y: scroll;
   padding-top: 25px;
   padding-bottom: 25px;
-  padding-left: 11px;
-  padding-right: 5px;
-  transition: 0.2s;
-  transition-timing-function: ease;
-  transition-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
+  padding-left: ${({open}) => (open ? '11px' : '15px')};
+  padding-right: ${({open}) => (open ? '5px' : '15px')};
   scrollbar-color: auto;
   scrollbar-width: thin;
   &::-webkit-scrollbar {
@@ -127,7 +124,7 @@ const DropDown = styled(animated.ul)<IDropDown>`
   }
   .tag-optname {
     display: block;
-    color: ${({theme}: any) => `rgb(${theme.vertical.sideBar.tagName})`};
+    color: ${({theme}: any) => `rgb(${theme.sideBar.tagName})`};
     letter-spacing: 0.7px;
     font-family: Roboto;
     font-size: 0.9rem;
@@ -140,7 +137,7 @@ const DropDown = styled(animated.ul)<IDropDown>`
   .svg-drop {
     width: 10px;
     height: 10px;
-    stroke: ${({theme}: any) => `rgb(${theme.vertical.sideBar.tagIcon})`};
+    stroke: ${({theme}: any) => `rgb(${theme.sideBar.tagIcon})`};
     margin-right: 18px;
     margin-left: 10px;
     transition: transform 0.25s ease, -webkit-transform 0.25s ease;
@@ -196,11 +193,11 @@ const ListItem = styled.li<IListItem>`
     position: absolute;
     top: calc(50% - 8px);
     left: 200px;
-    color: ${({theme}: any) => `rgb(${theme.vertical.sideBar.tagIcon})`};
+    color: ${({theme}: any) => `rgb(${theme.sideBar.tagIcon})`};
   }
   .tag-name {
     display: ${({open}) => (open ? 'space-between' : 'none')};
-    color: ${({theme}: any) => `rgb(${theme.vertical.sideBar.tagName})`};
+    color: ${({theme}: any) => `rgb(${theme.sideBar.tagName})`};
     line-height: 1.8rem;
     letter-spacing: 0.7px;
     font-family: Roboto;
@@ -213,7 +210,7 @@ const ListItem = styled.li<IListItem>`
   .svg-main {
     width: 24px;
     height: 24px;
-    fill: ${({theme}: any) => `rgb(${theme.vertical.sideBar.tagIcon})`};
+    fill: ${({theme}: any) => `rgb(${theme.sideBar.tagIcon})`};
     margin-right: ${({open}) => (open ? '14px' : '0')};
     transition: transform 0.25s ease, -webkit-transform 0.25s ease;
     transition: -webkit-transform 0.25s ease;
@@ -224,12 +221,12 @@ const ListItem = styled.li<IListItem>`
     height: 48px;
     width: 100%;
     border-radius: 4px;
-    padding: ${({open}) => (open ? '10px 9px' : '0')};
+    padding: ${({open}) => (open ? '10px 9px' : '10px 0')};
     align-items: center;
     background: ${({theme, activetag}: any) =>
       activetag
-        ? `rgba(${theme.vertical.sideBar.activeDropDown}, 0.9)`
-        : `rgb(${theme.vertical.sideBar.background})`};
+        ? `rgba(${theme.sideBar.activeDropDown}, 0.9)`
+        : `rgb(${theme.sideBar.background})`};
     justify-content: ${({open}) => (open ? 'flex-start' : 'center')};
     position: relative;
   }
@@ -337,7 +334,7 @@ const MemoidNavLink: React.FC<{
   )
 })
 //  Tag Wrapper
-const TagList: React.FC<ITagList> = observer(({tag, open, setTags}) => {
+const TagList: React.FC<ITagList> = ({tag, open, setTags}) => {
   const showHideDropItem: ShowHideDropItem = useCallback((tag) => {
     setTags((items: any) =>
       items.map((item: any) => ({
@@ -388,12 +385,11 @@ const TagList: React.FC<ITagList> = observer(({tag, open, setTags}) => {
       )}
     </ListItem>
   )
-})
+}
 //  memoizedTags
 const MemoizedTags = memo(TagList)
 //  Menu
-const MenuTags: React.FC<{hover: boolean}> = observer(({hover}) => {
-  const {layoutStore} = useRootStore()
+const MenuTags: React.FC<{hover: boolean; open: boolean}> = ({hover, open}) => {
   const [tags, setTags] = useState<ITag[]>(Tags)
   useEffect(() => {
     setTags((items) =>
@@ -404,22 +400,15 @@ const MenuTags: React.FC<{hover: boolean}> = observer(({hover}) => {
     )
   }, [])
   return (
-    <MenuList
-      open={layoutStore.sideBar || layoutStore.onHoverSideState}
-      hover={hover}
-    >
+    <MenuList open={open} hover={hover}>
       {tags.map((item) => (
         <div key={JSON.stringify(item.Name)}>
           {item.Title ? <div className="title_tagList">{item.Title}</div> : ''}
-          <MemoizedTags
-            setTags={setTags}
-            open={layoutStore.sideBar || layoutStore.onHoverSideState}
-            tag={item}
-          />
+          <MemoizedTags setTags={setTags} open={open} tag={item} />
         </div>
       ))}
     </MenuList>
   )
-})
+}
 
 export default MenuTags

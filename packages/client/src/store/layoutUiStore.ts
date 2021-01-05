@@ -1,9 +1,6 @@
 import {makeAutoObservable} from 'mobx'
-import {ITheme} from '../shared/themes'
-import {DarkTheme} from '../shared/themes/darkTheme'
-import {LightTheme} from '../shared/themes/lightTheme'
-import {getNavBarTheme} from '../shared/themes/customThemes'
-import {SemiDarkTheme} from '../shared/themes/semiDarkTheme'
+import {HorizontalDashBoard, VerticalDashBoard} from '../shared/themes'
+import {getTheme} from '../shared/themes/customThemes'
 import {ensure} from '../shared/utils/ensure'
 import {isColor} from '../shared/utils/isColor'
 import {RootStore} from './rootStore'
@@ -22,7 +19,7 @@ export class LayoutUIStore {
 
   //  isDarkMode: boolean
 
-  theme!: ITheme
+  theme!: VerticalDashBoard | HorizontalDashBoard
 
   isLayoutHorizontal = false
 
@@ -31,60 +28,33 @@ export class LayoutUIStore {
   constructor(private rootStore: RootStore) {
     makeAutoObservable(this)
     this.rootStore = rootStore
+    this.initLayoutOrientation()
     this.initTheme()
+  }
+
+  initLayoutOrientation = () => {
+    const orientation: any = localStorage.getItem('layout-type')
+    switch (JSON.parse(orientation)) {
+      case 'vertical':
+        this.layoutType = LayoutType.vertical
+        break
+      case 'horizontal':
+        this.layoutType = LayoutType.horizontal
+        break
+      default:
+        localStorage.setItem('layout-type', JSON.stringify('vertical'))
+        this.layoutType = LayoutType.vertical
+        break
+    }
   }
 
   initTheme = () => {
     const theme: any = JSON.parse(ensure(localStorage.getItem('theme-type')))
-    const customTheme: any = JSON.parse(ensure(localStorage.getItem('h-col')))
     const primaryColor: any = JSON.parse(ensure(localStorage.getItem('p-col')))
-    const getTheme = () => {
-      switch (theme) {
-        case 'light':
-          return LightTheme
-        case 'dark':
-          return DarkTheme
-        case 'semidark':
-          return SemiDarkTheme
-        default:
-          return LightTheme
-      }
-    }
-    this.theme = getTheme()
-    const hasCustomTheme = getNavBarTheme(JSON.parse(customTheme))
-    if (hasCustomTheme) {
-      this.theme.vertical = hasCustomTheme.vertical
-      this.theme.horizontal = hasCustomTheme.horizontal
-    }
+    this.theme = getTheme(this.layoutType, theme)
     this.theme.primary = isColor(primaryColor)
       ? primaryColor
       : this.theme.primary
-    //  this.theme.map((theme) => {
-    //  if (theme.type !== JSON.parse(themeType)) theme.status = false
-    //  if (theme.type === JSON.parse(themeType)) {
-    //    theme.status = true
-    //    theme.primary = isColor(JSON.parse(primaryColor))
-    //      ? primaryColor
-    //      : theme.primary
-    //    theme.header = getNavBarTheme(JSON.parse(headerColor))
-    //  }
-    //  return theme
-    //  })
-    //  const getTheme = () => {
-    //  switch (themeType && JSON.parse(themeType)) {
-    //    case 'light':
-    //      return LightTheme
-    //    case 'dark':
-    //      return DarkTheme
-    //    case 'semidark':
-    //      return SemiDarkTheme
-    //    default:
-    //      return LightTheme
-    //  }
-    //  }
-    //  if (headerColor) theme.header = headerColor
-    //  if (primaryColor) theme.primary = primaryColor
-    //  this.theme = theme
   }
 
   setDarkTheme = () => {
@@ -109,12 +79,29 @@ export class LayoutUIStore {
     this.sideBar = !this.sideBar
   }
 
-  setLayoutHorizontal = () => {
-    this.layoutType = LayoutType.horizontal
+  changeLayoutOrientation = (value: string) => {
+    switch (value) {
+      case 'vertical':
+        localStorage.setItem('layout-type', JSON.stringify('vertical'))
+        this.layoutType = LayoutType.vertical
+        this.initTheme()
+        break
+      case 'horizontal':
+        localStorage.setItem('layout-type', JSON.stringify('horizontal'))
+        this.layoutType = LayoutType.horizontal
+        this.initTheme()
+        break
+      default:
+        localStorage.setItem('layout-type', JSON.stringify('vertical'))
+        this.layoutType = LayoutType.vertical
+        this.initTheme()
+        break
+    }
   }
 
-  setLayoutVertical = () => {
-    this.layoutType = LayoutType.vertical
+  setTheme = (theme: string) => {
+    localStorage.setItem('theme-type', JSON.stringify(theme))
+    return this.initTheme()
   }
 
   toggleThemeSideBar = () => {

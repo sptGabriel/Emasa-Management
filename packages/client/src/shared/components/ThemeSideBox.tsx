@@ -1,4 +1,4 @@
-import React, {memo, useCallback, useEffect, useState} from 'react'
+import React, {memo, useCallback} from 'react'
 import styled from '@emotion/styled'
 import {useSpring, animated} from 'react-spring'
 import {observer} from 'mobx-react-lite'
@@ -10,14 +10,14 @@ import GearTheming from './GearTheming'
 import {Container} from './FlexBox'
 import RadioButton from './RadioButton'
 
-const Customizer = styled('div')`
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  outline: none;
-  text-transform: none;
-  text-decoration: none;
-`
+//  const Customizer = styled('div')`
+//  margin: 0;
+//  padding: 0;
+//  box-sizing: border-box;
+//  outline: none;
+//  text-transform: none;
+//  text-decoration: none;
+//  `
 const SideBar = styled(animated.div)`
   display: block;
   position: fixed;
@@ -106,24 +106,10 @@ const Body = styled('div')`
 `
 const CustomizerBody: React.FC = observer(() => {
   const {layoutStore} = useRootStore()
-  const [orientationGroup, setOrientationActive] = useState({
-    horizontal: layoutStore.layoutType === 'horizontal',
-    vertical: layoutStore.layoutType === 'vertical',
-  })
-  const handleInputChange = useCallback((event) => {
-    switch (event) {
-      case 'vertical':
-        setOrientationActive({horizontal: false, vertical: true})
-        layoutStore.setLayoutVertical()
-        break
-      case 'horizontal':
-        setOrientationActive({horizontal: true, vertical: false})
-        layoutStore.setLayoutHorizontal()
-        break
-      default:
-        return undefined
-    }
-  }, [])
+  const handleTheme = (e: React.ChangeEvent<HTMLInputElement>) =>
+    layoutStore.setTheme(e.target.value)
+  const handleOrientation = (e: React.ChangeEvent<HTMLInputElement>) =>
+    layoutStore.changeLayoutOrientation(e.target.value)
   return (
     <Body>
       <div className="colors_preference">
@@ -170,58 +156,66 @@ const CustomizerBody: React.FC = observer(() => {
       <div className="orientation_mode">
         <h1>Orientação do Dashboard</h1>
         <div className="options">
-          {/* <form>
+          <form>
             <fieldset id="orientation_mode">
               <RadioButton
-                onChange={handleInputChange}
+                onChange={handleOrientation}
                 id="vertical"
                 color="#c8c8c8"
                 name="orientation_mode"
                 label="Vertical"
                 value="vertical"
-                checked={orientationGroup.vertical}
+                checked={layoutStore.layoutType === 'vertical'}
               />
               <RadioButton
                 id="horizontal"
                 color="#c8c8c8"
                 name="orientation_mode"
-                onChange={handleInputChange}
+                onChange={handleOrientation}
                 label="Horizontal"
                 value="horizontal"
-                checked={orientationGroup.horizontal}
+                checked={layoutStore.layoutType === 'horizontal'}
               />
             </fieldset>
-          </form> */}
+          </form>
         </div>
       </div>
       <div className="theme_modes">
         <h1>Modo de Tema</h1>
         <div className="options">
-          {/* <form>
+          <form>
             <fieldset id="theme_modes">
               <RadioButton
                 id="dark"
                 name="theme_modes"
-                onChange={handleInputChange}
+                onChange={handleTheme}
                 label="Dark"
                 value="dark"
+                checked={layoutStore.theme.type === 'dark'}
               />
               <RadioButton
                 id="semidark"
                 name="theme_modes"
-                onChange={handleInputChange}
+                onChange={handleTheme}
                 label="Semi Dark"
                 value="semidark"
+                checked={layoutStore.theme.type === 'semidark'}
               />
               <RadioButton
                 id="light"
                 name="theme_modes"
-                onChange={handleInputChange}
+                onChange={handleTheme}
                 label="Light"
                 value="light"
+                checked={
+                  (layoutStore.theme.type !== 'dark' &&
+                    layoutStore.theme.type !== 'semidark' &&
+                    layoutStore.theme.type !== 'light') ||
+                  layoutStore.theme.type === 'light'
+                }
               />
             </fieldset>
-          </form> */}
+          </form>
         </div>
       </div>
     </Body>
