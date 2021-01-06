@@ -5,12 +5,14 @@ import {useRootStore} from '../infra/mobx'
 import {Container} from './FlexBox'
 import errorSvg from '../../assets/error.svg'
 import errorBg from '../../assets/bgerror.svg'
+import {NoSelect} from './NoSelect'
 
 export const ErrorBoundaryContainer = styled(Container)<{isAuth: boolean}>`
   min-height: ${({isAuth}) => (isAuth ? 'calc(100vh - 130px)' : '100vh')};
   width: 500px;
   margin: 0 auto;
   border-radius: 8px;
+  ${NoSelect}
   .buttons {
     display: flex;
     width: 100%;

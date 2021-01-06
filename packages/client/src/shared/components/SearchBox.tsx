@@ -6,6 +6,7 @@ import {IoIosSearch} from 'react-icons/io'
 import {css} from '@emotion/react'
 import {observer} from 'mobx-react-lite'
 import {useRootStore} from '../infra/mobx'
+import { NoSelect } from './NoSelect'
 
 interface SearchState {
   isOpen: boolean
@@ -17,13 +18,14 @@ const Vertical = styled.div<SearchState>`
   margin-right: 0.66667rem;
   display: flex;
   align-items: center;
+  ${NoSelect}
   .input-holder {
-    height: 46px;
-    width: ${({isOpen}) => (isOpen ? '290px' : '46px')};
+    height: 36px;
+    width: ${({isOpen}) => (isOpen ? '210px' : '36px')};
     display: flex;
     align-items: center;
     background: ${({isOpen, theme}: any) =>
-      isOpen ? `rgb(${theme.background})` : theme.background};
+      isOpen ? `rgb(${theme.header.searchBg})` : theme.background};
     overflow: hidden;
     border-radius: ${({isOpen}) => (isOpen ? '100vh' : '')};
     overflow: hidden;
@@ -79,11 +81,8 @@ const Vertical = styled.div<SearchState>`
     font-size: 0.88rem;
   }
   .search-icon {
-    width: 46px;
-    height: 46px;
     border-radius: 5px;
     border: none;
-    padding: 0.4rem;
     outline: none;
     position: relative;
     z-index: 2;
@@ -97,7 +96,7 @@ const Vertical = styled.div<SearchState>`
       isOpen
         ? css`
             width: 42px;
-            height: 42px;
+            height: 36px;
             margin: 0;
             border-radius: 30px;
           `
@@ -149,7 +148,7 @@ const Vertical = styled.div<SearchState>`
     position: absolute;
     z-index: 1;
     top: 50%;
-    right: ${({isOpen}) => (isOpen ? '300px' : '0')};
+    right: ${({isOpen}) => (isOpen ? '220px' : '0')};
     width: 20px;
     height: 20px;
     margin-top: -10px;
@@ -240,7 +239,7 @@ const VerticalSearch: React.FC = () => {
       <div className="input-holder">
         <input type="text" className="search-input" placeholder="Search ..." />
         <button className="search-icon" type="button" onClick={clickHandler}>
-          <BiSearchAlt size={32} />
+          <BiSearchAlt size={24} />
         </button>
       </div>
       <button

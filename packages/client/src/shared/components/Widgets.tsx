@@ -6,7 +6,6 @@ import {BiMoon} from 'react-icons/bi'
 import {FiBell, FiSun} from 'react-icons/fi'
 import {AiOutlineCompress} from 'react-icons/ai'
 import {Container} from './FlexBox'
-import VerticalSplit from './Divider'
 import {useRootStore} from '../infra/mobx'
 
 const bellAnimation = keyframes`
@@ -48,10 +47,6 @@ const bellAnimation = keyframes`
 export interface SideBarState {
   open: boolean
 }
-/* InterFaces Start */
-interface IUserCanvas {
-  open: boolean
-}
 
 const WrapperTools = styled(Container)<SideBarState>`
   display: flex;
@@ -91,7 +86,8 @@ const Widgets: React.FC = observer(() => {
         onClick={layoutStore.setDarkTheme}
         type="button"
       >
-        {layoutStore.theme.type === 'dark' ? (
+        {layoutStore.theme.type === 'dark' ||
+        layoutStore.theme.type === 'semidark' ? (
           <BiMoon size={18} />
         ) : (
           <FiSun size={18} />

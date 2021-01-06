@@ -45,6 +45,7 @@ export const DarkVerticalTheme: VerticalDashBoard = {
     tagName: '208, 210, 214',
     tagIcon: '208, 210, 214',
     activeDropDown: '22, 29, 49',
+    scrollBar: '243, 243, 243',
   },
   header: {
     userSection: {
@@ -55,6 +56,7 @@ export const DarkVerticalTheme: VerticalDashBoard = {
       activeBg: '0, 107, 166',
       activeText: '255, 255, 255',
     },
+    searchBg: '22, 29, 49',
     background: '40, 48, 70',
     tools: '208, 210, 214',
     toolsHover: '0, 108, 166',

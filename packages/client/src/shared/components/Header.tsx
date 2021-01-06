@@ -9,6 +9,7 @@ import Widgets from './Widgets'
 import Logo from './Logo'
 import Search from './SearchBox'
 import UserProfile from './UserProfile'
+import {NoSelect} from './NoSelect'
 /* SideBar Styles Start */
 interface SideBarState {
   open: boolean
@@ -20,6 +21,7 @@ const NavBar = styled('div')`
   background: ${({theme}: any) => `rgb(${theme.header.background})`};
   box-shadow: 0 0 11px rgba(0, 0, 0, 0.13);
   z-index: 3;
+  ${NoSelect}
 `
 const LogoHeader = styled(Container)<SideBarState>`
   width: ${({open}) => (open ? '260px' : '70px')};

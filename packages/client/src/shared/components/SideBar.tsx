@@ -5,6 +5,7 @@ import {runInAction} from 'mobx'
 import {useRootStore} from '../infra/mobx'
 import {Container} from './FlexBox'
 import SideMenu from './SideMenu'
+import {NoSelect} from './NoSelect'
 
 interface sideStat {
   sideisOpen: boolean
@@ -14,8 +15,9 @@ const SideBarContainer = styled(Container)<sideStat>`
   width: 100%;
   height: calc(100vh - 70px);
   background: ${({theme}: any) => `rgb(${theme.sideBar.background})`};
-  padding: ${({sideisOpen}) => (sideisOpen ? '10px 4px 10px 4px' : '10px 0')};
+  padding: ${({sideisOpen}) => (sideisOpen ? '10px 2px 10px 4px' : '10px 0')};
   box-shadow: 0 0 11px rgba(0, 0, 0, 0.13);
+  ${NoSelect}
 `
 
 const SideBar: React.FC = observer(() => {

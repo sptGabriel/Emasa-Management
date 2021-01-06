@@ -1,8 +1,10 @@
 import {makeAutoObservable} from 'mobx'
 import {HorizontalDashBoard, VerticalDashBoard} from '../shared/themes'
-import {getTheme} from '../shared/themes/customThemes'
+import {getCustomTheme} from '../shared/themes/customThemes'
+import {getTheme} from '../shared/themes/getTheme'
 import {ensure} from '../shared/utils/ensure'
 import {isColor} from '../shared/utils/isColor'
+import {isJson} from '../shared/utils/isJson'
 import {RootStore} from './rootStore'
 
 enum LayoutType {
@@ -49,12 +51,15 @@ export class LayoutUIStore {
   }
 
   initTheme = () => {
-    const theme: any = JSON.parse(ensure(localStorage.getItem('theme-type')))
-    const primaryColor: any = JSON.parse(ensure(localStorage.getItem('p-col')))
-    this.theme = getTheme(this.layoutType, theme)
-    this.theme.primary = isColor(primaryColor)
-      ? primaryColor
-      : this.theme.primary
+    const [err1, theme]: any = isJson(localStorage.getItem('theme-type'))
+    const [err2, customTheme]: any = isJson(localStorage.getItem('t-col'))
+    this.theme = getTheme(this.layoutType, err1 ? undefined : theme)
+    if (!isColor(customTheme)) return localStorage.removeItem('t-col')
+    this.theme = getCustomTheme(
+      this.layoutType,
+      err2 ? undefined : customTheme,
+      this.theme.type,
+    )
   }
 
   setDarkTheme = () => {

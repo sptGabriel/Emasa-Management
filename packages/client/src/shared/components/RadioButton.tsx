@@ -48,6 +48,7 @@ const RadioWrap = styled('label')<{label?: string}>`
   display: grid;
   grid-template-columns: min-content auto;
   grid-gap: ${({label}) => (label ? '0.4em' : '0')};
+  cursor: pointer;
   [type='radio'] {
     box-sizing: border-box;
     padding: 0;

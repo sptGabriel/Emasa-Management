@@ -33,11 +33,11 @@ const MenuList = styled.ul<IMenu>`
   padding-top: 25px;
   padding-bottom: 25px;
   padding-left: ${({open}) => (open ? '11px' : '15px')};
-  padding-right: ${({open}) => (open ? '5px' : '15px')};
+  padding-right: ${({open}) => (open ? '8px' : '15px')};
   scrollbar-color: auto;
   scrollbar-width: thin;
   &::-webkit-scrollbar {
-    width: ${({open}) => (open ? '6px' : '0')};
+    width: ${({open}) => (open ? '5px' : '0')};
   }
   &::-webkit-scrollbar-thumb {
     border-radius: 10px;
@@ -45,7 +45,7 @@ const MenuList = styled.ul<IMenu>`
   &::-webkit-scrollbar-thumb:vertical {
     border-radius: 10px;
     background: ${({theme, hover, open}: any) =>
-      hover && open ? `#9c9c9c` : `rgba(${theme.background})`};
+      `rgba(${theme.sideBar.scrollBar})`};
     /* border-left: 6px solid ${({theme}: any) =>
       `rgba(${theme.background})`}; */
     /* border-right: 2px solid ${({theme}: any) => `rgba(${theme.background})`};

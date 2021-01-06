@@ -1,10 +1,11 @@
+import {string} from 'prop-types'
 import {HorizontalDashBoard, VerticalDashBoard} from '.'
 
 export const LightHorizontalTheme: HorizontalDashBoard = {
   type: 'light',
   primary: '0, 107, 166',
   secondary: '13, 59, 102',
-  background: '243, 243, 243',
+  background: '255, 255, 255',
   backgroundSecondary: '13, 59, 102',
   header: {
     userSection: {
@@ -48,6 +49,7 @@ export const LightVerticalTheme: VerticalDashBoard = {
       activeBg: '0, 107, 166',
       activeText: '255, 255, 255',
     },
+    searchBg: '243, 243, 243',
     background: '255, 255, 255',
     tools: '110, 107, 123',
     toolsHover: '0, 108, 166',
@@ -58,6 +60,7 @@ export const LightVerticalTheme: VerticalDashBoard = {
     tagName: '98, 98, 98',
     tagIcon: '86, 86, 86',
     activeDropDown: '243, 243, 243',
+    scrollBar: '243, 243, 243',
   },
   footer: {
     background: '0, 107, 166',

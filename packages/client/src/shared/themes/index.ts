@@ -10,6 +10,7 @@ export interface VerticalDashBoard {
     tagName: string
     tagIcon: string
     activeDropDown: string
+    scrollBar: string;
   }
   header: {
     userSection: {
@@ -20,6 +21,7 @@ export interface VerticalDashBoard {
       activeBg: string
       activeText: string
     }
+    searchBg: string
     background: string
     tools: string
     toolsHover: string

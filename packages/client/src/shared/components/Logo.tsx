@@ -3,6 +3,7 @@ import styled from '@emotion/styled/macro'
 import {Container} from './FlexBox'
 import logo from '../../assets/logoem.svg'
 import {emasaAnimation} from './LogoAnimation'
+import {NoSelect} from './NoSelect'
 /* SideBar Styles Start */
 export interface SideBarState {
   open?: boolean
@@ -12,6 +13,7 @@ const LogoWrapper = styled(Container)<SideBarState>`
   display: ${({open, orientation}) =>
     open || orientation === 'horizontal' ? 'flex' : 'none'};
   align-items: center;
+  ${NoSelect}
   .text-5 {
     color: ${({orientation}) =>
       orientation === 'horizontal' ? '#fff' : '#0189cf'};

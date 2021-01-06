@@ -9,6 +9,7 @@ import {useRootStore} from '../infra/mobx'
 import GearTheming from './GearTheming'
 import {Container} from './FlexBox'
 import RadioButton from './RadioButton'
+import {NoSelect} from './NoSelect'
 
 //  const Customizer = styled('div')`
 //  margin: 0;
@@ -23,7 +24,7 @@ const SideBar = styled(animated.div)`
   position: fixed;
   z-index: 52000;
   width: 400px;
-  max-width: 90vw;
+  max-width: 400px;
   box-shadow: 0 15px 30px 0 rgba(0, 0, 0, 0.11),
     0 5px 15px 0 rgba(0, 0, 0, 0.08);
   right: 0;
@@ -34,6 +35,7 @@ const SideBar = styled(animated.div)`
   top: 50%;
   transform: translateY(-50%);
   background: #fff;
+  ${NoSelect}
 `
 const Wrap = styled(Container)`
   padding: 0 1.5rem;
@@ -99,6 +101,9 @@ const Body = styled('div')`
     align-items: center;
     min-height: 16px;
     padding-bottom: 14px;
+    fieldset {
+      display: flex;
+    }
     label {
       margin-right: 10px;
     }
@@ -208,9 +213,9 @@ const CustomizerBody: React.FC = observer(() => {
                 label="Light"
                 value="light"
                 checked={
-                  (layoutStore.theme.type !== 'dark' &&
-                    layoutStore.theme.type !== 'semidark' &&
-                    layoutStore.theme.type !== 'light') ||
+                  // (layoutStore.theme.type !== 'dark' &&
+                  //   layoutStore.theme.type !== 'semidark' &&
+                  //   layoutStore.theme.type !== 'light') ||
                   layoutStore.theme.type === 'light'
                 }
               />
