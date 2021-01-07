@@ -19,21 +19,19 @@ export const ErrorBoundaryContainer = styled(Container)<{isAuth: boolean}>`
     align-items: center;
     justify-content: center;
     button:nth-of-type(2) {
-      background: #4285f4;
+      background: ${({theme}: any) => `rgb(${theme.primary})`};
       color: #fff;
-      transition: background-color 0.3s, color 0.3s;
       border-radius: 5px;
-      border: 1px solid #0868c2;
+      border: 1px solid ${({theme}: any) => `rgb(${theme.primary})`};
       :hover {
-        background: #0868c2;
+        background: ${({theme}: any) => `rgb(${theme.primary})`};
       }
     }
     button:first-of-type {
       margin-right: 15px;
-      color: #a2d1fc;
+      color: ${({theme}: any) => `rgb(${theme.primary})`};
       background: transparent;
-      border: 1px solid #a2d1fc;
-      transition: background-color 0.3s, color 0.3s;
+      border: 1px solid ${({theme}: any) => `rgb(${theme.primary})`};
       border-radius: 5px;
       /* :hover {
         color: #fff;
@@ -62,7 +60,7 @@ export const ErrorBoundaryContainer = styled(Container)<{isAuth: boolean}>`
     margin-bottom: 20px;
   }
   .title_wrong {
-    color: #076adb;
+    color: ${({theme}: any) => `rgb(${theme.primary})`};
     font-size: 2.5rem;
     white-space: nowrap;
     font-weight: bold;
@@ -71,7 +69,7 @@ export const ErrorBoundaryContainer = styled(Container)<{isAuth: boolean}>`
     margin-bottom: 5px;
   }
   .subtittle_wrong {
-    color: #595b5f;
+    color: ${({theme}: any) => (theme.type === 'light' ? '#595b5f' : '#fff')};
     white-space: nowrap;
     font-size: 0.8rem;
     font-family: Rubik, sans-serif;

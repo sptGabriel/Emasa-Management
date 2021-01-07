@@ -21,6 +21,7 @@ export interface VerticalDashBoard {
       activeBg: string
       activeText: string
     }
+    logo: string
     searchBg: string
     background: string
     tools: string
@@ -46,11 +47,13 @@ export interface HorizontalDashBoard {
       activeBg: string
       activeText: string
     }
+    logo: string
     background: string
     tools: string
     toolsHover: string
   }
   navBar: {
+    background: string
     text: string
     svg: string
     activeBgButton: string

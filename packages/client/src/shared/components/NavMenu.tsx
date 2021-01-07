@@ -52,7 +52,7 @@ const Menu = styled('div')<{isSticky: boolean}>`
   width: 100% !important;
   height: 70px;
   position: relative;
-  background: ${({theme}: any) => `rgb(${theme.primary})`};
+  background: ${({theme}: any) => `rgb(${theme.navBar.background})`};
   box-shadow: 11px 0 0 rgba(0, 0, 0, 0.13);
 `
 

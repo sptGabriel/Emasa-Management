@@ -2,7 +2,6 @@ import {makeAutoObservable} from 'mobx'
 import {HorizontalDashBoard, VerticalDashBoard} from '../shared/themes'
 import {getCustomTheme} from '../shared/themes/customThemes'
 import {getTheme} from '../shared/themes/getTheme'
-import {ensure} from '../shared/utils/ensure'
 import {isColor} from '../shared/utils/isColor'
 import {isJson} from '../shared/utils/isJson'
 import {RootStore} from './rootStore'
@@ -106,6 +105,11 @@ export class LayoutUIStore {
 
   setTheme = (theme: string) => {
     localStorage.setItem('theme-type', JSON.stringify(theme))
+    return this.initTheme()
+  }
+
+  setCustomTheme = (color: string) => {
+    localStorage.setItem('t-col', JSON.stringify(color))
     return this.initTheme()
   }
 

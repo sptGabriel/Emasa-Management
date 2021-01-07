@@ -1,7 +1,7 @@
 import {string} from 'prop-types'
 import {HorizontalDashBoard, VerticalDashBoard} from '.'
 
-export const LightHorizontalTheme: HorizontalDashBoard = {
+export const horizontalLightTheme: HorizontalDashBoard = {
   type: 'light',
   primary: '0, 107, 166',
   secondary: '13, 59, 102',
@@ -16,11 +16,13 @@ export const LightHorizontalTheme: HorizontalDashBoard = {
       activeBg: '0, 107, 166',
       activeText: '255, 255, 255',
     },
+    logo: '255, 255, 255',
     background: '0, 108, 166',
     tools: '255, 255, 255',
     toolsHover: '0, 108, 166',
   },
   navBar: {
+    background: '0, 107, 166',
     text: '255, 255, 255',
     svg: '255, 255, 255',
     activeBgButton: '13, 59, 102',
@@ -30,11 +32,11 @@ export const LightHorizontalTheme: HorizontalDashBoard = {
     dropdownTextOptActive: '105, 147, 255',
   },
   footer: {
-    background: '0, 107, 166',
+    background: '255, 255, 255',
     text: '255, 255, 255',
   },
 }
-export const LightVerticalTheme: VerticalDashBoard = {
+export const verticalLightTheme: VerticalDashBoard = {
   type: 'light',
   primary: '0, 107, 166',
   secondary: '13, 59, 102',
@@ -49,6 +51,7 @@ export const LightVerticalTheme: VerticalDashBoard = {
       activeBg: '0, 107, 166',
       activeText: '255, 255, 255',
     },
+    logo: '0, 107, 166',
     searchBg: '243, 243, 243',
     background: '255, 255, 255',
     tools: '110, 107, 123',

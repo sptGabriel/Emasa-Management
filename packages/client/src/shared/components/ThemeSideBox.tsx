@@ -1,4 +1,4 @@
-import React, {memo, useCallback} from 'react'
+import React, {memo, useCallback, useState} from 'react'
 import styled from '@emotion/styled'
 import {useSpring, animated} from 'react-spring'
 import {observer} from 'mobx-react-lite'
@@ -10,6 +10,7 @@ import GearTheming from './GearTheming'
 import {Container} from './FlexBox'
 import RadioButton from './RadioButton'
 import {NoSelect} from './NoSelect'
+import {isJson} from '../utils/isJson'
 
 //  const Customizer = styled('div')`
 //  margin: 0;
@@ -69,26 +70,15 @@ const Body = styled('div')`
     white-space: nowrap;
     margin-bottom: 0.5rem !important;
   }
-  .colors_preference,
-  .nav_colors {
-    //.container {
-    //  width: 2.5rem !important;
-    //  height: 2.5rem !important;
-    //}
-    //.checkmark {
-    //  width: 2rem !important;
-    //  height: 2rem !important;
-    //  border: 0 !important;
-    //  border-radius: 0.5rem !important;
-    //  background-color: rgb(115, 103, 240);
-    //}
-    //input:checked ~ .container {
-    //  border-color: #dae1e7;
-    //}
-    //input:checked ~ .checkmark {
-    //  box-shadow: 0 0 0 3px rgba(52, 144, 220, 0.5) !important;
-    //  background-color: rgb(115, 103, 240);
-    //}
+  .colors_preference {
+    .radio__control {
+      display: block;
+      width: 25px !important;
+      height: 25px !important;
+      border-radius: 5px !important;
+      border: none !important;
+      transform: translateY(-0.05em);
+    }
   }
   .orientation_mode,
   .colors_preference,
@@ -111,51 +101,84 @@ const Body = styled('div')`
 `
 const CustomizerBody: React.FC = observer(() => {
   const {layoutStore} = useRootStore()
+  const [activeCustomTheme, setActiveCustomTheme] = useState(
+    (() => {
+      const [err, storage] = isJson(localStorage.getItem('t-col'))
+      if (err) return null
+      return storage
+    })(),
+  )
   const handleTheme = (e: React.ChangeEvent<HTMLInputElement>) =>
     layoutStore.setTheme(e.target.value)
   const handleOrientation = (e: React.ChangeEvent<HTMLInputElement>) =>
     layoutStore.changeLayoutOrientation(e.target.value)
+  const handleCustomTheme = (e: React.ChangeEvent<HTMLInputElement>) => {
+    layoutStore.setCustomTheme(e.target.value)
+    setActiveCustomTheme(e.target.value)
+  }
   return (
     <Body>
       <div className="colors_preference">
         <h1>Cores Temas</h1>
         <div className="options">
-          {/* <RadioButton
-            onChange={handleInputChange}
-            id="vertical"
-            value="vertical"
-            checked={layoutStore.layoutType === 'vertical'}
-          />
-          <RadioButton
-            onChange={handleInputChange}
-            value="horizontal"
-            checked={layoutStore.layoutType === 'horizontal'}
-          />
-          <RadioButton
-            onChange={handleInputChange}
-            value="horizontal"
-            checked={layoutStore.layoutType === 'horizontal'}
-          />  */}
-        </div>
-      </div>
-      <div className="nav_colors">
-        <h1>Cor da Barra de Navegação</h1>
-        <div className="options">
-          {/* <RadioButton
-            onChange={handleInputChange}
-            value="vertical"
-            checked={layoutStore.layoutType === 'vertical'}
-          />
-          <RadioButton
-            onChange={handleInputChange}
-            value="horizontal"
-            checked={layoutStore.layoutType === 'horizontal'}
-          />
-          <RadioButton
-            onChange={handleInputChange}
-            value="horizontal"
-            checked={layoutStore.layoutType === 'horizontal'}
-          />  */}
+          <form>
+            <fieldset id="color_themes">
+              <RadioButton
+                bgColor="0, 107, 166"
+                onChange={handleCustomTheme}
+                id="blue"
+                color="#c8c8c8"
+                name="color_themes"
+                value="#006ba6"
+                checked={activeCustomTheme === '#006ba6' || !activeCustomTheme}
+              />
+              <RadioButton
+                bgColor="255, 64, 0"
+                onChange={handleCustomTheme}
+                id="red"
+                color="#c8c8c8"
+                name="color_themes"
+                value="#ff4000"
+                checked={activeCustomTheme === '#ff4000'}
+              />
+              <RadioButton
+                bgColor="21, 214, 63"
+                onChange={handleCustomTheme}
+                id="green"
+                color="#c8c8c8"
+                name="color_themes"
+                value="#15d63f"
+                checked={activeCustomTheme === '#15d63f'}
+              />
+              <RadioButton
+                bgColor="161, 0, 255"
+                onChange={handleCustomTheme}
+                id="pink"
+                color="#c8c8c8"
+                name="color_themes"
+                value="#a100ff"
+                checked={activeCustomTheme === '#a100ff'}
+              />
+              <RadioButton
+                bgColor="107, 11, 163"
+                onChange={handleCustomTheme}
+                id="purple"
+                color="#c8c8c8"
+                name="color_themes"
+                value="#6b0ba3"
+                checked={activeCustomTheme === '#6b0ba3'}
+              />
+              <RadioButton
+                bgColor="234, 255, 0"
+                onChange={handleCustomTheme}
+                id="yellow"
+                color="#c8c8c8"
+                name="color_themes"
+                value="#eaff00"
+                checked={activeCustomTheme === '#eaff00'}
+              />
+            </fieldset>
+          </form>
         </div>
       </div>
       <div className="orientation_mode">

@@ -103,7 +103,7 @@ const Vertical = styled.div<SearchState>`
         : ''};
     :hover {
       svg {
-        color: ${({theme}: any) => `rgb(${theme.primary})`} !important;
+        color: ${({theme}: any) => `rgb(${theme.header.toolsHover})`} !important;
       }
     }
     svg {

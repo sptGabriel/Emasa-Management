@@ -4,6 +4,7 @@ import React from 'react'
 type RadioButtonProps = {
   color?: string
   label?: string
+  bgColor?: string
   name: string
   id: string
   value: string
@@ -18,9 +19,10 @@ const RadioButton = ({
   name,
   color,
   id,
+  bgColor,
 }: RadioButtonProps) => {
   return (
-    <RadioWrap label={label} color={color}>
+    <RadioWrap label={label} color={color} bgColor={bgColor}>
       <span className="radio__input">
         <input
           type="radio"
@@ -42,9 +44,10 @@ RadioButton.defaultProps = {
   checked: false,
   label: undefined,
   color: '#000',
+  bgColor: undefined,
 }
 
-const RadioWrap = styled('label')<{label?: string}>`
+const RadioWrap = styled('label')<{label?: string; bgColor?: string}>`
   display: grid;
   grid-template-columns: min-content auto;
   grid-gap: ${({label}) => (label ? '0.4em' : '0')};
@@ -77,9 +80,12 @@ const RadioWrap = styled('label')<{label?: string}>`
       width: 0;
       height: 0;
       &:checked + .radio__control {
-        background: #0189cf;
-        border-color: #0189cf;
-        box-shadow: 0 3px 12px 0 rgba(1, 137, 207, 0.4);
+        background: ${({bgColor}) => (bgColor ? `rgb(${bgColor})` : '#0189cf')};
+        border-color: ${({bgColor}) =>
+          bgColor ? `rgb(${bgColor})` : '#0189cf'};
+        box-shadow: 0 3px 8px 0
+          ${({bgColor}) =>
+            bgColor ? `rgba(${bgColor}, 0.4)` : 'rgba(1, 137, 207, 0.4)'};
       }
     }
   }
@@ -88,6 +94,7 @@ const RadioWrap = styled('label')<{label?: string}>`
     width: 18px;
     height: 18px;
     border-radius: 50%;
+    background: ${({bgColor}) => (bgColor ? `rgb(${bgColor})` : 'transparent')};
     border: 2px solid rgb(200, 200, 200);
     border-color: rgb(200, 200, 200);
     transform: translateY(-0.05em);

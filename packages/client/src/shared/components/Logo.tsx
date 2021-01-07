@@ -15,8 +15,7 @@ const LogoWrapper = styled(Container)<SideBarState>`
   align-items: center;
   ${NoSelect}
   .text-5 {
-    color: ${({orientation}) =>
-      orientation === 'horizontal' ? '#fff' : '#0189cf'};
+    color: ${({theme}: any) => `rgb(${theme.header.logo})`};
     text-transform: uppercase;
     font-size: 1rem;
     font-weight: bold;

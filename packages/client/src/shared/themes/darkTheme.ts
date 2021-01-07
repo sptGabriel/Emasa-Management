@@ -1,6 +1,6 @@
 import {HorizontalDashBoard, VerticalDashBoard} from '.'
 
-export const DarkHorizontalTheme: HorizontalDashBoard = {
+export const horizontalDarkTheme: HorizontalDashBoard = {
   type: 'dark',
   primary: '0, 107, 166',
   secondary: '13, 59, 102',
@@ -8,20 +8,22 @@ export const DarkHorizontalTheme: HorizontalDashBoard = {
   backgroundSecondary: '40, 48, 70',
   header: {
     userSection: {
-      userName: '208, 210, 214',
-      userPosition: '208, 210, 214',
+      userName: '255, 255, 255',
+      userPosition: '255, 255, 255',
       bg: '40, 48, 70',
       text: '255, 255, 255',
       activeBg: '0, 107, 166',
       activeText: '255, 255, 255',
     },
+    logo: '255, 255, 255',
     background: '40, 48, 70',
-    tools: '208, 210, 214',
-    toolsHover: '0, 108, 166',
+    tools: '255, 255, 255',
+    toolsHover: '255, 255, 255',
   },
   navBar: {
-    text: '208, 210, 214',
-    svg: '208, 210, 214',
+    background: '0, 107, 166',
+    text: '255, 255, 255',
+    svg: '255, 255, 255',
     activeBgButton: '22, 29, 49',
     dropdownBg: '40, 48, 70',
     dropdownTxt: '208, 210, 214',
@@ -33,7 +35,7 @@ export const DarkHorizontalTheme: HorizontalDashBoard = {
     text: '208, 210, 214',
   },
 }
-export const DarkVerticalTheme: VerticalDashBoard = {
+export const verticalDarkTheme: VerticalDashBoard = {
   type: 'dark',
   primary: '0, 107, 166',
   secondary: '13, 59, 102',
@@ -56,6 +58,7 @@ export const DarkVerticalTheme: VerticalDashBoard = {
       activeBg: '0, 107, 166',
       activeText: '255, 255, 255',
     },
+    logo: '255, 255, 255',
     searchBg: '22, 29, 49',
     background: '40, 48, 70',
     tools: '208, 210, 214',

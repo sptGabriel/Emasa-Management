@@ -73,12 +73,11 @@ const MenuList = styled.ul<IMenu>`
     align-items: center;
     position: relative;
     border-radius: 0.25rem;
-    color: rgba(26, 51, 83, 0.6);
+    color: ${({theme}: any) => `rgb(${theme.sideBar.tagTittle})`};
     font-size: 0.9rem;
     font-weight: 500;
     font-family: Montserrat, Helvetica, Arial, sans-serif;
     text-transform: uppercase;
-    color: #999;
     overflow: hidden !important;
     text-overflow: ellipsis !important;
     white-space: nowrap !important;

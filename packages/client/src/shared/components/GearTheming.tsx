@@ -20,7 +20,8 @@ const GearButton = styled('button')`
   justify-content: center;
   width: 45px;
   height: 45px;
-  background: linear-gradient(to right, #0189cf, #0080c0);
+  background: ${({theme}: any) =>
+    `linear-gradient(to right, rgb(${theme.primary}), rgb(${theme.primary}))`};
   cursor: pointer;
   margin: 0;
   box-shadow: -4px 0 8px rgba(255, 182, 77, 0.16), -6px 0 8px rgba(0, 0, 0, 0.1);

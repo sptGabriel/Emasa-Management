@@ -1,6 +1,6 @@
 import {HorizontalDashBoard, VerticalDashBoard} from '.'
 
-export const SemiDarkHorizontalTheme: HorizontalDashBoard = {
+export const horizontalSemiDarkTheme: HorizontalDashBoard = {
   type: 'semidark',
   primary: '0, 107, 166',
   secondary: '13, 59, 102',
@@ -15,11 +15,13 @@ export const SemiDarkHorizontalTheme: HorizontalDashBoard = {
       activeBg: '0, 107, 166',
       activeText: '255, 255, 255',
     },
+    logo: '255, 255, 255',
     background: '0, 108, 166',
     tools: '255, 255, 255',
     toolsHover: '0, 108, 166',
   },
   navBar: {
+    background: '0, 107, 166',
     text: '255, 255, 255',
     svg: '255, 255, 255',
     activeBgButton: '13, 59, 102',
@@ -33,7 +35,7 @@ export const SemiDarkHorizontalTheme: HorizontalDashBoard = {
     text: '255, 255, 255',
   },
 }
-export const SemiDarkVerticalTheme: VerticalDashBoard = {
+export const verticalSemiDarkTheme: VerticalDashBoard = {
   type: 'semidark',
   primary: '0, 107, 166',
   secondary: '13, 59, 102',
@@ -56,6 +58,7 @@ export const SemiDarkVerticalTheme: VerticalDashBoard = {
       activeBg: '0, 107, 166',
       activeText: '255, 255, 255',
     },
+    logo: '255, 255, 255',
     searchBg: '22, 29, 49',
     background: '40, 48, 70',
     tools: '208, 210, 214',
