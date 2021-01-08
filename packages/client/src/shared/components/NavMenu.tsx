@@ -60,7 +60,7 @@ const DropDown = styled(animated.ul)<IDropDown>`
   position: absolute;
   flex-direction: column;
   display: ${({activetag}) => (activetag ? 'block' : 'none')};
-  top: 100%;
+  top: 104%;
   padding: 15px 0;
   min-width: 215px;
   min-height: 52px;

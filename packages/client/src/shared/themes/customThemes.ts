@@ -4,7 +4,6 @@ import {horizontalLightTheme, verticalLightTheme} from './lightTheme'
 import {horizontalPinkTheme, verticalPinkTheme} from './pinkTheme'
 import {horizontalPurpleTheme, verticalPurpleTheme} from './purpleTheme'
 import {horizontalRedTheme, verticalRedTheme} from './redTheme'
-import {horizontalYellowTheme, verticalYellowTheme} from './yellowTheme'
 
 export const getCustomTheme = (
   orientation: string,
@@ -15,9 +14,6 @@ export const getCustomTheme = (
     case '#ff4000':
       if (orientation === 'horizontal') return horizontalRedTheme(type)
       return verticalRedTheme(type)
-    case '#eaff00':
-      if (orientation === 'horizontal') return horizontalYellowTheme(type)
-      return verticalYellowTheme(type)
     case '#6b0ba3':
       if (orientation === 'horizontal') return horizontalPurpleTheme(type)
       return verticalPurpleTheme(type)

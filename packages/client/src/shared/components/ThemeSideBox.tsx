@@ -168,15 +168,6 @@ const CustomizerBody: React.FC = observer(() => {
                 value="#6b0ba3"
                 checked={activeCustomTheme === '#6b0ba3'}
               />
-              <RadioButton
-                bgColor="234, 255, 0"
-                onChange={handleCustomTheme}
-                id="yellow"
-                color="#c8c8c8"
-                name="color_themes"
-                value="#eaff00"
-                checked={activeCustomTheme === '#eaff00'}
-              />
             </fieldset>
           </form>
         </div>

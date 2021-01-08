@@ -1,22 +1,35 @@
 export const horizontalRedTheme = (type: string) => {
   return {
     type,
-    primary: type === 'light' ? '255, 64, 0' : '255, 64, 0',
+    primary:
+      type === 'light' || type === 'semidark' ? '255, 64, 0' : '74, 2, 1',
     secondary: '13, 59, 102',
-    background: type === 'light' ? '255, 255, 255' : '41, 1, 0',
+    background: (() => {
+      if (type === 'dark') return '28, 1, 1'
+      if (type === 'semidark') return '41, 1, 0'
+      return '255, 255, 255'
+    })(),
     backgroundSecondary:
       type === 'light' || type === 'semidark' ? '120, 1, 1' : '74, 2, 1',
     header: {
       userSection: {
         userName: '255, 255, 255',
         userPosition: '255, 255, 255',
-        bg: type === 'light' || type === 'semidark' ? '120, 1, 1' : '74, 2, 1',
-        text: '255, 255, 255',
+        bg: (() => {
+          if (type === 'dark') return '74, 2, 1'
+          if (type === 'semidark') return '120, 1, 1'
+          return '255, 255, 255'
+        })(),
+        text: type === 'light' ? '98, 95, 110' : '255, 255, 255',
         activeBg: type === 'light' ? '255, 64, 0' : '255, 64, 0',
         activeText: '255, 255, 255',
       },
       logo: '255, 255, 255',
-      background: type === 'light' ? '255, 64, 0' : '120, 1, 1',
+      background: (() => {
+        if (type === 'dark') return '120, 1, 1'
+        if (type === 'semidark') return '120, 1, 1'
+        return '255, 64, 0'
+      })(),
       tools: '255, 255, 255',
       toolsHover: '255, 255, 255',
     },
@@ -51,10 +64,10 @@ export const horizontalRedTheme = (type: string) => {
 export const verticalRedTheme = (type: string) => {
   return {
     type,
-    primary: type === 'light' ? '186, 126, 6' : '179, 98, 0',
+    primary: type === 'light' ? '252, 97, 86' : '148, 25, 16',
     secondary: '13, 59, 102',
     background:
-      type === 'light' || type === 'semidark' ? '243, 243, 243' : '94, 29, 3',
+      type === 'light' || type === 'semidark' ? '243, 243, 243' : '54, 1, 1',
     backgroundSecondary: '13, 59, 102',
     header: {
       userSection: {
@@ -66,13 +79,13 @@ export const verticalRedTheme = (type: string) => {
         activeText: '255, 255, 255',
       },
       logo: '255, 255, 255',
-      searchBg: '255, 64, 0',
-      background: type === 'light' ? '255, 64, 0' : '120, 1, 1',
+      searchBg: type === 'light' ? '250, 127, 115' : '138, 15, 3',
+      background: type === 'light' ? '255, 64, 0' : '112, 9, 1',
       tools: '255, 255, 255',
       toolsHover: '255, 255, 255',
     },
     sideBar: {
-      background: type === 'light' ? '255, 64, 0' : '120, 1, 1',
+      background: type === 'light' ? '255, 64, 0' : '112, 9, 1',
       tagTittle: '247, 190, 171',
       tagName: '255, 255, 255',
       tagIcon: '255, 255, 255',

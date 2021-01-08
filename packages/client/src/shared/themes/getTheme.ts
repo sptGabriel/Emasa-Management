@@ -1,6 +1,6 @@
 import {horizontalDarkTheme, verticalDarkTheme} from './darkTheme'
 import {horizontalLightTheme, verticalLightTheme} from './lightTheme'
-import {horizontalSemiDarkTheme,  verticalSemiDarkTheme} from './semiDarkTheme'
+import {horizontalSemiDarkTheme, verticalSemiDarkTheme} from './semiDarkTheme'
 
 export const getTheme = (orientation: string, theme: string) => {
   switch (theme) {

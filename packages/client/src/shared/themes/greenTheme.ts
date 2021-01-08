@@ -1,22 +1,31 @@
 export const horizontalGreenTheme = (type: string) => {
   return {
     type,
-    primary: type === 'light' ? '40, 199, 112' : '255, 64, 0',
+    primary:
+      type === 'light' || type === 'semidark' ? '40, 199, 12' : '65, 133, 28',
     secondary: '13, 59, 102',
-    background: type === 'light' ? '255, 255, 255' : '8, 38, 0',
+    background: (() => {
+      if (type === 'dark') return '10, 28, 1'
+      if (type === 'semidark') return '8, 38, 0'
+      return '255, 255, 255'
+    })(),
     backgroundSecondary:
       type === 'light' || type === 'semidark' ? '23, 99, 5' : '31, 79, 22',
     header: {
       userSection: {
         userName: '255, 255, 255',
         userPosition: '255, 255, 255',
-        bg: type === 'light' || type === 'semidark' ? '31, 79, 22' : '74, 2, 1',
-        text: '255, 255, 255',
-        activeBg: type === 'light' ? '255, 64, 0' : '255, 64, 0',
+        bg: (() => {
+          if (type === 'dark') return '31, 79, 22'
+          if (type === 'semidark') return '23, 99, 5'
+          return '255, 255, 255'
+        })(),
+        text: type === 'light' ? '98, 95, 110' : '255, 255, 255',
+        activeBg: type === 'light' ? '44, 110, 5' : '40, 199, 112',
         activeText: '255, 255, 255',
       },
       logo: '255, 255, 255',
-      background: type === 'light' ? '255, 64, 0' : '120, 1, 1',
+      background: '40, 199, 12',
       tools: '255, 255, 255',
       toolsHover: '255, 255, 255',
     },
@@ -41,14 +50,14 @@ export const horizontalGreenTheme = (type: string) => {
       })(),
       dropdownTextOptActive: (() => {
         if (type === 'dark') return '92, 3, 2'
-        if (type === 'semidark') return '133, 3, 3'
+        if (type === 'semidark') return '23, 99, 5'
         return '63, 66, 84'
       })(),
     },
     footer: {
       background: (() => {
-        if (type === 'dark') return '74, 2, 1'
-        if (type === 'semidark') return '255,64,0'
+        if (type === 'dark') return '31, 79, 22'
+        if (type === 'semidark') return '40, 199, 12'
         return '255, 255, 255'
       })(),
       text: '255, 255, 255',
@@ -73,7 +82,7 @@ export const verticalGreenTheme = (type: string) => {
         activeText: '255, 255, 255',
       },
       logo: '255, 255, 255',
-      searchBg: '255, 64, 0',
+      searchBg: type === 'light' ? '183, 232, 202' : '53, 112, 42',
       background: type === 'light' ? '40, 199, 112' : '31, 79, 22',
       tools: type === 'light' ? '98, 95, 110' : '255, 255, 255',
       toolsHover: type === 'light' ? '98, 95, 110' : '255, 255, 255',

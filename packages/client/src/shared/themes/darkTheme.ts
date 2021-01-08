@@ -2,9 +2,9 @@ import {HorizontalDashBoard, VerticalDashBoard} from '.'
 
 export const horizontalDarkTheme: HorizontalDashBoard = {
   type: 'dark',
-  primary: '0, 107, 166',
+  primary: '40, 48, 70',
   secondary: '13, 59, 102',
-  background: '22, 29, 49',
+  background: '1, 8, 31',
   backgroundSecondary: '40, 48, 70',
   header: {
     userSection: {

@@ -1,36 +1,61 @@
 export const horizontalPurpleTheme = (type: string) => {
   return {
     type,
-    primary: '255, 64, 0',
+    primary:
+      type === 'light' || type === 'semidark' ? '117, 11, 163' : '59, 5, 89',
     secondary: '13, 59, 102',
-    background: '243, 243, 243',
-    backgroundSecondary: '13, 59, 102',
+    background: (() => {
+      if (type === 'dark') return '28, 0, 43'
+      if (type === 'semidark') return '42, 1, 66'
+      return '255, 255, 255'
+    })(),
+    backgroundSecondary:
+      type === 'light' || type === 'semidark' ? '77, 8, 117' : '59, 5, 89',
     header: {
       userSection: {
         userName: '255, 255, 255',
         userPosition: '255, 255, 255',
-        bg: '255, 64, 0',
-        text: '153, 153, 153',
-        activeBg: '0, 107, 166',
+        bg: (() => {
+          if (type === 'dark') return '59, 5, 89'
+          if (type === 'semidark') return '77, 8, 117'
+          return '255, 255, 255'
+        })(),
+        text: type === 'light' ? '98, 95, 110' : '255, 255, 255',
+        activeBg: '117, 11, 163',
         activeText: '255, 255, 255',
       },
       logo: '255, 255, 255',
-      background: '255, 64, 0',
+      background: '40, 199, 12',
       tools: '255, 255, 255',
-      toolsHover: '0, 108, 166',
+      toolsHover: '255, 255, 255',
     },
     navBar: {
-      background: '0, 0, 0',
+      background: '107, 11, 163',
       text: '255, 255, 255',
       svg: '255, 255, 255',
-      activeBgButton: '13, 59, 102',
-      dropdownBg: '255, 255, 255',
-      dropdownTxt: '63, 66, 84',
-      dropdownBgOptActive: '243, 246, 249',
-      dropdownTextOptActive: '105, 147, 255',
+      activeBgButton: (() => {
+        if (type === 'dark') return '59, 5, 89'
+        return '77, 8, 117'
+      })(),
+      dropdownBg: (() => {
+        if (type === 'dark') return '59, 5, 89'
+        if (type === 'semidark') return '77, 8, 117'
+        return '255, 255, 255'
+      })(),
+      dropdownTxt: type === 'light' ? '63, 66, 84' : '255, 255, 255',
+      dropdownBgOptActive: (() => {
+        if (type === 'dark') return '69, 6, 105'
+        if (type === 'semidark') return '96, 12, 145'
+        return '117, 11, 163'
+      })(),
+      dropdownTextOptActive: '255, 255, 255',
     },
     footer: {
-      background: '0, 107, 166',
+      background: (() => {
+        if (type === 'dark') return '59, 5, 89'
+        if (type === 'semidark') return '77, 8, 117'
+        return '255, 255, 255'
+      })(),
       text: '255, 255, 255',
     },
   }
