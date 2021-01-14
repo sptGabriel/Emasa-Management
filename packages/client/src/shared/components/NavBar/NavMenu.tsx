@@ -6,18 +6,14 @@ import React, {
   useRef,
 } from 'react'
 import {IconType} from 'react-icons'
-import styled from '@emotion/styled/macro'
 import {NavLink, useLocation} from 'react-router-dom'
 import {FaAngleDown} from 'react-icons/fa'
-import {animated} from 'react-spring'
 import useOnClickOutside from 'use-onclickoutside'
-import {ITag, IDropdownItems, TagHorizontal} from '../utils/MenuTags'
-import {Container} from './FlexBox'
+import {ITag, IDropdownItems, TagHorizontal} from '../../utils/MenuTags'
+import {Container} from '../FlexBox'
+import {DropDown, Menu, NavItem, Ul} from './styles'
 
 /* Styles */
-type IDropDown = {
-  activetag: any
-}
 type ClickHandler = (tag: ITag) => (e: MouseEvent) => void
 type ShowHideDropItem = (tag: ITag) => void
 interface IDrop {
@@ -27,126 +23,7 @@ interface IDrop {
   // setVisible: ClickHandler
   Icon: IconType
 }
-interface ITagList {
-  tag: ITag
-  setTags: any
-}
-interface IListItem {
-  isDropDown?: boolean
-  activetag: any
-}
-const Ul = styled('ul')<{isSticky: boolean}>`
-  display: flex;
-  flex-wrap: wrap;
-  align-items: ${({isSticky}) => (isSticky ? 'flex-start' : 'flex-end')};
-  padding-left: 0;
-  margin-bottom: 0;
-  list-style: none;
-  width: 100%;
-  height: 100%;
-  z-index: 99;
-`
-const Menu = styled('div')<{isSticky: boolean}>`
-  display: flex;
-  align-items: center;
-  width: 100% !important;
-  height: 70px;
-  position: relative;
-  background: ${({theme}: any) => `rgb(${theme.navBar.background})`};
-  box-shadow: 11px 0 0 rgba(0, 0, 0, 0.13);
-`
 
-const DropDown = styled(animated.ul)<IDropDown>`
-  position: absolute;
-  flex-direction: column;
-  display: ${({activetag}) => (activetag ? 'block' : 'none')};
-  top: 104%;
-  padding: 15px 0;
-  min-width: 215px;
-  min-height: 52px;
-  background: ${({theme}: any) => `rgb(${theme.navBar.dropdownBg})`};
-  box-shadow: 0 4px 24px 0 rgba(0, 0, 0, 0.24);
-  z-index: 999;
-  border-radius: 4px;
-  .dropdown-wrap {
-    &:hover {
-      .svg-drop,
-      .tag-optname {
-        transform: translateX(5px);
-      }
-    }
-  }
-  .dropdown-tag {
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-    padding: 0.75rem 1.5rem;
-  }
-  .tag-optname {
-    display: block;
-    color: ${({theme}: any) => `rgb(${theme.navBar.dropdownTxt})`};
-    font-size: 1rem;
-    font-family: Roboto;
-    text-transform: capitalize;
-    font-weight: 400;
-    transition: transform 0.25s ease, -webkit-transform 0.25s ease;
-    transition: -webkit-transform 0.25s ease;
-    transition: transform 0.25s ease;
-  }
-  .svg-drop {
-    width: 10px;
-    height: 10px;
-    stroke: ${({theme}: any) => `rgb(${theme.navBar.dropdownTxt})`};
-    margin-right: 0.75rem !important;
-    transition: transform 0.25s ease, -webkit-transform 0.25s ease;
-    transition: -webkit-transform 0.25s ease;
-    transition: transform 0.25s ease;
-  }
-  .active-dropheader {
-    background: ${({theme}: any) => `rgb(${theme.navBar.dropdownBgOptActive})`};
-    .svg-drop {
-      stroke: ${({theme}: any) => `rgb(${theme.navBar.dropdownTextOptActive})`};
-    }
-    .tag-optname {
-      color: ${({theme}: any) => `rgb(${theme.navBar.dropdownTextOptActive})`};
-    }
-  }
-`
-
-const NavItem = styled.li<IListItem>`
-  display: flex;
-  align-items: center;
-  height: 100%;
-  margin-right: 0.75rem;
-  .active {
-    /* background: #2a2a72; */
-    background: ${({theme}: any) => `rgb(${theme.navBar.activeBgButton})`};
-  }
-  .nav-link {
-    display: flex;
-    align-items: center;
-    color: ${({theme}: any) => `rgb(${theme.navBar.text})`};
-    cursor: pointer;
-    border-radius: 0.42rem;
-    padding: 0.65rem 1rem;
-    .tag-svg {
-      margin-right: 10px;
-    }
-    .tag-name {
-      color: ${({theme}: any) => `rgb(${theme.navBar.text})`};
-      font-weight: 500;
-      font-size: 1rem;
-      line-height: 1.5;
-      text-transform: initial;
-      font-family: Poppins, Helvetica, sans-serif;
-    }
-  }
-  .svg-arrow {
-    margin-left: 6px;
-    display: flex;
-    align-items: center;
-  }
-`
 const DropDownItems: React.FC<IDrop> = ({active, dropItems, baseUrl}) => {
   return (
     <DropDown activetag={active ? 1 : 0}>
@@ -181,7 +58,7 @@ const DropDownItems: React.FC<IDrop> = ({active, dropItems, baseUrl}) => {
   )
 }
 //  Tag Wrapper
-const NavTag: React.FC<ITagList> = ({tag, setTags}) => {
+const NavTag: React.FC<{tag: ITag; setTags: any}> = ({tag, setTags}) => {
   const location = useLocation()
   const ref = useRef(null)
   useOnClickOutside(ref, () => {

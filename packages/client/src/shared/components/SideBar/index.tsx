@@ -2,10 +2,10 @@ import React from 'react'
 import styled from '@emotion/styled/macro'
 import {observer} from 'mobx-react-lite'
 import {runInAction} from 'mobx'
-import {useRootStore} from '../infra/mobx'
-import {Container} from './FlexBox'
+import {useRootStore} from '../../infra/mobx'
+import {Container} from '../FlexBox'
 import SideMenu from './SideMenu'
-import {NoSelect} from './NoSelect'
+import {NoSelect} from '../NoSelect'
 
 interface sideStat {
   sideisOpen: boolean

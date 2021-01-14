@@ -1,4 +1,3 @@
-import jwtDecode from 'jwt-decode'
 import {action, configure, makeObservable, runInAction} from 'mobx'
 import {LoginModel} from '../models/loginModel'
 import {UserModel} from '../models/userModel'

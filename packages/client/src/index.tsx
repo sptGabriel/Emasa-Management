@@ -4,7 +4,7 @@ import {ErrorBoundary} from 'react-error-boundary'
 import {BrowserRouter} from 'react-router-dom'
 import App from './App'
 import reportWebVitals from './reportWebVitals'
-import ErrorFallback from './shared/components/ErrorFallBack'
+import ErrorFallback from './shared/components/ErrorBoundary/ErrorFallBack'
 import {RootStoreProvider} from './shared/infra/mobx'
 // if (process.env.NODE_ENV === 'development') {
 //   console.error = () => {};

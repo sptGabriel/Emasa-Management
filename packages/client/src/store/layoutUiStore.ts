@@ -26,11 +26,17 @@ export class LayoutUIStore {
 
   layoutType: LayoutType = LayoutType.vertical
 
+  overlay = false
+
   constructor(private rootStore: RootStore) {
     makeAutoObservable(this)
     this.rootStore = rootStore
     this.initLayoutOrientation()
     this.initTheme()
+  }
+
+  toggleOverlay = () => {
+    this.overlay = !this.overlay
   }
 
   initLayoutOrientation = () => {

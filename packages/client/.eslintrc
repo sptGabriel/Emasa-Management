@@ -35,6 +35,9 @@
         "endOfLine": "auto"
       }
     ],
+    "no-return-assign": [0],
+    "react/jsx-fragments": [0],
+    "prefer-const": [0],
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "@typescript-eslint/no-explicit-any": "off",
     "react-hooks/rules-of-hooks": "error",

@@ -39,7 +39,7 @@ export interface IUserRepository {
    * @returns {Promise<User>}
    */
   updateLogin(user: User): Promise<User>;
-      /**
+    /**
    * @param {string} employeeProps
    * @returns {Promise<User>}
    */
@@ -51,4 +51,9 @@ export interface IUserRepository {
   setRFToken(user: User): Promise<User>;
   login(user: User, ip:string): Promise<User>;
   logout(user: User, ip:string): Promise<User>;
+      /**
+   * @param {string} employeeProps
+   * @returns {Promise<User>}
+   */
+  changePictureProfile(user: User): Promise<User>;
 }

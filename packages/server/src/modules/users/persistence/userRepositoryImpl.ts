@@ -4,6 +4,7 @@ import { Pagination } from '@shared/core/pagination';
 import { IBootstrap } from '@shared/infra/bootstrap';
 import { inject, injectable } from 'tsyringe';
 import { User } from '../domain/user.entity';
+import { ProfilePicture } from '../domain/userProfilePicture.entity';
 import { IUserRepository } from './userRepository';
 @injectable()
 export class UserRepository implements IUserRepository {
@@ -122,7 +123,7 @@ export class UserRepository implements IUserRepository {
         .where({ ip_address: ip, employee_id: user.employee.id })
         .returning('*')
         .then(row => row[0]);
-      if(!isLogged) throw new Error(`Invalid Credentials`);
+      if (!isLogged) throw new Error(`Invalid Credentials`);
       if (isLogged && !isLogged.active)
         throw new Error(`This already logged out on this device`);
       await UserQB.update({ ref_token: null })
@@ -164,5 +165,29 @@ export class UserRepository implements IUserRepository {
     );
     if (!user) return;
     return user;
+  };
+  public changePictureProfile = async (user: User): Promise<User> => {
+    const em = await this.em.fork();
+    await em.begin();
+    try {
+      const UserQB = em.createQueryBuilder(User);
+      const ProfileQB = em.createQueryBuilder(ProfilePicture);
+      await ProfileQB.insert({
+        picture_id: user.picture?.picture_id,
+        name: user.picture?.name,
+        size: user.picture?.size,
+        key: user.picture?.key,
+      }).execute();
+      await UserQB.update({
+        picture_id: user.picture?.picture_id,
+        updated_at: new Date(),
+      }).execute();
+      await em.commit();
+      return user;
+    } catch (e) {
+      console.log(e, 'error');
+      await em.rollback();
+      throw e;
+    }
   };
 }

@@ -1,8 +1,6 @@
 import React from 'react'
 import styled from '@emotion/styled'
-import {observer} from 'mobx-react-lite'
-import {useRootStore} from '../infra/mobx'
-import {Container} from './FlexBox'
+import {Container} from '../FlexBox'
 
 const Footer = styled('div')<{orientation: string}>`
   width: 100%;

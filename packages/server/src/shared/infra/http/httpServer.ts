@@ -8,6 +8,7 @@ import { container } from 'tsyringe';
 import { BaseController } from '@shared/core/baseController';
 import { RequestContext } from '@mikro-orm/core';
 import { EntityManager } from '@mikro-orm/postgresql';
+import path from 'path'
 const corstOpts = cors({
   credentials: true,
   origin: 'http://localhost:3000',
@@ -55,17 +56,11 @@ export class ExpressServer implements IHttpServer {
   //    next();
   private initializeMiddlewares = () => {
     this.server.use(cookieParser());
-    this.server.use(cors({
-      credentials: true,
-      origin: 'http://localhost:3000',
-      optionsSuccessStatus: 200,
-      methods: ['POST', 'PUT', 'GET', 'OPTIONS', 'HEAD'],
-      exposedHeaders: ["eid", "Access-Token"],},
-      ));
+    this.server.use(corstOpts);
     this.server.use(function (req, res, next) {
       res.header('Content-Type', 'application/json;charset=UTF-8');
       res.header('Access-Control-Allow-Headers', 'Set-Cookie');
-      res.setHeader('Access-Control-Allow-Credentials', true);
+      res.setHeader('Access-Control-Allow-Credentials', "true");
       res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
       res.header(
         'Access-Control-Allow-Headers',
@@ -78,6 +73,10 @@ export class ExpressServer implements IHttpServer {
     this.server.use((req, res, next) => {
       RequestContext.create(this.em, next);
     });
+    this.server.use(
+      "/files",
+      express.static(path.resolve(__dirname, "..", "..", "..", "..", "uploads"))
+    );
   };
   public getServer = () => {
     return this.server;

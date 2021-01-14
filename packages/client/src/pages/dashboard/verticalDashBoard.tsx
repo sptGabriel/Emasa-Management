@@ -30,14 +30,15 @@ const DashBoardMain = styled('div')<SideBarState>`
 `
 export const OutletWrapper = styled('div')`
   width: 100%;
+  height: calc(100vh - 130px);
   min-height: calc(100vh - 130px);
 `
 const Content = styled('div')`
   background: ${({theme}: any) => `rgb(${theme.background})` || 'lightgrey'};
   width: 100%;
   padding: 0 50px;
-  position: relative;
   overflow-y: auto;
+  position: relative;
   //  padding-right: 30px;
   //  padding-left: 30px;
   ::-webkit-scrollbar-track {
@@ -69,9 +70,7 @@ export const VerticalDashBoard: React.FC = observer(() => {
       >
         <ASide />
         <Content>
-          <OutletWrapper>
-            <Outlet />
-          </OutletWrapper>
+          <Outlet />
           <DashBoardFooter orientation={layoutStore.layoutType}>
             .footer
           </DashBoardFooter>

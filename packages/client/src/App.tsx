@@ -3,9 +3,10 @@ import {observer} from 'mobx-react-lite'
 import {ThemeProvider} from '@emotion/react'
 import GlobalReset from './shared/utils/cssReset'
 import {useRootStore} from './shared/infra/mobx'
-import ErrorFallback from './shared/components/ErrorFallBack'
+import ErrorFallback from './shared/components/ErrorBoundary/ErrorFallBack'
 import ESpinner from './shared/components/Spinner'
 import ApplicationRoutes from './shared/infra/router/routes2'
+import {Overlay} from './shared/components/Overlay'
 
 const App: React.FC = observer(() => {
   const {layoutStore, appState, authStore, initApi} = useRootStore()
@@ -15,6 +16,7 @@ const App: React.FC = observer(() => {
   return (
     <ThemeProvider theme={layoutStore.theme}>
       <GlobalReset />
+      <Overlay isOn={layoutStore.overlay} />
       {appState === 'pending' ? (
         <div
           style={{

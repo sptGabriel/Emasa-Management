@@ -1,23 +1,7 @@
-import React, {memo, useCallback, useRef, useState} from 'react'
 import {css} from '@emotion/react'
-import styled from '@emotion/styled/macro'
-import {observer} from 'mobx-react-lite'
-import {BiChevronDown} from 'react-icons/bi'
-import {CgLogOff, CgProfile} from 'react-icons/cg'
-import {IoIosSettings} from 'react-icons/io'
-import useOnClickOutside from 'use-onclickoutside'
-import userAvatar from '../../assets/user.png'
-import {useRootStore} from '../infra/mobx'
+import styled from '@emotion/styled'
 
-interface IUserProfile {
-  open: boolean
-}
-interface IUserCanvas {
-  open: boolean
-  orientation?: string
-}
-/* User Profile Styles Section */
-const UserProfileContainer = styled('div')<IUserProfile>`
+export const UserProfileContainer = styled('div')<{open: boolean}>`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -81,7 +65,7 @@ const UserProfileContainer = styled('div')<IUserProfile>`
     }
   }
 `
-const UserCanvas = styled.div<IUserCanvas>`
+export const UserCanvas = styled('div')<{open: boolean; orientation?: string}>`
   position: absolute;
   width: 100%;
   display: ${({open}) => (open ? 'flex' : 'none')};
@@ -131,48 +115,3 @@ const UserCanvas = styled.div<IUserCanvas>`
     border-top: 1px solid #f0f0f0;
   }
 `
-const ContentUserSection: React.FC<IUserCanvas> = observer(({open}) => {
-  const {authStore, layoutStore} = useRootStore()
-  const onLogout = useCallback(() => authStore.logout(), [])
-  return (
-    <UserCanvas open={open} orientation={layoutStore.layoutType}>
-      <div className="header_txt">Welcome !</div>
-      <button type="button" className="dropdown-itemx">
-        <CgProfile size={18} />
-        <span>My Profile</span>
-      </button>
-      <button type="button" className="dropdown-itemx">
-        <IoIosSettings size={18} />
-        <span>Settings</span>
-      </button>
-      <div className="dropdown-divider" />
-      <button type="button" className="dropdown-itemx" onClick={onLogout}>
-        <CgLogOff className="logout" size={18} />
-        <span>Logout</span>
-      </button>
-    </UserCanvas>
-  )
-})
-const MemoizedLogout = memo(ContentUserSection)
-const UserProfile: React.FC = () => {
-  const [open, setOpen] = useState(false)
-  const ref = useRef(null)
-  useOnClickOutside(ref, () => setOpen(false))
-  const clickHandler = () => setOpen(!open)
-  return (
-    <UserProfileContainer ref={ref} onClick={clickHandler} open={open}>
-      <div className="user_avatar">
-        <img src={userAvatar} alt="Logo" />
-      </div>
-      <span className="svg-arrow">
-        <BiChevronDown />
-      </span>
-      <div className="user_text">
-        <span>SpiriT</span>
-        <span>Web Developer</span>
-      </div>
-      <MemoizedLogout open={open} />
-    </UserProfileContainer>
-  )
-}
-export default memo(UserProfile)

@@ -12,11 +12,13 @@ import { validate } from 'uuid';
 import { hash, genSaltSync, compareSync } from 'bcryptjs';
 import { isHashedRegex } from '@utils/isHashed';
 import { IJWTAcessPayload } from './jwt';
+import { ProfilePicture } from './userProfilePicture.entity';
 export interface userContainer {
   employee: Employee;
   login: string;
   password: string;
   ref_token?: string | null;
+  picture: ProfilePicture | null;
 }
 @Entity({ tableName: 'users' })
 export class User {
@@ -34,6 +36,12 @@ export class User {
   public password: string;
   @Property({ default: null })
   public ref_token: string | null;
+  @OneToOne(() => ProfilePicture, profile => profile.user, {
+    owner: true,
+    orphanRemoval: true,
+    fieldName: 'picture_id'
+  })
+  public picture: ProfilePicture | null;
   @Property({ name: 'payload', persist: false })
   public get getJWTPayload(): IJWTAcessPayload {
     return {
@@ -45,10 +53,12 @@ export class User {
       position: this.employee.position,
     };
   }
+
   constructor(container: userContainer) {
     this.employee = container.employee;
     this.login = container.login;
     this.password = container.password;
+    this.picture = container.picture;
     if (container.ref_token) this.ref_token = container.ref_token;
     this.ref_token = null;
   }
@@ -65,13 +75,14 @@ export class User {
     login,
     password,
     ref_token,
+    picture,
   }: userContainer) => {
     if (!validate(employee.id)) throw new Error(`Invalid Employee UUID`);
     if (employee.user) throw new Error(`Employee already has user`);
     if (password.length == 60 && password.match(isHashedRegex)) {
       throw new Error(`This password has been encrypted`);
     }
-    password = await User.EncryptPassword(password)
-    return new User({ employee, login, password, ref_token });
+    password = await User.EncryptPassword(password);
+    return new User({ employee, login, password, ref_token, picture });
   };
 }

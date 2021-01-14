@@ -1,11 +1,11 @@
 import React from 'react'
 import styled from '@emotion/styled'
 import {observer} from 'mobx-react-lite'
-import {useRootStore} from '../infra/mobx'
-import {Container} from './FlexBox'
-import errorSvg from '../../assets/error.svg'
-import errorBg from '../../assets/bgerror.svg'
-import {NoSelect} from './NoSelect'
+import {useRootStore} from '../../infra/mobx'
+import {Container} from '../FlexBox'
+import errorSvg from '../../../assets/error.svg'
+import errorBg from '../../../assets/bgerror.svg'
+import {NoSelect} from '../NoSelect'
 
 export const ErrorBoundaryContainer = styled(Container)<{isAuth: boolean}>`
   min-height: ${({isAuth}) => (isAuth ? 'calc(100vh - 130px)' : '100vh')};
@@ -69,7 +69,8 @@ export const ErrorBoundaryContainer = styled(Container)<{isAuth: boolean}>`
     margin-bottom: 5px;
   }
   .subtittle_wrong {
-    color: ${({theme}: any) => (theme.type === 'light' ? '#595b5f' : '#fff')};
+    color: ${({theme}: any) =>
+      theme.type === 'light' || theme.type === 'semidark' ? '#595b5f' : '#fff'};
     white-space: nowrap;
     font-size: 0.8rem;
     font-family: Rubik, sans-serif;
