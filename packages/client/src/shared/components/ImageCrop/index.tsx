@@ -1,7 +1,10 @@
 import React, {Fragment, useState} from 'react'
 import AvatarEditor from 'react-avatar-editor'
+import {AiOutlineClose} from 'react-icons/ai'
+import {useRootStore} from '../../infra/mobx'
 import Button from '../Button'
 import {Container} from '../FlexBox'
+import {ImageChangeWrap, Header, Body} from './styles'
 
 export const ImageCrop: React.FC<{
   imagefile: any
@@ -45,11 +48,17 @@ export const ImageCrop: React.FC<{
         />
       </div>
       <div>
-        <Button click={onImageCrop}>Cortar Foto</Button>
+        <Button
+          click={(e: any) => {
+            onImageCrop()
+            setScaleValue(1)
+          }}
+        >
+          Trocar foto de perfil
+        </Button>
       </div>
     </Container>
   )
-
   return (
     <Fragment>
       {renderEditor()}
@@ -57,3 +66,37 @@ export const ImageCrop: React.FC<{
     </Fragment>
   )
 }
+
+const ImageChanger: React.FC<{
+  open: boolean
+  reference: React.MutableRefObject<any>
+  setOpen: any
+  imageFile: any
+  setEditorRef: any
+  onImageCrop: any
+}> = ({open, reference, setOpen, setEditorRef, imageFile, onImageCrop}) => {
+  const {layoutStore} = useRootStore()
+  const clickHandler = () => {
+    layoutStore.toggleOverlay()
+    setOpen(false)
+  }
+  return (
+    <ImageChangeWrap open={open} ref={reference}>
+      <Header>
+        <h2>Atualizar a foto de perfil</h2>
+      </Header>
+      <span className="close" onClick={clickHandler} role="presentation">
+        <AiOutlineClose size={32} />
+      </span>
+      <Body>
+        <ImageCrop
+          imagefile={imageFile}
+          setEditorRef={setEditorRef}
+          onImageCrop={onImageCrop}
+        />
+      </Body>
+    </ImageChangeWrap>
+  )
+}
+
+export default ImageChanger

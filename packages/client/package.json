@@ -10,6 +10,7 @@
     "@testing-library/user-event": "^12.1.10",
     "@types/styled-system": "^5.1.10",
     "axios": "^0.21.0",
+    "blob-util": "^2.0.2",
     "class-validator": "^0.12.2",
     "hamburger-react": "^2.4.0",
     "history": "^5.0.0",

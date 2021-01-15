@@ -6,9 +6,7 @@ import App from './App'
 import reportWebVitals from './reportWebVitals'
 import ErrorFallback from './shared/components/ErrorBoundary/ErrorFallBack'
 import {RootStoreProvider} from './shared/infra/mobx'
-// if (process.env.NODE_ENV === 'development') {
-//   console.error = () => {};
-// }
+import 'react-toastify/dist/ReactToastify.css'
 
 ReactDOM.render(
   <BrowserRouter>

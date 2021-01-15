@@ -1,6 +1,7 @@
 import React, {useEffect} from 'react'
 import {observer} from 'mobx-react-lite'
 import {ThemeProvider} from '@emotion/react'
+import {ToastContainer} from 'react-toastify'
 import GlobalReset from './shared/utils/cssReset'
 import {useRootStore} from './shared/infra/mobx'
 import ErrorFallback from './shared/components/ErrorBoundary/ErrorFallBack'
@@ -17,6 +18,7 @@ const App: React.FC = observer(() => {
     <ThemeProvider theme={layoutStore.theme}>
       <GlobalReset />
       <Overlay isOn={layoutStore.overlay} />
+      <ToastContainer />
       {appState === 'pending' ? (
         <div
           style={{

@@ -41,7 +41,15 @@ export class AxiosStore {
       },
     })
   }
-
+  public put = async (url: string, data?: any): Promise<any> => {
+    return this.axiosInstance.put(url, data, {
+      withCredentials: true,
+      headers: {
+        crossDomain: true,
+        'Content-Type': 'application/json',
+      },
+    })
+  }
   public enableInterceptors = async (): Promise<void> => {
     this.axiosInstance.interceptors.response.use(
       (response: any) => {

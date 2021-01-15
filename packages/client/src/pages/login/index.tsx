@@ -331,7 +331,6 @@ const Form: React.FunctionComponent = observer(() => {
 const Login: React.FC = () => {
   return (
     <ContainerFluid>
-      <ToastContainer />
       <Row wrap="true" flexColumn>
         <Col>
           <LoginCard align="center" justify="center" flexColumn>
