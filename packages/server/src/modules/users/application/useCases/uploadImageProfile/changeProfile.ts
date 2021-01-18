@@ -26,24 +26,19 @@ export class ChangeProfile
   public execute = async ({
     id,
     ip,
-    key,
-    name,
-    size,
+    url,
+    public_id,
+    bytes,
   }: userProfileIMG): Promise<Either<AppError, User>> => {
     const user = await this.userRepository.byId(id);
     if (!user) throw new Error("This user doesn't exists");
-    const imgId = key.split('_')[0];
-    if (imgId !== id)
-      throw new Error(`Something went wrong, contact your administrator`);
-    console.log(`${process.env.APP_URL}/files/${key}`)
     const picture = ProfilePicture.build({
-      key,
-      name,
-      size,
-      url: `${process.env.APP_URL}/files/${key}`,
+      picture_id: public_id.split('/')[1],
+      bytes,
+      url,
     });
     wrap(user).assign({ picture });
     const updatedProfile = await this.userRepository.changePictureProfile(user);
-    return right(user);
+    return right(updatedProfile);
   };
 }

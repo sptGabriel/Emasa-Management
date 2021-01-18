@@ -47,7 +47,7 @@ export class AuthController extends BaseController {
       });
       return response
         .status(200)
-        .send({ token: result.value.accessToken, user: result.value.user });
+        .send({ token: result.value.accessToken});
     } catch (error) {
       console.log(error);
       next(error);

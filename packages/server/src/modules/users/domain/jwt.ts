@@ -12,6 +12,7 @@ export interface IJWTAcessPayload {
   matricula: string;
   name: string;
   position: string;
+  avatar: string | null;
   departament_id: string;
 }
 export class JWT {

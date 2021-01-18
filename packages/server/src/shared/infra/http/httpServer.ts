@@ -6,7 +6,7 @@ import { IHttpServer } from './server.contract';
 import { ErrorMiddleware } from './middlewares/error.middleware';
 import { container } from 'tsyringe';
 import { BaseController } from '@shared/core/baseController';
-import { RequestContext } from '@mikro-orm/core';
+import { expr, RequestContext } from '@mikro-orm/core';
 import { EntityManager } from '@mikro-orm/postgresql';
 import path from 'path'
 const corstOpts = cors({
@@ -55,6 +55,8 @@ export class ExpressServer implements IHttpServer {
   //    );
   //    next();
   private initializeMiddlewares = () => {
+    this.server.use(express.json({limit: '50mb'}));
+    this.server.use(express.urlencoded({limit: '50mb', extended: true}))
     this.server.use(cookieParser());
     this.server.use(corstOpts);
     this.server.use(function (req, res, next) {
@@ -68,7 +70,6 @@ export class ExpressServer implements IHttpServer {
       );
       next();
     });
-    this.server.use(express.json());
     this.server.use(bodyParser.json());
     this.server.use((req, res, next) => {
       RequestContext.create(this.em, next);

@@ -1,8 +1,10 @@
 import { IDepartamentRepository } from '@modules/departaments/persistence/departamentRepository';
 import { DepartamentRepository } from '@modules/departaments/persistence/departamentRepositoryImpl';
+import { Location } from '@modules/employees/domain/Location.entity';
 import { IEmployeeRepository } from '@modules/employees/persistence/employeeRepository';
 import { EmployeeRepository } from '@modules/employees/persistence/employeeRepositoryImpl';
 import { User } from '@modules/users/domain/user.entity';
+import { ProfilePicture } from '@modules/users/domain/userProfilePicture.entity';
 import { IUserRepository } from '@modules/users/persistence/userRepository';
 import { UserRepository } from '@modules/users/persistence/userRepositoryImpl';
 import { Either, left, right } from '@shared/core/either';
@@ -33,24 +35,39 @@ export class NewEmployeeUseCase
     matricula,
     departament_id,
     user_credentials,
+    address,
+    email,
+    biografia,
+    picture,
   }: NewEmployeeDTO): Promise<Either<AppError, Employee>> => {
+    const { rua,numero,complemento,cidade,cep,bairro } = address
     if (!(position in Positions)) throw new Error('Invalid position');
     const hasEmployee = await this.employeeRepository.byMatricula(matricula);
     if (hasEmployee) {
-      return left(
-        new Error(`Employee with matricula: ${matricula} already exists`),
-      );
+      throw new Error(`Employee with matricula: ${matricula} already exists`);
     }
     if (user_credentials) await this.validateLogin(user_credentials);
+    const userPicture = picture
+      ? ProfilePicture.build({
+          picture_id: picture.public_id.split('/')[1],
+          bytes: picture.bytes,
+          url: picture.url,
+        })
+      : null;
     const departament = await this.departamentRepository.byId(departament_id);
     const employee = await this.employeeRepository.create(
       await Employee.build({
+        address: Location.build({bairro,cep,cidade,complemento,numero,rua}),
         matricula,
         first_name,
         last_name,
         position,
         departament,
-        userProps: user_credentials ? user_credentials : undefined,
+        biografia: biografia ? biografia : null,
+        email,
+        userProps: user_credentials
+          ? { ...user_credentials, picture: userPicture }
+          : undefined,
       }),
     );
     return right(employee);

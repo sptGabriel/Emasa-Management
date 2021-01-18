@@ -3,7 +3,6 @@ import { LoadStrategy, MikroORM, Options } from '@mikro-orm/core';
 import { TsMorphMetadataProvider } from '@mikro-orm/reflection/TsMorphMetadataProvider';
 import path from 'path';
 import { PostgreSqlDriver } from '@mikro-orm/postgresql';
-import { EmployeeSubscriber } from '@modules/employees/domain/employee.subscriber';
 const configResult: DotenvConfigOutput = dotenv.config();
 if (configResult.error) {
   throw configResult.error;
@@ -17,7 +16,6 @@ export default {
   debug: true,
   // debug: process.env.NODE_ENV === 'development',
   entities: [rootDir + '/modules/**/domain/*.entity.{js,ts}'],
-  subscribers: [new EmployeeSubscriber()],
   host: 'localhost',
   migrations: {
     path: path.join(__dirname, '../migrations'), // path to the folder with migrations

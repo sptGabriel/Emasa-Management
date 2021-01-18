@@ -9,7 +9,8 @@ import { getCurrentUserCase } from '../application/useCases/getCurrentUser/getCu
 import multerConfig from '@shared/helpers/multer';
 import multer from 'multer';
 import { ChangeProfile } from '../application/useCases/uploadImageProfile/changeProfile';
-import cloudinary from '@shared/helpers/cloudinary'
+import cloudinary from '@shared/helpers/cloudinary';
+import { v4 } from 'uuid';
 @singleton()
 export class UserController extends BaseController {
   constructor() {
@@ -21,8 +22,8 @@ export class UserController extends BaseController {
     this.router.get(`${this.path}`, this.index);
     this.router.get(`${this.path}/me`, this.Me);
     this.router.post(`${this.path}/add`, this.addUser);
-    this.router.put(
-      `${this.path}/:id/image`,
+    this.router.post(
+      `${this.path}/:id/change_profile_image`,
       multer(multerConfig).single('image'),
       this.uploadImage,
     );
@@ -37,7 +38,6 @@ export class UserController extends BaseController {
   ) => {
     try {
       const ip = ensure(getRequestIpAddress(request));
-      const id = request.cookies['emsi'];
       const accessToken = ensure(
         request.headers.authorization &&
           request.headers.authorization.split(' ')[1],
@@ -71,14 +71,25 @@ export class UserController extends BaseController {
     next: NextFunction,
   ) => {
     try {
-      const { originalname: name, size, filename: key } = request.file;
+      const { data } = request.body;
+      if (!data) throw new Error(`Invalid Image`);
       const { id } = request.params;
       const ip = ensure(getRequestIpAddress(request));
+      const { bytes, public_id, url } = await cloudinary.uploader.upload(data, {
+        upload_preset: 'profile_images',
+        public_id: v4(),
+        format: 'jpg',
+      });
+      if (!bytes || !public_id || !url)
+        throw new Error(`Error to upload image`);
       const result = await container
         .resolve(ChangeProfile)
-        .execute({ ip, size, name, key, id });
+        .execute({ bytes, public_id, url, id, ip });
       if (result.isLeft()) return next(result.value);
-      return response.json(result.value);
+      return response.json({
+        message: 'Successfully Updated',
+        avatar: public_id,
+      });
     } catch (error) {
       next(error);
     }

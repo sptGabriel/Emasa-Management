@@ -39,18 +39,27 @@ export class User {
   @OneToOne(() => ProfilePicture, profile => profile.user, {
     owner: true,
     orphanRemoval: true,
-    fieldName: 'picture_id'
+    fieldName: 'picture_id',
   })
   public picture: ProfilePicture | null;
   @Property({ name: 'payload', persist: false })
-  public get getJWTPayload(): IJWTAcessPayload {
+  public get getJWTPayload(): any {
     return {
       id: this.employee.id,
-      name: this.employee.getFullName,
-      departament_id: this.employee.departament.id,
+      first_name: this.employee.first_name,
+      last_name: this.employee.last_name,
+      username: this.login,
+      email: this.employee.email,
+      biografia: this.employee.biografia,
+      departament: {
+        id: this.employee.departament.id,
+        departament_name: this.employee.departament.departament_name,
+      },
       login: this.login,
+      avatar: this.picture ? `profile_images/${this.picture.picture_id}` : null,
       matricula: this.employee.matricula,
       position: this.employee.position,
+      address: this.employee.address.Address,
     };
   }
 

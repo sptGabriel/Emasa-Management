@@ -146,6 +146,8 @@ export class UserRepository implements IUserRepository {
   public byId = async (id: string): Promise<User | undefined> => {
     const user = await this.em.findOne(User, { employee: { id } }, [
       'employee',
+      'employee.departament',
+      'employee.address'
     ]);
     if (!user) return;
     return user;
@@ -174,9 +176,8 @@ export class UserRepository implements IUserRepository {
       const ProfileQB = em.createQueryBuilder(ProfilePicture);
       await ProfileQB.insert({
         picture_id: user.picture?.picture_id,
-        name: user.picture?.name,
-        size: user.picture?.size,
-        key: user.picture?.key,
+        url: user.picture?.url,
+        bytes: user.picture?.bytes,
       }).execute();
       await UserQB.update({
         picture_id: user.picture?.picture_id,

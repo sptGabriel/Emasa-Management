@@ -1,7 +1,7 @@
 export interface userProfileIMG {
-  name: string;
-  size: number;
-  key: string;
+  bytes: number;
+  public_id: string;
+  url: string;
   ip: string;
   id: string;
 }

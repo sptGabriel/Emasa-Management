@@ -5,8 +5,7 @@ import path from 'path';
 const LocalStorage = multer.diskStorage({
   destination: path.resolve(__dirname, '..', '..', '..', 'uploads'),
   filename: (req: Request, file: Express.Multer.File, callback) => {
-    const { id } = req.params;
-    const fileName = `${id}_${Date.now()}_${file.originalname}`;
+    const fileName = file.originalname;
     callback(null, fileName);
   },
 });

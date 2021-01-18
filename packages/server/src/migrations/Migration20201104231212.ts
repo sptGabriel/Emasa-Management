@@ -11,10 +11,8 @@ export class Migration20201104231212 extends Migration {
             table
               .uuid('picture_id')
               .notNullable().primary();
-            table.string('key').notNullable();
-            table.string('name').notNullable();
             table.string('url').notNullable();
-            table.integer('size').notNullable();
+            table.integer('bytes').notNullable();
             table.timestamp('created_at').defaultTo(this.getKnex().fn.now());
             table.timestamp('deleted_at');
           });

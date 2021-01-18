@@ -10,11 +10,24 @@ export class Migration20201102135636 extends Migration {
           .createTable('employees', async table => {
             table.uuid('id').notNullable().primary();
             table
+            .string('email', 200)
+            .notNullable()
+            .unique('email');
+            table
+            .text('biografia')
+            .defaultTo(null)
+            table
               .string('matricula', 100)
               .notNullable()
               .unique('matricula_idx');
             table.string('first_name', 100).notNullable();
             table.string('last_name', 100).notNullable();
+            table
+            .uuid('address_id')
+            .notNullable()
+            .references('locations.id')
+            .onUpdate('CASCADE') // if Article primary key is changed, update this foreign key.
+            .onDelete('NO ACTION');
             table
               .uuid('departament_id')
               .notNullable()
