@@ -7,6 +7,7 @@ import {useRootStore} from '../../shared/infra/mobx'
 import ASide from '../../shared/components/SideBar'
 import DashBoardFooter from '../../shared/components/Footer'
 import Header from '../../shared/components/Header'
+import BreadCrumb from '../../shared/components/BreadCrumb'
 
 interface SideBarState {
   open: boolean
@@ -38,7 +39,6 @@ const Content = styled('div')`
   width: 100%;
   padding: 0 50px;
   overflow-y: auto;
-  position: relative;
   //  padding-right: 30px;
   //  padding-left: 30px;
   ::-webkit-scrollbar-track {
@@ -70,7 +70,9 @@ export const VerticalDashBoard: React.FC = observer(() => {
       >
         <ASide />
         <Content>
-          <Outlet />
+          <OutletWrapper>
+            <Outlet />
+          </OutletWrapper>
           <DashBoardFooter orientation={layoutStore.layoutType}>
             .footer
           </DashBoardFooter>

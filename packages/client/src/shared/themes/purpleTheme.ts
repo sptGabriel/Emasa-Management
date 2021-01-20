@@ -66,14 +66,14 @@ export const verticalPurpleTheme = (type: string) => {
     primary: type === 'light' ? '131, 16, 196' : '136, 6, 204',
     secondary: '13, 59, 102',
     background:
-      type === 'light' || type === 'semidark' ? '243, 243, 243' : '27, 0, 41',
+      type === 'light' || type === 'semidark' ? '244, 245, 248' : '20, 0, 31',
     backgroundSecondary: '13, 59, 102',
     header: {
       userSection: {
         userName: '255, 255, 255',
         userPosition: '255, 255, 255',
-        bg: type === 'light' ? '107, 11, 163' : '46, 1, 71',
-        text: '255, 255, 255',
+        bg: '255, 255, 255',
+        text: '98, 95, 110',
         activeBg: type === 'light' ? '131, 16, 196' : '136, 6, 204',
         activeText: '255, 255, 255',
       },
@@ -93,7 +93,11 @@ export const verticalPurpleTheme = (type: string) => {
     },
     footer: {
       background: '0, 107, 166',
-      text: '255, 255, 255',
+      text: (() => {
+        if (type === 'dark') return '255,255,255'
+        if (type === 'semidark') return '110, 107, 123'
+        return '110, 107, 123'
+      })(),
     },
   }
 }

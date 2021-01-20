@@ -4,10 +4,11 @@ import {BiChevronDown} from 'react-icons/bi'
 import {CgLogOff, CgProfile} from 'react-icons/cg'
 import {IoIosSettings} from 'react-icons/io'
 import useOnClickOutside from 'use-onclickoutside'
-import userAvatar from '../../../assets/user.png'
+import {NavLink} from 'react-router-dom'
+import userAvatar from '../../../assets/logo_emasa.png'
 import {useRootStore} from '../../infra/mobx'
-import { UserCanvas, UserProfileContainer } from './styles'
-
+import {UserCanvas, UserProfileContainer} from './styles'
+import {createBackgroundImage} from '../../utils/createCloudinaryBG'
 /* User Profile Styles Section */
 const ContentUserSection: React.FC<{open: boolean}> = observer(({open}) => {
   const {authStore, layoutStore} = useRootStore()
@@ -20,8 +21,10 @@ const ContentUserSection: React.FC<{open: boolean}> = observer(({open}) => {
         <span>My Profile</span>
       </button>
       <button type="button" className="dropdown-itemx">
-        <IoIosSettings size={18} />
-        <span>Settings</span>
+        <NavLink to={'accounts/edit'} end>
+          <IoIosSettings size={18} />
+          <span>Settings</span>
+        </NavLink>
       </button>
       <div className="dropdown-divider" />
       <button type="button" className="dropdown-itemx" onClick={onLogout}>
@@ -32,7 +35,8 @@ const ContentUserSection: React.FC<{open: boolean}> = observer(({open}) => {
   )
 })
 const MemoizedLogout = memo(ContentUserSection)
-const UserProfile: React.FC = () => {
+const UserProfile: React.FC = observer(() => {
+  const {currentUserStore} = useRootStore()
   const [open, setOpen] = useState(false)
   const ref = useRef(null)
   useOnClickOutside(ref, () => setOpen(false))
@@ -40,7 +44,14 @@ const UserProfile: React.FC = () => {
   return (
     <UserProfileContainer ref={ref} onClick={clickHandler} open={open}>
       <div className="user_avatar">
-        <img src={userAvatar} alt="Logo" />
+        <img
+          src={
+            currentUserStore.currentUser?.avatar
+              ? createBackgroundImage(currentUserStore.currentUser?.avatar)
+              : userAvatar
+          }
+          alt="Logo"
+        />
       </div>
       <span className="svg-arrow">
         <BiChevronDown />
@@ -52,5 +63,5 @@ const UserProfile: React.FC = () => {
       <MemoizedLogout open={open} />
     </UserProfileContainer>
   )
-}
+})
 export default memo(UserProfile)

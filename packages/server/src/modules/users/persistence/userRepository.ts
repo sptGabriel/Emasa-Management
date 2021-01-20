@@ -19,6 +19,11 @@ export interface IUserRepository {
    * @returns {Promise<User>}
    */
   byId(id: string): Promise<User | undefined>;
+    /**
+   * @param {number} email
+   * @returns {Promise<User>}
+   */
+  byEmail(email: string): Promise<User | undefined>;
   /**
    * @param {string} matricula
    * @returns {Promise<User>}

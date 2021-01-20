@@ -10,6 +10,8 @@
     "start:dev": "ts-node-dev --inspect --respawn --transpile-only --ignore-watch node_modules -r tsconfig-paths/register src/shared/infra/index.ts",
     "start:debug": "node start --debug --watch",
     "start:prod": "node dist/index.ts",
+    "dev:server": "ts-node-dev --inspect --respawn --transpile-only --ignore-watch node_modules -r tsconfig-paths/register src/shared/infra/index.ts",
+    "dev:queue": "ts-node-dev --respawn --transpile-only --ignore-watch node_modules -r tsconfig-paths/register src/shared/infra/queue/runner.ts",
     "test": "jest",
     "lint": "eslint --fix",
     "lint2": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix"
@@ -33,11 +35,14 @@
     "@types/ioredis": "^4.19.0",
     "@types/jest": "^26.0.15",
     "@types/jsonwebtoken": "^8.5.0",
+    "@types/mongoose": "^5.10.3",
     "@types/multer": "^1.4.5",
+    "@types/nodemailer": "^6.4.0",
     "@types/redis": "^2.8.28",
     "@types/request-ip": "^0.0.35",
     "@types/supertest": "^2.0.10",
     "@types/uuid": "^8.3.0",
+    "@types/winston": "^2.4.4",
     "commitizen": "^4.2.2",
     "eslint": "^7.12.1",
     "eslint-config-airbnb-base": "^14.2.0",
@@ -85,14 +90,17 @@
     "helmet": "^4.1.1",
     "ioredis": "^4.19.4",
     "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.11.12",
     "multer": "^1.4.2",
+    "nodemailer": "^6.4.17",
     "pg": "^8.4.2",
     "redis": "^3.0.2",
     "reflect-metadata": "^0.1.13",
     "tiny-types": "^1.15.0",
     "tsyringe": "^4.3.0",
     "typescript-optional": "^2.0.1",
-    "uuid": "^8.3.1"
+    "uuid": "^8.3.1",
+    "winston": "^3.3.3"
   },
   "husky": {
     "hooks": {

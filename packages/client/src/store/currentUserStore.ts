@@ -1,9 +1,12 @@
+import {promises} from 'fs'
 import {action, runInAction, makeAutoObservable} from 'mobx'
+import {UserAddress} from '../models/userAddressModel'
 import {UserModel} from '../models/userModel'
+import {cepMask} from '../shared/utils/cepMask'
 import {RootStore} from './rootStore'
 
 export class CurrentUserStore {
-  currentUser: UserModel | null = null
+  currentUser!: UserModel
 
   loadingUser = false
 
@@ -13,9 +16,25 @@ export class CurrentUserStore {
 
   accessToken: string | null = null
 
+  loadingProfileImage = false
+
   constructor(public rootStore: RootStore) {
     makeAutoObservable(this, {pullUser: action})
     this.rootStore = rootStore
+  }
+
+  public changeAvatar = async (url: any): Promise<any> => {
+    this.loadingProfileImage = true
+    const requestUrl = `/users/${this.currentUser?.id}/change_profile_image`
+    return this.rootStore.AxiosStore.post(
+      requestUrl,
+      JSON.stringify({data: url}),
+    ).then((res) => {
+      if (res && this.currentUser) this.currentUser.avatar = res.data.avatar
+      if (!res || !this.currentUser)
+        Promise.reject(new Error(`Contate Gabriel`))
+      Promise.resolve()
+    })
   }
 
   public pullUser = async (): Promise<void> => {
@@ -24,7 +43,13 @@ export class CurrentUserStore {
       if (!this.accessToken) return
       const user = await this.rootStore.AxiosStore.get('/users/me')
       return runInAction(() => {
-        this.currentUser = new UserModel(user.data)
+        if (user && user.data) {
+          const address = new UserAddress({
+            ...user.data.address,
+            cep: cepMask(user.data.address.cep),
+          })
+          this.currentUser = new UserModel({...user.data, address})
+        }
         if (this.currentUser) this.rootStore.authStore.isAuth = true
       })
     } catch (error) {

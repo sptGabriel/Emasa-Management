@@ -41,7 +41,7 @@ export const verticalYellowTheme = (type: string) => {
     primary: type === 'light' ? '227, 206, 18' : '227, 206, 18',
     secondary: '13, 59, 102',
     background:
-      type === 'light' || type === 'semidark' ? '243, 243, 243' : '48, 44, 0',
+      type === 'light' || type === 'semidark' ? '244, 245, 248' : '48, 44, 0',
     backgroundSecondary: '13, 59, 102',
     header: {
       userSection: {

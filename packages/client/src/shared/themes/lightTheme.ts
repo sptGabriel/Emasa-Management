@@ -5,7 +5,7 @@ export const horizontalLightTheme: HorizontalDashBoard = {
   type: 'light',
   primary: '0, 107, 166',
   secondary: '13, 59, 102',
-  background: '255, 255, 255',
+  background: '244, 245, 248',
   backgroundSecondary: '13, 59, 102',
   header: {
     userSection: {

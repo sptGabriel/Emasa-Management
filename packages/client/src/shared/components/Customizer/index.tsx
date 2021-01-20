@@ -4,11 +4,16 @@ import {observer} from 'mobx-react-lite'
 import useOnClickOutside from 'use-onclickoutside'
 import {runInAction} from 'mobx'
 import {IoIosClose} from 'react-icons/io'
-import { useRootStore } from '../../infra/mobx'
-import { isJson } from '../../utils/isJson'
+import {useRootStore} from '../../infra/mobx'
+import {isJson} from '../../utils/isJson'
 import RadioButton from '../RadioButton/RadioButton'
 import GearTheming from '../GearTheme/GearTheming'
-import { Body, Header, SideBar, Wrap } from './styles'
+import {
+  BodyCustomizer,
+  HeaderCustomizer,
+  SideBarCustomizer,
+  WrapCustomizer,
+} from './styles'
 
 const CustomizerBody: React.FC = observer(() => {
   const {layoutStore} = useRootStore()
@@ -28,7 +33,7 @@ const CustomizerBody: React.FC = observer(() => {
     setActiveCustomTheme(e.target.value)
   }
   return (
-    <Body>
+    <BodyCustomizer>
       <div className="colors_preference">
         <h1>Cores Temas</h1>
         <div className="options">
@@ -148,7 +153,7 @@ const CustomizerBody: React.FC = observer(() => {
           </form>
         </div>
       </div>
-    </Body>
+    </BodyCustomizer>
   )
 })
 const CustomizerHeader: React.FC = () => {
@@ -157,12 +162,12 @@ const CustomizerHeader: React.FC = () => {
     layoutStore.toggleThemeSideBar()
   }, [])
   return (
-    <Header justify="space-between" align="center">
+    <HeaderCustomizer justify="space-between" align="center">
       <div>
         <h1>CUSTOMIZE O SEU DASHBOARD</h1>
       </div>
       <IoIosClose size={32} onClick={toggleSideTheme} />
-    </Header>
+    </HeaderCustomizer>
   )
 }
 const SideThemeBar: React.FC = observer(() => {
@@ -184,12 +189,12 @@ const SideThemeBar: React.FC = observer(() => {
   return (
     <>
       <GearTheming />
-      <SideBar ref={ref} style={customizerAnimate as any}>
-        <Wrap flexColumn>
+      <SideBarCustomizer ref={ref} style={customizerAnimate as any}>
+        <WrapCustomizer flexColumn>
           <CustomizerHeader />
           <CustomizerBody />
-        </Wrap>
-      </SideBar>
+        </WrapCustomizer>
+      </SideBarCustomizer>
     </>
   )
 })

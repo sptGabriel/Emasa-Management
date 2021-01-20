@@ -67,25 +67,25 @@ export const verticalRedTheme = (type: string) => {
     primary: type === 'light' ? '252, 97, 86' : '148, 25, 16',
     secondary: '13, 59, 102',
     background:
-      type === 'light' || type === 'semidark' ? '243, 243, 243' : '54, 1, 1',
+      type === 'light' || type === 'semidark' ? '244, 245, 248' : '31, 0, 0',
     backgroundSecondary: '13, 59, 102',
     header: {
       userSection: {
         userName: '255, 255, 255',
         userPosition: '255, 255, 255',
-        bg: '255, 64, 0',
-        text: '255, 255, 255',
-        activeBg: '186, 126, 6',
+        bg: '255, 255, 255',
+        text: '98, 95, 110',
+        activeBg: '252, 97, 86',
         activeText: '255, 255, 255',
       },
       logo: '255, 255, 255',
       searchBg: type === 'light' ? '250, 127, 115' : '138, 15, 3',
-      background: type === 'light' ? '255, 64, 0' : '112, 9, 1',
+      background: type === 'light' ? '255, 64, 0' : '84, 7, 1',
       tools: '255, 255, 255',
       toolsHover: '255, 255, 255',
     },
     sideBar: {
-      background: type === 'light' ? '255, 64, 0' : '112, 9, 1',
+      background: type === 'light' ? '255, 64, 0' : '84, 7, 1',
       tagTittle: '247, 190, 171',
       tagName: '255, 255, 255',
       tagIcon: '255, 255, 255',
@@ -94,7 +94,11 @@ export const verticalRedTheme = (type: string) => {
     },
     footer: {
       background: '0, 107, 166',
-      text: '255, 255, 255',
+      text: (() => {
+        if (type === 'dark') return '255,255,255'
+        if (type === 'semidark') return '110, 107, 123'
+        return '110, 107, 123'
+      })(),
     },
   }
 }

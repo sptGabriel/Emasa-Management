@@ -1,68 +1,117 @@
-version: "3.7"
+version: '3.6'
 
-  networks:
+networks:
   emasa-network:
     driver: bridge
-  services:
-    emasa-api:
-      build: .
-      volumes:
-        - .:/home/node/api
-      environment:
-        - MONGO_URL=emasa-mongo
-        - REDIS_URL=emasa-redis
-      depends_on:
-        - emasa-mongo
-        - emasa-redis
-      networks:
-        - emasa-network
-      links:
-        - emasa-postgres
-        - emasa-redis
-      container_name: emasa-api
-      command: yarn dev
-      ports:
-        - 4000:4000
-    emasa-queue:
-      build: .
-      volumes:
-        - .:/home/node/api
-      environment:
-        - MONGO_URL=emasa-postgres
-        - REDIS_URL=emasa-redis
-      depends_on:
-        - emasa-postgres
-        - emasa-redis
-      networks:
-        - emasa-network
-      links:
-        - emasa-postgres
-        - emasa-redis
-      container_name: umbriel-queue
-      command: yarn queue
-    emasa-redis:
-      image: bitnami/redis:latest
-      container_name: emasa-redis
-      restart: always
-      environment:
-        - ALLOW_EMPTY_PASSWORD=no
-        - REDIS_PASSWORD=${REDIS_PASS}
-      ports:
-        - "6379:6379"
-      volumes:
-        - /tmp/redis:/bitnami/redis/data
-      networks:
-        - emasa-network
-    emasa-postgres:
-      image: postgres
-      container_name: ms-employee-db
-      restart: always
-      tty: true
-      volumes:
-        - pg-employee:/var/lib/postgresql/data
-      environment:
-        - POSTGRES_USER=emasa
-        - POSTGRES_PASSWORD=emasa03210
-        - POSTGRES_DB=emasa_ti
-      ports:
-        - "5432:5432"
+volumes:
+  emasa-pg:
+    external: true
+  emasa-redis:
+    external: true
+  emasa-mongo:
+    external: true 
+services:
+  emasa-postgres:
+    image: postgres
+    container_name: emasa-postgres
+    restart: always
+    tty: true
+    volumes:
+    - emasa-pg:/postgres/pg
+    environment:
+    - POSTGRES_USER=emasa
+    - POSTGRES_PASSWORD=emasa03210
+    - POSTGRES_DB=emasa_ti
+    ports:
+    - "5432:5432"
+  emasa-mongo:
+    image: bitnami/mongodb:latest
+    container_name: emasa-mongo
+    restart: always
+    environment:
+      - ALLOW_EMPTY_PASSWORD=no
+      - MONGODB_USERNAME=${MONGO_USER}
+      - MONGODB_PASSWORD=${MONGO_PASS}
+      - MONGODB_DATABASE=${MONGO_DB}
+    ports:
+      - "27017:27017"
+    volumes:
+      - emasa-mongo:/bitnami
+    networks:
+      - emasa-network
+  emasa-redis:
+    image: bitnami/redis:latest
+    container_name: emasa-redis
+    restart: always
+    environment:
+      - ALLOW_EMPTY_PASSWORD=no
+      - REDIS_PASSWORD=${REDIS_PASS}
+    ports:
+      - "6379:6379"
+    volumes:
+      - emasa-redis:/bitnami/redis/data
+    networks:
+      - emasa-network
+#version: "3.7"
+
+#  networks:
+#    emasa-network:
+#      driver: bridge
+
+#  services:
+#    emasa-api:
+#      build: .
+#      volumes:
+#        - .:/home/node/api
+#      depends_on:
+#        - emasa-postgres
+#        - emasa-redis
+#      networks:
+#        - emasa-network
+#      links:
+#        - emasa-postgres
+#        - emasa-redis
+#      container_name: emasa-api
+#      command: yarn dev
+#      ports:
+#        - 4000:4000
+#    emasa-queue:
+#      build: .
+#      volumes:
+#        - .:/home/node/api
+#      depends_on:
+#        - emasa-postgres
+#        - emasa-redis
+#      networks:
+#        - emasa-network
+#      links:
+#        - emasa-postgres
+#        - emasa-redis
+#      container_name: emasa-queue
+#      command: yarn queue
+#    emasa-redis:
+#      image: bitnami/redis:latest
+#      container_name: emasa-redis
+#      restart: always
+#      environment:
+#        - ALLOW_EMPTY_PASSWORD=no
+#        - REDIS_PASSWORD=${REDIS_PASS}
+#      ports:
+#        - "6379:6379"
+#      volumes:
+#        - /tmp/redis:/bitnami/redis/data
+#      networks:
+#        - emasa-network
+#    emasa-postgres:
+#      image: postgres
+#      container_name: ms-employee-db
+#      restart: always
+#      tty: true
+#      volumes:
+#        - pg-employee:/var/lib/postgresql/data
+#      environment:
+#        - POSTGRES_USER=emasa
+#        - POSTGRES_PASSWORD=emasa03210
+#        - POSTGRES_DB=emasa_ti
+#      ports:
+#        - "5432:5432"

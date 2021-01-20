@@ -1,5 +1,5 @@
 import React from 'react'
-import { RadioWrap } from './styles'
+import {RadioWrap} from './styles'
 
 type RadioButtonProps = {
   color?: string

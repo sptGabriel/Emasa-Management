@@ -1,5 +1,5 @@
-import styled from "@emotion/styled"
-import { animated } from "react-spring"
+import styled from '@emotion/styled'
+import {animated} from 'react-spring'
 
 export const GearWrap = styled(animated.div)`
   position: fixed;
@@ -12,7 +12,7 @@ export const GearButton = styled('button')`
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 45px;
+  width: 40px;
   height: 45px;
   background: ${({theme}: any) =>
     `linear-gradient(to right, rgb(${theme.primary}), rgb(${theme.primary}))`};

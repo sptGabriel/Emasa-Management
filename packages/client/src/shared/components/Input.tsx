@@ -10,6 +10,7 @@ type InputProps = Omit<
 >
 
 interface BoundInputProps<TModel, TProp extends keyof TModel> {
+  customChange?: (event?: any) => void
   model: TModel
   property: TProp
   formatter?(value: TModel[TProp]): string
@@ -22,6 +23,7 @@ const BoundInput = observer(
     model,
     formatter,
     parser,
+    customChange,
     ...props
   }: BoundInputProps<TModel, TProp> & InputProps) => {
     const format = formatter || ((val) => String(val))
@@ -34,6 +36,7 @@ const BoundInput = observer(
         name={property as string}
         value={model[property] ? format(model[property]) : ''}
         onChange={(e) => {
+          if (customChange) customChange()
           model[property] = parse(e.target.value)
         }}
         {...props}

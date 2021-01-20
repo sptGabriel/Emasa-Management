@@ -2,11 +2,10 @@ import {observer} from 'mobx-react-lite'
 import React from 'react'
 import {Navigate, useRoutes} from 'react-router-dom'
 import DashBoard from '../../../pages/dashboard'
-import {OutletWrapper} from '../../../pages/dashboard/verticalDashBoard'
 import Login from '../../../pages/login'
-import EditProfile from '../../../pages/profileEdit'
-import BreadCrumb from '../../components/BreadCrumb'
+import EditProfile from '../../../pages/dashboard/accounts/edit'
 import ErrorFallback from '../../components/ErrorBoundary/ErrorFallBack'
+import Accounts from '../../../pages/dashboard/accounts'
 
 const ApplicationRoutes: React.FC<{isLoggedIn: boolean}> = observer(
   ({isLoggedIn}) => {
@@ -21,15 +20,31 @@ const ApplicationRoutes: React.FC<{isLoggedIn: boolean}> = observer(
         children: [
           {
             path: '/',
-            element: (
-              <OutletWrapper>
-                <BreadCrumb />
-                <EditProfile />
-              </OutletWrapper>
-            ),
+            element: <EditProfile />,
+          },
+          {
+            path: '/accounts',
+            element: <Accounts />,
+            children: [
+              {
+                path: '/edit',
+                element: <EditProfile />,
+              },
+              {
+                path: '/password/change',
+                element: <EditProfile />,
+              },
+              {
+                path: '/login_activity',
+                element: <EditProfile />,
+              },
+            ],
           },
           {path: '/about', element: <div> Dash About</div>},
-          {path: '/test', element: <div> Dash Test</div>},
+          {
+            path: '/test',
+            element: <div>test</div>,
+          },
           {path: '*', element: <ErrorFallback />},
         ],
       },

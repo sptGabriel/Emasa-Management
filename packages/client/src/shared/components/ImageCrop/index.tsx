@@ -69,7 +69,7 @@ export const ImageCrop: React.FC<{
 
 const ImageChanger: React.FC<{
   open: boolean
-  reference: React.MutableRefObject<any>
+  reference: React.MutableRefObject<any> | null
   setOpen: any
   imageFile: any
   setEditorRef: any
@@ -77,7 +77,7 @@ const ImageChanger: React.FC<{
 }> = ({open, reference, setOpen, setEditorRef, imageFile, onImageCrop}) => {
   const {layoutStore} = useRootStore()
   const clickHandler = () => {
-    layoutStore.toggleOverlay()
+    layoutStore.setOverlay(false)
     setOpen(false)
   }
   return (

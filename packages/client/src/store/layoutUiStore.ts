@@ -28,6 +28,8 @@ export class LayoutUIStore {
 
   overlay = false
 
+  CepSearching = false
+
   constructor(private rootStore: RootStore) {
     makeAutoObservable(this)
     this.rootStore = rootStore
@@ -35,8 +37,12 @@ export class LayoutUIStore {
     this.initTheme()
   }
 
-  toggleOverlay = () => {
-    this.overlay = !this.overlay
+  setOverlay = (state: boolean) => {
+    this.overlay = state
+  }
+
+  setCepSearching = (state: boolean) => {
+    this.CepSearching = state
   }
 
   initLayoutOrientation = () => {

@@ -1,4 +1,4 @@
-import styled from "@emotion/styled"
+import styled from '@emotion/styled'
 
 export const ImageChangeWrap = styled('div')<{open: boolean}>`
   display: ${({open}) => (open ? 'flex' : 'none')};

@@ -3,7 +3,7 @@ import {animated} from 'react-spring'
 import {NoSelect} from '../NoSelect'
 import {Container} from '../FlexBox'
 
-export const SideBar = styled(animated.div)`
+export const SideBarCustomizer = styled(animated.div)`
   display: block;
   position: fixed;
   z-index: 52000;
@@ -21,11 +21,11 @@ export const SideBar = styled(animated.div)`
   background: #fff;
   ${NoSelect}
 `
-export const Wrap = styled(Container)`
+export const WrapCustomizer = styled(Container)`
   padding: 0 1.5rem;
 `
 
-export const Header = styled(Container)`
+export const HeaderCustomizer = styled(Container)`
   padding-bottom: 0.8rem;
   padding-top: 1rem;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
@@ -41,7 +41,7 @@ export const Header = styled(Container)`
     }
   }
 `
-export const Body = styled('div')`
+export const BodyCustomizer = styled('div')`
   display: block;
   width: 100%;
   padding: 1.2rem 0 !important;

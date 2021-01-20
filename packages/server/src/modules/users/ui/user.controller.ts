@@ -11,6 +11,8 @@ import multer from 'multer';
 import { ChangeProfile } from '../application/useCases/uploadImageProfile/changeProfile';
 import cloudinary from '@shared/helpers/cloudinary';
 import { v4 } from 'uuid';
+import { ForgotMessageService } from '../application/useCases/lostPassword/forgotPassword';
+import { ResetPasswordService } from '../application/useCases/lostPassword/resetPassword';
 @singleton()
 export class UserController extends BaseController {
   constructor() {
@@ -21,6 +23,11 @@ export class UserController extends BaseController {
   protected initRouter() {
     this.router.get(`${this.path}`, this.index);
     this.router.get(`${this.path}/me`, this.Me);
+    this.router.post(
+      `${this.path}/:email/forgot-password`,
+      this.ForgotPassword,
+    );
+    this.router.post(`${this.path}/:email/reset-password`, this.ResetPassword);
     this.router.post(`${this.path}/add`, this.addUser);
     this.router.post(
       `${this.path}/:id/change_profile_image`,
@@ -30,6 +37,43 @@ export class UserController extends BaseController {
   }
   private index = async (arg0: string, index: any) => {
     throw new Error('Method not implemented.');
+  };
+  private ForgotPassword = async (
+    request: Request,
+    response: Response,
+    next: NextFunction,
+  ) => {
+    try {
+      const { email } = request.params;
+      const { ip, longitude, latitude } = request.body;
+      const result = await container
+        .resolve(ForgotMessageService)
+        .execute({ email, ip, longitude, latitude });
+      if (result.value.email === false) return response.status(200).send();
+      if (result.value.user === false) return response.status(200).send();
+      if (result.isLeft()) return next(result.value);
+      return response.json(result.value);
+    } catch (error) {
+      next(error);
+    }
+  };
+  private ResetPassword = async (
+    request: Request,
+    response: Response,
+    next: NextFunction,
+  ) => {
+    try {
+      const { email, confirmPassword, password, token } = request.body;
+      const result = await container
+        .resolve(ResetPasswordService)
+        .execute({ email, confirmPassword, password, token });
+      if (result.value.email === false) return response.status(200).send();
+      if (result.value.user === false) return response.status(200).send();
+      if (result.isLeft()) return next(result.value);
+      return response.json(result.value);
+    } catch (error) {
+      next(error);
+    }
   };
   private Me = async (
     request: Request,

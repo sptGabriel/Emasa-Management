@@ -63,28 +63,28 @@ export const horizontalPinkTheme = (type: string) => {
 export const verticalPinkTheme = (type: string) => {
   return {
     type,
-    primary: type === 'light' ? '87, 10, 252' : '119, 0, 255',
+    primary: type === 'light' ? '87, 10, 252' : '150, 2, 126',
     secondary: '13, 59, 102',
     background:
-      type === 'light' || type === 'semidark' ? '243, 243, 243' : '66, 1, 56',
+      type === 'light' || type === 'semidark' ? '244, 245, 248' : '36, 0, 30',
     backgroundSecondary: '13, 59, 102',
     header: {
       userSection: {
         userName: '255, 255, 255',
         userPosition: '255, 255, 255',
-        bg: type === 'light' ? '161, 0, 255' : '128, 34, 113',
-        text: '255, 255, 255',
-        activeBg: type === 'light' ? '87, 10, 252' : '119, 0, 255',
+        bg: '255, 255, 255',
+        text: '98, 95, 110',
+        activeBg: '161, 0, 255',
         activeText: '255, 255, 255',
       },
       logo: '255, 255, 255',
       searchBg: type === 'light' ? '134, 6, 209' : '105, 4, 91',
-      background: type === 'light' ? '161, 0, 255' : '128, 34, 113',
+      background: type === 'light' ? '161, 0, 255' : '107, 28, 94',
       tools: '255, 255, 255',
       toolsHover: '255, 255, 255',
     },
     sideBar: {
-      background: type === 'light' ? '161, 0, 255' : '128, 34, 113',
+      background: type === 'light' ? '161, 0, 255' : '107, 28, 94',
       tagTittle: '247, 190, 171',
       tagName: '255, 255, 255',
       tagIcon: '255, 255, 255',
@@ -93,7 +93,11 @@ export const verticalPinkTheme = (type: string) => {
     },
     footer: {
       background: '0, 107, 166',
-      text: '255, 255, 255',
+      text: (() => {
+        if (type === 'dark') return '255,255,255'
+        if (type === 'semidark') return '110, 107, 123'
+        return '110, 107, 123'
+      })(),
     },
   }
 }

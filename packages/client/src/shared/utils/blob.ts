@@ -1,14 +1,19 @@
-export function makeblob(dataURL: string) {
-  const BASE64_MARKER = ';base64,'
-  const parts = dataURL.split(BASE64_MARKER)
-  const contentType = parts[0].split(':')[1]
-  const raw = window.atob(parts[1])
-  const rawLength = raw.length
-  const uInt8Array = new Uint8Array(rawLength)
+export function dataURItoBlob(dataURI: string, type: string) {
+  // convert base64/URLEncoded data component to raw binary data held in a string
+  var byteString;
+  if (dataURI.split(',')[0].indexOf('base64') >= 0)
+      byteString = atob(dataURI.split(',')[1]);
+  else
+      byteString = unescape(dataURI.split(',')[1]);
 
-  for (let i = 0; i < rawLength; ++i) {
-    uInt8Array[i] = raw.charCodeAt(i)
+  // separate out the mime component
+  var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+
+  // write the bytes of the string to a typed array
+  var ia = new Uint8Array(byteString.length);
+  for (var i = 0; i < byteString.length; i++) {
+      ia[i] = byteString.charCodeAt(i);
   }
 
-  return new Blob([uInt8Array], {type: 'image/jpg'})
+  return new Blob([ia], {type});
 }

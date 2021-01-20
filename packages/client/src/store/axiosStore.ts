@@ -38,6 +38,7 @@ export class AxiosStore {
       headers: {
         crossDomain: true,
         'Content-Type': 'application/json',
+        Authorization: `bearer ${this.rootStore.currentUserStore.accessToken}`,
       },
     })
   }
@@ -47,6 +48,7 @@ export class AxiosStore {
       headers: {
         crossDomain: true,
         'Content-Type': 'application/json',
+        Authorization: `bearer ${this.rootStore.currentUserStore.accessToken}`,
       },
     })
   }

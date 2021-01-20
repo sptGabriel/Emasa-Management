@@ -107,6 +107,7 @@ const GlobalStyle: React.FC = () => {
         @import url('https://fonts.googleapis.com/css2?family=Syne+Mono&display=swap');
         @import url('https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap');
         @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;600&display=swap');
         body > #emasa {
           height: 100%;
         }

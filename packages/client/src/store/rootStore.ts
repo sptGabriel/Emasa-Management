@@ -38,14 +38,17 @@ export class RootStore {
     this.appState = 'pending'
     try {
       const response = await this.AxiosStore.get('/')
-      runInAction(() => {
-        this.appState = 'done'
-        if (!response.data.token) this.authStore.isAuth = false
-        if (response.data.token && response.data.user) {
-          this.currentUserStore.currentUser = new UserModel(response.data.user)
-          this.currentUserStore.accessToken = response.data.token
-          this.authStore.isAuth = true
+      runInAction(async () => {
+        if (!response.data.token) {
+          this.authStore.isAuth = false
+          this.appState = 'done'
+          return
         }
+        this.currentUserStore.accessToken = response.data.token
+        await this.currentUserStore.pullUser().then(() => {
+          this.authStore.isAuth = true
+        })
+        this.appState = 'done'
       })
     } catch (e) {
       runInAction(() => {
@@ -53,65 +56,5 @@ export class RootStore {
         this.authStore.logout()
       })
     }
-    // try {
-    //   const response = await this.AxiosStore.get('/')
-    //   if (!response) throw Error('Service Unavaliable')
-    //   return runInAction(async () => {
-    //     if(!response.data.access_token) {
-    //       this.authStore.isAuth = false;
-    //       this.appState = 'fulfilled'
-    //     }
-    //     if (response.data.access_token) {
-    //       this.currentUserStore.accessToken = response.data.access_token
-    //       this.appState = 'fulfilled'
-    //     }
-    //   })
-    // } catch (error) {
-    //   runInAction(() => {
-    //     this.appState = 'error'
-    //   })
-    //   return Promise.reject(error)
-    // }
   }
 }
-
-//  public initApi = (): void => {
-//  this.appState = 'pending'
-//  this.AxiosStore.get('/').then(
-//    action('fetchSuccess', ({data}: any) => {
-//      if (data.acess_token)
-//        this.currentUserStore.accessToken = data.access_token
-//      this.appState = 'fulfilled'
-//    }),
-//    action('fetchError', (error: Error) => {
-//      this.appState = 'error'
-//    }),
-//  )
-//  }
-
-//  this.appState = 'pending'
-//  try {
-//  const api = await this.AxiosStore.get('/')
-//  if (api && !api.data.access_token) {
-//    return runInAction(() => {
-//      this.appState = 'fulfilled'
-//    })
-//  }
-//  const decoded: any = jwtDecode(api.data.access_token)
-//  if (decoded instanceof Error) Promise.reject()
-//  return runInAction(() => {
-//    this.currentUserStore.accessToken = api.data.access_token
-//    this.currentUserStore.currentUser = new UserModel({
-//      ...decoded,
-//      id: decoded.sub,
-//    })
-//    this.appState = 'fulfilled'
-//    this.authStore.isAuth = true
-//  })
-//  } catch (error) {
-//  runInAction(() => {
-//    this.appState = 'error'
-//  })
-//  return Promise.reject(error)
-//  }
-//  }

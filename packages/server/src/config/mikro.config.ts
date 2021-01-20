@@ -25,7 +25,7 @@ export default {
     transactional: true,
   },
   password: 'emasa03210',
-  port: 5433,
+  port: 5432,
   tsNode: true,
   loadStrategy: LoadStrategy.JOINED,
   user: 'emasa',
