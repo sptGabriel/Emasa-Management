@@ -61,7 +61,6 @@ export class AuthStore {
   }
 
   public logout = async (): Promise<void> => {
-    console.log('on logout')
     return this.rootStore.AxiosStore.get('/users/me/logout').finally(() => {
       this.isAuth = false
       this.rootStore.currentUserStore.currentUser = new UserModel()

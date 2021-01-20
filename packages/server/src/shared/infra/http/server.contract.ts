@@ -1,6 +1,6 @@
 import { Application } from 'express'
 export interface IHttpServer {
-  start(): void;
-  getServer(): Application;
+  init(): void;
+  getApp(): Application;
   stop(): void;
 }

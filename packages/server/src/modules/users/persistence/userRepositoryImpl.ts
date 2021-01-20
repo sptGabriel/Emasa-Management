@@ -1,5 +1,4 @@
-import { wrap } from '@mikro-orm/core';
-import { EntityManager } from '@mikro-orm/postgresql';
+import { RequestContext, wrap } from '@mikro-orm/core';
 import { Pagination } from '@shared/core/pagination';
 import { IBootstrap } from '@shared/infra/bootstrap';
 import { inject, injectable } from 'tsyringe';
@@ -8,9 +7,9 @@ import { ProfilePicture } from '../domain/userProfilePicture.entity';
 import { IUserRepository } from './userRepository';
 @injectable()
 export class UserRepository implements IUserRepository {
-  private em: EntityManager;
+  private em: any;
   constructor(@inject('bootstrap') bootstrap: IBootstrap) {
-    this.em = bootstrap.getDatabaseORM().getConnection().em.fork();
+    this.em = RequestContext.getEntityManager()
   }
   public create = async (user: User): Promise<User> => {
     if (!(user instanceof User)) throw new Error(`Invalid Data Type`);
@@ -63,7 +62,7 @@ export class UserRepository implements IUserRepository {
         .select('*')
         .where({ ip_address: ip, employee_id: user.employee.id })
         .returning('*')
-        .then(row => row[0]);
+        .then((row: any) => row[0]);
       if (isLogged && isLogged.active) {
         throw new Error(`This user has been logged`);
       }
@@ -122,7 +121,7 @@ export class UserRepository implements IUserRepository {
         .select('*')
         .where({ ip_address: ip, employee_id: user.employee.id })
         .returning('*')
-        .then(row => row[0]);
+        .then((row: any) => row[0]);
       if (!isLogged) throw new Error(`Invalid Credentials`);
       if (isLogged && !isLogged.active)
         throw new Error(`This already logged out on this device`);

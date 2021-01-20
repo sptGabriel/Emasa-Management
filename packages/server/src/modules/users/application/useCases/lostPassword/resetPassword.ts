@@ -5,11 +5,13 @@ import { inject, injectable } from 'tsyringe';
 import PasswordRecovery, {
   PasswordRecoveryDocument,
 } from '@modules/users/domain/passwordRecovery.mongo';
+import PasswordLog, {
+  PasswordLogsDocument,
+} from '@modules/users/domain/passwordLogs.mongo';
 import { UserRepository } from '@modules/users/persistence/userRepositoryImpl';
 import { IUserRepository } from '@modules/users/persistence/userRepository';
-import { forgotPwdDTO, resetPwdDTO } from './dto';
-import { Either, left, right } from '@shared/core/either';
-import { randomBytes } from 'crypto';
+import { resetPwdDTO } from './dto';
+import { Either, right } from '@shared/core/either';
 import { AppError } from '@shared/errors/BaseError';
 import { User } from '@modules/users/domain/user.entity';
 import { wrap } from '@mikro-orm/core';
@@ -28,39 +30,51 @@ export class ResetPasswordService
     confirmPassword,
     password,
     token,
+    device,
+    ip,
+    latitude,
+    longitude,
+    os,
   }: resetPwdDTO): Promise<any> {
     if (password !== confirmPassword)
       throw new Error('Passwords do not match. Please try again.');
     const user = await this.userRepository.byEmail(email);
     if (!user) throw new Error(`This user doesn't exists`);
+    const old_password = user.password;
     const hasRecovery = await PasswordRecovery.findOne({
-      where: {
-        email: email,
-        token: token,
-        used: false,
-      },
+      email,
+      used: false
     });
     if (!hasRecovery)
       throw new Error(`Token has expired. Please try password reset again.`);
-    await PasswordRecovery.updateOne(
-      {
-        used: true,
-      },
-      {
-        where: {
-          email: email,
-          token: token,
-        },
-      },
-    );
+    if (hasRecovery.token !== token) throw new Error(`Invalid Code`)
     const encryptedPwd = await User.EncryptPassword(password);
     wrap(user).assign({ password: encryptedPwd });
-    return await this.userRepository
-      .updatePassword(user)
-      .then(() =>
-        right({
-          message: 'Password reset. Please login with your new password.',
-        }),
-      );
+    await PasswordRecovery.updateOne({
+      email,
+      token,
+    },
+    {
+      $set: {
+        used: true,
+      },
+    });
+    await this.userRepository.updatePassword(user).then(() =>
+      PasswordLog.create({
+        old_password,
+        new_password: user.password,
+        employee_id: user.employee.id,
+        type: 'reset-password',
+        ip,
+        latitude,
+        longitude,
+        device,
+        os,
+      }),
+    );
+
+    return right({
+      message: 'Password reset. Please login with your new password.',
+    });
   }
 }

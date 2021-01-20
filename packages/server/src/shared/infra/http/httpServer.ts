@@ -1,96 +1,83 @@
-import express, { Request, Response } from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import { IHttpServer } from './server.contract';
 import { ErrorMiddleware } from './middlewares/error.middleware';
-import { container } from 'tsyringe';
+import { container, inject, injectable } from 'tsyringe';
 import { BaseController } from '@shared/core/baseController';
-import { expr, RequestContext } from '@mikro-orm/core';
+import { RequestContext } from '@mikro-orm/core';
 import { EntityManager } from '@mikro-orm/postgresql';
-import path from 'path'
+import path from 'path';
+import { corsMiddleware } from './middlewares/cors.middleware';
+import LoggerProvider from '@shared/adapters/models/LoggerProvider';
+import { jwtMiddleware } from './middlewares/jwt.middleware';
+
 const corstOpts = cors({
   credentials: true,
   origin: 'http://localhost:3000',
   methods: ['POST', 'PUT', 'GET', 'OPTIONS', 'HEAD'],
   exposedHeaders: ['eid', 'Access-Token'],
 });
+
+@injectable()
 export class ExpressServer implements IHttpServer {
-  private server: express.Application;
-  private em: EntityManager;
-  constructor() {
-    this.server = express();
+  private app: express.Application;
+  private em: EntityManager
+  constructor(
+    @inject('LoggerProvider') private loggerProvider: LoggerProvider
+  ) {
   }
-  private initializeRouter = () => {
-    container.resolveAll<BaseController>('Controllers').forEach(controller => {
-      this.server.use('/api/v1', controller.getRouter());
-    });
-    this.server.get('/favico.ico', (req, res) => {
-      res.sendStatus(404);
-    });
-    this.server.get('/favico.ico', (req, res) => {
-      res.sendStatus(404);
-    });
-    this.server.get('/', (req, res) => {
-      res.send('Welcome');
+
+  public init = () => {
+    this.em = container.resolve('EntityManager');
+    this.app = express()
+    this.setupExpress();
+    this.setupRouters();
+    this.app.listen(4000, '0.0.0.0', () => {
+      this.loggerProvider.log('info','this server is ready on port 3000');
     });
   };
-  private initializeErrorHandling() {
-    this.server.use(ErrorMiddleware);
-  }
-  //cors({
-  //  credentials: true,
-  //  origin: 'http://localhost:3000',
-  //  methods: ['POST', 'PUT', 'GET', 'OPTIONS', 'HEAD'],
-  //  exposedHeaders: ['eid', 'Access-Token'],
-  //}),
-  //save config of cors
-  //res.header('Content-Type', 'application/json;charset=UTF-8');
-  //    res.header('Access-Control-Allow-Headers', 'Set-Cookie');
-  //    //res.setHeader('Access-Control-Allow-Credentials', true);
-  //    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  //    res.header(
-  //      'Access-Control-Allow-Headers',
-  //      'Origin, X-Requested-With, Content-Type, Accept',
-  //    );
-  //    next();
-  private initializeMiddlewares = () => {
-    this.server.use(express.json({limit: '50mb'}));
-    this.server.use(express.urlencoded({limit: '50mb', extended: true}))
-    this.server.use(cookieParser());
-    this.server.use(corstOpts);
-    this.server.use(function (req, res, next) {
-      res.header('Content-Type', 'application/json;charset=UTF-8');
-      res.header('Access-Control-Allow-Headers', 'Set-Cookie');
-      res.setHeader('Access-Control-Allow-Credentials', "true");
-      res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-      res.header(
-        'Access-Control-Allow-Headers',
-        'Origin, X-Requested-With, Content-Type, Accept',
-      );
-      next();
-    });
-    this.server.use(bodyParser.json());
-    this.server.use((req, res, next) => {
-      RequestContext.create(this.em, next);
-    });
-    this.server.use(
-      "/files",
-      express.static(path.resolve(__dirname, "..", "..", "..", "..", "uploads"))
+
+  private setupExpress = (): void => {
+    this.app.use(express.json({ limit: '50mb' }));
+    this.app.use(express.urlencoded({ limit: '50mb', extended: true }));
+    this.app.use(cookieParser());
+    this.app.use(corstOpts);
+    this.app.use(corsMiddleware);
+    this.app.use(bodyParser.json());
+    this.app.use((req: Request, res: Response, next: NextFunction) =>
+      RequestContext.create(this.em, next),
+    );
+    this.app.use(
+      '/files',
+      express.static(
+        path.resolve(__dirname, '..', '..', '..', '..', 'uploads'),
+      ),
     );
   };
-  public getServer = () => {
-    return this.server;
-  };
-  public start = async () => {
-    this.em = container.resolve('EntityManager');
-    this.initializeMiddlewares();
-    this.initializeRouter();
-    this.initializeErrorHandling();
-    this.server.listen(4000, '0.0.0.0', () => {
-      console.log('this server is ready on port 3000');
+
+  private setupRouters = () => {
+    container.resolveAll<BaseController>('Controllers').forEach(controller => {
+      this.app.use('/api/v1', controller.getRouter());
     });
+    this.app.get('/favico.ico', (req:Request, res:Response) => {
+      res.sendStatus(404);
+    });
+    this.app.get('/favico.ico', (req:Request, res:Response) => {
+      res.sendStatus(404);
+    });
+    this.app.get('/', (req:Request, res:Response) => {
+      res.send('Welcome');
+    });
+    this.app.use(ErrorMiddleware);
+    this.app.use(jwtMiddleware);
   };
+  
+  public getApp = () => {
+    return this.app;
+  };
+  
   public stop = (): void => {
     throw new Error('Method not implemented.');
   };

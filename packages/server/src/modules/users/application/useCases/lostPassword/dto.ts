@@ -1,8 +1,5 @@
 export interface forgotPwdDTO{
 	email: string;
-	ip: string;
-	longitude: string;
-	latitude: string;
 }
 
 export interface resetPwdDTO {
@@ -10,4 +7,9 @@ export interface resetPwdDTO {
 	email: string;
 	password: string;
 	confirmPassword: string;
+	ip: string;
+	latitude: string;
+	longitude: string;
+	device: string;
+	os: string;
 }

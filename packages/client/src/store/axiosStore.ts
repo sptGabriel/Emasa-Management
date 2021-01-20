@@ -42,6 +42,7 @@ export class AxiosStore {
       },
     })
   }
+
   public put = async (url: string, data?: any): Promise<any> => {
     return this.axiosInstance.put(url, data, {
       withCredentials: true,
@@ -52,21 +53,20 @@ export class AxiosStore {
       },
     })
   }
+
   public enableInterceptors = async (): Promise<void> => {
     this.axiosInstance.interceptors.response.use(
       (response: any) => {
         return response
       },
       (error: any) => {
-        const {
-          config,
-          response: {status},
-        } = error
+        const {config, response} = error
         const originalRequest = config
-        if (status !== 401) throw error
+        if (error.message === 'Network Error') throw error
+        if (response && response.status !== 401) throw error
         if (
-          originalRequest.url !== 'users/me/refresh-token/' &&
-          originalRequest.url !== 'users/me/logout/' &&
+          originalRequest.url !== '/users/me/refresh-token' &&
+          originalRequest.url !== '/users/me/logout' &&
           !originalRequest._retry
         ) {
           originalRequest._retry = true

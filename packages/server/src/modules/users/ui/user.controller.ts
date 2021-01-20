@@ -23,11 +23,8 @@ export class UserController extends BaseController {
   protected initRouter() {
     this.router.get(`${this.path}`, this.index);
     this.router.get(`${this.path}/me`, this.Me);
-    this.router.post(
-      `${this.path}/:email/forgot-password`,
-      this.ForgotPassword,
-    );
-    this.router.post(`${this.path}/:email/reset-password`, this.ResetPassword);
+    this.router.post(`${this.path}/forgot-password`, this.ForgotPassword);
+    this.router.post(`${this.path}/reset-password`, this.ResetPassword);
     this.router.post(`${this.path}/add`, this.addUser);
     this.router.post(
       `${this.path}/:id/change_profile_image`,
@@ -44,11 +41,10 @@ export class UserController extends BaseController {
     next: NextFunction,
   ) => {
     try {
-      const { email } = request.params;
-      const { ip, longitude, latitude } = request.body;
+      const { email } = request.body;
       const result = await container
         .resolve(ForgotMessageService)
-        .execute({ email, ip, longitude, latitude });
+        .execute({ email });
       if (result.value.email === false) return response.status(200).send();
       if (result.value.user === false) return response.status(200).send();
       if (result.isLeft()) return next(result.value);
@@ -63,10 +59,30 @@ export class UserController extends BaseController {
     next: NextFunction,
   ) => {
     try {
-      const { email, confirmPassword, password, token } = request.body;
+      const {
+        email,
+        confirmPassword,
+        password,
+        token,
+        device,
+        os,
+        ip,
+        latitude,
+        longitude,
+      } = request.body;
       const result = await container
         .resolve(ResetPasswordService)
-        .execute({ email, confirmPassword, password, token });
+        .execute({
+          email,
+          confirmPassword,
+          password,
+          token,
+          device,
+          os,
+          ip,
+          latitude,
+          longitude,
+        });
       if (result.value.email === false) return response.status(200).send();
       if (result.value.user === false) return response.status(200).send();
       if (result.isLeft()) return next(result.value);

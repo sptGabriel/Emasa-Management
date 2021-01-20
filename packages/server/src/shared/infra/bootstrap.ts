@@ -1,47 +1,30 @@
-import chalk from 'chalk';
-import { delay, inject, injectable, singleton } from 'tsyringe';
-import { IDatabaseORM, MikroOrmClient } from './orm';
+import { inject, injectable, singleton } from 'tsyringe';
+import { MikroOrmClient } from './mikro-orm/index';
 import { ExpressServer } from './http/httpServer';
 import { IHttpServer } from './http/server.contract';
-import { IRedis, RedisServer } from './redis';
+import { IDatabaseORM } from '@shared/core/orm';
+import { MongoDB } from './mongoose';
 
 export interface IBootstrap {
-  getHttpServer(): IHttpServer;
-  getDatabaseORM(): IDatabaseORM;
-  getRedisServer(): IRedis;
-  start(): void;
+  start(): Promise<any>;
+  close(): Promise<any>;
 }
 
-export interface BootStrapContainer {
-  getHttpServer(): IHttpServer;
-  getDatabaseORM(): IDatabaseORM;
-}
 @injectable()
 @singleton()
-export class BootstrapApplication implements BootStrapContainer {
+export class BootstrapApplication implements IBootstrap {
   constructor(
-    @inject(MikroOrmClient) private DatabaseOrm: IDatabaseORM,
+    @inject(MongoDB) private MongoDB: IDatabaseORM,
+    @inject(MikroOrmClient) private MikroDB: IDatabaseORM,
     @inject(ExpressServer) private HttpServer: IHttpServer,
-    @inject(RedisServer) private RedisServer: IRedis,
-  ) {}
-  public getHttpServer = (): IHttpServer => {
-    return this.HttpServer;
-  };
-  public getDatabaseORM = (): IDatabaseORM => {
-    return this.DatabaseOrm;
-  };
-  public getRedisServer = (): IRedis => {
-    return this.RedisServer;
-  };
+  ) {
+  }
+  public close = () => {
+    throw new Error('Method not implemented.');
+  }
   public start = async () => {
-    console.log(chalk.yellow(`Starting Redis Server`));
-    this.RedisServer.startRedis();
-    console.log(chalk.yellow(`redis started successfully`));
-    console.log(chalk.yellow(`Starting Database`));
-    await this.DatabaseOrm.start();
-    console.log(chalk.yellow(`Database started successfully`));
-    console.log(chalk.yellow(`Starting Http Server`));
-    await this.HttpServer.start();
-    console.log(chalk.yellow(`Http Server started successfully`));
+    await this.MikroDB.connect();
+    await this.MongoDB.connect();
+    this.HttpServer.init();
   };
 }
