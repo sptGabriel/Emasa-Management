@@ -1,15 +1,13 @@
-import { LoadStrategy, wrap } from '@mikro-orm/core';
-import { EntityManager } from '@mikro-orm/postgresql';
+import { LoadStrategy, RequestContext, wrap } from '@mikro-orm/core';
 import { Pagination } from '@shared/core/pagination';
-import { IBootstrap } from '@shared/infra/bootstrap';
-import { inject, injectable } from 'tsyringe';
+import { injectable } from 'tsyringe';
 import { Employee } from '../domain/employee.entity';
 import { IEmployeeRepository } from './employeeRepository';
 @injectable()
 export class EmployeeRepository implements IEmployeeRepository {
-  private em: EntityManager;
-  constructor(@inject('bootstrap') bootstrap: IBootstrap) {
-    this.em = bootstrap.getDatabaseORM().getConnection().em.fork();
+  private em: any;
+  constructor() {
+    this.em = RequestContext.getEntityManager();
   }
   public create = async (employee: Employee): Promise<Employee> => {
     if (!(employee instanceof Employee)) throw new Error(`Invalid Data Type`);

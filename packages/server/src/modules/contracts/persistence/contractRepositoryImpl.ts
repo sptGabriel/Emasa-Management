@@ -1,15 +1,14 @@
-import { wrap } from '@mikro-orm/core';
-import { EntityManager } from '@mikro-orm/postgresql';
+import { RequestContext, wrap } from '@mikro-orm/core';
 import { Pagination } from '@shared/core/pagination';
 import { IBootstrap } from '@shared/infra/bootstrap';
-import { inject, injectable } from 'tsyringe';
+import { injectable } from 'tsyringe';
 import { Contract } from '../domain/contract.entity';
 import { IContractRepository } from './contractRepository';
 @injectable()
 export class ContractRepository implements IContractRepository {
-  private em: EntityManager;
-  constructor(@inject('bootstrap') bootstrap: IBootstrap) {
-    this.em = bootstrap.getDatabaseORM().getConnection().em.fork();
+  private em: any;
+  constructor() {
+    this.em = RequestContext.getEntityManager()
   }
   public create = async (contract: Contract): Promise<Contract> => {
     if (!(contract instanceof Contract)) throw new Error(`Invalid Data Type`);

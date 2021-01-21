@@ -1,5 +1,4 @@
-import { wrap } from '@mikro-orm/core';
-import { EntityRepository, EntityManager } from '@mikro-orm/postgresql';
+import { RequestContext, wrap } from '@mikro-orm/core';
 import { Pagination } from '@shared/core/pagination';
 import { IBootstrap } from '@shared/infra/bootstrap';
 import { inject, injectable } from 'tsyringe';
@@ -7,9 +6,9 @@ import { SuppliedProducts } from '../domain/suppliedProducts.entity';
 import { ISuppliedProductsRepository } from './suppliedProductsRepository';
 @injectable()
 export class SuppliedProductsRepository implements ISuppliedProductsRepository {
-  private em: EntityManager;
-  constructor(@inject('bootstrap') bootstrap: IBootstrap) {
-    this.em = bootstrap.getDatabaseORM().getConnection().em.fork();
+  private em: any;
+  constructor() {
+    this.em = RequestContext.getEntityManager()
   }
   public create = async (
     suppliedProducts: SuppliedProducts,

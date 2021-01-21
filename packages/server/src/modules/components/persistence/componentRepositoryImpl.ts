@@ -1,17 +1,15 @@
-import { wrap } from '@mikro-orm/core';
-import { EntityManager } from '@mikro-orm/postgresql';
+import { RequestContext, wrap } from '@mikro-orm/core';
 import { Pagination } from '@shared/core/pagination';
-import { IBootstrap } from '@shared/infra/bootstrap';
-import { inject, injectable } from 'tsyringe';
+import { injectable } from 'tsyringe';
 import { Component } from '../domain/component.entity';
 import { ProductStocks } from '@modules/products/domain/stock.entity';
 import { IComponentRepository } from './componentRepository';
 import { ComponentTransfer } from '../domain/componentTransfer.entity';
 @injectable()
 export class ComponentRepository implements IComponentRepository {
-  private em: EntityManager;
-  constructor(@inject('bootstrap') bootstrap: IBootstrap) {
-    this.em = bootstrap.getDatabaseORM().getConnection().em.fork();
+  private em: any;
+  constructor() {
+    this.em = RequestContext.getEntityManager()
   }
   public bySN2 = async (
     serial_number: string,

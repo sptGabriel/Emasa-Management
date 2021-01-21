@@ -26,9 +26,6 @@ export class AuthController extends BaseController {
     next: NextFunction,
   ) => {
     try {
-      const server = container.resolve<IBootstrap>('bootstrap');
-      if (!server.getDatabaseORM().getConnection().isConnected())
-        throw new Error(`Internal Error`);
       const id = request.cookies['emsi'];
       const refreshToken = request.cookies['@Emasa/Refresh-Token'];
       if (!refreshToken) {
@@ -61,20 +58,21 @@ export class AuthController extends BaseController {
   ) => {
     try {
       const dto: loginDTO = request.body;
-      dto.ip = ensure(getRequestIpAddress(request));
-      const result = await container.resolve(LoginUseCase).execute(dto);
-      if (result.isLeft()) return next(result.value);
-      response.cookie('emsi', result.value.user.id, {
-        expires: new Date(Number(new Date()) + 315360000000)
-      });
-      response.cookie('@Emasa/Refresh-Token', result.value.refresh, {
-        httpOnly: true,
-        expires: new Date(Number(new Date()) + 315360000000),
-      });
-      return response.json({
-        token: result.value.access,
-        user: result.value.user,
-      });
+      console.log(dto)
+      //dto.ip = ensure(getRequestIpAddress(request));
+      //const result = await container.resolve(LoginUseCase).execute(dto);
+      //if (result.isLeft()) return next(result.value);
+      //response.cookie('emsi', result.value.user.id, {
+      //  expires: new Date(Number(new Date()) + 315360000000)
+      //});
+      //response.cookie('@Emasa/Refresh-Token', result.value.refresh, {
+      //  httpOnly: true,
+      //  expires: new Date(Number(new Date()) + 315360000000),
+      //});
+      //return response.json({
+      //  token: result.value.access,
+      //  user: result.value.user,
+      //});
     } catch (error) {
       next(error);
     }

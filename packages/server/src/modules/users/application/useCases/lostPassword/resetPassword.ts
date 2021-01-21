@@ -2,12 +2,6 @@ import LoggerProvider from '@shared/adapters/models/LoggerProvider';
 import QueueProvider from '@shared/adapters/models/QueueProvider';
 import { IUseCase } from '@shared/core/useCase';
 import { inject, injectable } from 'tsyringe';
-import PasswordRecovery, {
-  PasswordRecoveryDocument,
-} from '@modules/users/domain/passwordRecovery.mongo';
-import PasswordLog, {
-  PasswordLogsDocument,
-} from '@modules/users/domain/passwordLogs.mongo';
 import { UserRepository } from '@modules/users/persistence/userRepositoryImpl';
 import { IUserRepository } from '@modules/users/persistence/userRepository';
 import { resetPwdDTO } from './dto';
@@ -15,6 +9,8 @@ import { Either, right } from '@shared/core/either';
 import { AppError } from '@shared/errors/BaseError';
 import { User } from '@modules/users/domain/user.entity';
 import { wrap } from '@mikro-orm/core';
+import { PasswordRecovery } from '@modules/users/domain/passwordRecovery.mongo';
+import { PasswordLogs } from '@modules/users/domain/passwordLogs.mongo';
 
 @injectable()
 export class ResetPasswordService
@@ -60,7 +56,7 @@ export class ResetPasswordService
       },
     });
     await this.userRepository.updatePassword(user).then(() =>
-      PasswordLog.create({
+      PasswordLogs.create({
         old_password,
         new_password: user.password,
         employee_id: user.employee.id,

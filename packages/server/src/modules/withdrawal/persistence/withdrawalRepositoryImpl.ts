@@ -1,16 +1,15 @@
-import { EntityManager } from '@mikro-orm/postgresql';
 import { Pagination } from '@shared/core/pagination';
-import { IBootstrap } from '@shared/infra/bootstrap';
-import { inject, injectable } from 'tsyringe';
+import { injectable } from 'tsyringe';
 import { Withdrawal } from '../domain/withdrawal.entity';
 import { ProductStocks } from '@modules/products/domain/stock.entity';
 import { IWithdrawalRepository } from './withdrawalRepository';
 import { WithdrawalProduct } from '../domain/withdrawalProducts.entity';
+import { RequestContext } from '@mikro-orm/core';
 @injectable()
 export class WithdrawalRepository implements IWithdrawalRepository {
-  private em: EntityManager;
-  constructor(@inject('bootstrap') bootstrap: IBootstrap) {
-    this.em = bootstrap.getDatabaseORM().getConnection().em.fork();
+  private em: any;
+  constructor() {
+    this.em = RequestContext.getEntityManager()
   }
   public bySN = async (
     sn: string,

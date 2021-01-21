@@ -8,7 +8,7 @@ import { IUserRepository } from './userRepository';
 @injectable()
 export class UserRepository implements IUserRepository {
   private em: any;
-  constructor(@inject('bootstrap') bootstrap: IBootstrap) {
+  constructor() {
     this.em = RequestContext.getEntityManager()
   }
   public create = async (user: User): Promise<User> => {

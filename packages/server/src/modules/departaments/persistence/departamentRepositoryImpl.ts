@@ -1,15 +1,13 @@
-import { wrap } from '@mikro-orm/core';
+import { RequestContext, wrap } from '@mikro-orm/core';
 import { Pagination } from '@shared/core/pagination';
-import { IBootstrap } from '@shared/infra/bootstrap';
-import { inject, injectable } from 'tsyringe';
+import { injectable } from 'tsyringe';
 import { Departament } from '../domain/departament.entity';
 import { IDepartamentRepository } from './departamentRepository';
-import { EntityManager } from '@mikro-orm/postgresql';
 @injectable()
 export class DepartamentRepository implements IDepartamentRepository {
-  private em: EntityManager;
-  constructor(@inject('bootstrap') bootstrap: IBootstrap) {
-    this.em = bootstrap.getDatabaseORM().getConnection().em.fork();
+  private em: any;
+  constructor() {
+    this.em = RequestContext.getEntityManager()
   }
   public create = async (departament: Departament): Promise<Departament> => {
     if (!(departament instanceof Departament))

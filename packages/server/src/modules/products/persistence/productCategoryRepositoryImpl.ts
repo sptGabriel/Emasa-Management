@@ -1,5 +1,4 @@
-import { LoadStrategy, wrap } from '@mikro-orm/core';
-import {  EntityManager } from '@mikro-orm/postgresql';
+import { LoadStrategy, RequestContext, wrap } from '@mikro-orm/core';
 import { Pagination } from '@shared/core/pagination';
 import { IBootstrap } from '@shared/infra/bootstrap';
 import { inject, injectable } from 'tsyringe';
@@ -7,9 +6,9 @@ import { ProductCategory } from '../domain/productCategory.entity';
 import { IProductCategoryRepository } from './productCategoryRepository';
 @injectable()
 export class ProductCategoryRepository implements IProductCategoryRepository {
-  private em: EntityManager;
-  constructor(@inject('bootstrap') bootstrap: IBootstrap) {
-    this.em = bootstrap.getDatabaseORM().getConnection().em.fork();
+  private em: any;
+  constructor() {
+    this.em = RequestContext.getEntityManager()
   }
   public create = async (
     category: ProductCategory,

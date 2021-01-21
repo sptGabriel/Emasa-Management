@@ -1,5 +1,4 @@
-import { LoadStrategy } from '@mikro-orm/core';
-import { EntityManager } from '@mikro-orm/postgresql';
+import { LoadStrategy, RequestContext } from '@mikro-orm/core';
 import { Pagination } from '@shared/core/pagination';
 import { IBootstrap } from '@shared/infra/bootstrap';
 import { inject, injectable } from 'tsyringe';
@@ -7,9 +6,9 @@ import { ProductStocks } from '../domain/stock.entity';
 import { IProductStocksRepository } from './productStocksRepository';
 @injectable()
 export class ProductStocksRepository implements IProductStocksRepository {
-  private em: EntityManager;
-  constructor(@inject('bootstrap') bootstrap: IBootstrap) {
-    this.em = bootstrap.getDatabaseORM().getConnection().em.fork();
+  private em: any;
+  constructor() {
+    this.em = RequestContext.getEntityManager()
   }
   public byArray = async (ids: string[]): Promise<ProductStocks[]> => {
     throw new Error('Method not implemented.');
@@ -23,7 +22,7 @@ export class ProductStocksRepository implements IProductStocksRepository {
       .update({ quantity: queryBuilder.raw(`quantity + ${quantity}`) })
       .where({ product_id })
       .getResult()
-      .then(stock => {
+      .then((stock: any) => {
         return stock[0];
       });
     return stock;

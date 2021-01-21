@@ -1,5 +1,4 @@
-import { wrap } from '@mikro-orm/core';
-import { EntityRepository, EntityManager } from '@mikro-orm/postgresql';
+import { RequestContext, wrap } from '@mikro-orm/core';
 import { Pagination } from '@shared/core/pagination';
 import { IBootstrap } from '@shared/infra/bootstrap';
 import { inject, injectable } from 'tsyringe';
@@ -7,9 +6,9 @@ import { Supplier } from '../domain/supplier.entity';
 import { ISupplierRepository } from './supplierRepository';
 @injectable()
 export class SupplierRepository implements ISupplierRepository {
-  private em: EntityManager;
-  constructor(@inject('bootstrap') bootstrap: IBootstrap) {
-    this.em = bootstrap.getDatabaseORM().getConnection().em.fork();
+  private em: any;
+  constructor() {
+    this.em = RequestContext.getEntityManager()
   }
   public create = async (supplier: Supplier): Promise<Supplier> => {
     if (!(supplier instanceof Supplier)) throw new Error(`Invalid Data Type`);

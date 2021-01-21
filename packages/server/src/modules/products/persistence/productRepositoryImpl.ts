@@ -1,5 +1,4 @@
-import { wrap } from '@mikro-orm/core';
-import {  EntityManager } from '@mikro-orm/postgresql';
+import { RequestContext, wrap } from '@mikro-orm/core';
 import { Pagination } from '@shared/core/pagination';
 import { IBootstrap } from '@shared/infra/bootstrap';
 import { inject, injectable } from 'tsyringe';
@@ -7,9 +6,9 @@ import { Product } from '../domain/product.entity';
 import { IProductRepository } from './productRepository';
 @injectable()
 export class ProductRepository implements IProductRepository {
-  private em: EntityManager;
-  constructor(@inject('bootstrap') bootstrap: IBootstrap) {
-    this.em = bootstrap.getDatabaseORM().getConnection().em.fork();
+  private em: any;
+  constructor() {
+    this.em = RequestContext.getEntityManager()
   }
   public byArray = async (ids: string[]): Promise<Product[]> => {
     return await this.em.find(Product, ids, ['stock']);

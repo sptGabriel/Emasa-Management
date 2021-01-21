@@ -1,21 +1,15 @@
-import { EntityManager } from '@mikro-orm/postgresql';
 import { Pagination } from '@shared/core/pagination';
-import { IBootstrap } from '@shared/infra/bootstrap';
-import { inject, injectable } from 'tsyringe';
-import { ProductStocks } from '@modules/products/domain/stock.entity';
+import { injectable } from 'tsyringe';
 import { Equipment } from '../domain/equipment.entity';
 import { IEquipmentRepository } from './equipmentRepository';
 import { ComponentTransfer } from '@modules/components/domain/componentTransfer.entity';
 import { Component } from '@modules/components/domain/component.entity';
-import { ErrorMiddleware } from '@shared/infra/http/middlewares/error.middleware';
 import { RequestContext } from '@mikro-orm/core';
 @injectable()
 export class EquipmentRepository implements IEquipmentRepository {
-  private em: EntityManager;
-  constructor(@inject('bootstrap') bootstrap: IBootstrap) {
-    const requestContext = RequestContext.getEntityManager();
-    if (!requestContext) throw new Error(`Invalid entity context`);
-    this.em = bootstrap.getDatabaseORM().getConnection().em.fork();
+  private em: any;
+  constructor() {
+    this.em = RequestContext.getEntityManager()
   }
   public getEquipandComponents = async (ids: string[]) => {
     throw new Error(`invalid`);
@@ -110,7 +104,7 @@ export class EquipmentRepository implements IEquipmentRepository {
         .update({ departament_id, updated_at: new Date() })
         .where({ id: componentsIds })
         .execute();
-      await em.commit().catch(err => console.log(err, 'xxx'));
+      await em.commit().catch((err: Error) => console.log(err, 'xxx'));
       return instance;
     } catch (e) {
       console.log(e.detail, 'error');

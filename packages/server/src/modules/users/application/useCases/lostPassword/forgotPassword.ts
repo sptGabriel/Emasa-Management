@@ -9,7 +9,6 @@ import { forgotPwdDTO } from './dto';
 import { Either, left, right } from '@shared/core/either';
 import { randomBytes } from 'crypto';
 import { AppError } from '@shared/errors/BaseError';
-import { BootstrapApplication } from '@shared/infra/bootstrap';
 
 @injectable()
 export class ForgotMessageService

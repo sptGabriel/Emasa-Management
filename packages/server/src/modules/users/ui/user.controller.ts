@@ -13,6 +13,8 @@ import cloudinary from '@shared/helpers/cloudinary';
 import { v4 } from 'uuid';
 import { ForgotMessageService } from '../application/useCases/lostPassword/forgotPassword';
 import { ResetPasswordService } from '../application/useCases/lostPassword/resetPassword';
+import { UserDevice } from '../domain/authorized_devices.mongo';
+import { LastUserAccess } from '../domain/lastAccess.mongo';
 @singleton()
 export class UserController extends BaseController {
   constructor() {
@@ -23,6 +25,7 @@ export class UserController extends BaseController {
   protected initRouter() {
     this.router.get(`${this.path}`, this.index);
     this.router.get(`${this.path}/me`, this.Me);
+    this.router.post(`${this.path}/testing`, this.Testing);
     this.router.post(`${this.path}/forgot-password`, this.ForgotPassword);
     this.router.post(`${this.path}/reset-password`, this.ResetPassword);
     this.router.post(`${this.path}/add`, this.addUser);
@@ -34,6 +37,44 @@ export class UserController extends BaseController {
   }
   private index = async (arg0: string, index: any) => {
     throw new Error('Method not implemented.');
+  };
+  private Testing = async (
+    request: Request,
+    response: Response,
+    next: NextFunction,
+  ) => {
+    try {
+      const {
+        employee_id,
+        device,
+        ip,
+        os,
+        longitude,
+        latitude,
+        timezone,
+        online = true,
+      } = request.body;
+      await LastUserAccess.create({
+        device: '1',
+        access_at: new Date(),
+      })
+        .then(res => console.log(res))
+        .catch(err => console.log(err));
+      //await UserDevice.create({
+      //  employee_id,
+      //  device,
+      //  ip,
+      //  os,
+      //  longitude,
+      //  latitude,
+      //  timezone,
+      //  online,
+      //})
+      //  .then(res => console.log(res))
+      //  .catch(err => console.log(err));
+    } catch (error) {
+      next(error);
+    }
   };
   private ForgotPassword = async (
     request: Request,
@@ -70,19 +111,17 @@ export class UserController extends BaseController {
         latitude,
         longitude,
       } = request.body;
-      const result = await container
-        .resolve(ResetPasswordService)
-        .execute({
-          email,
-          confirmPassword,
-          password,
-          token,
-          device,
-          os,
-          ip,
-          latitude,
-          longitude,
-        });
+      const result = await container.resolve(ResetPasswordService).execute({
+        email,
+        confirmPassword,
+        password,
+        token,
+        device,
+        os,
+        ip,
+        latitude,
+        longitude,
+      });
       if (result.value.email === false) return response.status(200).send();
       if (result.value.user === false) return response.status(200).send();
       if (result.isLeft()) return next(result.value);
