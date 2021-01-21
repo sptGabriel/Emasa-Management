@@ -9,14 +9,14 @@ const UserDeviceSchema = new Schema(
 		},
 		device: {
 			type: String,
-			enum: ['Chrome','Firefox','MSIE','Edge','Safari', 'Opera'],
+			enum: ['Chrome','Firefox','MSIE','Edge','Safari', 'Opera', 'Desconhecido'],
 			trim: true,
       required: true,
 		},
 		os: {
       type: String,
 			trim: true,
-			enum: ['Win','Mac','X11','Linux', 'Android', 'IOS'],
+			enum: ['Windows','Mac','X11','Linux', 'Android', 'IOS', 'Desconhecido'],
       required: true,
     },
     ip: {
@@ -25,12 +25,12 @@ const UserDeviceSchema = new Schema(
       required: true,
     },
     longitude: {
-      type: String,
+      type: Number || null,
       trim: true,
       required: true,
     },
     latitude: {
-      type: String,
+      type: Number || null,
       trim: true,
       required: true,
     },
@@ -61,8 +61,8 @@ export interface IUserDevice {
   device: string;
   ip: string;
   os: string;
-  longitude: string;
-  latitude: string;
+  longitude: string | null;
+  latitude: string | null;
   timezone: string;
   online: boolean;
 }

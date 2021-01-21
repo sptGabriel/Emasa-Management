@@ -19,7 +19,7 @@ export interface IUserRepository {
    * @returns {Promise<User>}
    */
   byId(id: string): Promise<User | undefined>;
-    /**
+  /**
    * @param {number} email
    * @returns {Promise<User>}
    */
@@ -34,29 +34,39 @@ export interface IUserRepository {
    * @returns {Promise<User>}
    */
   create(user: User): Promise<User>;
-    /**
+  /**
    * @param {string} employeeProps
    * @returns {Promise<User>}
    */
   updatePassword(user: User): Promise<User>;
-      /**
+  /**
    * @param {string} employeeProps
    * @returns {Promise<User>}
    */
   updateLogin(user: User): Promise<User>;
-    /**
+  /**
    * @param {string} employeeProps
    * @returns {Promise<User>}
    */
   update(user: User): Promise<User>;
-        /**
+  /**
    * @param {string} employeeProps
    * @returns {Promise<User>}
    */
   setRFToken(user: User): Promise<User>;
-  login(user: User, ip:string): Promise<User>;
-  logout(user: User, ip:string): Promise<User>;
-      /**
+  login(
+    user: User,
+    device: {
+      os: string;
+      device: string;
+      ip: string;
+      longitude: number | null;
+      latitude: number | null;
+      timezone: string;
+    },
+  ): Promise<User>;
+  logout(user: User, ip: string): Promise<User>;
+  /**
    * @param {string} employeeProps
    * @returns {Promise<User>}
    */

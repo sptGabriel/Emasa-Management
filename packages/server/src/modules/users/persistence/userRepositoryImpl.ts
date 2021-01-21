@@ -9,7 +9,7 @@ import { IUserRepository } from './userRepository';
 export class UserRepository implements IUserRepository {
   private em: any;
   constructor() {
-    this.em = RequestContext.getEntityManager()
+    this.em = RequestContext.getEntityManager();
   }
   public create = async (user: User): Promise<User> => {
     if (!(user instanceof User)) throw new Error(`Invalid Data Type`);
@@ -51,38 +51,23 @@ export class UserRepository implements IUserRepository {
     //   .execute();
     return user;
   };
-  public login = async (user: User, ip: string): Promise<User> => {
+  public login = async (
+    user: User,
+    device: {
+      os: string;
+      device: string;
+      ip: string;
+      longitude: number | null;
+      latitude: number | null;
+      timezone: string;
+    },
+  ): Promise<User> => {
     const em = await this.em.fork();
     await em.begin();
     try {
-      const IPV4QB = em.createQueryBuilder('ipv4_access_status');
       const UserQB = em.createQueryBuilder(User);
       const LastAccessQB = em.createQueryBuilder('lastaccess_users');
-      const isLogged: any = await IPV4QB.getKnex()
-        .select('*')
-        .where({ ip_address: ip, employee_id: user.employee.id })
-        .returning('*')
-        .then((row: any) => row[0]);
-      if (isLogged && isLogged.active) {
-        throw new Error(`This user has been logged`);
-      }
-      if (!isLogged) {
-        await IPV4QB.insert({
-          employee_id: user.employee.id,
-          ip_address: ip,
-          active: true,
-          created_at: new Date(),
-          updated_at: new Date(),
-        }).execute();
-      }
-      if (isLogged && !isLogged.active) {
-        await IPV4QB.update({ active: true, updated_at: new Date() })
-          .where({
-            employee_id: user.employee.id,
-            ip_address: ip,
-          })
-          .execute();
-      }
+
       await UserQB.update({
         ref_token: user.ref_token,
         updated_at: new Date(),
@@ -91,11 +76,7 @@ export class UserRepository implements IUserRepository {
           employee: { id: user.employee.id },
         })
         .execute();
-      await LastAccessQB.insert({
-        employee_id: user.employee.id,
-        ip_address: ip,
-        accessed_at: new Date(),
-      }).execute();
+
       await em.commit();
       return user;
     } catch (e) {
@@ -146,7 +127,7 @@ export class UserRepository implements IUserRepository {
     const user = await this.em.findOne(User, { employee: { id } }, [
       'employee',
       'employee.departament',
-      'employee.address'
+      'employee.address',
     ]);
     if (!user) return;
     return user;
@@ -155,7 +136,7 @@ export class UserRepository implements IUserRepository {
     const user = await this.em.findOne(User, { employee: { email } }, [
       'employee',
       'employee.departament',
-      'employee.address'
+      'employee.address',
     ]);
     if (!user) return;
     return user;

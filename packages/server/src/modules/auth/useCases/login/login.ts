@@ -11,6 +11,7 @@ import { wrap } from '@mikro-orm/core';
 import { ensure } from '@utils/ensure';
 import jwtConfig from '@config/jwt.config';
 import { User } from '@modules/users/domain/user.entity';
+import { UserDevice } from '@modules/users/domain/authorized_devices.mongo';
 export interface loginResult {
   refresh: string;
   access: string;
@@ -24,26 +25,29 @@ export class LoginUseCase
     private userRepository: IUserRepository,
   ) {}
   //validate acces
-  private validateUserAccess = async ({ip,login,password}: loginDTO) => {
-    const user = await this.userRepository.byLogin(login);
+  private validateUserAccess = async (data: loginDTO) => {
+    const user = await this.userRepository.byLogin(data.login);
     if (!user) throw new Error(`User not found`);
-    if (!User.DecryptPassword(password, user.password)) {
+    if (!User.DecryptPassword(data.password, user.password)) {
       throw new Error(`Incorrect Password`);
     }
     const renewToken = await JWT.buildRefreshToken(user.employee.id);
     wrap(user).assign({ ref_token: renewToken.token });
-    return await this.userRepository.login(user, ip);
+    const { ip, latitude, longitude, timezone, device, os } = data;
+    await this.userRepository.login(user, {
+      ip,
+      latitude,
+      longitude,
+      timezone,
+      device: device ? device : 'Desconhecido',
+      os: os ? os : 'Desconhecido',
+    });
   };
-  public execute = async ({
-    login,
-    password,
-    ip,
-  }: loginDTO): Promise<Either<AppError, loginResult>> => {
-    const user = await this.validateUserAccess({ login, password, ip });
-    const accessToken = JWT.buildAcessToken(
-      { sub: user.employee.id },
-      user.getJWTPayload,
-    );
+
+  public execute = async (
+    login: loginDTO,
+  ): Promise<Either<AppError, loginResult>> => {
+    const user = await this.validateUserAccess(login);
     return right({
       refresh: ensure(user.ref_token),
       access: accessToken.token,
