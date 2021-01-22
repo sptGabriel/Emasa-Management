@@ -1,9 +1,6 @@
 import {
   Cascade,
-  Collection,
   Entity,
-  LoadStrategy,
-  OneToMany,
   OneToOne,
   Property,
 } from '@mikro-orm/core';
@@ -11,8 +8,8 @@ import { Employee } from '@modules/employees/domain/employee.entity';
 import { validate } from 'uuid';
 import { hash, genSaltSync, compareSync } from 'bcryptjs';
 import { isHashedRegex } from '@utils/isHashed';
-import { IJWTAcessPayload } from './jwt';
 import { ProfilePicture } from './userProfilePicture.entity';
+
 export interface userContainer {
   employee: Employee;
   login: string;
@@ -20,6 +17,7 @@ export interface userContainer {
   ref_token?: string | null;
   picture: ProfilePicture | null;
 }
+
 @Entity({ tableName: 'users' })
 export class User {
   @OneToOne(() => Employee, employee => employee, {

@@ -28,10 +28,10 @@ export class MikroOrmClient implements IDatabaseORM {
   public connect = async (): Promise<void> => {
     try {
       this.connection = await MikroORM.init(this.options)
-      container.registerInstance<EntityManager>(
-        'EntityManager',
-        this.getEntityManager(),
-      );
+      // container.registerInstance<EntityManager>(
+      //   'EntityManager',
+      //   this.getEntityManager(),
+      // );
       const migrator = await this.connection.getMigrator();
       const migrations = await migrator.getPendingMigrations();
       if (!(migrations && migrations.length > 0)) return this.connected();

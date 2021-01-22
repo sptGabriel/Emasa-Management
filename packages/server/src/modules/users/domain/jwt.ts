@@ -43,8 +43,8 @@ export class JWT {
       subject: id,
       expiresIn: 720 * 60 * 60 * 1000,
     });
-    const redis = container.resolve<IBootstrap>('bootstrap').getRedisServer();
-    await redis.setKeyWithEX(id, refreshToken, 720 * 60 * 60);
+    // const redis = container.resolve<IBootstrap>('bootstrap').getRedisServer();
+    // await redis.setKeyWithEX(id, refreshToken, 720 * 60 * 60);
     return refreshToken;
   };
   private static generateAccessToken = (

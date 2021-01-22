@@ -11,6 +11,11 @@ import { SuppliesController } from '@modules/supplying/ui/supplies.controller';
 import { UserController } from '@modules/users/ui/user.controller';
 import { WithdrawalController } from '@modules/withdrawal/ui/withdrawal.controller';
 import { BaseController } from '@shared/core/baseController';
+import { IDatabaseORM } from '@shared/core/orm';
+import { BootstrapApplication, IBootstrap } from '@shared/infra/bootstrap';
+import { ExpressServer } from '@shared/infra/http/httpServer';
+import { IHttpServer } from '@shared/infra/http/server.contract';
+import { MikroOrmClient } from '@shared/infra/mikro-orm';
 import { container } from 'tsyringe';
 
 container.registerInstance('OrmConfig', mikroConfig);
@@ -34,3 +39,7 @@ container.registerSingleton<BaseController>(
 );
 container.registerSingleton<BaseController>('Controllers', UserController);
 container.registerSingleton<BaseController>('Controllers', AuthController);
+
+container.registerSingleton<IDatabaseORM>('mikroorm', MikroOrmClient);
+container.registerSingleton<IHttpServer>('express', ExpressServer);
+container.registerSingleton<IBootstrap>('bootstrap', BootstrapApplication);

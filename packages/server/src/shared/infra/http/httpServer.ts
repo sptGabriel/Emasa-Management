@@ -12,6 +12,7 @@ import path from 'path';
 import { corsMiddleware } from './middlewares/cors.middleware';
 import LoggerProvider from '@shared/adapters/models/LoggerProvider';
 import { jwtMiddleware } from './middlewares/jwt.middleware';
+import { IDatabaseORM } from '@shared/core/orm';
 
 const corstOpts = cors({
   credentials: true,
@@ -23,14 +24,13 @@ const corstOpts = cors({
 @injectable()
 export class ExpressServer implements IHttpServer {
   private app: express.Application;
-  private em: EntityManager
   constructor(
-    @inject('LoggerProvider') private loggerProvider: LoggerProvider
+    @inject('LoggerProvider') private loggerProvider: LoggerProvider,
+    @inject('mikroorm') private mikroOrm: IDatabaseORM 
   ) {
   }
 
   public init = () => {
-    this.em = container.resolve('EntityManager');
     this.app = express()
     this.setupExpress();
     this.setupRouters();
@@ -47,7 +47,7 @@ export class ExpressServer implements IHttpServer {
     this.app.use(corsMiddleware);
     this.app.use(bodyParser.json());
     this.app.use((req: Request, res: Response, next: NextFunction) =>
-      RequestContext.create(this.em, next),
+      RequestContext.create(this.mikroOrm.getConnection().em, next),
     );
     this.app.use(
       '/files',

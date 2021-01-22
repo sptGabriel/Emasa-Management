@@ -34,7 +34,7 @@ export class LoginUseCase
     const renewToken = await JWT.buildRefreshToken(user.employee.id);
     wrap(user).assign({ ref_token: renewToken.token });
     const { ip, latitude, longitude, timezone, device, os } = data;
-    await this.userRepository.login(user, {
+    return await this.userRepository.login(user, {
       ip,
       latitude,
       longitude,
@@ -48,6 +48,10 @@ export class LoginUseCase
     login: loginDTO,
   ): Promise<Either<AppError, loginResult>> => {
     const user = await this.validateUserAccess(login);
+    const accessToken = JWT.buildAcessToken(
+      { sub: user.employee.id },
+      user.getJWTPayload,
+    );
     return right({
       refresh: ensure(user.ref_token),
       access: accessToken.token,
