@@ -20,7 +20,4 @@
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
   },
-  "dependencies": {
-    "@emotion/react": "^11.1.2"
-  }
 }
