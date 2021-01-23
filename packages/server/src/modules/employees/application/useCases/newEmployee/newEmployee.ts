@@ -64,7 +64,7 @@ export class NewEmployeeUseCase
         position,
         departament,
         biografia: biografia ? biografia : null,
-        email,
+        email: email.toLowerCase(),
         userProps: user_credentials
           ? { ...user_credentials, picture: userPicture }
           : undefined,

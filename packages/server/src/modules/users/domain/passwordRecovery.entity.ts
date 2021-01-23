@@ -11,7 +11,7 @@ export interface pwdRecoveryContainer {
   employee: Employee;
   token: string;
   used: boolean;
-  accessed_at: Date;
+  expires_at: Date;
 }
 
 @Entity({ tableName: 'password_recovery' })
@@ -28,22 +28,22 @@ export class PasswordRecovery {
   @Property()
   public used: boolean;
   @Property()
-  public accessed_at: Date;
+  public expires_at: Date;
 
   constructor(container: pwdRecoveryContainer) {
     this.employee = container.employee;
-    this.accessed_at = container.accessed_at;
+    this.expires_at = container.expires_at;
     this.token = container.token;
     this.used = container.used;
   }
 
   public static build = ({
-    accessed_at,
+    expires_at,
     employee,
     token,
     used,
   }: pwdRecoveryContainer) => {
     if (!validate(employee.id)) throw new Error(`Invalid Employee UUID`);
-    return new PasswordRecovery({ employee, accessed_at, token, used });
+    return new PasswordRecovery({ employee, expires_at, token, used });
   };
 }

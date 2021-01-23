@@ -1,6 +1,4 @@
 import { inject, injectable, singleton } from 'tsyringe';
-import { MikroOrmClient } from './mikro-orm/index';
-import { ExpressServer } from './http/httpServer';
 import { IHttpServer } from './http/server.contract';
 import { IDatabaseORM } from '@shared/core/orm';
 

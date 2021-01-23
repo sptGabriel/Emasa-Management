@@ -2,7 +2,7 @@ import { RequestContext, wrap } from '@mikro-orm/core';
 import { Pagination } from '@shared/core/pagination';
 import { BootstrapApplication, IBootstrap } from '@shared/infra/bootstrap';
 import { container, inject, injectable } from 'tsyringe';
-import { UserDevice } from '../domain/authorized_devices.mongo';
+//import { UserDevice } from '../domain/authorized_devices.mongo';
 import { User } from '../domain/user.entity';
 import { ProfilePicture } from '../domain/userProfilePicture.entity';
 import { IUserRepository } from './userRepository';
@@ -63,60 +63,61 @@ export class UserRepository implements IUserRepository {
       timezone: string;
     },
   ): Promise<User> => {
-    const mongo = container.resolve(BootstrapApplication).getMongoConnection();
-    const sessionMongo = await mongo.startSession();
     const em = await this.em.fork();
     await em.begin();
     try {
-      await sessionMongo.withTransaction(async () => {
         const { device, ip, latitude, longitude, os, timezone } = user_device;
-        const hasDevice = await UserDevice.findOne({
-          device,
-          os,
-          ip,
-          employee_id: user.employee.id,
-        });
-        const userDevice = hasDevice
-          ? hasDevice
-          : await mongo.db.collection('AuthorizedUserDevice').insertOne(
-              {
-                ip,
-                os,
-                device,
-                employee_id: user.employee.id,
-                timezone,
-                longitude,
-                latitude,
-              },
-              { session: sessionMongo },
-            );
+        //const hasDevice = await UserDevice.findOne({
+        //  device,
+        //  os,
+        //  ip,
+        //  employee_id: user.employee.id,
+        //});
+        //const userDevice = hasDevice
+        //  ? hasDevice
+        //  : await mongo.db.collection('AuthorizedUserDevice').insertOne(
+        //      {
+        //        ip,
+        //        os,
+        //        device,
+        //        employee_id: user.employee.id,
+        //        timezone,
+        //        longitude,
+        //        latitude,
+        //      },
+        //      { session: sessionMongo },
+        //    );
 
-        await mongo.db
-          .collection('LastUserAccess')
-          .insertOne(
-            { device: userDevice.device, access_at: new Date() },
-            { session: sessionMongo },
-          );
-      });
-      const UserQB = em.createQueryBuilder(User);
-      await UserQB.update({
-        ref_token: user.ref_token,
-        updated_at: new Date(),
-      })
-        .where({
-          employee: { id: user.employee.id },
-        })
-        .execute();
-      await em.commit();
-      await sessionMongo.commitTransaction();
+    //    await mongo.db
+    //      .collection('LastUserAccess')
+    //      .insertOne(
+    //        { device: userDevice.device, access_at: new Date() },
+    //        { session: sessionMongo },
+    //      );
+    //  });
+    //  const UserQB = em.createQueryBuilder(User);
+    //  await UserQB.update({
+    //    ref_token: user.ref_token,
+    //    updated_at: new Date(),
+    //  })
+    //    .where({
+    //      employee: { id: user.employee.id },
+    //    })
+    //    .execute();
+    //  await em.commit();
+    //  await sessionMongo.commitTransaction();
       return user;
     } catch (e) {
       console.log(e, 'error');
       throw e;
-    } finally {
-      await em.rollback();
-      await sessionMongo.endSession();
-    }
+    } 
+    // finally {
+    //  await em.rollback();
+    //  await sessionMongo.endSession();
+    //}
+
+
+    ///
     // await this.em
     //   .createQueryBuilder(User)
     //   .update({ ref_token: user.ref_token, active: user.active, updated_at: new Date() })

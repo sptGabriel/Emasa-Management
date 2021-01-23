@@ -26,12 +26,12 @@ export default {
 
   config: {
     mailtrap: {
-      host: 'smtp.mailtrap.io',
-			port: 2525,
+      host: process.env.MAILTRAP_HOST,
+			port: process.env.MAILTRAP_PORT,
 			secure: false,
       auth: {
-        user: '998d0cfee1c4db',
-        pass: 'c1bd5d945aa0a1',
+        user: process.env.MAILTRAP_USER,
+        pass: process.env.MAILTRAP_PASS,
       },
     },
   },

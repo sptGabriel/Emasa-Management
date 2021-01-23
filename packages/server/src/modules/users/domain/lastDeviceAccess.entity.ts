@@ -1,4 +1,4 @@
-import { Entity, ManyToOne, Property } from '@mikro-orm/core';
+import { Entity, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
 import { AuthorizedUser } from './authorizedUser.entity';
 
 export interface lastDeviceAccessContainer {
@@ -7,6 +7,8 @@ export interface lastDeviceAccessContainer {
 
 @Entity({ tableName: 'last_device_accesses' })
 export class LastDeviceAccess {
+  @PrimaryKey()
+  public id: Number;
   @ManyToOne({
     entity: () => AuthorizedUser,
     fieldName: 'userdevice_id',

@@ -4,7 +4,7 @@ import {
   Options,
 } from '@mikro-orm/core';
 import { PostgreSqlDriver } from '@mikro-orm/postgresql';
-import { container, inject, injectable } from 'tsyringe';
+import { inject, injectable } from 'tsyringe';
 import { IDatabaseORM } from '@shared/core/orm';
 import LoggerProvider from '@shared/adapters/models/LoggerProvider';
 
@@ -28,16 +28,13 @@ export class MikroOrmClient implements IDatabaseORM {
   public connect = async (): Promise<void> => {
     try {
       this.connection = await MikroORM.init(this.options)
-      // container.registerInstance<EntityManager>(
-      //   'EntityManager',
-      //   this.getEntityManager(),
-      // );
       const migrator = await this.connection.getMigrator();
       const migrations = await migrator.getPendingMigrations();
       if (!(migrations && migrations.length > 0)) return this.connected();
       await migrator.up();
       this.connected()
     } catch (error) {
+      console.error(error)
       this.error(error)
     }
   };
@@ -47,6 +44,6 @@ export class MikroOrmClient implements IDatabaseORM {
   }
 
   private error(error: Error) {
-    this.loggerProvider.log('error','MikroOrm has errored', {error});
+    this.loggerProvider.log('error','MikroOrm has errored', error);
   }
 }

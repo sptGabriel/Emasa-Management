@@ -19,26 +19,11 @@ services:
     volumes:
     - emasa-pg:/postgres/pg
     environment:
-    - POSTGRES_USER=emasa
-    - POSTGRES_PASSWORD=emasa03210
-    - POSTGRES_DB=emasa_ti
+    - POSTGRES_USER=${DB_USER}
+    - POSTGRES_PASSWORD=${DB_PASS}
+    - POSTGRES_DB=${DB_NAME}
     ports:
     - "5432:5432"
-  emasa-mongo:
-    image: bitnami/mongodb:latest
-    container_name: emasa-mongo
-    restart: always
-    environment:
-      - ALLOW_EMPTY_PASSWORD=no
-      - MONGODB_USERNAME=${MONGO_USER}
-      - MONGODB_PASSWORD=${MONGO_PASS}
-      - MONGODB_DATABASE=${MONGO_DB}
-    ports:
-      - "27017:27017"
-    volumes:
-      - emasa-mongo:/bitnami
-    networks:
-      - emasa-network
   emasa-redis:
     image: bitnami/redis:latest
     container_name: emasa-redis

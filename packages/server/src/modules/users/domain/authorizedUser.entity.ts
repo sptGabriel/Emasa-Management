@@ -32,8 +32,10 @@ export interface authorizedUserContainer {
 }
 
 @Entity({ tableName: 'authorized_users' })
-@Unique({ properties: ['employee_id', 'ip', 'os', 'device'] })
+@Unique({ properties: ['employee', 'ip', 'os', 'device'] })
 export class AuthorizedUser {
+  @PrimaryKey()
+  public id: Number;
   @ManyToOne({
     entity: () => Employee,
     fieldName: 'employee_id',

@@ -15,7 +15,7 @@ export class Migration20201104231409 extends Migration {
               .notNullable();
             table.string('token').notNullable();
             table.boolean('used').notNullable().defaultTo(false);
-            table.timestamp('accessed_at').notNullable();
+            table.timestamp('expires_at').notNullable();
           });
       });
   }

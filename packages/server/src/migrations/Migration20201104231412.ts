@@ -10,7 +10,7 @@ export class Migration20201104231412 extends Migration {
           .createTable('last_device_accesses', async table => {
             table.increments('id').primary();
             table
-              .uuid('userdevice_id')
+              .integer('userdevice_id')
               .references('authorized_users.id')
               .notNullable();
             table.timestamp('accessed_at').defaultTo(this.getKnex().fn.now());

@@ -13,8 +13,6 @@ import cloudinary from '@shared/helpers/cloudinary';
 import { v4 } from 'uuid';
 import { ForgotMessageService } from '../application/useCases/lostPassword/forgotPassword';
 import { ResetPasswordService } from '../application/useCases/lostPassword/resetPassword';
-import { UserDevice } from '../domain/authorized_devices.mongo';
-import { LastUserAccess } from '../domain/lastAccess.mongo';
 @singleton()
 export class UserController extends BaseController {
   constructor() {
@@ -44,22 +42,22 @@ export class UserController extends BaseController {
     next: NextFunction,
   ) => {
     try {
-      const {
-        employee_id,
-        device,
-        ip,
-        os,
-        longitude,
-        latitude,
-        timezone,
-        online = true,
-      } = request.body;
-      await LastUserAccess.create({
-        device: '1',
-        access_at: new Date(),
-      })
-        .then(res => console.log(res))
-        .catch(err => console.log(err));
+      //const {
+      //  employee_id,
+      //  device,
+      //  ip,
+      //  os,
+      //  longitude,
+      //  latitude,
+      //  timezone,
+      //  online = true,
+      //} = request.body;
+      //await LastUserAccess.create({
+      //  device: '1',
+      //  access_at: new Date(),
+      //})
+      //  .then(res => console.log(res))
+      //  .catch(err => console.log(err));
       //await UserDevice.create({
       //  employee_id,
       //  device,
