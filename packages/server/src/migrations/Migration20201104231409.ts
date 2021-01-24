@@ -10,8 +10,8 @@ export class Migration20201104231409 extends Migration {
           .createTable('password_recovery', async table => {
             table.increments('id').primary();
             table
-              .uuid('employee_id')
-              .references('employees.id')
+              .uuid('user_id')
+              .references('users.id')
               .notNullable();
             table.string('token').notNullable();
             table.boolean('used').notNullable().defaultTo(false);

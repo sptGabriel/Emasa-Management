@@ -9,7 +9,7 @@ export class Migration20201104231206 extends Migration {
           .schema // **** udpate
           .createTable('users', async table => {
             table
-              .uuid('employee_id')
+              .uuid('id')
               .references('employees.id')
               .primary()
               .notNullable();

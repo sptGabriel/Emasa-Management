@@ -4,12 +4,11 @@ export interface forgotPwdDTO{
 
 export interface resetPwdDTO {
 	token: string;
-	email: string;
 	password: string;
 	confirmPassword: string;
 	ip: string;
-	latitude: string;
-	longitude: string;
+	latitude: number;
+	longitude: number;
 	device: string;
 	os: string;
 }

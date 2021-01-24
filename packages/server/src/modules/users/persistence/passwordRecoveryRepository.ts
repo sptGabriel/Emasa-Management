@@ -13,6 +13,10 @@ export interface IPasswordRecoveryRepository {
    * @param {string} login
    * @returns {Promise<User>}
    */
+  byUser(id: string): Promise<PasswordRecovery | undefined>;
   byEmail(email: string): Promise<PasswordRecovery | undefined>;
+  byToken(token: string): Promise<PasswordRecovery | undefined>;
   create(recovery: PasswordRecovery): Promise<PasswordRecovery>;
+  deleteExpiredTokens(email: string): Promise<PasswordRecovery[]>
+  //expireToken(recovery: PasswordRecovery, em?: any): Promise<PasswordRecovery>;
 }

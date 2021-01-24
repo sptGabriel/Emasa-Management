@@ -10,8 +10,8 @@ export class Migration20201104231410 extends Migration {
           .createTable('password_exchange_logs', async table => {
             table.increments('id').primary();
             table
-            .uuid('employee_id')
-            .references('employees.id')
+            .uuid('user_id')
+            .references('users.id')
             .notNullable();
             table.string('old_password').notNullable();
             table.string('new_password').notNullable();

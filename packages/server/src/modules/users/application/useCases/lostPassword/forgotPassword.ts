@@ -23,25 +23,29 @@ export class ForgotMessageService
     @inject('LoggerProvider') private loggerProvider: LoggerProvider,
   ) {}
 
+  async invalidateExpiredRecoveries(email: string) {
+    return await this.passwordRecoveryRepository.deleteExpiredTokens(email);
+  }
+
   async execute({ email }: forgotPwdDTO): Promise<any> {
     const user = await this.userRepository.byEmail(email.toLowerCase());
     if (!user) return left({ user: false });
     if (!user.employee.email) return left({ email: false });
-    const hasRecovery = await this.passwordRecoveryRepository.byEmail(email);
-    //Create a random reset token
-    const hash = randomBytes(64).toString('base64');
-    const token = hasRecovery ? hasRecovery.token : hash;
-    const expires_at = Date.now() + 3600000
-    const recovery = hasRecovery
-      ? hasRecovery
-      : await this.passwordRecoveryRepository.create(
-          PasswordRecovery.build({
-            employee: user.employee,
+    await this.invalidateExpiredRecoveries(email);
+    const hasRecovery = await this.passwordRecoveryRepository.byUser(
+      user.employee.id,
+    );
+    const token = randomBytes(64).toString('base64');
+    const expires_at = new Date(new Date().getTime() + 10 * 60000);
+    const recovery =
+      hasRecovery && hasRecovery.expires_at > new Date()
+        ? hasRecovery
+        : await this.passwordRecoveryRepository.create(PasswordRecovery.build({
+            user: user,
             token,
             used: false,
-            expires_at: new Date(),
-          }),
-        );
+            expires_at,
+          }));
     await this.queueProvider.add({
       from: {
         name: 'Emasa',

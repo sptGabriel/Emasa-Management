@@ -1,27 +1,27 @@
 import { Entity, ManyToOne, PrimaryKey, Property, Unique } from '@mikro-orm/core';
-import { Employee } from '@modules/employees/domain/employee.entity';
 import { validate } from 'uuid';
+import { User } from './user.entity';
 
 enum OS {
-  win = 'Windows',
-  mac = 'Mac',
-  x11 = 'X11',
-  linux = 'Linux',
-  android = 'Android',
-  ios = 'IOS',
-  random = 'Desconhecido',
+  win = 'wndows',
+  mac = 'mac',
+  x11 = 'x11',
+  linux = 'linux',
+  android = 'android',
+  ios = 'ios',
+  random = 'desconhecido',
 }
 enum Device {
-  chrome = 'Chrome',
-  firefox = 'FireFox',
-  msie = 'MSIE',
-  edge = 'Edge',
-  safari = 'Safari',
-  opera = 'Opera',
-  random = 'Desconhecido',
+  chrome = 'chrome',
+  firefox = 'fireFox',
+  msie = 'msie',
+  edge = 'edge',
+  safari = 'safari',
+  opera = 'opera',
+  random = 'desconhecido',
 }
 export interface authorizedUserContainer {
-  employee: Employee;
+  user: User;
   ip: string;
   latitude: Number;
   longitude: Number;
@@ -32,15 +32,15 @@ export interface authorizedUserContainer {
 }
 
 @Entity({ tableName: 'authorized_users' })
-@Unique({ properties: ['employee', 'ip', 'os', 'device'] })
+@Unique({ properties: ['user', 'ip', 'os', 'device'] })
 export class AuthorizedUser {
   @PrimaryKey()
   public id: Number;
   @ManyToOne({
-    entity: () => Employee,
+    entity: () => User,
     fieldName: 'employee_id',
   })
-  public employee: Employee;
+  public user: User;
   @Property()
   public ip: string;
   @Property()
@@ -56,7 +56,7 @@ export class AuthorizedUser {
   @Property({default: false})
   public online: boolean;
   constructor(container: authorizedUserContainer) {
-    this.employee = container.employee;
+    this.user = container.user;
     this.device = container.device;
     this.ip = container.ip;
     this.latitude = container.latitude;
@@ -67,7 +67,7 @@ export class AuthorizedUser {
   }
 
   public static build = ({
-    employee,
+    user,
     device,
     ip,
     latitude,
@@ -76,11 +76,11 @@ export class AuthorizedUser {
     online,
     timezone
   }: authorizedUserContainer) => {
-    if (!validate(employee.id)) throw new Error(`Invalid Employee UUID`);
+    if (!validate(user.employee.id)) throw new Error(`Invalid Employee UUID`);
     if(!(os in OS)) throw new Error(`Invalid OS`)
     if(!(device in Device)) throw new Error(`Problem contact your admin`)
     return new AuthorizedUser({
-      employee,
+      user,
       os,
       device,
       timezone,

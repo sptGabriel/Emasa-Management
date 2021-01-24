@@ -62,7 +62,7 @@ export class Employee {
   @OneToOne({
     entity: () => User,
     mappedBy: 'employee',
-    cascade: [Cascade.ALL],
+    cascade: [Cascade.PERSIST],
   })
   public user: User;
   @OneToOne(() => Location, location => location, {

@@ -1,31 +1,33 @@
 import { Entity, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
 import { Employee } from '@modules/employees/domain/employee.entity';
+import { enumFromValue } from '@utils/enumFromValue';
 import { validate } from 'uuid';
+import { User } from './user.entity';
 
-enum LOGTYPE {
+export enum LOGTYPE {
   default = 'default',
   resetpwd = 'reset-password',
 }
-enum OS {
-  win = 'Windows',
-  mac = 'Mac',
-  x11 = 'X11',
-  linux = 'Linux',
-  android = 'Android',
-  ios = 'IOS',
-  random = 'Desconhecido',
+export enum OS {
+  windows = 'windows',
+  mac = 'mac',
+  x11 = 'x11',
+  linux = 'linux',
+  android = 'android',
+  ios = 'ios',
+  random = 'desconhecido',
 }
-enum Device {
-  chrome = 'Chrome',
-  firefox = 'FireFox',
-  msie = 'MSIE',
-  edge = 'Edge',
-  safari = 'Safari',
-  opera = 'Opera',
-  random = 'Desconhecido',
+export enum Device {
+  chrome = 'chrome',
+  firefox = 'fireFox',
+  msie = 'msie',
+  edge = 'edge',
+  safari = 'safari',
+  opera = 'opera',
+  random = 'desconhecido',
 }
 export interface pwdLogsContainer {
-  employee: Employee;
+  user: User;
   type: LOGTYPE;
   old_password: string;
   new_password: string;
@@ -41,10 +43,10 @@ export class PasswordLogs {
   @PrimaryKey()
   public id: Number;
   @ManyToOne({
-    entity: () => Employee,
-    fieldName: 'employee_id',
+    entity: () => User,
+    fieldName: 'user_id',
   })
-  public employee: Employee;
+  public user: User;
   @Property()
   public old_password: string;
   @Property()
@@ -59,8 +61,10 @@ export class PasswordLogs {
   public os: OS;
   @Property()
   public device: Device;
+  @Property()
+  public type: LOGTYPE;
   constructor(container: pwdLogsContainer) {
-    this.employee = container.employee;
+    this.user = container.user;
     this.device = container.device;
     this.ip = container.ip;
     this.latitude = container.latitude;
@@ -68,10 +72,11 @@ export class PasswordLogs {
     this.new_password = container.new_password;
     this.old_password = container.old_password;
     this.os = container.os;
+    this.type = container.type;
   }
 
   public static build = ({
-    employee,
+    user,
     type,
     device,
     ip,
@@ -81,14 +86,18 @@ export class PasswordLogs {
     old_password,
     os,
   }: pwdLogsContainer) => {
-    if (!validate(employee.id)) throw new Error(`Invalid Employee UUID`);
-    if(!(os in OS)) throw new Error(`Invalid OS`)
-    if(!(device in Device)) throw new Error(`Problem contact your admin`)
+    if (!validate(user.employee.id)) throw new Error(`Invalid Employee UUID`);
     return new PasswordLogs({
-      employee,
-      type,
-      os,
-      device,
+      user,
+      type:
+        type in LOGTYPE
+          ? enumFromValue(type.toLowerCase(), LOGTYPE)
+          : LOGTYPE.default,
+      os: os in OS ? enumFromValue(os.toLowerCase(), OS) : OS.random,
+      device:
+        device in Device
+          ? enumFromValue(device.toLowerCase(), Device)
+          : Device.random,
       old_password,
       new_password,
       longitude,

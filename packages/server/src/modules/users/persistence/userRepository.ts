@@ -1,5 +1,7 @@
 import { Employee } from '@modules/employees/domain/employee.entity';
 import { Pagination } from '@shared/core/pagination';
+import { PasswordLogs } from '../domain/passwordLogs.entity';
+import { PasswordRecovery } from '../domain/passwordRecovery.entity';
 import { User } from '../domain/user.entity';
 
 export interface IUserRepository {
@@ -71,4 +73,12 @@ export interface IUserRepository {
    * @returns {Promise<User>}
    */
   changePictureProfile(user: User): Promise<User>;
+  /**
+   * @param {string} UserResetPWD
+   * @returns {Promise<User>}
+   */
+  resetPassword(
+    userRecovery: PasswordRecovery,
+    passwordLogs: PasswordLogs,
+  ): Promise<User>;
 }

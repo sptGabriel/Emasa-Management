@@ -99,7 +99,6 @@ export class UserController extends BaseController {
   ) => {
     try {
       const {
-        email,
         confirmPassword,
         password,
         token,
@@ -110,12 +109,11 @@ export class UserController extends BaseController {
         longitude,
       } = request.body;
       const result = await container.resolve(ResetPasswordService).execute({
-        email,
         confirmPassword,
         password,
         token,
-        device,
-        os,
+        device : device,
+        os: os,
         ip,
         latitude,
         longitude,

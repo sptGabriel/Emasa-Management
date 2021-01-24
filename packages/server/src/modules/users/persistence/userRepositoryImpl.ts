@@ -1,15 +1,19 @@
-import { RequestContext, wrap } from '@mikro-orm/core';
+import { RequestContext } from '@mikro-orm/core';
 import { Pagination } from '@shared/core/pagination';
-import { BootstrapApplication, IBootstrap } from '@shared/infra/bootstrap';
-import { container, inject, injectable } from 'tsyringe';
+import { inject, injectable } from 'tsyringe';
+import { PasswordLogs } from '../domain/passwordLogs.entity';
+import { PasswordRecovery } from '../domain/passwordRecovery.entity';
 //import { UserDevice } from '../domain/authorized_devices.mongo';
 import { User } from '../domain/user.entity';
 import { ProfilePicture } from '../domain/userProfilePicture.entity';
+import { IPasswordLogsRepository } from './passwordLogsRepository';
+import { PasswordLogsRepository } from './passwordLogsRepositoryImpl';
 import { IUserRepository } from './userRepository';
 @injectable()
 export class UserRepository implements IUserRepository {
   private em: any;
-  constructor() {
+  constructor(@inject(PasswordLogsRepository)
+  private passwordLogsRepository: IPasswordLogsRepository) {
     this.em = RequestContext.getEntityManager();
   }
   public create = async (user: User): Promise<User> => {
@@ -43,13 +47,6 @@ export class UserRepository implements IUserRepository {
   };
   public setRFToken = async (user: User): Promise<User> => {
     await this.em.persistAndFlush(user);
-    // await this.em
-    //   .createQueryBuilder(User)
-    //   .update({ ref_token: user.ref_token, active: user.active, updated_at: new Date() })
-    //   .where({
-    //     employee: { id: user.employee.id },
-    //   })
-    //   .execute();
     return user;
   };
   public login = async (
@@ -66,56 +63,55 @@ export class UserRepository implements IUserRepository {
     const em = await this.em.fork();
     await em.begin();
     try {
-        const { device, ip, latitude, longitude, os, timezone } = user_device;
-        //const hasDevice = await UserDevice.findOne({
-        //  device,
-        //  os,
-        //  ip,
-        //  employee_id: user.employee.id,
-        //});
-        //const userDevice = hasDevice
-        //  ? hasDevice
-        //  : await mongo.db.collection('AuthorizedUserDevice').insertOne(
-        //      {
-        //        ip,
-        //        os,
-        //        device,
-        //        employee_id: user.employee.id,
-        //        timezone,
-        //        longitude,
-        //        latitude,
-        //      },
-        //      { session: sessionMongo },
-        //    );
+      const { device, ip, latitude, longitude, os, timezone } = user_device;
+      //const hasDevice = await UserDevice.findOne({
+      //  device,
+      //  os,
+      //  ip,
+      //  employee_id: user.employee.id,
+      //});
+      //const userDevice = hasDevice
+      //  ? hasDevice
+      //  : await mongo.db.collection('AuthorizedUserDevice').insertOne(
+      //      {
+      //        ip,
+      //        os,
+      //        device,
+      //        employee_id: user.employee.id,
+      //        timezone,
+      //        longitude,
+      //        latitude,
+      //      },
+      //      { session: sessionMongo },
+      //    );
 
-    //    await mongo.db
-    //      .collection('LastUserAccess')
-    //      .insertOne(
-    //        { device: userDevice.device, access_at: new Date() },
-    //        { session: sessionMongo },
-    //      );
-    //  });
-    //  const UserQB = em.createQueryBuilder(User);
-    //  await UserQB.update({
-    //    ref_token: user.ref_token,
-    //    updated_at: new Date(),
-    //  })
-    //    .where({
-    //      employee: { id: user.employee.id },
-    //    })
-    //    .execute();
-    //  await em.commit();
-    //  await sessionMongo.commitTransaction();
+      //    await mongo.db
+      //      .collection('LastUserAccess')
+      //      .insertOne(
+      //        { device: userDevice.device, access_at: new Date() },
+      //        { session: sessionMongo },
+      //      );
+      //  });
+      //  const UserQB = em.createQueryBuilder(User);
+      //  await UserQB.update({
+      //    ref_token: user.ref_token,
+      //    updated_at: new Date(),
+      //  })
+      //    .where({
+      //      employee: { id: user.employee.id },
+      //    })
+      //    .execute();
+      //  await em.commit();
+      //  await sessionMongo.commitTransaction();
       return user;
     } catch (e) {
       console.log(e, 'error');
       throw e;
-    } 
+    }
     // finally {
     //  await em.rollback();
     //  await sessionMongo.endSession();
     //}
-
 
     ///
     // await this.em
@@ -206,6 +202,50 @@ export class UserRepository implements IUserRepository {
         picture_id: user.picture?.picture_id,
         updated_at: new Date(),
       }).execute();
+      await em.commit();
+      return user;
+    } catch (e) {
+      console.log(e, 'error');
+      await em.rollback();
+      throw e;
+    }
+  };
+  public resetPassword = async (
+    recovery: PasswordRecovery,
+    logs: PasswordLogs,
+  ): Promise<User> => {
+    const em = await this.em.fork();
+    await em.begin();
+    try {
+      const recoveryQB = em.createQueryBuilder(PasswordRecovery);
+      const logQB = em.createQueryBuilder(PasswordLogs);
+      const userQB = em.createQueryBuilder(User);
+      const user = await userQB
+        .update({
+          password: recovery.user.password,
+          updated_at: new Date(),
+        })
+        .where({ id: recovery.user.employee.id })
+        .execute();
+      await recoveryQB
+        .update({ used: true })
+        .where({
+          id: recovery.id,
+          user_id: recovery.user.employee.id,
+          token: recovery.token,
+        })
+        .execute();
+      await logQB.insert({
+        user_id: logs.user.employee.id,
+        new_password: logs.new_password,
+        old_password: logs.old_password,
+        ip: logs.ip,
+        type: logs.type,
+        device: logs.device,
+        os: logs.os,
+        longitude: logs.longitude,
+        latitude: logs.latitude,
+      }).execute()
       await em.commit();
       return user;
     } catch (e) {

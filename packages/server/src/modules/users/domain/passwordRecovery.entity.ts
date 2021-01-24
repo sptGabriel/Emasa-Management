@@ -4,11 +4,11 @@ import {
   PrimaryKey,
   Property,
 } from '@mikro-orm/core';
-import { Employee } from '@modules/employees/domain/employee.entity';
 import { validate } from 'uuid';
+import { User } from './user.entity';
 
 export interface pwdRecoveryContainer {
-  employee: Employee;
+  user: User;
   token: string;
   used: boolean;
   expires_at: Date;
@@ -19,10 +19,10 @@ export class PasswordRecovery {
   @PrimaryKey()
   public id: Number;
   @ManyToOne({
-    entity: () => Employee,
-    fieldName: 'employee_id',
+    entity: () => User,
+    fieldName: 'user_id',
   })
-  public employee: Employee;
+  public user: User;
   @Property()
   public token: string;
   @Property()
@@ -31,7 +31,7 @@ export class PasswordRecovery {
   public expires_at: Date;
 
   constructor(container: pwdRecoveryContainer) {
-    this.employee = container.employee;
+    this.user = container.user;
     this.expires_at = container.expires_at;
     this.token = container.token;
     this.used = container.used;
@@ -39,11 +39,11 @@ export class PasswordRecovery {
 
   public static build = ({
     expires_at,
-    employee,
+    user,
     token,
     used,
   }: pwdRecoveryContainer) => {
-    if (!validate(employee.id)) throw new Error(`Invalid Employee UUID`);
-    return new PasswordRecovery({ employee, expires_at, token, used });
+    if (!validate(user.employee.id)) throw new Error(`Invalid Employee UUID`);
+    return new PasswordRecovery({ user, expires_at, token, used });
   };
 }

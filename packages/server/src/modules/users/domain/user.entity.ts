@@ -25,7 +25,7 @@ export class User {
     primary: true,
     cascade: [Cascade.PERSIST],
     orphanRemoval: true,
-    fieldName: 'employee_id',
+    fieldName: 'id',
   })
   public readonly employee: Employee;
   @Property()
