@@ -2,29 +2,12 @@ import { Entity, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
 import { Employee } from '@modules/employees/domain/employee.entity';
 import { enumFromValue } from '@utils/enumFromValue';
 import { validate } from 'uuid';
+import { Device, OS } from './authorizedUser.entity';
 import { User } from './user.entity';
 
 export enum LOGTYPE {
   default = 'default',
   resetpwd = 'reset-password',
-}
-export enum OS {
-  windows = 'windows',
-  mac = 'mac',
-  x11 = 'x11',
-  linux = 'linux',
-  android = 'android',
-  ios = 'ios',
-  random = 'desconhecido',
-}
-export enum Device {
-  chrome = 'chrome',
-  firefox = 'fireFox',
-  msie = 'msie',
-  edge = 'edge',
-  safari = 'safari',
-  opera = 'opera',
-  random = 'desconhecido',
 }
 export interface pwdLogsContainer {
   user: User;

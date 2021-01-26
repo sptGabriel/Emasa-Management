@@ -58,6 +58,7 @@ export class AuthController extends BaseController {
   ) => {
     try {
       const dto: loginDTO = request.body;
+      console.log(dto)
       const result = await container.resolve(LoginUseCase).execute(dto);
       if (result.isLeft()) return next(result.value);
       response.cookie('emsi', result.value.user.id, {

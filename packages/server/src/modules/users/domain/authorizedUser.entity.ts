@@ -1,9 +1,10 @@
 import { Entity, ManyToOne, PrimaryKey, Property, Unique } from '@mikro-orm/core';
+import { enumFromValue } from '@utils/enumFromValue';
 import { validate } from 'uuid';
 import { User } from './user.entity';
 
-enum OS {
-  win = 'wndows',
+export enum OS {
+  windows = 'windows',
   mac = 'mac',
   x11 = 'x11',
   linux = 'linux',
@@ -11,7 +12,7 @@ enum OS {
   ios = 'ios',
   random = 'desconhecido',
 }
-enum Device {
+export enum Device {
   chrome = 'chrome',
   firefox = 'fireFox',
   msie = 'msie',
@@ -23,8 +24,8 @@ enum Device {
 export interface authorizedUserContainer {
   user: User;
   ip: string;
-  latitude: Number;
-  longitude: Number;
+  latitude: number | null;
+  longitude: number | null;
   os: OS;
   device: Device;
   timezone: string;
@@ -44,9 +45,9 @@ export class AuthorizedUser {
   @Property()
   public ip: string;
   @Property()
-  public latitude: Number;
+  public latitude: number | null;
   @Property()
-  public longitude: Number;
+  public longitude: number | null;
   @Property()
   public os: OS;
   @Property()
@@ -77,12 +78,12 @@ export class AuthorizedUser {
     timezone
   }: authorizedUserContainer) => {
     if (!validate(user.employee.id)) throw new Error(`Invalid Employee UUID`);
-    if(!(os in OS)) throw new Error(`Invalid OS`)
-    if(!(device in Device)) throw new Error(`Problem contact your admin`)
     return new AuthorizedUser({
       user,
-      os,
-      device,
+      os: os in OS ? enumFromValue(os.toLowerCase(), OS) : OS.random,
+      device: device in Device
+      ? enumFromValue(device.toLowerCase(), Device)
+      : Device.random,
       timezone,
       online,
       longitude,

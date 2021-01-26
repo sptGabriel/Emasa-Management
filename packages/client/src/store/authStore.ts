@@ -1,4 +1,5 @@
 import {action, configure, makeObservable, runInAction} from 'mobx'
+import {v4} from 'public-ip'
 import {LoginModel} from '../models/loginModel'
 import {UserModel} from '../models/userModel'
 import {RootStore} from './rootStore'
@@ -45,7 +46,13 @@ export class AuthStore {
   }
 
   public login = async (): Promise<void> => {
+    const position = await this.rootStore.getPosition()
     return this.rootStore.AxiosStore.post('/login', {
+      ...position,
+      ip: await v4(),
+      timezone: this.rootStore.timezone,
+      device: this.rootStore.browser,
+      os: this.rootStore.os,
       login: this.loginModel.login,
       password: this.loginModel.password,
     }).then((response) =>

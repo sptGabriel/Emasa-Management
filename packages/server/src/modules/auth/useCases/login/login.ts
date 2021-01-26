@@ -6,12 +6,16 @@ import { loginDTO } from './loginDTO';
 import { UserRepository } from '@modules/users/persistence/userRepositoryImpl';
 import { IUserRepository } from '@modules/users/persistence/userRepository';
 import { IJWTAcessPayload, JWT } from '@modules/users/domain/jwt';
-import { promisifyDecode } from '@shared/helpers/jwt';
 import { wrap } from '@mikro-orm/core';
 import { ensure } from '@utils/ensure';
-import jwtConfig from '@config/jwt.config';
 import { User } from '@modules/users/domain/user.entity';
-import { UserDevice } from '@modules/users/domain/authorized_devices.mongo';
+import { enumFromValue } from '@utils/enumFromValue';
+import {
+  AuthorizedUser,
+  Device,
+  OS,
+} from '@modules/users/domain/authorizedUser.entity';
+
 export interface loginResult {
   refresh: string;
   access: string;
@@ -34,14 +38,17 @@ export class LoginUseCase
     const renewToken = await JWT.buildRefreshToken(user.employee.id);
     wrap(user).assign({ ref_token: renewToken.token });
     const { ip, latitude, longitude, timezone, device, os } = data;
-    return await this.userRepository.login(user, {
+    const userDevice = AuthorizedUser.build({
+      device,
       ip,
       latitude,
       longitude,
+      online: true,
+      os,
       timezone,
-      device: device ? device : 'Desconhecido',
-      os: os ? os : 'Desconhecido',
+      user,
     });
+    return await this.userRepository.login(user, userDevice);
   };
 
   public execute = async (
