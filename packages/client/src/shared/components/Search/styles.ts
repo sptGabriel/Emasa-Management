@@ -1,6 +1,6 @@
-import { css } from "@emotion/react"
-import styled from "@emotion/styled"
-import { NoSelect } from "../NoSelect"
+import {css} from '@emotion/react'
+import styled from '@emotion/styled'
+import {NoSelect} from '../NoSelect'
 
 // Search Box
 export const Vertical = styled.div<{isOpen: boolean}>`
@@ -94,7 +94,8 @@ export const Vertical = styled.div<{isOpen: boolean}>`
         : ''};
     :hover {
       svg {
-        color: ${({theme}: any) => `rgb(${theme.header.toolsHover})`} !important;
+        color: ${({theme}: any) =>
+          `rgb(${theme.header.toolsHover})`} !important;
       }
     }
     svg {

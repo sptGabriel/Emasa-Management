@@ -24,8 +24,8 @@ export class UserAddress implements TAddress {
 
   constructor(props?: TAddress) {
     makeAutoObservable(this)
-   this.cep = props ? props.cep : ''
-    this.bairro =props ? props.bairro : ''
+    this.cep = props ? props.cep : ''
+    this.bairro = props ? props.bairro : ''
     this.cidade = props ? props.cidade : ''
     this.complemento = props ? props.complemento : ''
     this.numero = props ? props.numero : ''

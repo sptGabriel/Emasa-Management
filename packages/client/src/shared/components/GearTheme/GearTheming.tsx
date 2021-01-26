@@ -4,7 +4,7 @@ import {useSpring, animated} from 'react-spring'
 import {observer} from 'mobx-react-lite'
 import {useHover} from '../../utils/useHoover'
 import {useRootStore} from '../../infra/mobx'
-import { GearButton, GearWrap } from './styles'
+import {GearButton, GearWrap} from './styles'
 
 const GearTheming: React.FC = observer(() => {
   const [hoverRef, isHovered] = useHover()
