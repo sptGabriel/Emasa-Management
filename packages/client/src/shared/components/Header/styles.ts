@@ -1,7 +1,7 @@
-import { css } from "@emotion/react"
-import styled from "@emotion/styled"
-import { Container } from "../FlexBox"
-import { NoSelect } from "../NoSelect"
+import {css} from '@emotion/react'
+import styled from '@emotion/styled'
+import {Container} from '../FlexBox'
+import {NoSelect} from '../NoSelect'
 
 export const NavBar = styled('div')`
   display: flex;

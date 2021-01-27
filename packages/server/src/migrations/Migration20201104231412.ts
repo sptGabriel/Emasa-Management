@@ -8,9 +8,9 @@ export class Migration20201104231412 extends Migration {
         return this.getKnex()
           .schema // **** udpate
           .createTable('last_device_accesses', async table => {
-            table.increments('id').primary();
+            table.uuid('id').primary();
             table
-              .integer('userdevice_id')
+              .uuid('userdevice_id')
               .references('authorized_users.id')
               .notNullable();
             table.timestamp('accessed_at').defaultTo(this.getKnex().fn.now());

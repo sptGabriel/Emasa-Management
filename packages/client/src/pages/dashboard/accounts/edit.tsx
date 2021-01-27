@@ -129,7 +129,7 @@ const EditInformations: React.FC = observer(() => {
             </div>
           </div>
         </div>
-        <div className="form-item">
+        <div className="form-item subBut">
           <div className="form-name" />
           <div className="form-input">
             <div className="wrap-input">

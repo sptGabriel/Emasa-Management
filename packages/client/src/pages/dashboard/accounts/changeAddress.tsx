@@ -21,7 +21,10 @@ const ChangeAddress: React.FC = observer(() => {
   const [address, setAddress] = useState<IAddress>(
     new UserAddress(currentUserStore.currentUser.address),
   )
+  const [onBlurCep, setBlurCep] = useState(address.cep)
+
   const findCep = async (e: any) => {
+    if (onBlurCep === address.cep) return
     const {value} = e.target
     const sleep = (m: any) => new Promise((r) => setTimeout(r, m))
     const valid = (val: string) => /^[0-9\b]+$/.test(val)
@@ -37,8 +40,6 @@ const ChangeAddress: React.FC = observer(() => {
           rua: res.street,
           cidade: res.city,
         })
-        layoutStore.setCepSearching(false)
-        layoutStore.setOverlay(false)
       })
       .catch((err) => {
         const messageErrors =
@@ -55,9 +56,10 @@ const ChangeAddress: React.FC = observer(() => {
           ? 'CEP inválido'
           : 'Algo deu errado tente mais tarde ou contate gabriel 😁 .'
         toast.error(errMessage)
-        layoutStore.setCepSearching(false)
-        layoutStore.setOverlay(false)
       })
+    setBlurCep(address.cep)
+    layoutStore.setCepSearching(false)
+    layoutStore.setOverlay(false)
   }
   return (
     <Forms buttonActive={onChangeFields}>

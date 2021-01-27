@@ -7,8 +7,9 @@ export const AccountsWrap = styled('div')`
   border-radius: 3px;
   border: 1px solid #dbdbdb;
   max-width: 935px;
+  margin: 0px auto 0;
+  height: calc(100% - 90px);
   overflow: hidden;
-  height: calc(100% - 80px);
   width: 100%;
   flex-grow: 1;
   justify-content: stretch;
@@ -17,7 +18,6 @@ export const AccountsWrap = styled('div')`
   flex-shrink: 0;
   padding: 0;
   position: relative;
-  margin: 0px auto 0;
 `
 export const ULSettings = styled(`ul`)`
   flex-basis: 236px;
@@ -57,6 +57,8 @@ export const Article = styled('article')`
   border: 0 solid #000;
   box-sizing: border-box;
   display: flex;
+  overflow: hidden;
+  height: 100%;
   flex-direction: column;
   margin: 0;
   padding: 0;
@@ -77,22 +79,21 @@ export const AvatarProfile = styled(`div`)<{image: any}>`
   position: relative;
   width: 70px;
   .avatar_cam {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  height: 22px;
-  width: 22px;
-  border-radius: 50%;
-  background: ${({theme}: any) => `rgba(${theme.primary},0.5)`};
-  border-none;
-  top: 40%;
-  right: 10px;
-  transform: translate(50%, 50%);
-  position: absolute;
-  svg {
-    color: #fff;
-  }
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    height: 22px;
+    width: 22px;
+    border-radius: 50%;
+    background: ${({theme}: any) => `rgba(${theme.primary},0.5)`};
+    top: 40%;
+    right: 10px;
+    transform: translate(50%, 50%);
+    position: absolute;
+    svg {
+      color: #fff;
+    }
   }
   .avatar {
     position: relative;
@@ -117,6 +118,7 @@ export const UserInfoWrap = styled('div')`
   padding: 0;
   position: relative;
   font-family: work-Sans, sans-serif;
+  ${NoSelect}
   .user_infos {
     display: flex;
     flex-direction: column;
@@ -129,13 +131,13 @@ export const UserInfoWrap = styled('div')`
       h1 {
         margin-right: 5px;
         font-size: 15px;
-          font-weight: 600;
-          line-height: 22px;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          white-space: nowrap;
-          font-family: inherit;
-          text-align: left;
+        font-weight: 600;
+        line-height: 22px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-family: inherit;
+        text-align: left;
       }
     }
     p {
@@ -145,16 +147,15 @@ export const UserInfoWrap = styled('div')`
     }
     .user_name {
       color: ${({theme}: any) => `rgb(${theme.primary})`};
-          font-size: 16px;
-          font-weight: 600;
-          line-height: 22px;
-          margin-bottom: 2px;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          white-space: nowrap;
-          font-family: inherit;
-          text-align: left;
-      }
+      font-size: 16px;
+      font-weight: 600;
+      line-height: 22px;
+      margin-bottom: 2px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-family: inherit;
+      text-align: left;
     }
   }
   .card-content {
@@ -171,7 +172,11 @@ export const Forms = styled('form')<{buttonActive: boolean}>`
   flex-direction: column;
   margin-bottom: 16px;
   margin-top: 16px;
+  height: 100%;
   font-family: work-Sans, sans-serif;
+  .subBut {
+    margin-top: 16px;
+  }
   .error-message {
     width: 100%;
     max-width: 355px;

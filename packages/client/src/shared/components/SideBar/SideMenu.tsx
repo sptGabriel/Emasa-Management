@@ -6,7 +6,7 @@ import {FaAngleDown} from 'react-icons/fa'
 import {useSpring} from 'react-spring'
 import {ITag, IDropdownItems, Tags} from '../../utils/MenuTags'
 import {useHeight} from '../../utils/useHeight'
-import { ListItem, MenuList, DropDown } from './styles'
+import {ListItem, MenuList, DropDown} from './styles'
 
 export type TSideBar = {
   open: boolean

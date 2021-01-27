@@ -9,7 +9,6 @@ const DashBoard = observer(() => {
   const {layoutStore} = useRootStore()
   return (
     <>
-      <CustomizerTheme />
       {layoutStore.layoutType === 'vertical' ? (
         <VerticalDashBoard />
       ) : (

@@ -6,7 +6,7 @@ import {
   Unique,
 } from '@mikro-orm/core';
 import { enumFromValue } from '@utils/enumFromValue';
-import { validate } from 'uuid';
+import { v4, validate } from 'uuid';
 import { User } from './user.entity';
 
 export enum OS {
@@ -28,6 +28,7 @@ export enum Device {
   random = 'desconhecido',
 }
 export interface authorizedUserContainer {
+  id?:string;
   user: User;
   ip: string;
   latitude: number | null;
@@ -42,7 +43,7 @@ export interface authorizedUserContainer {
 @Unique({ properties: ['user', 'ip', 'os', 'device'] })
 export class AuthorizedUser {
   @PrimaryKey()
-  public id: Number;
+  public id: string;
   @ManyToOne({
     entity: () => User,
     fieldName: 'user_id',
@@ -71,6 +72,7 @@ export class AuthorizedUser {
     this.online = container.online;
     this.timezone = container.timezone;
     this.os = container.os;
+    this.id = container.id ? container.id : v4()
   }
 
   public static build = ({
@@ -82,6 +84,7 @@ export class AuthorizedUser {
     os,
     online,
     timezone,
+    id
   }: authorizedUserContainer) => {
     const osValue = enumFromValue(os.toLowerCase(), OS);
     const deviceValue = enumFromValue(device.toLowerCase(), Device);
@@ -95,6 +98,7 @@ export class AuthorizedUser {
       longitude,
       latitude,
       ip,
+      id,
     });
   };
 }

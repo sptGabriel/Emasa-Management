@@ -8,7 +8,7 @@ export class Migration20201104231409 extends Migration {
         return this.getKnex()
           .schema // **** udpate
           .createTable('password_recovery', async table => {
-            table.increments('id').primary();
+            table.uuid('id').primary();
             table
               .uuid('user_id')
               .references('users.id')

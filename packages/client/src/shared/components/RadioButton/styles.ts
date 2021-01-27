@@ -1,4 +1,4 @@
-import styled from "@emotion/styled";
+import styled from '@emotion/styled'
 
 export const RadioWrap = styled('label')<{label?: string; bgColor?: string}>`
   display: grid;

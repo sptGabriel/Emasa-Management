@@ -4,7 +4,7 @@ import {BiMoon} from 'react-icons/bi'
 import {FiBell, FiSun} from 'react-icons/fi'
 import {AiOutlineCompress} from 'react-icons/ai'
 import {useRootStore} from '../../infra/mobx'
-import { WrapperTools } from './styles'
+import {WrapperTools} from './styles'
 
 const Widgets: React.FC = observer(() => {
   const {layoutStore} = useRootStore()

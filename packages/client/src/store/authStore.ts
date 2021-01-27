@@ -46,25 +46,21 @@ export class AuthStore {
   }
 
   public login = async (): Promise<void> => {
-    const position = await this.rootStore.getPosition()
     return this.rootStore.AxiosStore.post('/login', {
-      ...position,
+      ...(await this.rootStore.getPosition()),
       ip: await v4(),
       timezone: this.rootStore.timezone,
       device: this.rootStore.browser,
       os: this.rootStore.os,
       login: this.loginModel.login,
       password: this.loginModel.password,
-    }).then((response) =>
-      runInAction(() => {
-        console.log(response, 'response')
+    }).then(async (response) => {
+      if (response && response.data.token) {
         this.rootStore.authStore.isAuth = true
         this.rootStore.currentUserStore.accessToken = response.data.token
-        this.rootStore.currentUserStore.currentUser = new UserModel(
-          response.data.user,
-        )
-      }),
-    )
+        await this.rootStore.currentUserStore.pullUser()
+      }
+    })
   }
 
   public logout = async (): Promise<void> => {

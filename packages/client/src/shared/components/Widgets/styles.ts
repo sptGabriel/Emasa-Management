@@ -1,6 +1,6 @@
-import { keyframes } from "@emotion/react"
-import styled from "@emotion/styled"
-import { Container } from "../FlexBox"
+import {keyframes} from '@emotion/react'
+import styled from '@emotion/styled'
+import {Container} from '../FlexBox'
 
 const bellAnimation = keyframes`
   0% {

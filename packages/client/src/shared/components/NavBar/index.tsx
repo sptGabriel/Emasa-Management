@@ -4,7 +4,7 @@ import Widgets from '../Widgets'
 import Logo from '../Logo'
 import UserProfile from '../UserProfile'
 import MenuTags from './NavMenu'
-import { ToolsBar } from './styles'
+import {ToolsBar} from './styles'
 /* SideBar Styles Start */
 const Tools: React.FC<{isSticky: boolean; orientation: string}> = ({
   isSticky,

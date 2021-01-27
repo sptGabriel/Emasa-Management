@@ -6,6 +6,6 @@ const cloudinaryCore = new cloudinary.Cloudinary({
 })
 
 export const createBackgroundImage = (publicId: any) => {
-  if(!publicId) return undefined
+  if (!publicId) return undefined
   return cloudinaryCore.url(publicId)
 }

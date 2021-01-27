@@ -157,27 +157,27 @@ const RenderAvatar = observer(() => {
 const MemoizedAvatar = memo(RenderAvatar)
 
 const Accounts: React.FC = observer(() => {
-  const Location = useLocation()
+  // const Location = useLocation()
   const {layoutStore} = useRootStore()
-  const [breadCrumb, setBreadCrum] = useState([''])
+  // const [breadCrumb, setBreadCrum] = useState([''])
   const [accountsTags] = useState(SettingsTag)
-  useEffect(() => {
-    switch (Location.pathname) {
-      case '/dashboard/accounts/login_activity':
-        return setBreadCrum(['Dashboard', 'Conta', 'Atividade de login'])
-      case '/dashboard/accounts/edit':
-        return setBreadCrum(['Dashboard', 'Conta', 'Alterar Informações'])
-      case '/dashboard/accounts/password/change':
-        return setBreadCrum(['Dashboard', 'Conta', 'Alterar senha'])
-      case '/dashboard/accounts/address/change':
-        return setBreadCrum(['Dashboard', 'Conta', 'Alterar endereço'])
-      default:
-        return setBreadCrum(['Dashboard', 'Conta', 'Alterar Informações'])
-    }
-  }, [Location.pathname])
+  // useEffect(() => {
+  //   switch (Location.pathname) {
+  //     case '/dashboard/accounts/login_activity':
+  //       return setBreadCrum(['Dashboard', 'Conta', 'Atividade de login'])
+  //     case '/dashboard/accounts/edit':
+  //       return setBreadCrum(['Dashboard', 'Conta', 'Alterar Informações'])
+  //     case '/dashboard/accounts/password/change':
+  //       return setBreadCrum(['Dashboard', 'Conta', 'Alterar senha'])
+  //     case '/dashboard/accounts/address/change':
+  //       return setBreadCrum(['Dashboard', 'Conta', 'Alterar endereço'])
+  //     default:
+  //       return setBreadCrum(['Dashboard', 'Conta', 'Alterar Informações'])
+  //   }
+  // }, [Location.pathname])
   return (
     <>
-      <BreadCrumb path={breadCrumb} />
+      {/* <BreadCrumb path={breadCrumb} /> */}
       <AccountsWrap>
         <ULSettings>
           {accountsTags.map((item) => (

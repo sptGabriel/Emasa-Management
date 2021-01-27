@@ -6,7 +6,7 @@ import Widgets from '../Widgets'
 import Logo from '../Logo'
 import Search from '../Search'
 import UserProfile from '../UserProfile'
-import { LogoHeader, WrapperTools, NavBar } from './styles'
+import {LogoHeader, WrapperTools, NavBar} from './styles'
 
 const Header: React.FC = observer(() => {
   const {layoutStore} = useRootStore()

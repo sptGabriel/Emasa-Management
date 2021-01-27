@@ -1,7 +1,7 @@
 import { Entity, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
 import { Employee } from '@modules/employees/domain/employee.entity';
 import { enumFromValue } from '@utils/enumFromValue';
-import { validate } from 'uuid';
+import { v4, validate } from 'uuid';
 import { Device, OS } from './authorizedUser.entity';
 import { User } from './user.entity';
 
@@ -10,6 +10,7 @@ export enum LOGTYPE {
   resetpwd = 'reset-password',
 }
 export interface pwdLogsContainer {
+  id?: string;
   user: User;
   type: LOGTYPE;
   old_password: string;
@@ -24,7 +25,7 @@ export interface pwdLogsContainer {
 @Entity({ tableName: 'password_exchange_logs' })
 export class PasswordLogs {
   @PrimaryKey()
-  public id: Number;
+  public id: string;
   @ManyToOne({
     entity: () => User,
     fieldName: 'user_id',
@@ -56,6 +57,7 @@ export class PasswordLogs {
     this.old_password = container.old_password;
     this.os = container.os;
     this.type = container.type;
+    this.id = container.id ? container.id : v4();
   }
 
   public static build = ({
@@ -68,8 +70,10 @@ export class PasswordLogs {
     new_password,
     old_password,
     os,
+    id
   }: pwdLogsContainer) => {
     if (!validate(user.employee.id)) throw new Error(`Invalid Employee UUID`);
+    if (id && !validate(id)) throw new Error(`Invalid Logs UUID`);
     return new PasswordLogs({
       user,
       type:
@@ -86,6 +90,7 @@ export class PasswordLogs {
       longitude,
       latitude,
       ip,
+      id,
     });
   };
 }

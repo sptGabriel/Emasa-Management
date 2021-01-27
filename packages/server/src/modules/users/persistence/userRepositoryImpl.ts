@@ -1,6 +1,7 @@
 import { RequestContext } from '@mikro-orm/core';
 import { Pagination } from '@shared/core/pagination';
 import { inject, injectable } from 'tsyringe';
+import { v4 } from 'uuid';
 import { AuthorizedUser } from '../domain/authorizedUser.entity';
 import { LastDeviceAccess } from '../domain/lastDeviceAccess.entity';
 import { PasswordLogs } from '../domain/passwordLogs.entity';
@@ -60,10 +61,18 @@ export class UserRepository implements IUserRepository {
       const deviceQB = await em.createQueryBuilder(AuthorizedUser);
       const userQB = await em.createQueryBuilder(User);
       const lastAccessQB = await em.createQueryBuilder(LastDeviceAccess);
+      await deviceQB
+        .update({ online: false })
+        .where({ user_id: user.employee.id })
+        .andWhere('ip', '!=', device.ip)
+        .andWhere('os', '!=', device.os)
+        .andWhere('device', '!=', device.device)
+        .execute();
       const hasDevice = await this.em.findOne(AuthorizedUser, {
         user_id: user.employee.id,
         ip: device.ip,
         os: device.os,
+        device: device.device
       });
       const userDevice = hasDevice
         ? await deviceQB
@@ -72,6 +81,7 @@ export class UserRepository implements IUserRepository {
             .execute()
         : await deviceQB
             .insert({
+              id:device.id,
               user_id: user.employee.id,
               ip: device.ip,
               latitude: device.latitude,
@@ -88,6 +98,7 @@ export class UserRepository implements IUserRepository {
         .execute();
       await lastAccessQB
         .insert({
+          id: v4(),
           userdevice_id: hasDevice ? hasDevice.id : device.id,
           accessed_at: new Date(),
         })

@@ -4,10 +4,11 @@ import {
   PrimaryKey,
   Property,
 } from '@mikro-orm/core';
-import { validate } from 'uuid';
+import { v4, validate } from 'uuid';
 import { User } from './user.entity';
 
 export interface pwdRecoveryContainer {
+  id?: string;
   user: User;
   token: string;
   used: boolean;
@@ -17,7 +18,7 @@ export interface pwdRecoveryContainer {
 @Entity({ tableName: 'password_recovery' })
 export class PasswordRecovery {
   @PrimaryKey()
-  public id: Number;
+  public id: string;
   @ManyToOne({
     entity: () => User,
     fieldName: 'user_id',
@@ -35,15 +36,18 @@ export class PasswordRecovery {
     this.expires_at = container.expires_at;
     this.token = container.token;
     this.used = container.used;
+    this.id = container.id? container.id : v4()
   }
 
   public static build = ({
     expires_at,
     user,
     token,
+    id,
     used,
   }: pwdRecoveryContainer) => {
+    if (id && !validate(id)) throw new Error(`Invalid Recovery UUID`);
     if (!validate(user.employee.id)) throw new Error(`Invalid Employee UUID`);
-    return new PasswordRecovery({ user, expires_at, token, used });
+    return new PasswordRecovery({ user, expires_at, token, used, id });
   };
 }

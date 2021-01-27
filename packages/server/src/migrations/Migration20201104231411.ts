@@ -8,7 +8,7 @@ export class Migration20201104231411 extends Migration {
         return this.getKnex()
           .schema // **** udpate
           .createTable('authorized_users', async table => {
-            table.increments('id').primary();
+            table.uuid('id').primary();
             table.uuid('user_id').references('users.id').notNullable();
             table.string('ip').notNullable();
             table.integer('latitude');
