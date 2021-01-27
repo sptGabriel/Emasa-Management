@@ -1,4 +1,10 @@
-import { Entity, ManyToOne, PrimaryKey, Property, Unique } from '@mikro-orm/core';
+import {
+  Entity,
+  ManyToOne,
+  PrimaryKey,
+  Property,
+  Unique,
+} from '@mikro-orm/core';
 import { enumFromValue } from '@utils/enumFromValue';
 import { validate } from 'uuid';
 import { User } from './user.entity';
@@ -29,7 +35,7 @@ export interface authorizedUserContainer {
   os: OS;
   device: Device;
   timezone: string;
-  online: boolean
+  online: boolean;
 }
 
 @Entity({ tableName: 'authorized_users' })
@@ -39,7 +45,7 @@ export class AuthorizedUser {
   public id: Number;
   @ManyToOne({
     entity: () => User,
-    fieldName: 'employee_id',
+    fieldName: 'user_id',
   })
   public user: User;
   @Property()
@@ -54,7 +60,7 @@ export class AuthorizedUser {
   public device: Device;
   @Property()
   public timezone: string;
-  @Property({default: false})
+  @Property({ default: false })
   public online: boolean;
   constructor(container: authorizedUserContainer) {
     this.user = container.user;
@@ -62,8 +68,8 @@ export class AuthorizedUser {
     this.ip = container.ip;
     this.latitude = container.latitude;
     this.longitude = container.longitude;
-    this.online = container.online
-    this.timezone = container.timezone
+    this.online = container.online;
+    this.timezone = container.timezone;
     this.os = container.os;
   }
 
@@ -75,15 +81,15 @@ export class AuthorizedUser {
     longitude,
     os,
     online,
-    timezone
+    timezone,
   }: authorizedUserContainer) => {
+    const osValue = enumFromValue(os.toLowerCase(), OS);
+    const deviceValue = enumFromValue(device.toLowerCase(), Device);
     if (!validate(user.employee.id)) throw new Error(`Invalid Employee UUID`);
     return new AuthorizedUser({
       user,
-      os: os in OS ? enumFromValue(os.toLowerCase(), OS) : OS.random,
-      device: device in Device
-      ? enumFromValue(device.toLowerCase(), Device)
-      : Device.random,
+      os: osValue ? osValue : OS.random,
+      device: deviceValue ? deviceValue : Device.random,
       timezone,
       online,
       longitude,

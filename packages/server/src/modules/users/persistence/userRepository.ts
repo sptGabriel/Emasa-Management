@@ -1,5 +1,6 @@
 import { Employee } from '@modules/employees/domain/employee.entity';
 import { Pagination } from '@shared/core/pagination';
+import { AuthorizedUser } from '../domain/authorizedUser.entity';
 import { PasswordLogs } from '../domain/passwordLogs.entity';
 import { PasswordRecovery } from '../domain/passwordRecovery.entity';
 import { User } from '../domain/user.entity';
@@ -58,14 +59,7 @@ export interface IUserRepository {
   setRFToken(user: User): Promise<User>;
   login(
     user: User,
-    device: {
-      os: string;
-      device: string;
-      ip: string;
-      longitude: number | null;
-      latitude: number | null;
-      timezone: string;
-    },
+    device: AuthorizedUser,
   ): Promise<User>;
   logout(user: User, ip: string): Promise<User>;
   /**

@@ -9,12 +9,8 @@ import { IJWTAcessPayload, JWT } from '@modules/users/domain/jwt';
 import { wrap } from '@mikro-orm/core';
 import { ensure } from '@utils/ensure';
 import { User } from '@modules/users/domain/user.entity';
-import { enumFromValue } from '@utils/enumFromValue';
-import {
-  AuthorizedUser,
-  Device,
-  OS,
-} from '@modules/users/domain/authorizedUser.entity';
+
+import {AuthorizedUser} from '@modules/users/domain/authorizedUser.entity';
 
 export interface loginResult {
   refresh: string;
