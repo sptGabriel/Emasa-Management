@@ -106,6 +106,14 @@ export const AvatarProfile = styled(`div`)<{image: any}>`
     border-radius: 100vh;
     cursor: pointer;
     border: 2px solid ${({theme}: any) => `rgb(${theme.primary})`};
+    label {
+      width: 60px !important;
+      height: 60px !important;
+      input {
+        width: 60px !important;
+        height: 60px !important;
+      }
+    }
   }
 `
 export const UserInfoWrap = styled('div')`
@@ -114,7 +122,7 @@ export const UserInfoWrap = styled('div')`
   justify-content: flex-start;
   align-items: stretch;
   flex-direction: row;
-  margin: 32px 0 0;
+  margin: 32px 0 16px;
   padding: 0;
   position: relative;
   font-family: work-Sans, sans-serif;

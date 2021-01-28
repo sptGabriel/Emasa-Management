@@ -54,13 +54,16 @@ export class AuthStore {
       os: this.rootStore.os,
       login: this.loginModel.login,
       password: this.loginModel.password,
-    }).then(async (response) => {
-      if (response && response.data.token) {
+    }).then((response) =>
+      runInAction(() => {
+        console.log(response, 'response')
         this.rootStore.authStore.isAuth = true
         this.rootStore.currentUserStore.accessToken = response.data.token
-        await this.rootStore.currentUserStore.pullUser()
-      }
-    })
+        this.rootStore.currentUserStore.currentUser = new UserModel(
+          response.data.user,
+        )
+      }),
+    )
   }
 
   public logout = async (): Promise<void> => {

@@ -17,8 +17,10 @@ const ContentUserSection: React.FC<{open: boolean}> = observer(({open}) => {
     <UserCanvas open={open} orientation={layoutStore.layoutType}>
       <div className="header_txt">Welcome !</div>
       <button type="button" className="dropdown-itemx">
-        <CgProfile size={18} />
-        <span>My Profile</span>
+        <NavLink to={'accounts/edit'} end>
+          <CgProfile size={18} />
+          <span>My Profile</span>
+        </NavLink>
       </button>
       <button type="button" className="dropdown-itemx">
         <NavLink to={'accounts/edit'} end>
@@ -28,8 +30,10 @@ const ContentUserSection: React.FC<{open: boolean}> = observer(({open}) => {
       </button>
       <div className="dropdown-divider" />
       <button type="button" className="dropdown-itemx" onClick={onLogout}>
-        <CgLogOff className="logout" size={18} />
-        <span>Logout</span>
+        <NavLink to={'..'} end>
+          <CgLogOff className="logout" size={18} />
+          <span>Logout</span>
+        </NavLink>
       </button>
     </UserCanvas>
   )

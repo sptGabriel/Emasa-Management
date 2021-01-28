@@ -109,8 +109,8 @@ const RenderAvatar = observer(() => {
             image={createBackgroundImage(currentUserStore.currentUser.avatar)}
           >
             {Location.pathname === '/dashboard/accounts/edit' ? (
-              <div className="avatar">
-                <label>
+              <label>
+                <div className="avatar">
                   <input
                     hidden
                     type="file"
@@ -124,10 +124,10 @@ const RenderAvatar = observer(() => {
                   <div className="avatar_cam">
                     <AiOutlineCamera size={20} />
                   </div>
-                </label>
-              </div>
+                </div>
+              </label>
             ) : (
-              <div className="avatar" />
+              <div className="avatar" style={{cursor: 'auto'}} />
             )}
           </AvatarProfile>
           <div className="user_infos">

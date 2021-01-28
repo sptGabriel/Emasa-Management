@@ -91,9 +91,16 @@ export const UserCanvas = styled('div')<{open: boolean; orientation?: string}>`
     font-family: Open Sans, sans-serif;
   }
   button {
+    a {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      padding: 0.5rem 1rem;
+      justify-content: flex-start;
+    }
     display: flex;
-    padding: 0.5rem 1rem;
     align-items: center;
+    justify-content: flex-start;
     color: ${({theme}: any) =>
       `rgb(${theme.header.userSection.text})`} !important;
     :hover {
