@@ -57,10 +57,7 @@ export interface IUserRepository {
    * @returns {Promise<User>}
    */
   setRFToken(user: User): Promise<User>;
-  login(
-    user: User,
-    device: AuthorizedUser,
-  ): Promise<User>;
+  login(user: User, device: AuthorizedUser, hasDevice: boolean): Promise<User>;
   logout(user: User, ip: string): Promise<User>;
   /**
    * @param {string} employeeProps
@@ -75,4 +72,7 @@ export interface IUserRepository {
     userRecovery: PasswordRecovery,
     passwordLogs: PasswordLogs,
   ): Promise<User>;
+  deviceByUQIndex(
+    device: Pick<AuthorizedUser, 'user' | 'ip' | 'os' | 'device'>,
+  ): Promise<AuthorizedUser | undefined>;
 }

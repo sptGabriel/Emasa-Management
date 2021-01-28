@@ -54,7 +54,11 @@ export class UserRepository implements IUserRepository {
     await this.em.persistAndFlush(user);
     return user;
   };
-  public login = async (user: User, device: AuthorizedUser): Promise<User> => {
+  public login = async (
+    user: User,
+    device: AuthorizedUser,
+    hasDevice: boolean,
+  ): Promise<User> => {
     const em = await this.em.fork();
     await em.begin();
     try {
@@ -68,37 +72,32 @@ export class UserRepository implements IUserRepository {
         .andWhere('os', '!=', device.os)
         .andWhere('device', '!=', device.device)
         .execute();
-      const hasDevice = await this.em.findOne(AuthorizedUser, {
-        user_id: user.employee.id,
-        ip: device.ip,
-        os: device.os,
-        device: device.device
-      });
-      console.log(device.city, 'iixixisam')
-      const userDevice = hasDevice
-        ? await deviceQB
-            .update({ online: true })
-            .where({ id: hasDevice.id })
-            .execute()
-        : await deviceQB
-            .insert({
-              id:device.id,
-              city: device.city,
-              continent: device.continent,
-              continent_code: device.continentCode,
-              country: device.country,
-              principal_subdivision: device.principalSubdivision,
-              principal_subdivision_code: device.principalSubdivisionCode,
-              user_id: user.employee.id,
-              ip: device.ip,
-              latitude: device.latitude,
-              longitude: device.longitude,
-              os: device.os,
-              device: device.device,
-              timezone: device.timezone,
-              online: true,
-            })
-            .execute();
+      if (hasDevice) {
+        await deviceQB
+          .update({ online: true })
+          .where({ id: device.id })
+          .execute();
+      } else {
+        await deviceQB
+          .insert({
+            id: device.id,
+            city: device.city,
+            continent: device.continent,
+            continent_code: device.continentCode,
+            country: device.country,
+            principal_subdivision: device.principalSubdivision,
+            principal_subdivision_code: device.principalSubdivisionCode,
+            user_id: user.employee.id,
+            ip: device.ip,
+            latitude: device.latitude,
+            longitude: device.longitude,
+            os: device.os,
+            device: device.device,
+            timezone: device.timezone,
+            online: true,
+          })
+          .execute();
+      }
       await userQB
         .update({ ref_token: user.ref_token })
         .where({ id: user.employee.id })
@@ -106,7 +105,7 @@ export class UserRepository implements IUserRepository {
       await lastAccessQB
         .insert({
           id: v4(),
-          userdevice_id: hasDevice ? hasDevice.id : device.id,
+          userdevice_id: device.id,
           accessed_at: new Date(),
         })
         .execute();
@@ -154,6 +153,8 @@ export class UserRepository implements IUserRepository {
       'employee',
       'employee.departament',
       'employee.address',
+      'authorizedDevices',
+      'authorizedDevices.lastAccesses'
     ]);
     if (!user) return;
     return user;
@@ -168,7 +169,11 @@ export class UserRepository implements IUserRepository {
     return user;
   };
   public byLogin = async (login: string): Promise<User | undefined> => {
-    const user = await this.em.findOne(User, { login }, ['employee']);
+    const user = await this.em.findOne(User, { login }, [
+      'employee',
+      'authorizedDevices',
+      'authorizedDevices.lastAccesses'
+    ]);
     if (!user) return;
     return user;
   };
@@ -251,5 +256,20 @@ export class UserRepository implements IUserRepository {
       await em.rollback();
       throw e;
     }
+  };
+  public deviceByUQIndex = async ({
+    device,
+    ip,
+    os,
+    user,
+  }: Pick<AuthorizedUser, 'user' | 'ip' | 'os' | 'device'>): Promise<
+    AuthorizedUser | undefined
+  > => {
+    return await this.em.findOne(AuthorizedUser, {
+      user_id: user.employee.id,
+      ip: ip,
+      os: os.toLowerCase(),
+      device: device.toLowerCase(),
+    });
   };
 }

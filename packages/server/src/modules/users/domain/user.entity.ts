@@ -1,6 +1,9 @@
 import {
   Cascade,
+  Collection,
   Entity,
+  LoadStrategy,
+  OneToMany,
   OneToOne,
   Property,
 } from '@mikro-orm/core';
@@ -9,6 +12,7 @@ import { validate } from 'uuid';
 import { hash, genSaltSync, compareSync } from 'bcryptjs';
 import { isHashedRegex } from '@utils/isHashed';
 import { ProfilePicture } from './userProfilePicture.entity';
+import { AuthorizedUser } from './authorizedUser.entity';
 
 export interface userContainer {
   employee: Employee;
@@ -40,6 +44,27 @@ export class User {
     fieldName: 'picture_id',
   })
   public picture: ProfilePicture | null;
+  @OneToMany(() => AuthorizedUser, devices => devices.user, {
+    strategy: LoadStrategy.JOINED,
+  })
+  public authorizedDevices = new Collection<AuthorizedUser>(this);
+  @Property({ name: 'devicesInformations', persist: false })
+  public get getDevicesInfos(): any {
+    const devices: any = this.authorizedDevices.getItems();
+    console.log(devices)
+    return devices.map((item: any) => {
+      return {
+        device: item.device,
+        browser: item.os,
+        city: item.city,
+        state: item.principalSubdivision,
+        country: item.country,
+        online: item.online,
+        accessTime: item.lastAccesses.getItems()[item.lastAccesses.length - 1]
+          .accessed_at,
+      };
+    });
+  }
   @Property({ name: 'payload', persist: false })
   public get getJWTPayload(): any {
     return {
@@ -58,6 +83,7 @@ export class User {
       matricula: this.employee.matricula,
       position: this.employee.position,
       address: this.employee.address.Address,
+      devices: this.getDevicesInfos
     };
   }
 

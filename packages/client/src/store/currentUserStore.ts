@@ -1,5 +1,6 @@
 import {promises} from 'fs'
 import {action, runInAction, makeAutoObservable} from 'mobx'
+import {DeviceModel} from '../models/deviceModel'
 import {UserAddress} from '../models/userAddressModel'
 import {UserModel} from '../models/userModel'
 import {cepMask} from '../shared/utils/cepMask'
@@ -48,7 +49,10 @@ export class CurrentUserStore {
             ...user.data.address,
             cep: cepMask(user.data.address.cep),
           })
-          this.currentUser = new UserModel({...user.data, address})
+          const devices = user.data.devices.map(
+            (device: any) => new DeviceModel({...device}),
+          )
+          this.currentUser = new UserModel({...user.data, address, devices})
         }
         if (this.currentUser) this.rootStore.authStore.isAuth = true
       })

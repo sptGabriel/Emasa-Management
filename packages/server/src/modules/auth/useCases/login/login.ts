@@ -39,26 +39,40 @@ export class LoginUseCase
     if (!User.DecryptPassword(data.password, user.password)) {
       throw new Error(`Incorrect Password`);
     }
+    const devices = user.authorizedDevices.getItems();
     const renewToken = await JWT.buildRefreshToken(user.employee.id);
     wrap(user).assign({ ref_token: renewToken.token });
-    const { ip, latitude, longitude, timezone, device, os } = data;
-    const reverser = await getReverse({
-      latitude,
-      longitude,
+    let { ip, latitude, longitude, timezone, device, os } = data;
+    const hasDevice = devices.find(item => {
+      if (item.os === os && item.ip === ip && item.device === device)
+        return device;
     });
-    const userDevice = AuthorizedUser.build({
-      ...reverser.data,
-      device,
-      city: reverser.data.city || reverser.data.locality || null,
-      ip,
-      latitude,
-      longitude,
-      online: true,
-      os,
-      timezone,
+    const reverser: any = !hasDevice
+      ? await getReverse({
+          latitude,
+          longitude,
+        })
+      : undefined;
+    const userDevice = !hasDevice
+      ? AuthorizedUser.build({
+          ...reverser.data,
+          device,
+          country: reverser.data.countryName || null,
+          city: reverser.data.city || reverser.data.locality || null,
+          ip,
+          latitude,
+          longitude,
+          online: true,
+          os,
+          timezone,
+          user,
+        })
+      : undefined;
+    return await this.userRepository.login(
       user,
-    });
-    return await this.userRepository.login(user, userDevice);
+      ensure(hasDevice ? hasDevice : userDevice),
+      hasDevice ? true : false,
+    );
   };
 
   public execute = async (

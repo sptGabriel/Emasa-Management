@@ -1,6 +1,9 @@
 import {
+  Collection,
   Entity,
+  LoadStrategy,
   ManyToOne,
+  OneToMany,
   PrimaryKey,
   Property,
   Unique,
@@ -8,6 +11,7 @@ import {
 import { enumFromValue } from '@utils/enumFromValue';
 import Big from 'big.js';
 import { v4, validate } from 'uuid';
+import { LastDeviceAccess } from './lastDeviceAccess.entity';
 import { User } from './user.entity';
 
 export enum OS {
@@ -82,6 +86,8 @@ export class AuthorizedUser {
   public timezone: string;
   @Property({ default: false })
   public online: boolean;
+  @OneToMany(() => LastDeviceAccess, access => access.authorizedUser, {strategy: LoadStrategy.JOINED,})
+  public lastAccesses = new Collection<LastDeviceAccess>(this);
   constructor(container: authorizedUserContainer) {
     this.user = container.user;
     this.device = container.device;

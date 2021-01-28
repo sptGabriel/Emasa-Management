@@ -36,15 +36,13 @@ export class AuthController extends BaseController {
         .execute({ refreshToken, id });
       if (result.isLeft()) return response.status(401);
       response.cookie('emsi', result.value.user.id, {
-        expires: new Date(Number(new Date()) + 315360000000)
+        expires: new Date(Number(new Date()) + 315360000000),
       });
       response.cookie('@Emasa/Refresh-Token', result.value.refreshToken, {
         httpOnly: true,
-        expires: new Date(Number(new Date()) + 315360000000)
+        expires: new Date(Number(new Date()) + 315360000000),
       });
-      return response
-        .status(200)
-        .send({ token: result.value.accessToken});
+      return response.status(200).send({ token: result.value.accessToken });
     } catch (error) {
       console.log(error);
       next(error);
@@ -58,18 +56,24 @@ export class AuthController extends BaseController {
   ) => {
     try {
       const dto: loginDTO = request.body;
-      const result = await container.resolve(LoginUseCase).execute(dto);
+      const result = await container
+        .resolve(LoginUseCase)
+        .execute({
+          ...dto,
+          os: dto.os ? dto.os.toLowerCase() : null,
+          device: dto.device ? dto.device.toLowerCase() : null,
+        });
       if (result.isLeft()) return next(result.value);
       response.cookie('emsi', result.value.user.id, {
-       expires: new Date(Number(new Date()) + 315360000000)
+        expires: new Date(Number(new Date()) + 315360000000),
       });
       response.cookie('@Emasa/Refresh-Token', result.value.refresh, {
-       httpOnly: true,
-       expires: new Date(Number(new Date()) + 315360000000),
+        httpOnly: true,
+        expires: new Date(Number(new Date()) + 315360000000),
       });
       return response.json({
-       token: result.value.access,
-       user: result.value.user,
+        token: result.value.access,
+        user: result.value.user,
       });
     } catch (error) {
       next(error);

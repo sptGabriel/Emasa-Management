@@ -1,5 +1,6 @@
 /* eslint-disable camelcase */
 import {makeAutoObservable} from 'mobx'
+import {DeviceModel} from './deviceModel'
 import {UserAddress} from './userAddressModel'
 
 export type TUser = {
@@ -17,6 +18,7 @@ export type TUser = {
   email: string
   biografia: string
   address: UserAddress
+  devices: DeviceModel[]
 }
 export class UserModel implements TUser {
   id: string
@@ -44,6 +46,8 @@ export class UserModel implements TUser {
 
   address: UserAddress
 
+  devices: DeviceModel[] = []
+
   constructor(props?: TUser) {
     makeAutoObservable(this)
     this.id = props ? props.id : ''
@@ -59,5 +63,6 @@ export class UserModel implements TUser {
     this.email = props ? props.email : ''
     this.position = props ? props.position : ''
     this.address = props ? props.address : new UserAddress()
+    if (props && props.devices) this.devices.push(...props.devices)
   }
 }

@@ -5,8 +5,8 @@ export interface loginDTO {
   login: string;
   password: string;
   ip: string;
-  os: OS;
-  device: Device;
+  os: string | null;
+  device: string | null;
   longitude: Big | null;
   latitude: Big | null;
   timezone: string;
