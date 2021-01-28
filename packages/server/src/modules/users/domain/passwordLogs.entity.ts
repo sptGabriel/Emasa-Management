@@ -1,6 +1,7 @@
 import { Entity, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
 import { Employee } from '@modules/employees/domain/employee.entity';
 import { enumFromValue } from '@utils/enumFromValue';
+import Big from 'big.js';
 import { v4, validate } from 'uuid';
 import { Device, OS } from './authorizedUser.entity';
 import { User } from './user.entity';
@@ -16,8 +17,8 @@ export interface pwdLogsContainer {
   old_password: string;
   new_password: string;
   ip: string;
-  latitude: Number;
-  longitude: Number;
+  latitude: Big;
+  longitude: Big;
   os: OS;
   device: Device;
 }
@@ -38,9 +39,9 @@ export class PasswordLogs {
   @Property()
   public ip: string;
   @Property()
-  public latitude: Number;
+  public latitude: Big;
   @Property()
-  public longitude: Number;
+  public longitude: Big;
   @Property()
   public os: OS;
   @Property()

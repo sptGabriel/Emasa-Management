@@ -6,6 +6,7 @@ import {
   Unique,
 } from '@mikro-orm/core';
 import { enumFromValue } from '@utils/enumFromValue';
+import Big from 'big.js';
 import { v4, validate } from 'uuid';
 import { User } from './user.entity';
 
@@ -28,12 +29,18 @@ export enum Device {
   random = 'desconhecido',
 }
 export interface authorizedUserContainer {
-  id?:string;
+  id?: string;
   user: User;
   ip: string;
-  latitude: number | null;
-  longitude: number | null;
+  latitude: Big | null;
+  longitude: Big | null;
   os: OS;
+  city: string | null;
+  country: string | null;
+  principalSubdivision: string | null;
+  principalSubdivisionCode: string | null;
+  continent: string | null;
+  continentCode: string | null;
   device: Device;
   timezone: string;
   online: boolean;
@@ -52,9 +59,21 @@ export class AuthorizedUser {
   @Property()
   public ip: string;
   @Property()
-  public latitude: number | null;
+  public latitude: Big | null;
   @Property()
-  public longitude: number | null;
+  public longitude: Big | null;
+  @Property()
+  public city: string | null;
+  @Property()
+  public country: string | null;
+  @Property()
+  public continent: string | null;
+  @Property()
+  public continentCode: string | null;
+  @Property()
+  public principalSubdivision: string | null;
+  @Property()
+  public principalSubdivisionCode: string | null;
   @Property()
   public os: OS;
   @Property()
@@ -71,8 +90,14 @@ export class AuthorizedUser {
     this.longitude = container.longitude;
     this.online = container.online;
     this.timezone = container.timezone;
+    this.city = container.city;
+    this.continent = container.continent;
+    this.country = container.country;
+    this.continentCode = container.continentCode;
     this.os = container.os;
-    this.id = container.id ? container.id : v4()
+    this.principalSubdivision = container.principalSubdivision;
+    this.principalSubdivisionCode = container.principalSubdivisionCode;
+    this.id = container.id ? container.id : v4();
   }
 
   public static build = ({
@@ -84,13 +109,25 @@ export class AuthorizedUser {
     os,
     online,
     timezone,
-    id
+    id,
+    city,
+    continent,
+    continentCode,
+    country,
+    principalSubdivision,
+    principalSubdivisionCode,
   }: authorizedUserContainer) => {
     const osValue = enumFromValue(os.toLowerCase(), OS);
     const deviceValue = enumFromValue(device.toLowerCase(), Device);
     if (!validate(user.employee.id)) throw new Error(`Invalid Employee UUID`);
     return new AuthorizedUser({
+      principalSubdivision,
+      principalSubdivisionCode,
       user,
+      city,
+      continent,
+      continentCode,
+      country,
       os: osValue ? osValue : OS.random,
       device: deviceValue ? deviceValue : Device.random,
       timezone,

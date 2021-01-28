@@ -9,8 +9,16 @@ import { IJWTAcessPayload, JWT } from '@modules/users/domain/jwt';
 import { wrap } from '@mikro-orm/core';
 import { ensure } from '@utils/ensure';
 import { User } from '@modules/users/domain/user.entity';
+import http from 'http';
+import { AuthorizedUser } from '@modules/users/domain/authorizedUser.entity';
+import { getReverse } from '@utils/getReverseGeoLocation';
 
-import {AuthorizedUser} from '@modules/users/domain/authorizedUser.entity';
+var options = {
+  host: 'https://api.bigdatacloud.net/data/reverse-geocode',
+  port: 80,
+  path: '/resource?id=foo&bar=baz',
+  method: 'POST',
+};
 
 export interface loginResult {
   refresh: string;
@@ -34,8 +42,14 @@ export class LoginUseCase
     const renewToken = await JWT.buildRefreshToken(user.employee.id);
     wrap(user).assign({ ref_token: renewToken.token });
     const { ip, latitude, longitude, timezone, device, os } = data;
+    const reverser = await getReverse({
+      latitude,
+      longitude,
+    });
     const userDevice = AuthorizedUser.build({
+      ...reverser.data,
       device,
+      city: reverser.data.city || reverser.data.locality || null,
       ip,
       latitude,
       longitude,

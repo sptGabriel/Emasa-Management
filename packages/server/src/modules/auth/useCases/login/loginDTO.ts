@@ -1,4 +1,5 @@
-import { Device, OS } from "@modules/users/domain/passwordLogs.entity";
+import { Device, OS } from "@modules/users/domain/authorizedUser.entity";
+import {Big} from 'big.js'
 
 export interface loginDTO {
   login: string;
@@ -6,7 +7,7 @@ export interface loginDTO {
   ip: string;
   os: OS;
   device: Device;
-  longitude: number | null;
-  latitude: number | null;
+  longitude: Big | null;
+  latitude: Big | null;
   timezone: string;
 }

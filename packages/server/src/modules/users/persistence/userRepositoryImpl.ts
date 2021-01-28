@@ -74,6 +74,7 @@ export class UserRepository implements IUserRepository {
         os: device.os,
         device: device.device
       });
+      console.log(device.city, 'iixixisam')
       const userDevice = hasDevice
         ? await deviceQB
             .update({ online: true })
@@ -82,6 +83,12 @@ export class UserRepository implements IUserRepository {
         : await deviceQB
             .insert({
               id:device.id,
+              city: device.city,
+              continent: device.continent,
+              continent_code: device.continentCode,
+              country: device.country,
+              principal_subdivision: device.principalSubdivision,
+              principal_subdivision_code: device.principalSubdivisionCode,
               user_id: user.employee.id,
               ip: device.ip,
               latitude: device.latitude,

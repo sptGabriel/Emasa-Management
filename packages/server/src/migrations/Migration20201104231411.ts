@@ -11,11 +11,17 @@ export class Migration20201104231411 extends Migration {
             table.uuid('id').primary();
             table.uuid('user_id').references('users.id').notNullable();
             table.string('ip').notNullable();
-            table.integer('latitude');
-            table.integer('longitude');
+            table.specificType('latitude', 'double precision').notNullable();
+            table.specificType('longitude', 'double precision').notNullable();
             table.string('os');
             table.string('device');
             table.string('timezone');
+            table.string('continent');
+            table.string('country');
+            table.string('continent_code');
+            table.string('city');
+            table.string('principal_subdivision');
+            table.string('principal_subdivision_code');
             table.unique(['user_id', 'ip', 'device', 'os'])
             table.boolean('online').defaultTo(false);
             table.timestamp('created_at').defaultTo(this.getKnex().fn.now());
