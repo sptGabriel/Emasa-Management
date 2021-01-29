@@ -305,3 +305,46 @@ export const Forms = styled('form')<{buttonActive: boolean}>`
     }
   }
 `
+export const LoginActivity = styled('div')`
+  margin-top: 32px;
+  margin-right: 55px;
+  margin-left: 55px;
+  margin-bottom: 16px;
+  height: 100%;
+  .deviceInfo {
+    display: flex;
+    flex-direction: column;
+  }
+  .acitivty-item {
+    border-bottom: 1px solid #e5e5e5;
+    padding-bottom: 12px;
+    padding-top: 12px;
+    font-size: 14px;
+    display: flex;
+  }
+  .os {
+    display: flex;
+    align-items: center;
+    margin-right: 12px;
+    img {
+      height: 30px;
+      width: 30px;
+    }
+  }
+  .header {
+    flex: 0 0 auto;
+    justify-content: flex-start;
+    align-items: stretch;
+    h1 {
+      margin-bottom: 20px;
+      margin-top: 8px;
+    }
+    h2 {
+      color: #262626;
+      font-size: 22px;
+      line-height: 26px;
+      font-weight: 300;
+      font-family: work-Sans, sans-serif;
+    }
+  }
+`

@@ -1,4 +1,4 @@
-import { RequestContext } from '@mikro-orm/core';
+import { RequestContext, wrap } from '@mikro-orm/core';
 import { Pagination } from '@shared/core/pagination';
 import { inject, injectable } from 'tsyringe';
 import { v4 } from 'uuid';
@@ -110,7 +110,13 @@ export class UserRepository implements IUserRepository {
         })
         .execute();
       await em.commit();
-      return user;
+      return em.findOne(User, { employee: { id: user.employee.id } }, [
+        'employee',
+        'employee.departament',
+        'employee.address',
+        'authorizedDevices',
+        'authorizedDevices.lastAccesses',
+      ]);
     } catch (e) {
       await em.rollback();
       console.log(e, 'error');
@@ -154,7 +160,7 @@ export class UserRepository implements IUserRepository {
       'employee.departament',
       'employee.address',
       'authorizedDevices',
-      'authorizedDevices.lastAccesses'
+      'authorizedDevices.lastAccesses',
     ]);
     if (!user) return;
     return user;
@@ -172,7 +178,7 @@ export class UserRepository implements IUserRepository {
     const user = await this.em.findOne(User, { login }, [
       'employee',
       'authorizedDevices',
-      'authorizedDevices.lastAccesses'
+      'authorizedDevices.lastAccesses',
     ]);
     if (!user) return;
     return user;

@@ -8,6 +8,7 @@ import ErrorFallback from '../../components/ErrorBoundary/ErrorFallBack'
 import Accounts from '../../../pages/dashboard/accounts'
 import ChangePassword from '../../../pages/dashboard/accounts/changePassword'
 import ChangeAddress from '../../../pages/dashboard/accounts/changeAddress'
+import UserActivity from '../../../pages/dashboard/accounts/loginActivity'
 
 const ApplicationRoutes: React.FC<{isLoggedIn: boolean}> = observer(
   ({isLoggedIn}) => {
@@ -25,7 +26,7 @@ const ApplicationRoutes: React.FC<{isLoggedIn: boolean}> = observer(
             element: <EditProfile />,
           },
           {
-            path: '/accounts/edit/',
+            path: '/accounts',
             element: <Accounts />,
             children: [
               {
@@ -42,7 +43,7 @@ const ApplicationRoutes: React.FC<{isLoggedIn: boolean}> = observer(
               },
               {
                 path: '/login_activity',
-                element: <div>need implement</div>,
+                element: <UserActivity />,
               },
             ],
           },

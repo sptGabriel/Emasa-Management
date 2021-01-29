@@ -51,7 +51,6 @@ export class User {
   @Property({ name: 'devicesInformations', persist: false })
   public get getDevicesInfos(): any {
     const devices: any = this.authorizedDevices.getItems();
-    console.log(devices)
     return devices.map((item: any) => {
       return {
         device: item.device,

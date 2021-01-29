@@ -53,6 +53,7 @@ export class CurrentUserStore {
             (device: any) => new DeviceModel({...device}),
           )
           this.currentUser = new UserModel({...user.data, address, devices})
+          console.log(this.currentUser)
         }
         if (this.currentUser) this.rootStore.authStore.isAuth = true
       })

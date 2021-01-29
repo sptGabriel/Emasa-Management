@@ -23,7 +23,7 @@ const ContentUserSection: React.FC<{open: boolean}> = observer(({open}) => {
         </NavLink>
       </button>
       <button type="button" className="dropdown-itemx">
-        <NavLink to={'accounts/edit'} end>
+        <NavLink to={'accounts/'} end>
           <IoIosSettings size={18} />
           <span>Settings</span>
         </NavLink>

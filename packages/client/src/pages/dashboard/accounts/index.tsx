@@ -31,7 +31,7 @@ const SettingsTag: ISettingsTag[] = [
   {
     id: 1,
     Name: 'Editar perfil',
-    Url: 'edit',
+    Url: '',
   },
   {
     id: 2,
@@ -103,7 +103,14 @@ const RenderAvatar = observer(() => {
   }
   return (
     <>
-      <UserInfoWrap>
+      <UserInfoWrap
+        style={{
+          display:
+            Location.pathname === '/dashboard/accounts/login_activity'
+              ? 'none'
+              : 'flex',
+        }}
+      >
         <div className="card-content">
           <AvatarProfile
             image={createBackgroundImage(currentUserStore.currentUser.avatar)}
@@ -182,12 +189,7 @@ const Accounts: React.FC = observer(() => {
         <ULSettings>
           {accountsTags.map((item) => (
             <LISettings key={item.id}>
-              <NavLink
-                activeClassName="active"
-                to={item.Url === 'edit' ? `../${item.Url}` : item.Url}
-                end
-                replace
-              >
+              <NavLink activeClassName="active" to={item.Url} end replace>
                 {item.Name}
               </NavLink>
             </LISettings>
