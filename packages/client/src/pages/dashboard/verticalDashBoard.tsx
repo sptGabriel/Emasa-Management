@@ -38,6 +38,9 @@ const Content = styled('div')`
   background: ${({theme}: any) => `rgb(${theme.background})` || 'lightgrey'};
   width: 100%;
   padding: 30px 50px 0 50px;
+  height: 100%;
+  overflow-y: auto;
+  box-sizing: border-box;
   //  padding-right: 30px;
   //  padding-left: 30px;
   ::-webkit-scrollbar-track {

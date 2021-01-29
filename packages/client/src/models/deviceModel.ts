@@ -8,7 +8,7 @@ export type TDevice = {
   state: string
   country: string
   online: boolean
-  accessTime: Date | undefined
+  accessTime: number
 }
 export class DeviceModel implements TDevice {
   device: string
@@ -23,17 +23,18 @@ export class DeviceModel implements TDevice {
 
   online: boolean
 
-  accessTime: Date | undefined
+  accessTime: number
 
-  constructor(props?: TDevice) {
+  constructor(props: TDevice) {
     makeAutoObservable(this)
+    console.log(props?.device, props?.browser)
     this.device = props ? props.device : ''
     this.browser = props ? props.browser : ''
     this.city = props ? props.city : ''
     this.state = props ? props.state : ''
     this.city = props ? props.city : ''
     this.online = props ? props.online : false
-    this.accessTime = props ? props.accessTime : undefined
+    this.accessTime = props.accessTime
     this.country = props ? props.country : ''
   }
 }

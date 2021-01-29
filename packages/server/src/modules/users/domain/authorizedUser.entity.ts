@@ -25,7 +25,7 @@ export enum OS {
 }
 export enum Device {
   chrome = 'chrome',
-  firefox = 'fireFox',
+  firefox = 'firefox',
   msie = 'msie',
   edge = 'edge',
   safari = 'safari',

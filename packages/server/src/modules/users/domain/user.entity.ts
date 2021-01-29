@@ -13,6 +13,7 @@ import { hash, genSaltSync, compareSync } from 'bcryptjs';
 import { isHashedRegex } from '@utils/isHashed';
 import { ProfilePicture } from './userProfilePicture.entity';
 import { AuthorizedUser } from './authorizedUser.entity';
+import { moveArrayItem } from '@utils/moveArrayItem';
 
 export interface userContainer {
   employee: Employee;
@@ -50,22 +51,30 @@ export class User {
   public authorizedDevices = new Collection<AuthorizedUser>(this);
   @Property({ name: 'devicesInformations', persist: false })
   public get getDevicesInfos(): any {
-    const devices: any = this.authorizedDevices.getItems();
+    const devices: any[] = this.authorizedDevices.getItems();
+    if (!(devices.length > 0)) return undefined;
     return devices.map((item: any) => {
+      let access = item.lastAccesses.getItems()[item.lastAccesses.length - 1]
+        .accessed_at.getTime();
       return {
-        device: item.device,
-        browser: item.os,
+        device: item.os,
+        browser: item.device,
         city: item.city,
         state: item.principalSubdivision,
         country: item.country,
         online: item.online,
-        accessTime: item.lastAccesses.getItems()[item.lastAccesses.length - 1]
-          .accessed_at,
+        accessTime: access,
       };
     });
   }
   @Property({ name: 'payload', persist: false })
   public get getJWTPayload(): any {
+    const devices = this.getDevicesInfos;
+    const sortedDevices = moveArrayItem({
+      array: devices,
+      fromIndex: devices.findIndex((item: any) => item.online),
+      toIndex: 0,
+    })
     return {
       id: this.employee.id,
       first_name: this.employee.first_name,
@@ -82,7 +91,7 @@ export class User {
       matricula: this.employee.matricula,
       position: this.employee.position,
       address: this.employee.address.Address,
-      devices: this.getDevicesInfos
+      devices: sortedDevices,
     };
   }
 

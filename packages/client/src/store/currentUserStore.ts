@@ -1,4 +1,3 @@
-import {promises} from 'fs'
 import {action, runInAction, makeAutoObservable} from 'mobx'
 import {DeviceModel} from '../models/deviceModel'
 import {UserAddress} from '../models/userAddressModel'

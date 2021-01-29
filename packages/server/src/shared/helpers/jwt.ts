@@ -1,6 +1,6 @@
 import { JsonWebTokenError, Secret, sign, TokenExpiredError, verify, VerifyErrors } from 'jsonwebtoken';
 import instance from 'tsyringe/dist/typings/dependency-container';
-const now = Date.now().valueOf() / 1000;
+    const now = Date.now().valueOf() / 1000;
 export function isExpiredTokenERROR(error:Error) {
   return error instanceof TokenExpiredError
 }

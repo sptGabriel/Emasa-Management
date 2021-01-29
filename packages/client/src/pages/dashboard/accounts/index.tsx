@@ -115,7 +115,7 @@ const RenderAvatar = observer(() => {
           <AvatarProfile
             image={createBackgroundImage(currentUserStore.currentUser.avatar)}
           >
-            {Location.pathname === '/dashboard/accounts/edit' ? (
+            {Location.pathname === '/dashboard/accounts' ? (
               <label>
                 <div className="avatar">
                   <input

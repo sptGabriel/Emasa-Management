@@ -6,8 +6,6 @@ const Footer = styled('div')<{orientation: string}>`
   width: 100%;
   display: flex;
   align-items: center;
-  position: absolute;
-  bottom: 0;
   padding: 20px 0;
   color: ${({theme}: any) => `rgb(${theme.footer.text})`};
   height: 60px;

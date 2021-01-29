@@ -68,6 +68,7 @@ export class LoginUseCase
           user,
         })
       : undefined;
+    console.log(userDevice)
     return await this.userRepository.login(
       user,
       ensure(hasDevice ? hasDevice : userDevice),

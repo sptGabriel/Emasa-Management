@@ -68,9 +68,6 @@ export class UserRepository implements IUserRepository {
       await deviceQB
         .update({ online: false })
         .where({ user_id: user.employee.id })
-        .andWhere('ip', '!=', device.ip)
-        .andWhere('os', '!=', device.os)
-        .andWhere('device', '!=', device.device)
         .execute();
       if (hasDevice) {
         await deviceQB

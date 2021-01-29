@@ -7,8 +7,9 @@ export const AccountsWrap = styled('div')`
   border-radius: 3px;
   border: 1px solid #dbdbdb;
   max-width: 935px;
-  margin: 0px auto 0;
-  height: calc(100% - 90px);
+  margin: 0px auto 10px;
+  min-height: calc(100% - 60px) !important;
+  height: auto;
   overflow: hidden;
   width: 100%;
   flex-grow: 1;
@@ -17,7 +18,6 @@ export const AccountsWrap = styled('div')`
   display: flex;
   flex-shrink: 0;
   padding: 0;
-  position: relative;
 `
 export const ULSettings = styled(`ul`)`
   flex-basis: 236px;
@@ -62,13 +62,12 @@ export const Article = styled('article')`
   flex-direction: column;
   margin: 0;
   padding: 0;
-  position: relative;
 `
 
 export const EditProfileContainer = styled('div')`
   display: flex;
   flex-wrap: wrap;
-  height: calc(100% - 80px);
+  height: 100%;
   align-items: center;
   .edit-card {
     background: white;
@@ -311,6 +310,9 @@ export const LoginActivity = styled('div')`
   margin-left: 55px;
   margin-bottom: 16px;
   height: 100%;
+  div:last-of-type {
+    border: none;
+  }
   .deviceInfo {
     display: flex;
     flex-direction: column;
@@ -325,7 +327,7 @@ export const LoginActivity = styled('div')`
   .os {
     display: flex;
     align-items: center;
-    margin-right: 12px;
+    margin-right: 16px;
     img {
       height: 30px;
       width: 30px;
