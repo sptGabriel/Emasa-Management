@@ -27,7 +27,7 @@ export class UserRepository implements IUserRepository {
     return user;
   };
   public update = async (user: User): Promise<User> => {
-    await this.em.persistAndFlush(user);
+    await this.em.persistAndFlush(user).catch((err: any) => console.log(err));
     return user;
   };
   public updatePassword = async (user: User): Promise<User> => {

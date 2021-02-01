@@ -30,16 +30,21 @@ export class EditProfileUseCase
     if (!user) throw new Error(`This user doesn't exists`);
     const decoded = await promisifyDecode(token, ensure(jwtConfig.secret));
     if (decoded.id !== user.employee.id) throw new Error(`Invalid Request`);
-    if (biografia) wrap(user).assign({ employee: { biografia } });
-    console.log('biografia');
-    if (email) wrap(user).assign({ employee: { email } });
-    console.log('email');
-    if (nome) wrap(user).assign({ employee: { first_name: nome } });
-    console.log('nome');
-    if (sobreNome) wrap(user).assign({ employee: { last_name: sobreNome } });
-    console.log('sobrenome');
-    if (userName) wrap(user).assign({ login: userName });
-    console.log('username');
+    if (biografia && biografia !== user.employee.biografia) {
+      wrap(user.employee).assign({biografia});
+    }
+    if (email && email !== user.employee.email) {
+      wrap(user.employee).assign({email});
+    }
+    if (nome && nome !== user.employee.first_name) {
+      wrap(user.employee).assign({ first_name: nome });
+    }
+    if (sobreNome && sobreNome !== user.employee.last_name) {
+      wrap(user.employee).assign({ last_name: sobreNome });
+    }
+    if (userName && userName !== user.login) {
+      wrap(user).assign({ login: userName });
+    }
     const updatedUser = await this.userRepository.update(user);
     return right(updatedUser);
   };

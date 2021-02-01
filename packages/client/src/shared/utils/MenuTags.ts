@@ -29,13 +29,13 @@ export const Tags: ITag[] = [
   },
   {
     Title: 'Pages',
-    Name: 'Test',
+    Name: '.',
     Link: 'test2',
     Icon: BsLightning,
     DropdownItems: null,
   },
   {
-    Name: 'Employees',
+    Name: '..',
     Icon: TiGroupOutline,
     DropdownItems: [
       {Name: 'Employee List', Link: 'dsad'},
@@ -45,7 +45,7 @@ export const Tags: ITag[] = [
     ],
   },
   {
-    Name: 'Departaments',
+    Name: '...',
     Icon: FaRegBuilding,
     DropdownItems: [
       {Name: 'Employee List', Link: 'sadasd'},
@@ -55,7 +55,7 @@ export const Tags: ITag[] = [
     ],
   },
   {
-    Name: 'Products',
+    Name: '....',
     Icon: BsLightning,
     DropdownItems: [
       {Name: 'Employee List', Link: 'asdaw'},
@@ -65,7 +65,7 @@ export const Tags: ITag[] = [
     ],
   },
   {
-    Name: 'Suppliers',
+    Name: '.....',
     Icon: BsBookmarkPlus,
     DropdownItems: [
       {Name: 'Employee List', Link: 'xcxv'},
@@ -75,7 +75,7 @@ export const Tags: ITag[] = [
     ],
   },
   {
-    Name: 'Contracts',
+    Name: '......',
     Icon: BsFileEarmarkText,
     DropdownItems: [
       {Name: 'Employee List', Link: 'eqweq'},
@@ -85,7 +85,7 @@ export const Tags: ITag[] = [
     ],
   },
   {
-    Name: 'User List',
+    Name: '.........',
     Icon: RiGroupLine,
     DropdownItems: [
       {Name: 'Employee List', Link: 'dasd'},

@@ -240,6 +240,9 @@ export const Forms = styled('form')<{buttonActive: boolean}>`
     display: inline-block;
     flex-direction: column;
     button {
+      display: flex;
+      justify-content: center;
+      align-items: center;
       background: ${({buttonActive}) =>
         buttonActive
           ? 'rgba(0, 149, 246, 1)'
@@ -250,8 +253,9 @@ export const Forms = styled('form')<{buttonActive: boolean}>`
       color: white;
       background: 0 0;
       cursor: pointer;
-      display: block;
       font-weight: 600;
+      min-width: 59px;
+      min-height: 30px;
       padding: 5px 9px;
       text-align: center;
       text-transform: inherit;

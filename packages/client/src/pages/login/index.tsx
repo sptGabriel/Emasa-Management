@@ -293,7 +293,8 @@ const Form: React.FunctionComponent = observer(() => {
           navigate('../dashboard', {replace: true})
         })
         .catch((err) => {
-          if (err.response.status === 404) handleError(err)
+          console.log(err)
+          if (err && err.response.status === 404) handleError(err)
           authStore.loginModel.password = ''
           authStore.loginModel.login = ''
           toast.error(err.response.data.message)
