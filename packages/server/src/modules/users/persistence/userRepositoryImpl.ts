@@ -152,15 +152,13 @@ export class UserRepository implements IUserRepository {
     return await this.em.find(User, {});
   };
   public byId = async (id: string): Promise<User | undefined> => {
-    const user = await this.em.findOne(User, { employee: { id } }, [
+    return await this.em.findOne(User, { employee: { id } }, [
       'employee',
       'employee.departament',
       'employee.address',
       'authorizedDevices',
       'authorizedDevices.lastAccesses',
     ]);
-    if (!user) return;
-    return user;
   };
   public byEmail = async (email: string): Promise<User | undefined> => {
     const user = await this.em.findOne(User, { employee: { email } }, [

@@ -7,7 +7,6 @@ import {useRootStore} from '../../shared/infra/mobx'
 import ASide from '../../shared/components/SideBar'
 import DashBoardFooter from '../../shared/components/Footer'
 import Header from '../../shared/components/Header'
-import BreadCrumb from '../../shared/components/BreadCrumb'
 
 interface SideBarState {
   open: boolean

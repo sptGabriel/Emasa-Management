@@ -2,6 +2,8 @@
 import {makeAutoObservable} from 'mobx'
 
 export type TDevice = {
+  id: string
+  ip: string
   device: string
   browser: string
   city: string
@@ -11,6 +13,10 @@ export type TDevice = {
   accessTime: number
 }
 export class DeviceModel implements TDevice {
+  id: string
+
+  ip: string
+
   device: string
 
   browser: string
@@ -27,8 +33,9 @@ export class DeviceModel implements TDevice {
 
   constructor(props: TDevice) {
     makeAutoObservable(this)
-    console.log(props?.device, props?.browser)
     this.device = props ? props.device : ''
+    this.id = props ? props.id : ''
+    this.ip = props ? props.ip : ''
     this.browser = props ? props.browser : ''
     this.city = props ? props.city : ''
     this.state = props ? props.state : ''

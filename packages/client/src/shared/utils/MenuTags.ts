@@ -23,8 +23,8 @@ export const Tags: ITag[] = [
     Name: 'Dashboard',
     Icon: AiOutlineDashboard,
     DropdownItems: [
-      {Name: 'Analytics', Link: '../dashboard'},
-      {Name: 'Inventory', Link: '../dashboard/inventory'},
+      {Name: 'Analytics', Link: ''},
+      {Name: 'Inventory', Link: 'inventory'},
     ],
   },
   {
@@ -94,6 +94,14 @@ export const Tags: ITag[] = [
       {Name: 'Any', Link: 'wqeqw'},
     ],
   },
+]
+
+export const allVerticalLinks = [
+  'dashboard',
+  'inventory',
+  'test2',
+  'dsad',
+  'dasas',
 ]
 
 export const TagHorizontal: ITag[] = [

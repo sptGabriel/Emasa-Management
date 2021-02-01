@@ -1,10 +1,15 @@
 import React, {useState, useEffect, MouseEvent, memo, useCallback} from 'react'
 import {IconType} from 'react-icons'
 import {observer} from 'mobx-react-lite'
-import {NavLink} from 'react-router-dom'
+import {NavLink, useLocation} from 'react-router-dom'
 import {FaAngleDown} from 'react-icons/fa'
 import {useSpring} from 'react-spring'
-import {ITag, IDropdownItems, Tags} from '../../utils/MenuTags'
+import {
+  ITag,
+  IDropdownItems,
+  Tags,
+  allVerticalLinks,
+} from '../../utils/MenuTags'
 import {useHeight} from '../../utils/useHeight'
 import {ListItem, MenuList, DropDown} from './styles'
 
@@ -37,7 +42,6 @@ const DropDownItems: React.FC<IDrop> = observer(
         overflow: active && isOpen ? 'visible' : 'hidden',
       },
     })
-
     return (
       <DropDown
         activetag={active ? 1 : 0}
@@ -110,6 +114,7 @@ const MemoidNavLink: React.FC<{
 })
 //  Tag Wrapper
 const TagList: React.FC<ITagList> = ({tag, open, setTags}) => {
+  const {pathname} = useLocation()
   const showHideDropItem: ShowHideDropItem = useCallback((tag) => {
     setTags((items: any) =>
       items.map((item: any) => ({
@@ -165,6 +170,7 @@ const TagList: React.FC<ITagList> = ({tag, open, setTags}) => {
 const MemoizedTags = memo(TagList)
 //  Menu
 const MenuTags: React.FC<{hover: boolean; open: boolean}> = ({hover, open}) => {
+  const {pathname} = useLocation()
   const [tags, setTags] = useState<ITag[]>(Tags)
   useEffect(() => {
     setTags((items) =>
@@ -174,6 +180,17 @@ const MenuTags: React.FC<{hover: boolean; open: boolean}> = ({hover, open}) => {
       })),
     )
   }, [])
+  useEffect(() => {
+    const finalPath = pathname.split('/')[pathname.split('/').length - 1]
+    if (!allVerticalLinks.includes(finalPath)) {
+      setTags((items) =>
+        items.map((item) => ({
+          ...item,
+          Active: false,
+        })),
+      )
+    }
+  }, [pathname])
   return (
     <MenuList open={open} hover={hover}>
       {tags.map((item) => (

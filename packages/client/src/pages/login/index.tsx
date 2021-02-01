@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useEffect, useRef, useState} from 'react'
 import styled from '@emotion/styled/macro'
 import {GiPadlock} from 'react-icons/gi'
 import {FaUser} from 'react-icons/fa'
@@ -275,6 +275,7 @@ const Inputs: React.FunctionComponent = observer(() => {
 })
 
 const Form: React.FunctionComponent = observer(() => {
+  const isMounted = useRef(true)
   const navigate = useNavigate()
   const {authStore} = useRootStore()
   const [loading, setLoading] = useState(false)
@@ -287,16 +288,26 @@ const Form: React.FunctionComponent = observer(() => {
       authStore
         .login()
         .then(() => {
+          authStore.loginModel.password = ''
+          authStore.loginModel.login = ''
           navigate('../dashboard', {replace: true})
-          setLoading(false)
         })
         .catch((err) => {
           if (err.response.status === 404) handleError(err)
-          setLoading(false)
+          authStore.loginModel.password = ''
+          authStore.loginModel.login = ''
           toast.error(err.response.data.message)
         })
     }, 1000)
   }
+  useEffect(() => {
+    return () => {
+      setLoading(false)
+      authStore.loginModel.password = ''
+      authStore.loginModel.login = ''
+      isMounted.current = false
+    }
+  }, [])
   return (
     <FormContainer onSubmit={(event) => loginHanlder(event)}>
       <Inputs />
@@ -312,7 +323,7 @@ const Form: React.FunctionComponent = observer(() => {
         type="submit"
       >
         {loading ? (
-          <PuffLoader size={18} color={'#fff'} loading={loading} />
+          <PuffLoader size={18} color="#fff" loading={loading} />
         ) : (
           'Entrar'
         )}

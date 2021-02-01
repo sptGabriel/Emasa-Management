@@ -49,7 +49,7 @@ export const ImageCrop: React.FC<{
       </div>
       <div>
         <Button
-          click={(e: any) => {
+          click={() => {
             onImageCrop()
             setScaleValue(1)
           }}

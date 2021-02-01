@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import authConfig from '@config/jwt.config';
 import { promisifyDecode } from '@shared/helpers/jwt';
+import { ensure } from '@utils/ensure';
 export const jwtMiddleware = (
   error: any,
   req: Request,
@@ -9,7 +10,7 @@ export const jwtMiddleware = (
 ) => {
   const token = req.get('accToken');
   if (!token) throw new Error(`Token doens't exist`);
-  const decoded = promisifyDecode(token, authConfig.secret);
+  const decoded = promisifyDecode(token, ensure(authConfig.secret));
   if(decoded instanceof Error) throw new Error(`Unauthorized`)
   return next()
 };

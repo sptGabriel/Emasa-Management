@@ -8,7 +8,7 @@ export function useHeight({on = true /* no value means on */} = {} as any) {
   const heightRef = useRef(height)
   const [ro] = useState(
     () =>
-      new ResizeObserver((packet: any) => {
+      new ResizeObserver(() => {
         if (ref.current && heightRef.current !== ref.current.offsetHeight) {
           heightRef.current = ref.current.offsetHeight
           set(ref.current.offsetHeight)

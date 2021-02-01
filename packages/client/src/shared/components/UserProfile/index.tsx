@@ -17,20 +17,20 @@ const ContentUserSection: React.FC<{open: boolean}> = observer(({open}) => {
     <UserCanvas open={open} orientation={layoutStore.layoutType}>
       <div className="header_txt">Welcome !</div>
       <button type="button" className="dropdown-itemx">
-        <NavLink to={'accounts/edit'} end>
+        <NavLink to="accounts/edit" end>
           <CgProfile size={18} />
           <span>My Profile</span>
         </NavLink>
       </button>
       <button type="button" className="dropdown-itemx">
-        <NavLink to={'accounts/'} end>
+        <NavLink to="accounts/" end>
           <IoIosSettings size={18} />
           <span>Settings</span>
         </NavLink>
       </button>
       <div className="dropdown-divider" />
       <button type="button" className="dropdown-itemx" onClick={onLogout}>
-        <NavLink to={'..'} end>
+        <NavLink to=".." end>
           <CgLogOff className="logout" size={18} />
           <span>Logout</span>
         </NavLink>

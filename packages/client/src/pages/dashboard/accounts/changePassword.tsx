@@ -1,31 +1,60 @@
-import React from 'react'
-import {observer, useLocalStore} from 'mobx-react-lite'
+import React, {useState} from 'react'
+import {observer} from 'mobx-react-lite'
+import {toast} from 'react-toastify'
 import {Forms} from './styles'
 import BoundInput from '../../../shared/components/Input'
+import {ChangePassword} from '../../../models/changePasswordModel'
+import {useRootStore} from '../../../shared/infra/mobx'
+import {sleep} from '../../../shared/utils/sleep'
 
 interface IChangePassword {
   oldPassword: string | null
   newPassword: string | null
   confirmNewPassword: string | null
 }
-const ChangePassword: React.FC = observer(() => {
-  const passwordStore = useLocalStore(() => ({
-    changePassword: {
-      confirmNewPassword: null,
-      newPassword: null,
-      oldPassword: null,
-    } as IChangePassword,
-  }))
+const ChangeUserPassword: React.FC = observer(() => {
+  const {currentUserStore, authStore} = useRootStore()
+  const [changeState, setState] = useState(false)
+  const [passwordModel, setModel] = useState(
+    new ChangePassword({
+      oldPassword: '',
+      password: '',
+      confirmPassword: '',
+    }),
+  )
   const submitHandler = (event: any) => {
     event.preventDefault()
+    setState(true)
+    currentUserStore
+      .changePassword(passwordModel)
+      .then(async () => {
+        setModel({password: '', confirmPassword: '', oldPassword: ''})
+        await sleep(
+          toast.success(
+            'Senha alterada com sucesso, por favor entre novamente.',
+            {autoClose: 3000},
+          ),
+          3250,
+        )
+        await authStore.logout()
+      })
+      .catch((err) => {
+        setModel({password: '', confirmPassword: '', oldPassword: ''})
+        toast.error(
+          err && err.response
+            ? err.response.data.message
+            : 'Please try again later',
+        )
+      })
+    setState(false)
   }
-  const RenderForms = () => (
+  return (
     <Forms
       onSubmit={(event) => submitHandler(event)}
       buttonActive={
-        (passwordStore.changePassword.confirmNewPassword &&
-          passwordStore.changePassword.newPassword &&
-          passwordStore.changePassword.oldPassword) !== null
+        passwordModel.confirmPassword.length > 4 &&
+        passwordModel.password.length > 4 &&
+        passwordModel.oldPassword.length > 4
       }
     >
       <div className="form-item">
@@ -35,7 +64,7 @@ const ChangePassword: React.FC = observer(() => {
         <div className="form-input">
           <div className="wrap-input">
             <BoundInput
-              model={passwordStore.changePassword}
+              model={passwordModel}
               property="oldPassword"
               type="password"
               required
@@ -52,12 +81,12 @@ const ChangePassword: React.FC = observer(() => {
         <div className="form-input">
           <div className="wrap-input">
             <BoundInput
-              model={passwordStore.changePassword}
-              property="newPassword"
+              model={passwordModel}
+              property="password"
               required
               type="password"
               autoComplete="off"
-              id="newPassword"
+              id="password"
             />
           </div>
         </div>
@@ -69,12 +98,12 @@ const ChangePassword: React.FC = observer(() => {
         <div className="form-input">
           <div className="wrap-input">
             <BoundInput
-              model={passwordStore.changePassword}
-              property="confirmNewPassword"
+              model={passwordModel}
+              property="confirmPassword"
               required
               type="password"
               autoComplete="off"
-              id="confirmNewPassword"
+              id="confirmPassword"
             />
           </div>
         </div>
@@ -83,13 +112,24 @@ const ChangePassword: React.FC = observer(() => {
         <div className="form-name" />
         <div className="form-input">
           <div className="wrap-input">
-            <button type="button">Alterar senha</button>
+            <button
+              type="submit"
+              disabled={
+                changeState
+                  ? true
+                  : false ||
+                    (passwordModel.confirmPassword.length < 4 &&
+                      passwordModel.password.length < 4 &&
+                      passwordModel.oldPassword.length < 4)
+              }
+            >
+              Alterar senha
+            </button>
           </div>
         </div>
       </div>
     </Forms>
   )
-  return RenderForms()
 })
 
-export default ChangePassword
+export default ChangeUserPassword

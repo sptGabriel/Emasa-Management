@@ -1,4 +1,5 @@
 import {action, runInAction, makeAutoObservable} from 'mobx'
+import {ChangePassword} from '../models/changePasswordModel'
 import {DeviceModel} from '../models/deviceModel'
 import {UserAddress} from '../models/userAddressModel'
 import {UserModel} from '../models/userModel'
@@ -21,6 +22,33 @@ export class CurrentUserStore {
   constructor(public rootStore: RootStore) {
     makeAutoObservable(this, {pullUser: action})
     this.rootStore = rootStore
+  }
+
+  public changePassword = ({
+    confirmPassword,
+    password,
+    oldPassword,
+  }: ChangePassword): Promise<any> => {
+    return this.rootStore.AxiosStore.post(
+      `users/${this.currentUser.matricula}/change-password`,
+      {confirmPassword, password, oldPassword},
+    )
+  }
+
+  public editProfile = async ({
+    biografia,
+    email,
+    first_name,
+    last_name,
+    username,
+  }: UserModel): Promise<any> => {
+    return this.rootStore.AxiosStore.post(`users/${this.currentUser.id}/edit`, {
+      biografia,
+      email,
+      nome: first_name,
+      sobreNome: last_name,
+      userName: username,
+    })
   }
 
   public changeAvatar = async (url: any): Promise<any> => {
@@ -52,7 +80,6 @@ export class CurrentUserStore {
             (device: any) => new DeviceModel({...device}),
           )
           this.currentUser = new UserModel({...user.data, address, devices})
-          console.log(this.currentUser)
         }
         if (this.currentUser) this.rootStore.authStore.isAuth = true
       })

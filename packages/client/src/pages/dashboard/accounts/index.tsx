@@ -1,11 +1,10 @@
-import React, {memo, useEffect, useRef, useState} from 'react'
+import React, {memo, useRef, useState} from 'react'
 import {NavLink, Outlet, useLocation} from 'react-router-dom'
 import {observer} from 'mobx-react-lite'
 import {runInAction} from 'mobx'
 import useOnClickOutside from 'use-onclickoutside'
 import {toast} from 'react-toastify'
 import {AiOutlineCamera} from 'react-icons/ai'
-import {useTheme} from '@emotion/react'
 import {
   AccountsWrap,
   Article,
@@ -14,7 +13,6 @@ import {
   ULSettings,
   UserInfoWrap,
 } from './styles'
-import BreadCrumb from '../../../shared/components/BreadCrumb'
 import {createBackgroundImage} from '../../../shared/utils/createCloudinaryBG'
 import {useRootStore} from '../../../shared/infra/mobx'
 import {verifyFile} from '../../../shared/utils/verifyFile'
@@ -53,7 +51,6 @@ const SettingsTag: ISettingsTag[] = [
 const RenderAvatar = observer(() => {
   let imageEditor: any = null
   const Location = useLocation()
-  const theme: any = useTheme()
   const {currentUserStore, layoutStore} = useRootStore()
   const [selectedFile, setSelectedFile] = useState(null)
   const [open, setOpen] = useState(false)

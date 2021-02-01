@@ -57,6 +57,8 @@ export class User {
       let access = item.lastAccesses.getItems()[item.lastAccesses.length - 1]
         .accessed_at.getTime();
       return {
+        id: item.id,
+        ip: item.ip,
         device: item.os,
         browser: item.device,
         city: item.city,
@@ -74,6 +76,10 @@ export class User {
       array: devices,
       fromIndex: devices.findIndex((item: any) => item.online),
       toIndex: 0,
+    }).sort((a,b) => {
+      if(a.accessTime < b.accessTime) return 1;
+      if(a.accessTime > b.accessTime) return -1;
+      return 0;
     })
     return {
       id: this.employee.id,

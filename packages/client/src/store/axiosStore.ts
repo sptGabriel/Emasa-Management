@@ -70,7 +70,6 @@ export class AxiosStore {
           !originalRequest._retry
         ) {
           originalRequest._retry = true
-          console.log('on original request')
           this.rootStore.authStore
             .refreshToken()
             .then(() => axios(originalRequest))

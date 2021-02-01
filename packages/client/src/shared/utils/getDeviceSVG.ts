@@ -2,6 +2,8 @@ import windows from '../../assets/windows.svg'
 import phone from '../../assets/smartphone.svg'
 import linux from '../../assets/linux.svg'
 import random from '../../assets/desconhecido.svg'
+import ios from '../../assets/ios.svg'
+import mac from '../../assets/mac.svg'
 
 export function getDeviceSVG(device: string) {
   switch (device) {
@@ -10,11 +12,11 @@ export function getDeviceSVG(device: string) {
     case 'linux':
       return linux
     case 'mac':
-      return windows
+      return mac
     case 'android':
       return phone
     case 'ios':
-      return phone
+      return ios
     case 'desconhecido':
       return random
     default:

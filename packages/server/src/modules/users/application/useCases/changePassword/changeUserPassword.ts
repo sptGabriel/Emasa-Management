@@ -1,5 +1,3 @@
-import { IEmployeeRepository } from '@modules/employees/persistence/employeeRepository';
-import { EmployeeRepository } from '@modules/employees/persistence/employeeRepositoryImpl';
 import { IUserRepository } from '@modules/users/persistence/userRepository';
 import { UserRepository } from '@modules/users/persistence/userRepositoryImpl';
 import { Either, right } from '@shared/core/either';
@@ -12,29 +10,23 @@ import { changePasswordDTO } from './changeUserPassword_DTO';
 export class ChangePasswordUseCase
   implements IUseCase<changePasswordDTO, Promise<Either<AppError, User>>> {
   constructor(
-    @inject(EmployeeRepository)
-    private employeeRepository: IEmployeeRepository,
     @inject(UserRepository)
     private userRepository: IUserRepository,
   ) {}
   public execute = async ({
-    matricula,
+    id,
     password,
-    password_confirm,
-    old_password,
+    confirmPassword,
+    oldPassword,
   }: changePasswordDTO): Promise<Either<AppError, User>> => {
-    if (password !== password_confirm) {
-      throw new Error(
-        `There is a problem with the password and password confirmation. Please check.`,
-      );
-    }
-    if (password === old_password) {
-      throw new Error(`Old and new Password is equals`);
-    }
-    const user = await this.userRepository.byMatricula(matricula);
-    if (!user) throw new Error(`This employee doesn't have user.`);
-    if (!User.DecryptPassword(old_password, user.password)) {
-      throw new Error(`Old password is invalid `);
+    if (password !== confirmPassword)
+      throw new Error(`As senhas não conferem.`);
+    if (password === oldPassword)
+      throw new Error(`Porfavor escolha um nova senha`);
+    const user = await this.userRepository.byId(id);
+    if (!user) throw new Error(`Esse funcionario não possui usuário.`);
+    if (!User.DecryptPassword(oldPassword, user.password)) {
+      throw new Error(`A senha antiga está invalida `);
     }
     user.password = await User.EncryptPassword(password);
     const updatedUser = await this.userRepository.updatePassword(user);

@@ -11,6 +11,7 @@ import { wrap } from '@mikro-orm/core';
 import jwtConfig from '@config/jwt.config';
 import { JsonWebTokenError, TokenExpiredError, verify } from 'jsonwebtoken';
 import { User } from '@modules/users/domain/user.entity';
+import { ensure } from '@utils/ensure';
 @injectable()
 export class RefreshTokenUseCase
   implements IUseCase<refreshTokenDTO, Promise<Either<AppError, any>>> {
@@ -20,10 +21,9 @@ export class RefreshTokenUseCase
   ) {}
 
   private async renewRefreshToken(rfToken: string, user: User) {
-    console.log(rfToken === user.ref_token)
     if (user.ref_token !== null && rfToken !== user.ref_token)
       throw new Error(`Plase login again`);
-    const token = await promisifyDecode(rfToken, jwtConfig.rfSecret);
+    const token = await promisifyDecode(rfToken, ensure(jwtConfig.rfSecret));
     if (!(token instanceof Error) && token) return user;
     if (
       token instanceof JsonWebTokenError &&

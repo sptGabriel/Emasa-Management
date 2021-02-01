@@ -1,5 +1,4 @@
 import Bowser from 'bowser'
-import jwtDecode from 'jwt-decode'
 import {makeAutoObservable, runInAction} from 'mobx'
 import {getPosition} from '../shared/utils/getPosition'
 import {AuthStore} from './authStore'

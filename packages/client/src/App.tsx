@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react'
+import React, {useEffect, useRef} from 'react'
 import {observer} from 'mobx-react-lite'
 import {ThemeProvider} from '@emotion/react'
 import {ToastContainer} from 'react-toastify'
@@ -10,17 +10,9 @@ import ApplicationRoutes from './shared/infra/router/routes2'
 import {Overlay} from './shared/components/Overlay'
 
 const App: React.FC = observer(() => {
-  const {
-    layoutStore,
-    appState,
-    authStore,
-    initApi,
-    currentUserStore,
-  } = useRootStore()
-
+  const {layoutStore, appState, authStore, initApi} = useRootStore()
   useEffect(() => {
     initApi()
-    console.log(currentUserStore.currentUser)
   }, [])
   return (
     <ThemeProvider theme={layoutStore.theme}>

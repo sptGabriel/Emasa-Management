@@ -32,8 +32,7 @@ export const MenuList = styled.ul<IMenu>`
   }
   &::-webkit-scrollbar-thumb:vertical {
     border-radius: 10px;
-    background: ${({theme, hover, open}: any) =>
-      `rgba(${theme.sideBar.scrollBar})`};
+    background: ${({theme}: any) => `rgba(${theme.sideBar.scrollBar})`};
     /* border-left: 6px solid ${({theme}: any) =>
       `rgba(${theme.background})`}; */
     /* border-right: 2px solid ${({theme}: any) => `rgba(${theme.background})`};

@@ -350,3 +350,32 @@ export const LoginActivity = styled('div')`
     }
   }
 `
+export const Test = styled('span')<{active: boolean}>`
+  position: relative;
+  white-space: nowrap;
+  .ip {
+    display: ${({active}) => (active ? 'block' : 'none')};
+    padding: 4px 10px;
+    border-radius: 4px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    transform: translateY(calc(-100% - 4px));
+    background: #c9c9c9;
+    width: auto;
+    height: auto;
+    font-weight: bold;
+    font-size: 12px;
+    font-family: work-Sans, sans-serif;
+    :before {
+      content: '';
+      display: block;
+      position: absolute;
+      left: 10px;
+      bottom: -4px;
+      border-top: 4px solid #c9c9c9;
+      border-left: 4px solid transparent;
+      border-right: 4px solid transparent;
+    }
+  }
+`

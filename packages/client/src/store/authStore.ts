@@ -1,7 +1,7 @@
-import {action, configure, makeObservable, runInAction} from 'mobx'
-import {v4} from 'public-ip'
+import {action, configure, makeObservable} from 'mobx'
 import {LoginModel} from '../models/loginModel'
 import {UserModel} from '../models/userModel'
+import {getIPV4ORV6} from '../shared/utils/getIPV4ORV6'
 import {RootStore} from './rootStore'
 
 configure({
@@ -38,17 +38,14 @@ export class AuthStore {
       )
       this.isAuth = true
     } catch (error) {
-      const mute = error
-      runInAction(() => {
-        this.isAuth = false
-      })
+      this.isAuth = false
     }
   }
 
   public login = async (): Promise<void> => {
     return this.rootStore.AxiosStore.post('/login', {
       ...(await this.rootStore.getPosition()),
-      ip: await v4(),
+      ip: await getIPV4ORV6(),
       timezone: this.rootStore.timezone,
       device: this.rootStore.browser,
       os: this.rootStore.os,

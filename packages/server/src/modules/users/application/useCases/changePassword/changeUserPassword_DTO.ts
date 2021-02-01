@@ -1,6 +1,7 @@
 export interface changePasswordDTO {
-  matricula:string;
-  old_password:string;
+  id:string;
+  oldPassword:string;
   password:string;
-  password_confirm:string;
+  confirmPassword:string;
+  token: string;
 }

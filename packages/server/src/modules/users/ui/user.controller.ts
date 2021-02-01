@@ -13,6 +13,9 @@ import cloudinary from '@shared/helpers/cloudinary';
 import { v4 } from 'uuid';
 import { ForgotMessageService } from '../application/useCases/lostPassword/forgotPassword';
 import { ResetPasswordService } from '../application/useCases/lostPassword/resetPassword';
+import { ChangePasswordUseCase } from '../application/useCases/changePassword/changeUserPassword';
+import { editProfiledDTO } from '../application/useCases/editProfile/editProfile_DTO';
+import { EditProfileUseCase } from '../application/useCases/editProfile/editProfile';
 @singleton()
 export class UserController extends BaseController {
   constructor() {
@@ -23,8 +26,12 @@ export class UserController extends BaseController {
   protected initRouter() {
     this.router.get(`${this.path}`, this.index);
     this.router.get(`${this.path}/me`, this.Me);
-    this.router.post(`${this.path}/testing`, this.Testing);
+    this.router.post(`${this.path}/:id/edit`, this.EditProfile);
     this.router.post(`${this.path}/forgot-password`, this.ForgotPassword);
+    this.router.post(
+      `${this.path}/:id/change-password`,
+      this.ChangePassword,
+    );
     this.router.post(`${this.path}/reset-password`, this.ResetPassword);
     this.router.post(`${this.path}/add`, this.addUser);
     this.router.post(
@@ -36,40 +43,44 @@ export class UserController extends BaseController {
   private index = async (arg0: string, index: any) => {
     throw new Error('Method not implemented.');
   };
-  private Testing = async (
+  private EditProfile = async (
     request: Request,
     response: Response,
     next: NextFunction,
   ) => {
     try {
-      //const {
-      //  employee_id,
-      //  device,
-      //  ip,
-      //  os,
-      //  longitude,
-      //  latitude,
-      //  timezone,
-      //  online = true,
-      //} = request.body;
-      //await LastUserAccess.create({
-      //  device: '1',
-      //  access_at: new Date(),
-      //})
-      //  .then(res => console.log(res))
-      //  .catch(err => console.log(err));
-      //await UserDevice.create({
-      //  employee_id,
-      //  device,
-      //  ip,
-      //  os,
-      //  longitude,
-      //  latitude,
-      //  timezone,
-      //  online,
-      //})
-      //  .then(res => console.log(res))
-      //  .catch(err => console.log(err));
+      const token = ensure(
+        request.headers.authorization &&
+          request.headers.authorization.split(' ')[1],
+      );
+      const { id } = request.params;
+      const dto: editProfiledDTO = request.body;
+      const result = await container
+        .resolve(EditProfileUseCase)
+        .execute({ ...dto, id, token });
+      if (result.isLeft()) return next(result.value);
+      return response.json({ status: `ok` });
+    } catch (error) {
+      next(error);
+    }
+  };
+  private ChangePassword = async (
+    request: Request,
+    response: Response,
+    next: NextFunction,
+  ) => {
+    try {
+      const token = ensure(
+        request.headers.authorization &&
+          request.headers.authorization.split(' ')[1],
+      );
+      const { id } = request.params;
+      const { oldPassword, password, confirmPassword } = request.body;
+      const result = await container
+        .resolve(ChangePasswordUseCase)
+        .execute({ id, oldPassword, password, confirmPassword, token });
+      if (result.isLeft()) return next(result.value);
+      return response.json({ message: `A senha foi alterada com sucesso!` });
     } catch (error) {
       next(error);
     }
@@ -112,7 +123,7 @@ export class UserController extends BaseController {
         confirmPassword,
         password,
         token,
-        device : device,
+        device: device,
         os: os,
         ip,
         latitude,

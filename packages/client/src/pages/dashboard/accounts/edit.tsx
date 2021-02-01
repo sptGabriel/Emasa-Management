@@ -1,6 +1,8 @@
 import React, {useState} from 'react'
 import {observer} from 'mobx-react-lite'
+import {toast} from 'react-toastify'
 import {useRootStore} from '../../../shared/infra/mobx'
+import {sleep} from '../../../shared/utils/sleep'
 import {Forms} from './styles'
 import {UserModel} from '../../../models/userModel'
 
@@ -10,8 +12,31 @@ const EditInformations: React.FC = observer(() => {
   const [user, setUser] = useState(new UserModel(currentUserStore.currentUser))
   const submitHandler = (event: any) => {
     event.preventDefault()
-    console.log(user, 'user local')
-    console.log(currentUserStore.currentUser, 'store')
+    currentUserStore
+      .editProfile(user)
+      .then(async () => {
+        await sleep(
+          toast.success('Informações trocadas com sucesso !!!', {
+            autoClose: 3000,
+          }),
+          3250,
+        )
+      })
+      .catch((err: any) => {
+        toast.error(
+          err && err.response
+            ? err.response.data.message
+            : 'Please try again later',
+        )
+      })
+    setUser({
+      ...user,
+      last_name: '',
+      first_name: '',
+      email: '',
+      biografia: '',
+      username: '',
+    })
   }
   const RenderForms = () => {
     return (
