@@ -9,6 +9,7 @@ import Accounts from '../../../pages/dashboard/accounts'
 import ChangePassword from '../../../pages/dashboard/accounts/changePassword'
 import ChangeAddress from '../../../pages/dashboard/accounts/changeAddress'
 import UserActivity from '../../../pages/dashboard/accounts/loginActivity'
+import DepartamentPage from '../../../pages/dashboard/departaments'
 
 const ApplicationRoutes: React.FC<{isLoggedIn: boolean}> = observer(
   ({isLoggedIn}) => {
@@ -24,6 +25,10 @@ const ApplicationRoutes: React.FC<{isLoggedIn: boolean}> = observer(
           {
             path: '/',
             element: <EditProfile />,
+          },
+          {
+            path: '/departaments',
+            element: <DepartamentPage />,
           },
           {
             path: '/accounts',

@@ -1,0 +1,26 @@
+import React from 'react'
+
+export default function CheckBox({
+  name,
+  value,
+  tick,
+  onCheck,
+}: {
+  name: string
+  value: any
+  tick: any
+  onCheck: any
+}) {
+  return (
+    <label>
+      <input
+        name={name}
+        type="checkbox"
+        value={value}
+        checked={tick || false}
+        onChange={onCheck}
+      />
+      {value}
+    </label>
+  )
+}

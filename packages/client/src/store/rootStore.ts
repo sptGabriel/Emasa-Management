@@ -5,12 +5,15 @@ import {AuthStore} from './authStore'
 import {AxiosStore} from './axiosStore'
 import {CookieStore} from './cookieStore'
 import {CurrentUserStore} from './currentUserStore'
+import {DepartamentStore} from './departamentStore'
 import {LayoutUIStore} from './layoutUiStore'
 
 export class RootStore {
   appName = 'Emasa'
 
   appState = 'pending'
+
+  departamentStore: DepartamentStore
 
   currentUserStore: CurrentUserStore
 
@@ -38,6 +41,7 @@ export class RootStore {
     this.cookieStore = new CookieStore(this)
     this.currentUserStore = new CurrentUserStore(this)
     this.authStore = new AuthStore(this)
+    this.departamentStore = new DepartamentStore(this)
   }
 
   public initApi = async (): Promise<void> => {

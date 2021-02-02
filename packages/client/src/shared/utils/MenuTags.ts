@@ -29,9 +29,9 @@ export const Tags: ITag[] = [
   },
   {
     Title: 'Pages',
-    Name: '.',
-    Link: 'test2',
-    Icon: BsLightning,
+    Name: 'Departamentos',
+    Icon: FaRegBuilding,
+    Link: 'departaments',
     DropdownItems: null,
   },
   {
@@ -42,16 +42,6 @@ export const Tags: ITag[] = [
       {Name: 'View Employee', Link: 'dasas'},
       {Name: 'New Employee', Link: 'dasd'},
       {Name: 'Any', Link: 'about'},
-    ],
-  },
-  {
-    Name: '...',
-    Icon: FaRegBuilding,
-    DropdownItems: [
-      {Name: 'Employee List', Link: 'sadasd'},
-      {Name: 'View Employee', Link: 'xx'},
-      {Name: 'New Employee', Link: 'xxx'},
-      {Name: 'Any', Link: 'dad'},
     ],
   },
   {
