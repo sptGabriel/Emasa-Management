@@ -1,60 +1,63 @@
 import React, {useState} from 'react'
 import {observer} from 'mobx-react-lite'
 import {toast} from 'react-toastify'
+import {PuffLoader} from 'react-spinners'
 import {Forms} from './styles'
 import BoundInput from '../../../shared/components/Input'
 import {ChangePassword} from '../../../models/changePasswordModel'
 import {useRootStore} from '../../../shared/infra/mobx'
 import {sleep} from '../../../shared/utils/sleep'
 
-interface IChangePassword {
-  oldPassword: string | null
-  newPassword: string | null
-  confirmNewPassword: string | null
-}
 const ChangeUserPassword: React.FC = observer(() => {
   const {currentUserStore, authStore} = useRootStore()
-  const [changeState, setState] = useState(false)
-  const [passwordModel, setModel] = useState(
-    new ChangePassword({
+  const [changePasswordSection, setChange] = useState({
+    passwordModel: new ChangePassword({
       oldPassword: '',
       password: '',
       confirmPassword: '',
     }),
-  )
-  const submitHandler = (event: any) => {
+    changeState: false,
+  })
+  const submitHandler = async (event: any) => {
     event.preventDefault()
-    setState(true)
-    currentUserStore
-      .changePassword(passwordModel)
-      .then(async () => {
-        setModel({password: '', confirmPassword: '', oldPassword: ''})
-        await sleep(
-          toast.success(
+    setChange({...changePasswordSection, changeState: true})
+    await sleep({timeout: 1000})
+    await currentUserStore
+      .changePassword(changePasswordSection.passwordModel)
+      .then(() => {
+        sleep({
+          fn: toast.success(
             'Senha alterada com sucesso, por favor entre novamente.',
-            {autoClose: 3000},
+            {autoClose: 2000},
           ),
-          3250,
-        )
-        await authStore.logout()
+          timeout: 2000,
+        })
+        authStore.logout()
       })
       .catch((err) => {
-        setModel({password: '', confirmPassword: '', oldPassword: ''})
+        console.log(err)
         toast.error(
           err && err.response
             ? err.response.data.message
             : 'Please try again later',
         )
       })
-    setState(false)
+    setChange({
+      passwordModel: new ChangePassword({
+        oldPassword: '',
+        password: '',
+        confirmPassword: '',
+      }),
+      changeState: false,
+    })
   }
   return (
     <Forms
       onSubmit={(event) => submitHandler(event)}
       buttonActive={
-        passwordModel.confirmPassword.length > 4 &&
-        passwordModel.password.length > 4 &&
-        passwordModel.oldPassword.length > 4
+        changePasswordSection.passwordModel.confirmPassword.length > 4 &&
+        changePasswordSection.passwordModel.password.length > 4 &&
+        changePasswordSection.passwordModel.oldPassword.length > 4
       }
     >
       <div className="form-item">
@@ -64,7 +67,7 @@ const ChangeUserPassword: React.FC = observer(() => {
         <div className="form-input">
           <div className="wrap-input">
             <BoundInput
-              model={passwordModel}
+              model={changePasswordSection.passwordModel}
               property="oldPassword"
               type="password"
               required
@@ -81,7 +84,7 @@ const ChangeUserPassword: React.FC = observer(() => {
         <div className="form-input">
           <div className="wrap-input">
             <BoundInput
-              model={passwordModel}
+              model={changePasswordSection.passwordModel}
               property="password"
               required
               type="password"
@@ -98,7 +101,7 @@ const ChangeUserPassword: React.FC = observer(() => {
         <div className="form-input">
           <div className="wrap-input">
             <BoundInput
-              model={passwordModel}
+              model={changePasswordSection.passwordModel}
               property="confirmPassword"
               required
               type="password"
@@ -114,16 +117,27 @@ const ChangeUserPassword: React.FC = observer(() => {
           <div className="wrap-input">
             <button
               type="submit"
+              style={{minWidth: 104.09}}
               disabled={
-                changeState
+                changePasswordSection.changeState
                   ? true
                   : false ||
-                    (passwordModel.confirmPassword.length < 4 &&
-                      passwordModel.password.length < 4 &&
-                      passwordModel.oldPassword.length < 4)
+                    (changePasswordSection.passwordModel.confirmPassword
+                      .length < 4 &&
+                      changePasswordSection.passwordModel.password.length < 4 &&
+                      changePasswordSection.passwordModel.oldPassword.length <
+                        4)
               }
             >
-              Alterar senha
+              {changePasswordSection.changeState ? (
+                <PuffLoader
+                  size={18}
+                  color="#fff"
+                  loading={changePasswordSection.changeState}
+                />
+              ) : (
+                'Alterar senha'
+              )}
             </button>
           </div>
         </div>

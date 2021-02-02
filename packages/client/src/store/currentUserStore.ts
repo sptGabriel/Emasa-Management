@@ -30,7 +30,7 @@ export class CurrentUserStore {
     oldPassword,
   }: ChangePassword): Promise<any> => {
     return this.rootStore.AxiosStore.post(
-      `users/${this.currentUser.matricula}/change-password`,
+      `users/${this.currentUser.id}/change-password`,
       {confirmPassword, password, oldPassword},
     )
   }

@@ -39,12 +39,12 @@ export class RefreshTokenUseCase
 
   public execute = async ({
     refreshToken,
-    id
+    id,
   }: refreshTokenDTO): Promise<Either<AppError, any>> => {
     if (!refreshToken) throw new Error(`Invalid credentials`);
     const decoded: any = await promisifyDecode(
       refreshToken,
-      jwtConfig.rfSecret,
+      ensure(jwtConfig.rfSecret),
     );
     const user = await this.userRepository.byId(id);
     if (!user) throw new Error(`This user doesn't exists`);
@@ -54,7 +54,7 @@ export class RefreshTokenUseCase
     // const user = await this.validateUser({ id, ip });
     const renewAccessToken = JWT.buildAcessToken(
       { sub: user.employee.id },
-      user.getJWTPayload,
+      { id: user.employee.id, matricula: user.employee.matricula },
     );
     return right({
       refreshToken: renewRefreshToken.ref_token,

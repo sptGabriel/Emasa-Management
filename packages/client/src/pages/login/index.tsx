@@ -287,17 +287,11 @@ const Form: React.FunctionComponent = observer(() => {
     setTimeout(() => {
       authStore
         .login()
-        .then(() => {
-          authStore.loginModel.password = ''
-          authStore.loginModel.login = ''
-          navigate('../dashboard', {replace: true})
-        })
+        .then(() => navigate('../dashboard', {replace: true}))
         .catch((err) => {
-          console.log(err)
           if (err && err.response.status === 404) handleError(err)
-          authStore.loginModel.password = ''
-          authStore.loginModel.login = ''
           toast.error(err.response.data.message)
+          setLoading(false)
         })
     }, 1000)
   }

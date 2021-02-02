@@ -19,14 +19,14 @@ const EditInformations: React.FC = observer(() => {
     setEdition({...editSection, loading: true})
     await currentUserStore
       .editProfile(editSection.user)
-      .then(async () => {
-        await currentUserStore.pullUser()
-        await sleep(
-          toast.success('Informações atualizadas com sucesso !!!', {
+      .then(() => {
+        currentUserStore.pullUser()
+        sleep({
+          fn: toast.success('Informações atualizadas com sucesso !!!', {
             autoClose: 3000,
           }),
-          3250,
-        )
+          timeout: 3250,
+        })
       })
       .catch((err: any) => {
         toast.error(
