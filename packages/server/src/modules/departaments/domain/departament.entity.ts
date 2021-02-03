@@ -6,7 +6,7 @@ import {
   Property,
   Unique,
 } from '@mikro-orm/core';
-import { Employee } from '@modules/employees/domain/employee.entity';
+import { Employee, Positions } from '@modules/employees/domain/employee.entity';
 import { isString } from '@utils/isString';
 import { v4, validate } from 'uuid';
 
@@ -25,6 +25,28 @@ export class Departament {
   public updatedAt = new Date();
   @Property()
   public deletedAt?: Date;
+
+  @Property({ name: 'devicesInformations', persist: false })
+  public get formatedReponse(): any {
+    const gerente = this.employees
+      .getItems()
+      .find(i => i.position === Positions.gerente);
+      const coordenador = this.employees
+      .getItems()
+      .find(i => i.position === Positions.coordenador);
+      const diretor = this.employees
+      .getItems()
+      .find(i => i.position === Positions.diretor);
+      return {
+        id: this.id,
+        nome: this.departament_name,
+        diretor: diretor || 'Não cadastrado',
+        coordenador: coordenador || 'Não cadastrado',
+        gerente: gerente || 'Não cadastrado',
+        criado: this.createdAt
+      }
+  }
+
   constructor(departament_name: string, id?: string) {
     if (!id) this.id = v4();
     this.departament_name = departament_name;

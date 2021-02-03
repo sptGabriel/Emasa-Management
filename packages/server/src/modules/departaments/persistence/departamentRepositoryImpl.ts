@@ -1,4 +1,11 @@
-import { LoadStrategy, QueryFlag, QueryOrder, RequestContext, wrap } from '@mikro-orm/core';
+import {
+  LoadStrategy,
+  QueryFlag,
+  QueryOrder,
+  RequestContext,
+  wrap,
+} from '@mikro-orm/core';
+import { EntityManager } from '@mikro-orm/postgresql';
 import { Pagination } from '@shared/core/pagination';
 import { injectable } from 'tsyringe';
 import { Departament } from '../domain/departament.entity';
@@ -22,19 +29,22 @@ export class DepartamentRepository implements IDepartamentRepository {
     await this.em.persist(departament).flush();
     return departament;
   };
-  public all = async (pagination: Pagination): Promise<Departament[]> => {
+  public all = async (
+    pagination: Pagination,
+  ): Promise<{ departaments: Departament[]; total: number }> => {
     const departaments: Departament[] = await this.em.find(
       Departament,
       {},
       {
-        orderBy: { createdAt: QueryOrder.ASC },
+        orderBy: { createdAt: QueryOrder.DESC },
         offset: pagination.offset(),
         limit: pagination.perPage(),
         flags: [QueryFlag.PAGINATE],
       },
     );
-    await this.em.populate(departaments, ['employees'])
-    return departaments;
+    await this.em.populate(departaments, ['employees']);
+    const total = await this.total();
+    return { departaments, total };
   };
   public byArray = async (id: string[]): Promise<Departament[]> => {
     return await this.em.find(Departament, { id });
@@ -53,4 +63,5 @@ export class DepartamentRepository implements IDepartamentRepository {
     if (!departamentRow) return;
     return departamentRow;
   };
+  public total = async (): Promise<number> => await this.em.count(Departament);
 }
