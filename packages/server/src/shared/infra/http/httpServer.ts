@@ -71,7 +71,7 @@ export class ExpressServer implements IHttpServer {
       res.send('Welcome');
     });
     this.app.use(ErrorMiddleware);
-    this.app.use(jwtMiddleware);
+    //this.app.use(jwtMiddleware);
   };
   
   public getApp = () => {

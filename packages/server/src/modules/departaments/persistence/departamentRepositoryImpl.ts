@@ -1,4 +1,4 @@
-import { RequestContext, wrap } from '@mikro-orm/core';
+import { LoadStrategy, QueryFlag, QueryOrder, RequestContext, wrap } from '@mikro-orm/core';
 import { Pagination } from '@shared/core/pagination';
 import { injectable } from 'tsyringe';
 import { Departament } from '../domain/departament.entity';
@@ -7,7 +7,7 @@ import { IDepartamentRepository } from './departamentRepository';
 export class DepartamentRepository implements IDepartamentRepository {
   private em: any;
   constructor() {
-    this.em = RequestContext.getEntityManager()
+    this.em = RequestContext.getEntityManager();
   }
   public create = async (departament: Departament): Promise<Departament> => {
     if (!(departament instanceof Departament))
@@ -23,10 +23,21 @@ export class DepartamentRepository implements IDepartamentRepository {
     return departament;
   };
   public all = async (pagination: Pagination): Promise<Departament[]> => {
-    return await this.em.find(Departament, {});
+    const departaments: Departament[] = await this.em.find(
+      Departament,
+      {},
+      {
+        orderBy: { createdAt: QueryOrder.ASC },
+        offset: pagination.offset(),
+        limit: pagination.perPage(),
+        flags: [QueryFlag.PAGINATE],
+      },
+    );
+    await this.em.populate(departaments, ['employees'])
+    return departaments;
   };
   public byArray = async (id: string[]): Promise<Departament[]> => {
-    return await this.em.find(Departament, {id});
+    return await this.em.find(Departament, { id });
   };
   public byId = async (id: string): Promise<Departament | undefined> => {
     const departamentRow = await this.em.findOne(Departament, { id });

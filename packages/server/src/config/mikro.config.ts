@@ -13,7 +13,7 @@ export default {
   metadataProvider: TsMorphMetadataProvider,
   type: 'postgresql',
   dbName: process.env.DB_NAME,
-  debug: false,
+  debug: true,
   // debug: process.env.NODE_ENV === 'development',
   entities: [rootDir + '/modules/**/domain/*.entity.{js,ts}'],
   host: process.env.DB_HOST,
