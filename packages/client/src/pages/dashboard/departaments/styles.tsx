@@ -3,7 +3,6 @@ import styled from '@emotion/styled'
 export const DepartamentMain = styled('div')`
   min-height: calc(100% - 60px) !important;
   height: auto;
-  overflow: hidden;
   width: 100%;
   padding: 0;
 `
@@ -45,7 +44,7 @@ export const ResponsiveTable = styled('table')`
   }
   thead {
     visibility: visible;
-    background: #fafafa;
+    background: #fff;
   }
   tbody {
     display: table-row-group;
@@ -54,9 +53,9 @@ export const ResponsiveTable = styled('table')`
     border-collapse: collapse;
     border-spacing: 0;
     visibility: visible;
-    background: #fafafa;
+    background: #fff;
     tr {
-      background: #fafafa;
+      background: #fff;
       display: table-row;
       border-bottom-width: 1px;
       margin-bottom: 0;

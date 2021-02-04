@@ -2,27 +2,30 @@
 import {makeAutoObservable} from 'mobx'
 
 export type TDepartament = {
-  Nome: string
-  Diretor: string
-  Gerente: string
-  Coordenador: string
-  Criado: Date
+  id: string
+  nome: string
+  diretor: string
+  gerente: string
+  coordenador: string
+  criado: Date
 }
 export class DepartamentModel implements TDepartament {
-  Nome!: string
+  id!: string
 
-  Diretor!: string
+  nome!: string
 
-  Gerente!: string
+  diretor!: string
 
-  Coordenador!: string
+  gerente!: string
 
-  Criado!: Date
+  coordenador!: string
+
+  criado!: Date
   constructor(props?: TDepartament) {
-    makeAutoObservable(this)
-    this.Coordenador = props ? props.Coordenador : ''
-    this.Gerente = props ? props.Gerente : ''
-    this.Diretor = props ? props.Diretor : ''
-    this.Nome = props ? props.Nome : ''
+    this.id = props ? props.id : ''
+    this.coordenador = props ? props.coordenador : ''
+    this.gerente = props ? props.gerente : ''
+    this.diretor = props ? props.diretor : ''
+    this.nome = props ? props.nome : ''
   }
 }
