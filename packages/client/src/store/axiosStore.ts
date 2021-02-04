@@ -1,5 +1,5 @@
 /* eslint-disable no-underscore-dangle */
-import axios, {AxiosInstance} from 'axios'
+import axios, {AxiosInstance, AxiosRequestConfig} from 'axios'
 import {makeAutoObservable} from 'mobx'
 import {apiConfig} from '../config/api'
 import {RootStore} from './rootStore'
@@ -22,8 +22,12 @@ export class AxiosStore {
     return this.axiosInstance
   }
 
-  public get = async (url: string): Promise<any> => {
+  public get = async (
+    url: string,
+    config?: AxiosRequestConfig,
+  ): Promise<any> => {
     return this.axiosInstance.get(url, {
+      ...config,
       withCredentials: true,
       // prettier-ignore
       headers: {

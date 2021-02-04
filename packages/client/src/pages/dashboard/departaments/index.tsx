@@ -1,58 +1,19 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 import {observer} from 'mobx-react-lite'
 import {DepartamentMain, ResponsiveTable, TableContent} from './styles'
 import CheckBox from '../../../shared/components/CheckBox'
+import Pagination from '../../../shared/components/Pagination'
+import {useRootStore} from '../../../shared/infra/mobx'
 
 const DepartamentPage: React.FC = observer(() => {
+  const {departamentStore} = useRootStore()
   return (
-    <DepartamentMain>
-      <h1>departament page </h1>
-      <TableContent>
-        <ResponsiveTable>
-          <thead>
-            <tr>
-              <th className="paddingCheckbox">
-                <span className="root">
-                  <input type="checkbox" />
-                </span>
-              </th>
-              <th>Nome</th>
-              <th>Diretor</th>
-              <th>Gerente</th>
-              <th>Coordenador</th>
-              <th>Criado</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td className="paddingCheckbox">
-                <span className="root">
-                  <input type="checkbox" />
-                </span>
-              </td>
-              <td>Ti</td>
-              <td>Test</td>
-              <td>Test</td>
-              <td>Test</td>
-              <td>Test</td>
-            </tr>
-            <tr>
-              <td className="paddingCheckbox">
-                <span className="root">
-                  <input type="checkbox" />
-                </span>
-              </td>
-              <td>Ti</td>
-              <td>Test</td>
-              <td>Test</td>
-              <td>Test</td>
-              <td>Test</td>
-            </tr>
-          </tbody>
-        </ResponsiveTable>
-      </TableContent>
-    </DepartamentMain>
+    <Pagination
+      total={departamentStore.total}
+      page={1}
+      perPage={10}
+      callData={departamentStore.getDepartamentsPage}
+    />
   )
 })
-
 export default DepartamentPage
