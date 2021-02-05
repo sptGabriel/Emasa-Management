@@ -6,13 +6,49 @@ export const DepartamentMain = styled('div')`
   width: 100%;
   padding: 0;
 `
-export const TableContent = styled('div')``
+export const TableContent = styled('div')`
+  box-shadow: 0 0 0 1px rgb(63 63 68 / 5%), 0 1px 2px 0 rgb(63 63 68 / 15%);
+  border-radius: 4px;
+`
 export const ResponsiveTable = styled('table')`
   width: 100%;
   margin: 0;
   padding: 0;
   border-collapse: collapse;
   border-spacing: 0;
+  .paddingCheckbox {
+    width: 48px;
+    padding: 0 0 0 4px !important;
+    color: #263238;
+    font-weight: 500;
+    line-height: 1.5rem;
+    font-size: 0.875rem;
+    text-align: left;
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  }
+  tr {
+    color: inherit;
+    display: table-row;
+    outline: 0;
+    vertical-align: middle;
+    border-spacing: 0;
+    border-collapse: collapse;
+  }
+  .tr-head {
+    th {
+      border-bottom: 1px solid rgba(224, 224, 224, 1);
+      letter-spacing: 0.01071em;
+      vertical-align: inherit;
+      display: table-cell;
+      padding: 16px;
+      font-size: 0.875rem;
+      text-align: left;
+      font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
+      color: #263238;
+      font-weight: 500;
+      line-height: 1.5rem;
+    }
+  }
   .root {
     padding: 9px;
     flex: 0 0 auto;
@@ -32,16 +68,6 @@ export const ResponsiveTable = styled('table')`
     vertical-align: middle;
     background-color: transparent;
   }
-  .paddingCheckbox {
-    width: 48px;
-    padding: 0 0 0 4px;
-    display: table-cell;
-    font-size: 0.875rem;
-    text-align: left;
-    border-bottom: 1px solid rgba(224, 224, 224, 1);
-    letter-spacing: 0.01071em;
-    vertical-align: inherit;
-  }
   thead {
     visibility: visible;
     background: #fff;
@@ -54,53 +80,44 @@ export const ResponsiveTable = styled('table')`
     border-spacing: 0;
     visibility: visible;
     background: #fff;
-    tr {
-      background: #fff;
-      display: table-row;
-      border-bottom-width: 1px;
-      margin-bottom: 0;
-      border: 1px solid #ddd;
-      border-bottom: 2px solid #ddd;
-      padding: 5px;
-    }
     td {
       display: table-cell;
+      padding: 16px;
+      font-size: 0.875rem;
       text-align: left;
-      font-size: 14px;
-      border-bottom: none;
+      font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+      font-weight: 400;
+      line-height: 1.43;
+      border-bottom: 1px solid rgba(224, 224, 224, 1);
+      letter-spacing: 0.01071em;
+      vertical-align: inherit;
     }
   }
-  tr {
-    border: 1px solid #ddd;
-    border-bottom: 2px solid #ddd;
-    padding: 5px;
-    margin-bottom: 10px;
-    display: table-row;
-    border-bottom-width: 1px;
-    margin-bottom: 0;
-  }
-  th,
-  td {
-    padding: 10px;
-    text-align: left;
-  }
-  th {
-    text-transform: uppercase;
-    font-size: 11px;
-  }
-  td {
-    display: block;
-    text-align: right;
-    font-size: 13px;
-    border-bottom: 1px dotted #ddd;
-    &:last-of-type {
-      border-bottom: none;
-    }
-    /* :before {
-      content: attr(data-label);
-      float: left;
-      text-transform: uppercase;
-      font-weight: bold;
-    } */
+  //tr {
+  //  border: 1px solid #ddd;
+  //  border-bottom: 2px solid #ddd;
+  //  padding: 5px;
+  //  margin-bottom: 10px;
+  //  display: table-row;
+  //  border-bottom-width: 1px;
+  //  margin-bottom: 0;
+  //}
+  //th,
+  //td {
+  //  padding: 10px;
+  //  text-align: left;
+  //}
+  //th {
+  //  text-transform: uppercase;
+  //  font-size: 11px;
+  //}
+  //td {
+  //  display: block;
+  //  text-align: right;
+  //  font-size: 13px;
+  //  border-bottom: 1px dotted #ddd;
+  //  &:last-of-type {
+  //    border-bottom: none;
+  //  }
   }
 `

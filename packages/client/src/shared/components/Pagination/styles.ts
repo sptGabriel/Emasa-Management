@@ -92,7 +92,7 @@ export const PaginationToolBar = styled('div')<{isOPTOpen: boolean}>`
       color: rgba(0, 0, 0, 0.26);
       cursor: pointer;
       background-color: transparent;
-      pointer-events: none;
+      //pointer-events: none;
       flex: 0 0 auto;
       padding: 12px;
       overflow: visible;
@@ -113,8 +113,8 @@ export const PaginationToolBar = styled('div')<{isOPTOpen: boolean}>`
     button:last-of-type {
       color: rgba(0, 0, 0, 0.26);
       background-color: transparent;
-      cursor: default;
-      pointer-events: none;
+      cursor: pointer;
+      //pointer-events: none;
       flex: 0 0 auto;
       padding: 12px;
       overflow: visible;

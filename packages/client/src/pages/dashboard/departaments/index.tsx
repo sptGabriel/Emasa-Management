@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import {observer} from 'mobx-react-lite'
+import {observer, useStaticRendering} from 'mobx-react-lite'
 import Pagination from '../../../shared/components/Pagination'
 import {useRootStore} from '../../../shared/infra/mobx'
 import {DepartamentModel} from '../../../models/departamentModel'
@@ -8,25 +8,34 @@ import {DepartamentMain, ResponsiveTable, TableContent} from './styles'
 const DepartamentPage: React.FC = observer(() => {
   const {departamentStore} = useRootStore()
   const [total, setTotal] = useState(0)
-  const [departSec, setSec] = useState({
-    total: 0,
-    data: [] as any,
-    page: 1,
-    perPage: 10,
-    loading: false,
-  })
+  const [loading, setLoad] = useState(false)
+  const [currentPage, setCurrentPage] = useState(1)
+  const [limit, setLimit] = useState(10)
+  const [data, setData] = useState<DepartamentModel[]>([])
   useEffect(() => {
     departamentStore
-      .getCount(departSec.perPage)
-      .then((total) => setSec({...departSec, total}))
+      .getDepartamentsPage(limit, currentPage)
+      .then((data) => setData(data))
+    departamentStore.getCount(limit).then((total) => setTotal(total))
   }, [])
+  useEffect(() => {
+    departamentStore
+      .getDepartamentsPage(limit, currentPage)
+      .then((data) => setData(data))
+    departamentStore.getCount(limit).then((total) => setTotal(total))
+  }, [limit])
+  useEffect(() => {
+    departamentStore
+      .getDepartamentsPage(limit, currentPage)
+      .then((data) => setData(data))
+  }, [currentPage])
   return (
     <DepartamentMain>
       <h1>departament page </h1>
       <TableContent>
         <ResponsiveTable>
           <thead>
-            <tr>
+            <tr className="tr-head">
               <th className="paddingCheckbox">
                 <span className="root">
                   <input type="checkbox" />
@@ -40,39 +49,29 @@ const DepartamentPage: React.FC = observer(() => {
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td className="paddingCheckbox">
-                <span className="root">
-                  <input type="checkbox" />
-                </span>
-              </td>
-              <td>Ti</td>
-              <td>Test</td>
-              <td>Test</td>
-              <td>Test</td>
-              <td>Test</td>
-            </tr>
-            <tr>
-              <td className="paddingCheckbox">
-                <span className="root">
-                  <input type="checkbox" />
-                </span>
-              </td>
-              <td>Ti</td>
-              <td>Test</td>
-              <td>Test</td>
-              <td>Test</td>
-              <td>Test</td>
-            </tr>
+            {data.map((depart) => (
+              <tr key={depart.id}>
+                <td className="paddingCheckbox">
+                  <span className="root">
+                    <input type="checkbox" />
+                  </span>
+                </td>
+                <td>{depart.nome}</td>
+                <td>{depart.diretor}</td>
+                <td>{depart.gerente}</td>
+                <td>{depart.coordenador}</td>
+                <td>{depart.criado}</td>
+              </tr>
+            ))}
           </tbody>
         </ResponsiveTable>
+        <Pagination
+          isLoading={{loading, setLoad}}
+          total={{total, setTotal}}
+          page={{page: currentPage, setPage: setCurrentPage}}
+          limit={{limit, setLimit}}
+        />
       </TableContent>
-      <Pagination
-        isLoading={departSec.loading}
-        total={departSec.total}
-        page={departSec.page}
-        perPage={departSec.perPage}
-      />
     </DepartamentMain>
   )
 })

@@ -21,8 +21,10 @@ export class DepartamentStore {
   }
 
   public getCount = async (perPage: number): Promise<number> => {
-    return this.rootStore.AxiosStore.get('/departaments/count').then((res) =>
-      Math.floor(res.data / perPage),
-    )
+    return this.rootStore.AxiosStore.get('/departaments/count').then((res) => {
+      const page = Math.floor(res.data / perPage)
+      if (page < 1) return 1
+      return page
+    })
   }
 }
