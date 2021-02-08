@@ -6,7 +6,7 @@ import {observer} from 'mobx-react-lite'
 import {useRootStore} from '../../infra/mobx'
 import { Horizontal, Vertical } from './styles'
 
-const VerticalSearch: React.FC = () => {
+export const VerticalSearch: React.FC = () => {
   const [isOpen, setOpen] = useState(false)
   const clickHandler = useCallback(() => {
     setOpen(!isOpen)
@@ -43,7 +43,7 @@ const HorizontalSearch = () => {
   )
 }
 
-const Search: React.FC = observer(() => {
+export const Search: React.FC = observer(() => {
   const {layoutStore} = useRootStore()
   return layoutStore.layoutType === 'vertical' ? (
     <VerticalSearch />
@@ -52,4 +52,3 @@ const Search: React.FC = observer(() => {
   )
 })
 
-export default Search

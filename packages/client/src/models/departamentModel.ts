@@ -27,5 +27,6 @@ export class DepartamentModel implements TDepartament {
     this.gerente = props ? props.gerente : ''
     this.diretor = props ? props.diretor : ''
     this.nome = props ? props.nome : ''
+    if (props && props.criado) this.criado = props.criado
   }
 }

@@ -1,16 +1,18 @@
+import {css} from '@emotion/react'
 import styled from '@emotion/styled'
+import {Container} from '../../../shared/components/FlexBox'
 import {NoSelect} from '../../../shared/components/NoSelect'
 
 export const DepartamentMain = styled('div')`
   min-height: calc(100% - 60px) !important;
-  height: auto;
   width: 100%;
-  padding: 0;
+  padding: 0 20px;
   ${NoSelect}
 `
 export const TableContent = styled('div')`
   box-shadow: 0 0 0 1px rgb(63 63 68 / 5%), 0 1px 2px 0 rgb(63 63 68 / 15%);
   border-radius: 4px;
+  min-height: 100%;
 `
 export const ResponsiveTable = styled('table')`
   width: 100%;
@@ -18,6 +20,7 @@ export const ResponsiveTable = styled('table')`
   padding: 0;
   border-collapse: collapse;
   border-spacing: 0;
+  height: 100%;
   .paddingCheckbox {
     width: 48px;
     padding: 0 0 0 4px !important;
@@ -28,21 +31,13 @@ export const ResponsiveTable = styled('table')`
     text-align: left;
     font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
   }
-  tr {
-    color: inherit;
-    display: table-row;
-    outline: 0;
-    vertical-align: middle;
-    border-spacing: 0;
-    border-collapse: collapse;
-  }
   .tr-head {
     th {
       border-bottom: 1px solid rgba(224, 224, 224, 1);
       letter-spacing: 0.01071em;
       vertical-align: inherit;
       display: table-cell;
-      padding: 16px;
+      padding: 5px 8px 5px 4px !important;
       font-size: 0.875rem;
       text-align: left;
       font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
@@ -82,9 +77,11 @@ export const ResponsiveTable = styled('table')`
     border-spacing: 0;
     visibility: visible;
     background: #fff;
+    min-height: calc(100% - 60px);
     td {
       display: table-cell;
-      padding: 16px;
+      padding: 5px 8px 5px 0px;
+      word-break: break-all;
       font-size: 0.875rem;
       text-align: left;
       font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
@@ -94,5 +91,26 @@ export const ResponsiveTable = styled('table')`
       letter-spacing: 0.01071em;
       vertical-align: inherit;
     }
+  }
+`
+export const TR = styled('tr')<{hasHover: number; selected?: boolean}>`
+  color: inherit;
+  display: table-row;
+  outline: 0;
+  vertical-align: middle;
+  border-spacing: 0;
+  border-collapse: collapse;
+  background: ${({selected}) => (selected ? 'rgba(0, 0, 0, 0.08)' : '#fff')};
+  ${({hasHover}) =>
+    hasHover === 1
+      ? css`
+          :hover {
+            background: #eee;
+          }
+        `
+      : ''};
+`
+export const EditDepartament = styled(Container)`
+  .modal-header {
   }
 `

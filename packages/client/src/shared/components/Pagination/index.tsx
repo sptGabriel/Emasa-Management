@@ -1,12 +1,11 @@
 import {observer} from 'mobx-react-lite'
-import React, {useEffect, useState} from 'react'
+import React, {useState} from 'react'
 import {PaginationROOT, PaginationToolBar} from './styles'
 
 const options = [
   {value: 10, label: '10'},
   {value: 15, label: '15'},
   {value: 25, label: '25'},
-  {value: 5, label: '25'},
 ]
 
 const Pagination: React.FC<{

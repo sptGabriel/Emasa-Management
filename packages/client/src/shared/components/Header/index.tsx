@@ -4,7 +4,7 @@ import {Sling as Hamburger} from 'hamburger-react'
 import {useRootStore} from '../../infra/mobx'
 import Widgets from '../Widgets'
 import Logo from '../Logo'
-import Search from '../Search'
+import {Search} from '../Search'
 import UserProfile from '../UserProfile'
 import {LogoHeader, WrapperTools, NavBar} from './styles'
 
