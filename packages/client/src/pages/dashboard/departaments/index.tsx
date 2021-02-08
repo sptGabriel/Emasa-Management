@@ -124,7 +124,7 @@ const DepartamentPage: React.FC = observer(() => {
         hideWithOutSide={setModal}
         tittle="Editar departamento"
       >
-        <EditDepartament flexColumn>
+        <EditDepartament>
           <div className="modal-body">body</div>
         </EditDepartament>
       </Modal>

@@ -7,38 +7,65 @@ import useOnClickOutside from 'use-onclickoutside'
 const modal = document.getElementById('emasa-modal')
 
 const ModalWrap = styled('div')<{isShowing: boolean}>`
-  opacity: ${({isShowing}) => (isShowing ? '1' : '0')};
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: ${({isShowing}) => (isShowing ? '999' : '0')};
-  border-radius: 10px;
-  padding: 33px;
+  position: relative;
+  width: 100%;
   max-width: 768px;
   max-height: 90vh;
-  width: 100%;
-  background: rgb(32, 32, 36);
-  box-shadow: rgb(0 0 0 / 56%) 0px 5px 30px;
+  padding: 33px;
+  background: white;
+  opacity: ${({isShowing}) => (isShowing ? '1' : '0')};
   border-radius: 5px;
+  transform: ${({isShowing}) =>
+    isShowing ? 'translateY(0px)' : 'translateY(20px)'};
+  transition: transform 0.2s ease-in 0s, opacity 0.2s ease-in 0s;
   overflow-y: auto;
   text-align: left;
   cursor: default;
   .tittle {
     font-size: 24px;
     font-weight: bold;
+    font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
     margin-bottom: 1.33em;
-    color: rgb(255, 255, 255);
+    color: #000;
   }
+`
+const EmasaModal = styled('div')<{isShowing: boolean}>`
+  position: fixed;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  top: 0px;
+  left: 0px;
+  background: rgba(0, 0, 0, 0.2);
+  z-index: 9999;
+  -webkit-box-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  justify-content: center;
+  visibility: ${({isShowing}) => (isShowing ? 'visible' : 'hidden')};
+  opacity: ${({isShowing}) => (isShowing ? '1' : '0')};
+  transition: all 0.3s ease 0s;
+  cursor: pointer;
 `
 const ModalContainer = styled('div')<{isShowing: boolean}>`
   position: fixed;
-  top: 0;
-  left: 0;
-  z-index: ${({isShowing}) => (isShowing ? '999' : '0')};
-  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  -webkit-box-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  justify-content: center;
   width: 100%;
   height: 100%;
+  top: 0px;
+  left: 0px;
+  padding: 30px;
+  background: rgba(0, 0, 0, 0.365);
+  color: rgb(255, 255, 255);
+  z-index: 9998;
+  font-size: 16px;
+  opacity: ${({isShowing}) => (isShowing ? '1' : '0')};
+  visibility: ${({isShowing}) => (isShowing ? 'visible' : 'hidden')};
+  transition: all 0.3s ease 0s;
 `
 
 const Modal = ({isShowing, hide, hideWithOutSide, children, tittle}: any) => {
@@ -54,11 +81,14 @@ const Modal = ({isShowing, hide, hideWithOutSide, children, tittle}: any) => {
   function portal() {
     if (!modal) return null
     return createPortal(
-      <ModalContainer isShowing={isShowing}>
-        <ModalWrap isShowing={isShowing} ref={ref}>
-          <h1 className="tittle">{tittle}</h1>
-        </ModalWrap>
-      </ModalContainer>,
+      <EmasaModal isShowing={isShowing}>
+        <ModalContainer isShowing={isShowing}>
+          <ModalWrap isShowing={isShowing} ref={ref}>
+            <h1 className="tittle">{tittle}</h1>
+            {children}
+          </ModalWrap>
+        </ModalContainer>
+      </EmasaModal>,
       modal,
     )
   }

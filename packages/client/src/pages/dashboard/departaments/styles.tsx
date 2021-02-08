@@ -110,7 +110,7 @@ export const TR = styled('tr')<{hasHover: number; selected?: boolean}>`
         `
       : ''};
 `
-export const EditDepartament = styled(Container)`
-  .modal-header {
-  }
+export const EditDepartament = styled('form')`
+  display: flex;
+  flex-direction: column;
 `
