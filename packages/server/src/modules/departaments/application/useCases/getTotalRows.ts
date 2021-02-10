@@ -14,6 +14,7 @@ export class GetTotalRowsUseCase
     private departamentRepository: IDepartamentRepository,
   ) {}
   public execute = async (): Promise<Either<AppError, number>> => {
+    console.log('enter herr')
     return right(await this.departamentRepository.total());
   };
 }

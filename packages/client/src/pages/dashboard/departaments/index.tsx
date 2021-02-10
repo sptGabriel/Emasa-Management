@@ -15,9 +15,65 @@ import CheckBox from '../../../shared/components/CheckBox'
 import {TableToolsHeader} from '../../../shared/components/TableToolsHeader'
 import UnselectCheckBox from '../../../shared/components/UnselectCheckBox'
 import Modal from '../../../shared/components/Modal'
+import {StyledInput} from '../../../shared/components/StyledInput'
+import {DepartamentModel} from '../../../models/departamentModel'
+
+const DepartamentEditSection: React.FC<{
+  item: {active: boolean; depart: DepartamentModel}
+  toggle: any
+  setModal: any
+}> = observer(({item, setModal, toggle}) => {
+  if (!item.active || !item.depart) return null
+  return (
+    <Modal
+      isShowing={item.active && item.depart}
+      hide={toggle}
+      hideWithOutSide={setModal}
+      tittle="Editar departamento"
+    >
+      <EditDepartament>
+        <div className="modal-body">
+          <section>
+            <StyledInput>
+              <div>
+                <label>Alterar nome do departamento</label>
+                <div>
+                  <input value={item.depart.nome} />
+                </div>
+              </div>
+            </StyledInput>
+            <StyledInput>
+              <div>
+                <label>Alterar sigla do departamento</label>
+                <div>
+                  <input value="not implemented yet" />
+                </div>
+              </div>
+            </StyledInput>
+          </section>
+          <section>
+            <div>
+              <label>Deseja alterar o diretor?</label>
+            </div>
+          </section>
+          <section>
+            <div>
+              <label>Deseja alterar o gerente?</label>
+            </div>
+          </section>
+          <section>
+            <div>
+              <label>Deseja alterar o coordenador?</label>
+            </div>
+          </section>
+        </div>
+      </EditDepartament>
+    </Modal>
+  )
+})
 
 const DepartamentPage: React.FC = observer(() => {
-  const {departamentStore} = useRootStore()
+  const {departamentStore, AxiosStore} = useRootStore()
   const [total, setTotal] = useState(0)
   const [loading, setLoad] = useState(false)
   const [currentPage, setCurrentPage] = useState(1)
@@ -28,11 +84,11 @@ const DepartamentPage: React.FC = observer(() => {
     data.filter((item) => item.checked).length,
   )
   const [unselect, setUnselect] = useState(false)
-  const [itemModalEdit, setModal]: any = useState({active: false, key: null})
+  const [itemModalEdit, setModal]: any = useState({active: false, depart: null})
 
-  function toggleModal(key: string) {
-    if (!key) return
-    setModal({active: !itemModalEdit.active, key})
+  function toggleModal(item: DepartamentModel) {
+    if (!item) return
+    setModal({active: !itemModalEdit.active, depart: item})
   }
 
   function loadData() {
@@ -60,7 +116,7 @@ const DepartamentPage: React.FC = observer(() => {
     setSelected(isAllSelected)
   }
 
-  function drawTDTools(key: string) {
+  function drawTDTools(item: DepartamentModel) {
     return (
       <td>
         <div
@@ -77,7 +133,7 @@ const DepartamentPage: React.FC = observer(() => {
               overflow: 'visible',
               cursor: 'pointer',
             }}
-            onClick={() => toggleModal(key)}
+            onClick={() => toggleModal(item)}
             type="button"
           >
             <MdEdit size={18} />
@@ -111,12 +167,12 @@ const DepartamentPage: React.FC = observer(() => {
         <td>{item.gerente}</td>
         <td>{item.coordenador}</td>
         <td>{item.criado}</td>
-        {drawTDTools(item.id)}
+        {drawTDTools(item)}
       </TR>
     ))
   }
 
-  function renderEditModal() {
+  function RenderEditModal() {
     return (
       <Modal
         isShowing={itemModalEdit.active && itemModalEdit.key}
@@ -125,16 +181,45 @@ const DepartamentPage: React.FC = observer(() => {
         tittle="Editar departamento"
       >
         <EditDepartament>
-          <div className="modal-body">body</div>
+          <div className="modal-body">
+            <section>
+              <StyledInput>
+                <div>
+                  <label>Alterar nome do departamento</label>
+                  <div>
+                    <input />
+                  </div>
+                </div>
+              </StyledInput>
+              <StyledInput>
+                <div>
+                  <label>Alterar sigla do departamento</label>
+                  <div>
+                    <input />
+                  </div>
+                </div>
+              </StyledInput>
+            </section>
+            <section>
+              <div>
+                <label>Deseja alterar o diretor?</label>
+              </div>
+            </section>
+            <section>
+              <div>
+                <label>Deseja alterar o gerente?</label>
+              </div>
+            </section>
+            <section>
+              <div>
+                <label>Deseja alterar o coordenador?</label>
+              </div>
+            </section>
+          </div>
         </EditDepartament>
       </Modal>
     )
   }
-
-  useEffect(() => {
-    loadData().then((data) => setData(data))
-    getTotal().then((value) => setTotal(value))
-  }, [])
 
   useEffect(() => {
     loadData().then((item) => setData(item))
@@ -219,7 +304,11 @@ const DepartamentPage: React.FC = observer(() => {
           limit={{limit, setLimit}}
         />
       </TableContent>
-      {itemModalEdit.active ? renderEditModal() : ''}
+      <DepartamentEditSection
+        item={itemModalEdit}
+        toggle={toggleModal}
+        setModal={setModal}
+      />
     </DepartamentMain>
   )
 })

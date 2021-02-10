@@ -6,7 +6,8 @@ import { CreateDepartamentDTO } from '../application/useCases/newDepartament/new
 import { CreateDepartamentUseCase } from '../application/useCases/newDepartament/newDepartament';
 import { Pagination } from '@shared/core/pagination';
 import { GetDepartamentsUseCase } from '../application/useCases/getDepartaments/getDepartaments';
-import { GetTotalRowsUseCase } from '../application/useCases/getTotalDepartaments/getTotalRows';
+import { GetTotalRowsUseCase } from '../application/useCases/getTotalRows';
+import { getByID } from '../application/useCases/getById';
 @singleton()
 export class DepartamentController extends BaseController {
   constructor() {
@@ -15,11 +16,28 @@ export class DepartamentController extends BaseController {
     this.initRouter();
   }
   protected initRouter() {
-    this.router.get(`${this.path}`, this.getDepartaments);
     this.router.get(`${this.path}/count`, this.count);
+    this.router.get(`${this.path}/:id`, this.byId);
+    this.router.get(`${this.path}`, this.getDepartaments);
     this.router.post(`${this.path}/add`, this.createDepartament);
     this.router.post(`${this.path}/`, this.getDepartaments);
   }
+  private byId = async (
+    request: Request,
+    response: Response,
+    next: NextFunction,
+  ) => {
+    try {
+      console.log('enter herr2')
+      const { id } = request.params;
+      console.log(id, 'id')
+      const result = await container.resolve(getByID).execute(id);
+      if (result.isLeft()) return next(result.value);
+      return response.json(result.value);
+    } catch (error) {
+      next(error);
+    }
+  };
   private index = async (arg0: string, index: any) => {
     throw new Error('Method not implemented.');
   };
@@ -29,9 +47,8 @@ export class DepartamentController extends BaseController {
     next: NextFunction,
   ) => {
     try {
-      const result = await container
-        .resolve(GetTotalRowsUseCase)
-        .execute();
+      console.log('enter herr1')
+      const result = await container.resolve(GetTotalRowsUseCase).execute();
       if (result.isLeft()) return next(result.value);
       return response.json(result.value);
     } catch (error) {
@@ -45,10 +62,10 @@ export class DepartamentController extends BaseController {
   ) => {
     try {
       const pagination = Pagination.fromRequest(request);
-      console.log(pagination)
+      console.log(pagination);
       const result = await container
         .resolve(GetDepartamentsUseCase)
-        .execute({pagination});
+        .execute({ pagination });
       if (result.isLeft()) return next(result.value);
       return response.json(result.value);
     } catch (error) {

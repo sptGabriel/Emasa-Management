@@ -241,7 +241,6 @@ const Inputs: React.FunctionComponent = observer(() => {
       <StyledInput>
         <div>
           <div>
-            <FaUser size={18} />
             <BoundInput
               model={authStore.loginModel}
               property="login"

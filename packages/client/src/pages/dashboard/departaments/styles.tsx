@@ -113,4 +113,21 @@ export const TR = styled('tr')<{hasHover: number; selected?: boolean}>`
 export const EditDepartament = styled('form')`
   display: flex;
   flex-direction: column;
+  section:nth-of-type(n + 2) {
+    margin-top: 24px;
+  }
+  section {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+    gap: 16px;
+  }
+  label {
+    display: block;
+    width: 100%;
+    min-height: 16px;
+    font-size: 14px;
+    color: rgb(135, 134, 139);
+    margin-bottom: 8px;
+  }
 `
