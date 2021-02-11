@@ -130,4 +130,51 @@ export const EditDepartament = styled('form')`
     color: rgb(135, 134, 139);
     margin-bottom: 8px;
   }
+  .grid {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+    gap: 16px;
+  }
+  .modal-footer {
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+    flex-direction: row-reverse;
+    width: 100%;
+    margin-top: 32px;
+    padding-top: 32px;
+    border-top: 1px solid #eee;
+  }
+  button {
+    position: relative;
+    padding: 16px 32px;
+    font-size: 12px;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: rgb(255, 255, 255);
+    border: 2px solid rgb(2, 143, 219);
+    border-radius: 5px;
+    transition: background 0.2s ease 0s, border 0.2s ease 0s;
+    cursor: pointer;
+    background: rgb(0, 107, 166);
+    ::after {
+      content: '';
+      position: absolute;
+      border-width: 2px;
+      border-style: solid;
+      border-color: rgb(255, 255, 255) rgba(255, 255, 255, 0.25)
+        rgb(255, 255, 255) rgb(255, 255, 255);
+      border-image: initial;
+      width: 12px;
+      height: 12px;
+      top: 50%;
+      left: 50%;
+      border-radius: 50%;
+      animation: 0.75s linear 0s infinite normal none running inmtdF;
+      will-change: transform, opacity;
+      opacity: 0;
+    }
+  }
 `

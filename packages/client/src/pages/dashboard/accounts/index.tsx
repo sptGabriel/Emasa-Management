@@ -29,7 +29,7 @@ const SettingsTag: ISettingsTag[] = [
   {
     id: 1,
     Name: 'Editar perfil',
-    Url: '',
+    Url: '../accounts/',
   },
   {
     id: 2,
@@ -112,7 +112,7 @@ const RenderAvatar = observer(() => {
           <AvatarProfile
             image={createBackgroundImage(currentUserStore.currentUser.avatar)}
           >
-            {Location.pathname === '/dashboard/accounts' ? (
+            {Location.pathname === '/dashboard/accounts/' ? (
               <label>
                 <div className="avatar">
                   <input

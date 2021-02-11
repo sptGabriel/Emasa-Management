@@ -16,12 +16,13 @@ const EditInformations: React.FC = observer(() => {
   })
   const submitHandler = async (event: any) => {
     event.preventDefault()
+    if (editSection.user === currentUserStore.currentUser) return
     setEdition({...editSection, loading: true})
     await currentUserStore
       .editProfile(editSection.user)
-      .then(() => {
+      .then(async () => {
         currentUserStore.pullUser()
-        sleep({
+        await sleep({
           fn: toast.success('Informações atualizadas com sucesso !!!', {
             autoClose: 3000,
           }),
@@ -173,7 +174,20 @@ const EditInformations: React.FC = observer(() => {
         <div className="form-name" />
         <div className="form-input">
           <div className="wrap-input">
-            <button type="submit">
+            <button
+              type="submit"
+              disabled={editSection.loading}
+              style={{
+                cursor:
+                  editSection.fieldChange && !editSection.loading
+                    ? 'pointer'
+                    : 'default',
+                pointerEvents:
+                  editSection.fieldChange && !editSection.loading
+                    ? 'auto'
+                    : 'none',
+              }}
+            >
               {editSection.loading ? (
                 <PuffLoader
                   size={18}

@@ -26,6 +26,14 @@ export interface IDepartamentRepository {
    */
   byName(departament_name: string): Promise<Departament | undefined>;
   /**
+   * @param {string} departament_name
+   * @returns {Promise<Departament>}
+   */
+  byNameOrSigla(
+    departament_name: string,
+    sigla: string,
+  ): Promise<Departament | undefined>;
+  /**
    * @param {string} departamentProps
    * @returns {Promise<Departament>}
    */

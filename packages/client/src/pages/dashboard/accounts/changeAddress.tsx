@@ -61,6 +61,7 @@ const ChangeAddress: React.FC = observer(() => {
     layoutStore.setCepSearching(false)
     layoutStore.setOverlay(false)
   }
+
   return (
     <Forms buttonActive={onChangeFields}>
       <div className="form-item">

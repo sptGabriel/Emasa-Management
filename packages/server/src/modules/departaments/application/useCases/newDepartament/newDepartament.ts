@@ -14,17 +14,17 @@ export class CreateDepartamentUseCase
     @inject(DepartamentRepository)
     private departamentRepository: IDepartamentRepository,
   ) {}
-  public execute = async (
-    request: CreateDepartamentDTO,
-  ): Promise<Either<AppError, Departament>> => {
-    const hasDepartament = await this.departamentRepository.byName(
-      request.departament_name,
+  public execute = async ({
+    departament_name,
+    sigla,
+  }: CreateDepartamentDTO): Promise<Either<AppError, Departament>> => {
+    const hasDepartament = await this.departamentRepository.byNameOrSigla(
+      departament_name,
+      sigla,
     );
-    if (hasDepartament) {
-      return left(new Error(`${request.departament_name} already exists`));
-    }
+    if (hasDepartament) throw Error(`${departament_name} already exists`);
     const departament = await this.departamentRepository.create(
-      Departament.build(request.departament_name),
+      Departament.build({ departament_name, initial_acronyms: sigla }),
     );
     return right(departament);
   };

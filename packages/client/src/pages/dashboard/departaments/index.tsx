@@ -19,10 +19,11 @@ import {StyledInput} from '../../../shared/components/StyledInput'
 import {DepartamentModel} from '../../../models/departamentModel'
 
 const DepartamentEditSection: React.FC<{
-  item: {active: boolean; depart: DepartamentModel}
+  item: {active: boolean; depart: any}
   toggle: any
   setModal: any
 }> = observer(({item, setModal, toggle}) => {
+  const [edit, setEdit] = useState(new DepartamentModel({...item.depart}))
   if (!item.active || !item.depart) return null
   return (
     <Modal
@@ -38,7 +39,13 @@ const DepartamentEditSection: React.FC<{
               <div>
                 <label>Alterar nome do departamento</label>
                 <div>
-                  <input value={item.depart.nome} />
+                  <input
+                    name="depart_nome"
+                    id="depart_nome"
+                    defaultValue={item.depart.nome}
+                    value={edit.nome}
+                    onChange={(e) => setEdit({...edit, nome: e.target.value})}
+                  />
                 </div>
               </div>
             </StyledInput>
@@ -46,27 +53,95 @@ const DepartamentEditSection: React.FC<{
               <div>
                 <label>Alterar sigla do departamento</label>
                 <div>
-                  <input value="not implemented yet" />
+                  <input
+                    name="depart_sigla"
+                    id="depart_sigla"
+                    defaultValue={item.depart.sigla}
+                    value={edit.sigla}
+                    onChange={(e) => setEdit({...edit, sigla: e.target.value})}
+                  />
                 </div>
               </div>
             </StyledInput>
           </section>
           <section>
-            <div>
-              <label>Deseja alterar o diretor?</label>
-            </div>
+            <StyledInput>
+              <div>
+                <label>
+                  {item.depart.diretor
+                    ? 'Alterar diretor do departamento'
+                    : 'Adicionar um diretor ao departamento:'}
+                </label>
+                <div className="grid">
+                  {item.depart.diretor ? (
+                    <div>
+                      <label>Diretor atual:</label>
+                      <input
+                        style={{
+                          borderColor: 'rgb(0, 107, 166)',
+                          width: item.depart.diretor
+                            ? 'auto'
+                            : '30% !important',
+                        }}
+                        value={item.depart.nome}
+                        disabled
+                      />
+                    </div>
+                  ) : null}
+                  <div>
+                    {/* <label>Digite um número de matricula válido</label> */}
+                    <input disabled />
+                  </div>
+                </div>
+              </div>
+            </StyledInput>
           </section>
           <section>
-            <div>
-              <label>Deseja alterar o gerente?</label>
-            </div>
+            <StyledInput>
+              <div>
+                <label>Alterar gerente do departamento:</label>
+                <div className="grid">
+                  <div>
+                    <label>Gerente atual:</label>
+                    <input
+                      style={{borderColor: 'rgb(0, 107, 166)'}}
+                      value={item.depart.nome}
+                      disabled
+                    />
+                  </div>
+                  <div>
+                    <label>Digite um número de matricula válido:</label>
+                    <input value={item.depart.nome} disabled />
+                  </div>
+                </div>
+              </div>
+            </StyledInput>
           </section>
           <section>
-            <div>
-              <label>Deseja alterar o coordenador?</label>
-            </div>
+            <StyledInput>
+              <div>
+                <label>Alterar diretor do coordenador:</label>
+                <div className="grid">
+                  <div>
+                    <label>Coordenador atual:</label>
+                    <input
+                      value={item.depart.nome}
+                      disabled
+                      style={{borderColor: 'rgb(0, 107, 166)'}}
+                    />
+                  </div>
+                  <div>
+                    <label>Digite um número de matricula válido:</label>
+                    <input value={item.depart.nome} disabled />
+                  </div>
+                </div>
+              </div>
+            </StyledInput>
           </section>
         </div>
+        <footer className="modal-footer">
+          <button type="button">Alterar Departamento</button>
+        </footer>
       </EditDepartament>
     </Modal>
   )
@@ -162,11 +237,12 @@ const DepartamentPage: React.FC = observer(() => {
             />
           </span>
         </td>
-        <td>{item.nome}</td>
-        <td>{item.diretor}</td>
-        <td>{item.gerente}</td>
-        <td>{item.coordenador}</td>
-        <td>{item.criado}</td>
+        <td style={{width: '20%'}}>{item.nome}</td>
+        <td style={{width: '20%'}}>
+          {item.diretor ? item.diretor : 'Não tem um cadastro de diretor'}
+        </td>
+        <td style={{width: '10%'}}>{item.sigla}</td>
+        <td style={{width: '20%'}}>{item.criado}</td>
         {drawTDTools(item)}
       </TR>
     ))
@@ -201,9 +277,12 @@ const DepartamentPage: React.FC = observer(() => {
               </StyledInput>
             </section>
             <section>
-              <div>
+              <StyledInput>
                 <label>Deseja alterar o diretor?</label>
-              </div>
+                <div>
+                  <input />
+                </div>
+              </StyledInput>
             </section>
             <section>
               <div>
@@ -287,8 +366,7 @@ const DepartamentPage: React.FC = observer(() => {
               </th>
               <th>Nome</th>
               <th>Diretor</th>
-              <th>Gerente</th>
-              <th>Coordenador</th>
+              <th>Sigla</th>
               <th>Data de criação</th>
               <th>
                 <span />

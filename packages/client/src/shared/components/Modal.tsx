@@ -74,10 +74,6 @@ const Modal = ({isShowing, hide, hideWithOutSide, children, tittle}: any) => {
     hideWithOutSide(false)
   })
 
-  useEffect(() => {
-    console.log(isShowing)
-  }, [isShowing])
-
   function portal() {
     if (!modal) return null
     return createPortal(

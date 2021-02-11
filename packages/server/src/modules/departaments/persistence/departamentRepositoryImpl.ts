@@ -63,5 +63,18 @@ export class DepartamentRepository implements IDepartamentRepository {
     if (!departamentRow) return;
     return departamentRow;
   };
+  public byNameOrSigla = async (
+    departament_name: string,
+    sigla: string
+  ): Promise<Departament | undefined> => {
+    const departamentRow = await this.em.findOne(Departament, {
+      departament_name,
+      $or: [
+        { initial_acronyms: sigla },
+      ]
+    });
+    if (!departamentRow) return;
+    return departamentRow;
+  };
   public total = async (): Promise<number> => await this.em.count(Departament);
 }

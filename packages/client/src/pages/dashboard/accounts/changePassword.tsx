@@ -55,6 +55,7 @@ const ChangeUserPassword: React.FC = observer(() => {
     <Forms
       onSubmit={(event) => submitHandler(event)}
       buttonActive={
+        !changePasswordSection.changeState &&
         changePasswordSection.passwordModel.confirmPassword.length > 4 &&
         changePasswordSection.passwordModel.password.length > 4 &&
         changePasswordSection.passwordModel.oldPassword.length > 4
@@ -117,17 +118,25 @@ const ChangeUserPassword: React.FC = observer(() => {
           <div className="wrap-input">
             <button
               type="submit"
-              style={{minWidth: 104.09}}
-              disabled={
-                changePasswordSection.changeState
-                  ? true
-                  : false ||
-                    (changePasswordSection.passwordModel.confirmPassword
-                      .length < 4 &&
-                      changePasswordSection.passwordModel.password.length < 4 &&
-                      changePasswordSection.passwordModel.oldPassword.length <
-                        4)
-              }
+              style={{
+                minWidth: 104.09,
+                cursor:
+                  !changePasswordSection.changeState &&
+                  changePasswordSection.passwordModel.confirmPassword.length >
+                    4 &&
+                  changePasswordSection.passwordModel.password.length > 4 &&
+                  changePasswordSection.passwordModel.oldPassword.length > 4
+                    ? 'pointer'
+                    : 'default',
+                pointerEvents:
+                  !changePasswordSection.changeState &&
+                  changePasswordSection.passwordModel.confirmPassword.length >
+                    4 &&
+                  changePasswordSection.passwordModel.password.length > 4 &&
+                  changePasswordSection.passwordModel.oldPassword.length > 4
+                    ? 'auto'
+                    : 'none',
+              }}
             >
               {changePasswordSection.changeState ? (
                 <PuffLoader
