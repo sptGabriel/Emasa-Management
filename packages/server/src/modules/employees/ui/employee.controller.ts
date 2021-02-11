@@ -73,10 +73,12 @@ export class EmployeeController extends BaseController {
     next: NextFunction,
   ) => {
     try {
-      const ipAddres = getRequestIpAddress(request)
-      if(!ipAddres) throw new Error(` Not is possile check ip`)
+      const ipAddres = getRequestIpAddress(request);
+      if (!ipAddres) throw new Error(` Not is possile check ip`);
       const dto: NewEmployeeDTO = request.body;
-      const result = await container.resolve(NewEmployeeUseCase).execute(dto);
+      const result = await container
+        .resolve(NewEmployeeUseCase)
+        .execute({ ...dto, position: dto.position.toLowerCase() });
       if (result.isLeft()) return next(result.value);
       return response.json(result.value);
     } catch (error) {

@@ -25,7 +25,7 @@ const ModalWrap = styled('div')<{isShowing: boolean}>`
     font-size: 24px;
     font-weight: bold;
     font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
-    margin-bottom: 1.33em;
+    margin-bottom: 0.5em;
     color: #000;
   }
 `

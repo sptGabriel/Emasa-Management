@@ -68,29 +68,39 @@ const DepartamentEditSection: React.FC<{
             <StyledInput>
               <div>
                 <label>
-                  {item.depart.diretor
+                  {item.depart.diretor.nome
                     ? 'Alterar diretor do departamento'
                     : 'Adicionar um diretor ao departamento:'}
                 </label>
                 <div className="grid">
-                  {item.depart.diretor ? (
+                  {item.depart.diretor.nome ? (
                     <div>
                       <label>Diretor atual:</label>
                       <input
-                        style={{
-                          borderColor: 'rgb(0, 107, 166)',
-                          width: item.depart.diretor
-                            ? 'auto'
-                            : '30% !important',
-                        }}
-                        value={item.depart.nome}
+                        style={{pointerEvents: 'none', cursor: 'default'}}
+                        defaultValue={item.depart.diretor.nome}
                         disabled
                       />
                     </div>
                   ) : null}
                   <div>
-                    {/* <label>Digite um número de matricula válido</label> */}
-                    <input disabled />
+                    <label>
+                      {item.depart.diretor.nome
+                        ? 'Digite um número de matricula válido'
+                        : ''}
+                    </label>
+                    <input
+                      onChange={(e) =>
+                        setEdit({
+                          ...edit,
+                          diretor: {
+                            ...item.depart.diretor,
+                            matricula: e.target.value,
+                          },
+                        })
+                      }
+                      value={item.depart.diretor.matricula}
+                    />
                   </div>
                 </div>
               </div>
@@ -99,19 +109,38 @@ const DepartamentEditSection: React.FC<{
           <section>
             <StyledInput>
               <div>
-                <label>Alterar gerente do departamento:</label>
+                <label>
+                  {item.depart.gerente.nome
+                    ? 'Alterar gerente do departamento'
+                    : 'Adicionar um gerente ao departamento:'}
+                </label>
                 <div className="grid">
+                  {item.depart.gerente.nome ? (
+                    <div>
+                      <label>Gerente atual:</label>
+                      <input
+                        style={{pointerEvents: 'none', cursor: 'default'}}
+                        value={item.depart.gerente.matricula}
+                        disabled
+                      />
+                    </div>
+                  ) : null}
                   <div>
-                    <label>Gerente atual:</label>
+                    {item.depart.gerente.nome
+                      ? 'Digite um número de matricula válido'
+                      : ''}
                     <input
-                      style={{borderColor: 'rgb(0, 107, 166)'}}
-                      value={item.depart.nome}
-                      disabled
+                      onChange={(e) =>
+                        setEdit({
+                          ...edit,
+                          gerente: {
+                            ...item.depart.gerente,
+                            matricula: e.target.value,
+                          },
+                        })
+                      }
+                      value={item.depart.gerente.matricula}
                     />
-                  </div>
-                  <div>
-                    <label>Digite um número de matricula válido:</label>
-                    <input value={item.depart.nome} disabled />
                   </div>
                 </div>
               </div>
@@ -120,19 +149,38 @@ const DepartamentEditSection: React.FC<{
           <section>
             <StyledInput>
               <div>
-                <label>Alterar diretor do coordenador:</label>
+                <label>
+                  {item.depart.coordenador.nome
+                    ? 'Alterar coordenador do departamento'
+                    : 'Adicionar um coordenador ao departamento:'}
+                </label>
                 <div className="grid">
+                  {item.depart.coordenador.nome ? (
+                    <div>
+                      <label>Gerente atual:</label>
+                      <input
+                        style={{pointerEvents: 'none', cursor: 'default'}}
+                        value={item.depart.coordenador.nome}
+                        disabled
+                      />
+                    </div>
+                  ) : null}
                   <div>
-                    <label>Coordenador atual:</label>
+                    {item.depart.coordenador.nome
+                      ? 'Digite um número de matricula válido'
+                      : ''}
                     <input
-                      value={item.depart.nome}
-                      disabled
-                      style={{borderColor: 'rgb(0, 107, 166)'}}
+                      value={item.depart.coordenador.matricula}
+                      onChange={(e) =>
+                        setEdit({
+                          ...edit,
+                          gerente: {
+                            ...item.depart.coordenador,
+                            matricula: e.target.value,
+                          },
+                        })
+                      }
                     />
-                  </div>
-                  <div>
-                    <label>Digite um número de matricula válido:</label>
-                    <input value={item.depart.nome} disabled />
                   </div>
                 </div>
               </div>
@@ -238,66 +286,16 @@ const DepartamentPage: React.FC = observer(() => {
           </span>
         </td>
         <td style={{width: '20%'}}>{item.nome}</td>
-        <td style={{width: '20%'}}>
-          {item.diretor ? item.diretor : 'Não tem um cadastro de diretor'}
+        <td style={{width: '25%'}}>
+          {item.diretor.nome
+            ? item.diretor.nome
+            : 'Não tem um cadastro de diretor'}
         </td>
         <td style={{width: '10%'}}>{item.sigla}</td>
         <td style={{width: '20%'}}>{item.criado}</td>
         {drawTDTools(item)}
       </TR>
     ))
-  }
-
-  function RenderEditModal() {
-    return (
-      <Modal
-        isShowing={itemModalEdit.active && itemModalEdit.key}
-        hide={toggleModal}
-        hideWithOutSide={setModal}
-        tittle="Editar departamento"
-      >
-        <EditDepartament>
-          <div className="modal-body">
-            <section>
-              <StyledInput>
-                <div>
-                  <label>Alterar nome do departamento</label>
-                  <div>
-                    <input />
-                  </div>
-                </div>
-              </StyledInput>
-              <StyledInput>
-                <div>
-                  <label>Alterar sigla do departamento</label>
-                  <div>
-                    <input />
-                  </div>
-                </div>
-              </StyledInput>
-            </section>
-            <section>
-              <StyledInput>
-                <label>Deseja alterar o diretor?</label>
-                <div>
-                  <input />
-                </div>
-              </StyledInput>
-            </section>
-            <section>
-              <div>
-                <label>Deseja alterar o gerente?</label>
-              </div>
-            </section>
-            <section>
-              <div>
-                <label>Deseja alterar o coordenador?</label>
-              </div>
-            </section>
-          </div>
-        </EditDepartament>
-      </Modal>
-    )
   }
 
   useEffect(() => {

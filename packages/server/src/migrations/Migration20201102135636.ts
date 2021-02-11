@@ -35,7 +35,7 @@ export class Migration20201102135636 extends Migration {
               .onUpdate('CASCADE') // if Article primary key is changed, update this foreign key.
               .onDelete('NO ACTION');
             table
-              .enu('position', ['diretor', 'gerente', 'tecnico'])
+              .enu('position', ['diretor', 'gerente', 'tecnico', 'coordenador'])
               .notNullable();
               table.timestamp('created_at').defaultTo(this.getKnex().fn.now());
               table.timestamp('updated_at').defaultTo(this.getKnex().fn.now());

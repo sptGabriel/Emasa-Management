@@ -23,7 +23,7 @@ export interface NewEmployeeDTO {
   biografia?: string;
   first_name: string;
   last_name: string;
-  position: Positions;
+  position: string;
   departament_id: string;
   address: location
   user_credentials: employeeUser;

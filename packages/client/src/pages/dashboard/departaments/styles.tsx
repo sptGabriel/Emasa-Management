@@ -80,7 +80,7 @@ export const ResponsiveTable = styled('table')`
     min-height: calc(100% - 60px);
     td {
       display: table-cell;
-      padding: 5px 8px 5px 0px;
+      padding: 5px 8px 5px 4px;
       word-break: break-all;
       font-size: 0.875rem;
       text-align: left;
@@ -113,8 +113,9 @@ export const TR = styled('tr')<{hasHover: number; selected?: boolean}>`
 export const EditDepartament = styled('form')`
   display: flex;
   flex-direction: column;
+  ${NoSelect}
   section:nth-of-type(n + 2) {
-    margin-top: 24px;
+    margin-top: 14px;
   }
   section {
     display: grid;

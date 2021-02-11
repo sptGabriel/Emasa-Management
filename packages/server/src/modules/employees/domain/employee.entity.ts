@@ -35,10 +35,10 @@ export interface EmployeeContainer {
   userProps?: employeeUser;
 }
 export enum Positions {
-  diretor = 'Diretor',
-  gerente = 'Gerente',
-  tecnico = 'Tecnico',
-  coordenador = 'Coordenador',
+  diretor = 'diretor',
+  gerente = 'gerente',
+  tecnico = 'tecnico',
+  coordenador = 'coordenador',
 }
 @Entity({ tableName: 'employees' })
 @Unique({ properties: ['position', 'departament'] })

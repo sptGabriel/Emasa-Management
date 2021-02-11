@@ -7,6 +7,7 @@ import {
   Unique,
 } from '@mikro-orm/core';
 import { Employee, Positions } from '@modules/employees/domain/employee.entity';
+import { enumFromValue } from '@utils/enumFromValue';
 import { isString } from '@utils/isString';
 import { v4, validate } from 'uuid';
 
@@ -51,9 +52,9 @@ export class Departament {
       id: this.id,
       nome: this.departament_name,
       sigla: this.initial_acronyms,
-      diretor: diretor,
-      coordenador: coordenador,
-      gerente: gerente,
+      diretor,
+      coordenador,
+      gerente,
       criado: this.createdAt,
     };
   }

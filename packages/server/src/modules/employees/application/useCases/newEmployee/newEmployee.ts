@@ -3,13 +3,13 @@ import { DepartamentRepository } from '@modules/departaments/persistence/departa
 import { Location } from '@modules/employees/domain/Location.entity';
 import { IEmployeeRepository } from '@modules/employees/persistence/employeeRepository';
 import { EmployeeRepository } from '@modules/employees/persistence/employeeRepositoryImpl';
-import { User } from '@modules/users/domain/user.entity';
 import { ProfilePicture } from '@modules/users/domain/userProfilePicture.entity';
 import { IUserRepository } from '@modules/users/persistence/userRepository';
 import { UserRepository } from '@modules/users/persistence/userRepositoryImpl';
-import { Either, left, right } from '@shared/core/either';
+import { Either, right } from '@shared/core/either';
 import { IUseCase } from '@shared/core/useCase';
 import { AppError } from '@shared/errors/BaseError';
+import { enumFromValue } from '@utils/enumFromValue';
 import { inject, injectable } from 'tsyringe';
 import { Employee, Positions } from '../../../domain/employee.entity';
 import { employeeUser, NewEmployeeDTO } from './newEmployee_DTO';
@@ -61,7 +61,7 @@ export class NewEmployeeUseCase
         matricula,
         first_name,
         last_name,
-        position,
+        position: enumFromValue(position, Positions),
         departament,
         biografia: biografia ? biografia : null,
         email: email.toLowerCase(),
