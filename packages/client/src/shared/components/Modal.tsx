@@ -1,6 +1,6 @@
-import {css} from '@emotion/react'
+import React, {useRef} from 'react'
 import styled from '@emotion/styled'
-import React, {useEffect, useRef} from 'react'
+import {IoMdClose} from 'react-icons/io'
 import {createPortal} from 'react-dom'
 import useOnClickOutside from 'use-onclickoutside'
 
@@ -27,6 +27,13 @@ const ModalWrap = styled('div')<{isShowing: boolean}>`
     font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
     margin-bottom: 0.5em;
     color: #000;
+  }
+  .close-bt {
+    position: absolute;
+    color: #000;
+    right: 15px;
+    top: 10px;
+    cursor: pointer;
   }
 `
 const EmasaModal = styled('div')<{isShowing: boolean}>`
@@ -80,6 +87,9 @@ const Modal = ({isShowing, hide, hideWithOutSide, children, tittle}: any) => {
       <EmasaModal isShowing={isShowing}>
         <ModalContainer isShowing={isShowing}>
           <ModalWrap isShowing={isShowing} ref={ref}>
+            <div className="close-bt">
+              <IoMdClose onClick={() => hideWithOutSide(false)} size={32} />
+            </div>
             <h1 className="tittle">{tittle}</h1>
             {children}
           </ModalWrap>

@@ -24,7 +24,6 @@ const DepartamentEditSection: React.FC<{
   setModal: any
 }> = observer(({item, setModal, toggle}) => {
   const [edit, setEdit] = useState(new DepartamentModel({...item.depart}))
-  if (!item.active || !item.depart) return null
   return (
     <Modal
       isShowing={item.active && item.depart}
@@ -99,7 +98,7 @@ const DepartamentEditSection: React.FC<{
                           },
                         })
                       }
-                      value={item.depart.diretor.matricula}
+                      value={edit.diretor.matricula}
                     />
                   </div>
                 </div>
@@ -120,15 +119,17 @@ const DepartamentEditSection: React.FC<{
                       <label>Gerente atual:</label>
                       <input
                         style={{pointerEvents: 'none', cursor: 'default'}}
-                        value={item.depart.gerente.matricula}
+                        value={item.depart.gerente.nome}
                         disabled
                       />
                     </div>
                   ) : null}
                   <div>
-                    {item.depart.gerente.nome
-                      ? 'Digite um número de matricula válido'
-                      : ''}
+                    <label>
+                      {item.depart.gerente.nome
+                        ? 'Digite um número de matricula válido'
+                        : ''}
+                    </label>
                     <input
                       onChange={(e) =>
                         setEdit({
@@ -139,7 +140,7 @@ const DepartamentEditSection: React.FC<{
                           },
                         })
                       }
-                      value={item.depart.gerente.matricula}
+                      value={edit.gerente.matricula}
                     />
                   </div>
                 </div>
@@ -157,7 +158,7 @@ const DepartamentEditSection: React.FC<{
                 <div className="grid">
                   {item.depart.coordenador.nome ? (
                     <div>
-                      <label>Gerente atual:</label>
+                      <label>Coordenador atual:</label>
                       <input
                         style={{pointerEvents: 'none', cursor: 'default'}}
                         value={item.depart.coordenador.nome}
@@ -166,15 +167,17 @@ const DepartamentEditSection: React.FC<{
                     </div>
                   ) : null}
                   <div>
-                    {item.depart.coordenador.nome
-                      ? 'Digite um número de matricula válido'
-                      : ''}
+                    <label>
+                      {item.depart.coordenador.nome
+                        ? 'Digite um número de matricula válido'
+                        : ''}
+                    </label>
                     <input
-                      value={item.depart.coordenador.matricula}
+                      value={edit.coordenador.matricula}
                       onChange={(e) =>
                         setEdit({
                           ...edit,
-                          gerente: {
+                          coordenador: {
                             ...item.depart.coordenador,
                             matricula: e.target.value,
                           },
@@ -196,7 +199,7 @@ const DepartamentEditSection: React.FC<{
 })
 
 const DepartamentPage: React.FC = observer(() => {
-  const {departamentStore, AxiosStore} = useRootStore()
+  const {departamentStore} = useRootStore()
   const [total, setTotal] = useState(0)
   const [loading, setLoad] = useState(false)
   const [currentPage, setCurrentPage] = useState(1)
@@ -380,11 +383,15 @@ const DepartamentPage: React.FC = observer(() => {
           limit={{limit, setLimit}}
         />
       </TableContent>
-      <DepartamentEditSection
-        item={itemModalEdit}
-        toggle={toggleModal}
-        setModal={setModal}
-      />
+      {itemModalEdit.active ? (
+        <DepartamentEditSection
+          item={itemModalEdit}
+          toggle={toggleModal}
+          setModal={setModal}
+        />
+      ) : (
+        ''
+      )}
     </DepartamentMain>
   )
 })

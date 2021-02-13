@@ -82,6 +82,17 @@ export class Employee {
   public updatedAt = new Date();
   @Property()
   public deletedAt?: Date;
+  @Property({ name: 'formated', persist: false, hidden: true })
+  public get formatedEmployee(): any {
+    return {
+      id: this.id,
+      matricula: this.matricula,
+      name: this.getFullName,
+      email: this.email,
+      departament_id: this.departament.id,
+      position: this.position  
+    }
+  }
   constructor(container: EmployeeContainer) {
     this.id = container.id ? container.id : v4();
     this.matricula = container.matricula;

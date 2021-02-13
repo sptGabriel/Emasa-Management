@@ -52,9 +52,9 @@ export class Departament {
       id: this.id,
       nome: this.departament_name,
       sigla: this.initial_acronyms,
-      diretor,
-      coordenador,
-      gerente,
+      diretor: diretor ? diretor.formatedEmployee : null,
+      coordenador: coordenador ? coordenador.formatedEmployee : null,
+      gerente: gerente ? gerente.formatedEmployee : null,
       criado: this.createdAt,
     };
   }
