@@ -11,9 +11,9 @@ const Checkbox = styled('label')`
   input {
     top: 0;
     left: 0;
-    width: 100%;
+    width: auto;
     cursor: inherit;
-    height: 100%;
+    height: auto;
     margin: 0;
     opacity: 0;
     padding: 0;
@@ -38,39 +38,41 @@ export default function UnselectCheckBox({
   tick,
   onCheck,
   label,
+  color,
 }: {
   name: string
   value: any
   tick: any
   onCheck: any
   label?: string
+  color?: string
 }) {
   return (
-    <Checkbox>
+    <label className="fill-current text-current w-auto flex cursor-pointer">
       <input
         name={name}
+        className="fill-current text-current top-0 left-0 w-auto h-auto m-0 opacity-0 p-0 absolute z-10"
         type="checkbox"
         value={value}
         checked={tick || false}
         onChange={onCheck}
       />
       <svg
-        className="icon"
+        className={`fill-current text-current w-6 h-6 inline-flex inline-flex flex-shrink-0 select-none`}
         focusable="false"
         viewBox="0 0 24 24"
         aria-hidden="true"
       >
         {tick ? (
-          <svg focusable="false" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10H7v-2h10v2z" />
-          </svg>
+          <path d="M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.11 0 2-.9 2-2V5c0-1.1-.89-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
         ) : (
           <path d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z" />
         )}
       </svg>
-    </Checkbox>
+    </label>
   )
 }
 UnselectCheckBox.defaultProps = {
   label: undefined,
+  color: 'rgba(52, 49, 76, 0.54)',
 }

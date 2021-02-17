@@ -14,6 +14,7 @@ export type TDepartament = {
   gerente: IPositions
   coordenador: IPositions
   criado: Date
+  status: boolean
 }
 export class DepartamentModel implements TDepartament {
   id!: string
@@ -29,8 +30,12 @@ export class DepartamentModel implements TDepartament {
   coordenador!: IPositions
 
   criado!: Date
+
+  status!: boolean
+
   constructor(props?: any) {
     this.id = props ? props.id : ''
+    this.status = props ? props.status : false
     this.coordenador =
       props && props.coordenador
         ? {...props.coordenador, nome: props.coordenador.name}

@@ -1,6 +1,5 @@
 import {observer} from 'mobx-react-lite'
 import React, {useState} from 'react'
-import {PaginationROOT, PaginationToolBar} from './styles'
 
 const options = [
   {value: 10, label: '10'},
@@ -24,20 +23,31 @@ const Pagination: React.FC<{
   }
   const [isOPTOpen, setOPTOPEN] = useState(false)
   return (
-    <PaginationROOT>
-      <PaginationToolBar isOPTOpen={isOPTOpen}>
-        <p>Itens por pagina:</p>
+    <div className="pt-4 pb-4 pr-6 pl-6 w-full flex bg-white justify-between items-center">
+      <div className="font-medium text-gray-600 relative flex">
+        <span className="mr-1 font-bold text-gray-600">
+          Registros por pagina:
+        </span>
         <div
-          className="selection"
+          className="cursor-pointer items-center justify-center px-2 justify-center mr-2"
           role="presentation"
           onClick={() => setOPTOPEN(!isOPTOpen)}
         >
-          <p>{limit.limit}</p>
-          <div className="selection-options">
-            <ul>
+          {limit.limit}
+          <div
+            style={{
+              display: isOPTOpen ? 'block' : 'none',
+              transform: 'translateX(-0.5rem) rotate(360deg)',
+            }}
+            className="absolute bottom-0 bg-white rounded pb-0 pt-2 px-2 shadow-md"
+          >
+            <ul className="pr-0 w-full m-0 relative list-none">
               {options.map((opt) => {
                 return (
-                  <li key={opt.value}>
+                  <li
+                    className="w-full flex text-left items-center cursor-pointer font-medium"
+                    key={opt.value}
+                  >
                     <button
                       type="button"
                       onClick={() => limit.setLimit(opt.value)}
@@ -50,43 +60,38 @@ const Pagination: React.FC<{
             </ul>
           </div>
         </div>
-        <div className="total-section">
+        <span>
           {page.page} de {total.total}
-        </div>
-        <div className="actions">
-          <button
-            style={{
-              cursor: page.page === 1 ? 'default' : 'pointer',
-              pointerEvents: page.page === 1 ? 'none' : 'auto',
-            }}
-            className="prev"
-            type="button"
-            onClick={() => previousPage()}
-          >
-            <span className="label">
-              <svg focusable="false" viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M15.41 16.09l-4.58-4.59 4.58-4.59L14 5.5l-6 6 6 6z" />
-              </svg>
-            </span>
-          </button>
-          <button
-            style={{
-              cursor: page.page === total.total ? 'default' : 'pointer',
-              pointerEvents: page.page === total.total ? 'none' : 'auto',
-            }}
-            className="next"
-            type="button"
-            onClick={() => nextPage()}
-          >
-            <span className="label">
-              <svg focusable="false" viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M8.59 16.34l4.58-4.59-4.58-4.59L10 5.75l6 6-6 6z" />
-              </svg>
-            </span>
-          </button>
-        </div>
-      </PaginationToolBar>
-    </PaginationROOT>
+        </span>
+        <span className="ml-2"> Página(s)</span>
+      </div>
+      <div className="flex items-center">
+        <button
+          type="button"
+          disabled={page.page === 1}
+          onClick={() => previousPage()}
+          className={`${
+            page.page === 1
+              ? 'cursor-default text-gray-500 bg-indigo-200 shadow-sm'
+              : 'border-blue-500 text-blue-800 hover:bg-blue-800 hover:text-white'
+          } border block rounded-md font-medium text-md py-2 px-5 mr-2 flex items-center`}
+        >
+          Previous page
+        </button>
+        <button
+          type="button"
+          onClick={() => nextPage()}
+          disabled={page.page === total.total}
+          className={`${
+            page.page === total.total
+              ? 'cursor-default text-gray-500 bg-indigo-200 shadow-sm'
+              : 'border-blue-500 text-blue-800 hover:bg-blue-800 hover:text-white'
+          } border block rounded-md font-medium text-md py-2 px-5 ml-2 flex items-center`}
+        >
+          Next page
+        </button>
+      </div>
+    </div>
   )
 })
 

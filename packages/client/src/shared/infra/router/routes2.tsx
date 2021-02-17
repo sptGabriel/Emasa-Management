@@ -31,6 +31,10 @@ const ApplicationRoutes: React.FC<{isLoggedIn: boolean}> = observer(
             element: <DepartamentPage />,
           },
           {
+            path: '/departaments/add',
+            element: <div>add</div>,
+          },
+          {
             path: '/accounts',
             element: <Accounts />,
             children: [

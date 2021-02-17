@@ -51,9 +51,11 @@ const UserActivity: React.FC = observer(() => {
                 onMouseOut={out}
               >
                 <div className="ip">IP: {device.ip}</div>
-                {` ${capitalizeFirstLetter(device.city)}`},
-                {` ${capitalizeFirstLetter(device.state)}`},
-                {` ${capitalizeFirstLetter(device.country)}`}
+                {device.city
+                  ? ` ${capitalizeFirstLetter(device.city)} 
+                    ${capitalizeFirstLetter(device.state)}
+                    ${capitalizeFirstLetter(device.country)}`
+                  : 'Desconhecido'}
               </Test>
             </span>
             <span>

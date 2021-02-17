@@ -10,8 +10,13 @@ import { wrap } from '@mikro-orm/core';
 import { ensure } from '@utils/ensure';
 import { User } from '@modules/users/domain/user.entity';
 import http from 'http';
-import { AuthorizedUser } from '@modules/users/domain/authorizedUser.entity';
+import {
+  AuthorizedUser,
+  Device,
+  OS,
+} from '@modules/users/domain/authorizedUser.entity';
 import { getReverse } from '@utils/getReverseGeoLocation';
+import { enumFromValue } from '@utils/enumFromValue';
 
 var options = {
   host: 'https://api.bigdatacloud.net/data/reverse-geocode',
@@ -55,20 +60,18 @@ export class LoginUseCase
       : undefined;
     const userDevice = !hasDevice
       ? AuthorizedUser.build({
-          ...reverser.data,
-          device,
-          country: reverser.data.countryName || null,
-          city: reverser.data.city || reverser.data.locality || null,
+          ...reverser,
           ip,
           latitude,
           longitude,
+          country: reverser ? reverser.countryName : null,
           online: true,
-          os,
+          os: enumFromValue(ensure(os), OS),
+          device: enumFromValue(ensure(device), Device),
           timezone,
           user,
         })
       : undefined;
-    console.log(userDevice)
     return await this.userRepository.login(
       user,
       ensure(hasDevice ? hasDevice : userDevice),

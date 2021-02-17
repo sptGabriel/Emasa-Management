@@ -7,6 +7,7 @@ import reportWebVitals from './reportWebVitals'
 import ErrorFallback from './shared/components/ErrorBoundary/ErrorFallBack'
 import {RootStoreProvider} from './shared/infra/mobx'
 import 'react-toastify/dist/ReactToastify.css'
+import './index.css'
 
 ReactDOM.render(
   <BrowserRouter>

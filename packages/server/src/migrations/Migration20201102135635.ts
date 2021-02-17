@@ -8,6 +8,7 @@ export class Migration20201102135635 extends Migration {
           table.uuid('id').notNullable().primary();
           table.string('departament_name', 100).notNullable().unique();
           table.string('initial_acronyms', 10).notNullable().unique();
+          table.boolean('status').defaultTo(true)
           table.timestamp('created_at').defaultTo(this.getKnex().fn.now());
           table.timestamp('updated_at').defaultTo(this.getKnex().fn.now());
           table.timestamp('deleted_at');
