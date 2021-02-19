@@ -508,7 +508,6 @@ const DepartamentPage: React.FC = observer(() => {
       </table>
       <ExportModal
         setModal={setExport}
-        columns={['nome', 'sigla', 'status', 'criado em', 'atualizado há']}
         toggle={() => setExport(!exportData)}
         active={exportData}
         tittle="Exportar departamentos"
