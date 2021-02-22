@@ -6,7 +6,14 @@ import useOnClickOutside from 'use-onclickoutside'
 
 const modal = document.getElementById('emasa-modal')
 
-const Modal = ({isShowing, hide, hideWithOutSide, children, tittle}: any) => {
+const Modal = ({
+  isShowing,
+  hide,
+  hideWithOutSide,
+  children,
+  tittle,
+  width,
+}: any) => {
   const ref: any = useRef()
   useOnClickOutside(ref, () => {
     hideWithOutSide(false)
@@ -35,12 +42,12 @@ const Modal = ({isShowing, hide, hideWithOutSide, children, tittle}: any) => {
               outline: 'none',
             }}
             className="transition transform motion-reduce:transition-none motion-reduce:transform-none scale-100	col-start-2 row-start-2 min-h-full"
-            ref={ref}
           >
             <div
+              ref={ref}
               style={{
                 minWidth: '296px',
-                maxWidth: '600px',
+                maxWidth: width ? width : '600px',
                 margin: '0 auto',
                 maxHeight: 'calc(100vh - 80px)',
               }}

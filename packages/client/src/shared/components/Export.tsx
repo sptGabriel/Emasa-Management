@@ -6,7 +6,6 @@ const PeriodOption: React.FC<{state: any; setState: any}> = ({
   state,
   setState,
 }: any) => {
-  console.log(state)
   function handlerOptions(
     ev: any,
     custom?: {active: boolean; initialDate: Date; finalDate: Date},
@@ -396,12 +395,12 @@ const PeriodOption: React.FC<{state: any; setState: any}> = ({
 
 export const ExportModal: React.FC<{
   data: any[]
-  setModal: any
+  setState: any
   toggle: any
   active: boolean
   tittle: string
   btActionName: string
-}> = ({active, setModal, toggle, tittle, btActionName}) => {
+}> = ({active, setState, toggle, tittle, btActionName}) => {
   const [exportType, setType] = useState({
     today: true,
     currentMonth: {
@@ -441,7 +440,7 @@ export const ExportModal: React.FC<{
     <Modal
       isShowing={active}
       hide={toggle}
-      hideWithOutSide={setModal}
+      hideWithOutSide={setState}
       tittle={tittle}
       btActionName={btActionName}
     >
@@ -468,7 +467,7 @@ export const ExportModal: React.FC<{
           className="flex-auto px-5 py-5 flex justify-end"
         >
           <button
-            onClick={() => setModal(false)}
+            onClick={() => setState(false)}
             type="button"
             className="mr-2 bg-white hover:shadow text-black font-medium  py-1 px-3 rounded-xl inline-flex items-center mr-2 shadow-sm border-gray-300 border"
           >

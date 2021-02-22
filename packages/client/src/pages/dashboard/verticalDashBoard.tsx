@@ -69,12 +69,10 @@ export const VerticalDashBoard: React.FC = observer(() => {
         open={layoutStore.sideBar || layoutStore.onHoverSideState}
         theme={theme}
       >
-        <ASide />
+        <div>side</div>
+        {/* <ASide /> */}
         <Content>
           <Outlet />
-          <DashBoardFooter orientation={layoutStore.layoutType}>
-            .footer
-          </DashBoardFooter>
         </Content>
       </DashBoardMain>
     </DashBoardContainer>

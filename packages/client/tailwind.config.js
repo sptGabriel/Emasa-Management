@@ -8,6 +8,9 @@ module.exports = {
         2: 2,
         999: 999,
       },
+      fontFamily: {
+        roboto: 'Roboto',
+      },
       gridTemplateRows: {
         modal: 'minmax(40px,1fr) auto minmax(40px,2fr)',
       },
@@ -16,6 +19,7 @@ module.exports = {
       },
       colors: {
         modal: 'rgba(193,201,210,.7)',
+        primary: 'rgb(64, 153, 255)'
       },
       boxShadow: {
         focusradioShadow:

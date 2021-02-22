@@ -10,6 +10,9 @@ import ChangePassword from '../../../pages/dashboard/accounts/changePassword'
 import ChangeAddress from '../../../pages/dashboard/accounts/changeAddress'
 import UserActivity from '../../../pages/dashboard/accounts/loginActivity'
 import DepartamentPage from '../../../pages/dashboard/departaments'
+import DepartamentTable from '../../../pages/dashboard/departaments/DepartamentTable'
+import NewDepartament from '../../../pages/dashboard/departaments/addNewDepartament'
+import DepartamentViewer from '../../../pages/dashboard/departaments/viewPage'
 
 const ApplicationRoutes: React.FC<{isLoggedIn: boolean}> = observer(
   ({isLoggedIn}) => {
@@ -29,10 +32,16 @@ const ApplicationRoutes: React.FC<{isLoggedIn: boolean}> = observer(
           {
             path: '/departaments',
             element: <DepartamentPage />,
-          },
-          {
-            path: '/departaments/add',
-            element: <div>add</div>,
+            children: [
+              {
+                path: '/',
+                element: <DepartamentTable />,
+              },
+              {
+                path: ':departamentId',
+                element: <DepartamentViewer />,
+              },
+            ],
           },
           {
             path: '/accounts',
