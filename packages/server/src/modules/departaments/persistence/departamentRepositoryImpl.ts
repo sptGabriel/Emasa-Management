@@ -50,7 +50,9 @@ export class DepartamentRepository implements IDepartamentRepository {
     return await this.em.find(Departament, { id });
   };
   public byId = async (id: string): Promise<Departament | undefined> => {
-    const departamentRow = await this.em.findOne(Departament, { id });
+    const departamentRow = await this.em.findOne(Departament, { id }, [
+      'employees',
+    ]);
     if (!departamentRow) return;
     return departamentRow;
   };
@@ -65,13 +67,11 @@ export class DepartamentRepository implements IDepartamentRepository {
   };
   public byNameOrSigla = async (
     departament_name: string,
-    sigla: string
+    sigla: string,
   ): Promise<Departament | undefined> => {
     const departamentRow = await this.em.findOne(Departament, {
       departament_name,
-      $or: [
-        { initial_acronyms: sigla },
-      ]
+      $or: [{ initial_acronyms: sigla }],
     });
     if (!departamentRow) return;
     return departamentRow;

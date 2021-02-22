@@ -1,5 +1,6 @@
 /* eslint-disable camelcase */
 import {makeAutoObservable} from 'mobx'
+import {UserModel} from './userModel'
 
 interface IPositions {
   matricula: string
@@ -13,6 +14,7 @@ export type TDepartament = {
   diretor: IPositions
   gerente: IPositions
   coordenador: IPositions
+  employees: UserModel[]
   criado: Date
   status: boolean
 }
@@ -29,11 +31,14 @@ export class DepartamentModel implements TDepartament {
 
   coordenador!: IPositions
 
+  employees: UserModel[] = []
+
   criado!: Date
 
   status!: boolean
 
   constructor(props?: any) {
+    console.log(props)
     this.id = props ? props.id : ''
     this.status = props ? props.status : false
     this.coordenador =
@@ -50,6 +55,7 @@ export class DepartamentModel implements TDepartament {
         : {nome: '', matricula: ''}
     this.nome = props ? props.nome : ''
     this.sigla = props ? props.sigla : ''
+    if (props) this.employees.push(...props.employees)
     if (props && props.criado) this.criado = props.criado
   }
 }

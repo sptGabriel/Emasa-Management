@@ -30,7 +30,7 @@ export class Departament {
   public initial_acronyms: string;
   @OneToMany(() => Employee, employee => employee.departament)
   public employees = new Collection<Employee>(this);
-  @Property({default:true})
+  @Property({ default: true })
   public status: boolean;
   @Property()
   public createdAt = new Date();
@@ -59,6 +59,9 @@ export class Departament {
       gerente: gerente ? gerente.formatedEmployee : null,
       status: this.status,
       criado: this.createdAt,
+      employees: this.employees
+        .getItems()
+        .map(employee => employee.formatedEmployee),
     };
   }
 
