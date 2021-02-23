@@ -7,6 +7,8 @@ import {DepartamentModel} from '../../../models/departamentModel'
 import userAvatar from '../../../assets/logo_emasa.png'
 import {UserModel} from '../../../models/userModel'
 import {createBackgroundImage} from '../../../shared/utils/createCloudinaryBG'
+import {capitalizeFirstLetter} from '../../../shared/utils/capitalizeFirstLetter'
+import {DepartamentLogs} from '../../../models/departamentLogs'
 
 interface EmployeeTable {
   loading: boolean
@@ -28,109 +30,111 @@ const Employees: React.FC<{employees: UserModel[]}> = ({employees}) => {
   }, [])
 
   function renderDataList() {
-    return employees.map((item: any) => {
-      return (
-        <tr
-          key={item.id}
-          className={`${
-            item.checked
-              ? 'bg-blue-200 text-blue-800'
-              : 'bg-white text-gray-600'
-          } lg:hover:bg-blue-200 lg:hover:text-blue-800 flex lg:table-row flex-row lg:flex-row flex-wrap lg:flex-no-wrap mb-10 lg:mb-0`}
+    return employees.map((item: any) => (
+      <tr
+        key={item.id}
+        className="flex lg:table-row flex-row lg:flex-row flex-wrap lg:flex-no-wrap mb-10 lg:mb-0"
+      >
+        <td
+          style={{width: '15%'}}
+          className="w-full lg:w-auto py-3 pl-4 pr-3 border border-b text-left block lg:table-cell relative lg:static"
         >
-          <td className="w-full lg:w-auto py-3 px-2 border border-b text-left block lg:table-cell relative lg:static">
-            <div className="flex items-center">
-              <div
-                style={{width: '40px', height: '40px', borderRadius: '50%'}}
-                className="overflow-hidden relative flex items-center"
-              >
-                <img
-                  src={
-                    item.avatar
-                      ? createBackgroundImage(item.avatar)
-                      : userAvatar
-                  }
-                  className="absolute top-0 left-0 w-full h-full"
-                  alt="Logo"
-                />
-              </div>
-              <span className="ml-2 font-medium text-gray-800">
-                {item.name}
+          <div className="flex items-center">
+            <div
+              style={{width: '40px', height: '40px', borderRadius: '50%'}}
+              className="overflow-hidden relative flex items-center"
+            >
+              <img
+                src={
+                  item.avatar ? createBackgroundImage(item.avatar) : userAvatar
+                }
+                className="absolute top-0 left-0 w-full h-full"
+                alt="Logo"
+              />
+            </div>
+            <div className="ml-3 flex flex-col">
+              <span className="font-medium text-gray-800">{item.name}</span>
+              <span className="font-light text-xs text-gray-500">
+                {item.email || ''}
               </span>
             </div>
-          </td>
-          <td
-            className="w-full lg:w-auto py-1 px-2 border border-b text-left block lg:table-cell relative lg:static"
-            style={{width: '25%'}}
+          </div>
+        </td>
+        <td
+          className="w-full lg:w-auto py-3 pl-4 pr-3 border border-b text-left block lg:table-cell relative lg:static"
+          style={{width: '25%'}}
+        >
+          {item.matricula}
+        </td>
+        <td
+          className="w-full lg:w-auto py-3 pl-4 pr-3 border border-b text-left block lg:table-cell relative lg:static"
+          style={{width: '25%'}}
+        >
+          {item.position}
+        </td>
+        <td
+          className="w-full lg:w-auto py-3 pl-4 pr-3 border border-b text-left block lg:table-cell relative lg:static"
+          style={{width: '10%'}}
+        >
+          <span
+            className={`rounded py-1 px-3 text-xs ${
+              item.situation
+                ? 'bg-green-400 text-white'
+                : 'bg-red-400 text-white'
+            }`}
           >
-            {item.position}
-          </td>
-          <td
-            className="w-full lg:w-auto py-1 px-2 border border-b text-left block lg:table-cell relative lg:static"
-            style={{width: '25%'}}
-          >
-            {item.email || 'Não possui'}
-          </td>
-          <td
-            className="w-full lg:w-auto py-1 px-2 border border-b text-left block lg:table-cell relative lg:static"
-            style={{width: '10%'}}
-          >
-            any
-          </td>
-        </tr>
-      )
-    })
+            {item.situation ? 'Ativo' : 'Inativo'}
+          </span>
+        </td>
+      </tr>
+    ))
   }
 
   return (
-    <table className="border-collapse w-full mt-8">
-      <thead>
-        <tr>
-          {['Nome', 'Cargo', 'Email', 'Status'].map((item, index) => (
-            <th
-              key={index}
-              className="text-sm py-2 px-2 font-semibold bg-gray-200 text-gray-700 border border-gray-300 hidden lg:table-cell text-left"
-            >
-              {item}
-            </th>
-          ))}
-        </tr>
-      </thead>
-      <tbody>{renderDataList()}</tbody>
-      <tfoot>
-        <tr>
-          <td
-            colSpan={3}
-            className="w-full lg:w-auto text-gray-800 text-center border border-b text-center block lg:table-cell relative lg:static"
-          >
-            {/* <Pagination
-                isLoading={{
-                  loading: state.loading,
-                  setLoad: () => setState({...state, loading: !state}),
-                }}
-                total={{
-                  total: state.total,
-                  setTotal: (total: number) => setState({...state, total}),
-                }}
-                page={{
-                  page: state.currentPage,
-                  setPage: (currentPage: number) =>
-                    setState({...state, currentPage}),
-                }}
-                limit={{
-                  limit: state.limit,
-                  setLimit: (limit: number) => setState({...state, limit}),
-                }}
-              /> */}
-          </td>
-        </tr>
-      </tfoot>
-    </table>
+    <div>
+      <div
+        style={{boxShadow: 'inset 0 -1px #e3e8ee'}}
+        className="employees w-full mt-7 py-4"
+      >
+        <span className="font-semibold text-xl tracking-wider	">
+          Funcionários
+        </span>
+      </div>
+      <table className="border-collapse w-full mt-8">
+        <thead>
+          <tr>
+            {['Nome', 'Matricula', 'Cargo', 'Situação'].map((item, index) => (
+              <th
+                key={index}
+                className="text-sm py-3 pl-4 pr-3 font-semibold bg-gray-200 text-gray-700 border border-gray-300 hidden lg:table-cell text-left"
+              >
+                {item}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>{renderDataList()}</tbody>
+      </table>
+    </div>
   )
 }
 
-const LogsPage = () => {
-  return <p>logs</p>
+const LogsPage: React.FC<{id: string}> = ({id}) => {
+  const [logs, setLogs] = useState<DepartamentLogs[]>([])
+  const {departamentStore} = useRootStore()
+  useEffect(() => {
+    departamentStore.getLogByID(id).then((res) => console.log(res))
+  }, [])
+  return (
+    <div>
+      <div
+        style={{boxShadow: 'inset 0 -1px #e3e8ee'}}
+        className="employees w-full mt-7 py-4"
+      >
+        <span className="font-semibold text-xl tracking-wider	">Logs</span>
+      </div>
+    </div>
+  )
 }
 
 const DepartamentViewer = observer(() => {
@@ -159,14 +163,11 @@ const DepartamentViewer = observer(() => {
 
   function renderDetails() {
     return (
-      <div
-        style={{bottom: '-10px'}}
-        className="sticky self-start h-full flex pb-14"
-      >
+      <div className="fixed self-start h-full flex pb-14">
         <div>
           <div className="info">
             <h1 className="font-roboto font-semibold text-2xl pt-3 pb-2">
-              {departament ? departament.nome : ''}
+              {departament ? capitalizeFirstLetter(departament.nome) : ''}
             </h1>
           </div>
           <div className="pb-2 details relative">
@@ -279,10 +280,7 @@ const DepartamentViewer = observer(() => {
   }
 
   return (
-    <div
-      style={{height: '100%', paddingTop: '20px'}}
-      className="w-full h-full flex"
-    >
+    <div className="w-full flex pb-11 relative">
       <div style={{minWidth: '240px', maxWidth: '320px', flex: '0 0 30%'}}>
         {renderDetails()}
       </div>
@@ -291,7 +289,7 @@ const DepartamentViewer = observer(() => {
         {tabs.details ? (
           <Employees employees={departament.employees} />
         ) : tabs.logs ? (
-          <LogsPage />
+          <LogsPage id={departament.id} />
         ) : (
           <Employees employees={departament.employees} />
         )}

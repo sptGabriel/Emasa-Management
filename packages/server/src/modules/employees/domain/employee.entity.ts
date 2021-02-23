@@ -18,18 +18,19 @@ import { v4, validate } from 'uuid';
 import { Location } from './Location.entity';
 interface employeeUser {
   login: string;
-  picture: ProfilePicture  | null
+  picture: ProfilePicture | null;
   password: string;
 }
 export interface EmployeeContainer {
   id?: string;
   email: string;
   biografia: string | null;
-  address: Location
+  address: Location;
   matricula: string;
   departament?: Departament;
   first_name: string;
   last_name: string;
+  active?: boolean;
   position: Positions;
   user?: User;
   userProps?: employeeUser;
@@ -55,6 +56,8 @@ export class Employee {
   public first_name: string;
   @Property({ hidden: true })
   public last_name: string;
+  @Property({ hidden: true, default: true })
+  public active: boolean;
   @Enum()
   public position: Positions;
   @ManyToOne({ entity: () => Departament, name: 'departament_id' })
@@ -90,8 +93,9 @@ export class Employee {
       name: this.getFullName,
       email: this.email,
       departament_id: this.departament.id,
-      position: this.position  
-    }
+      position: this.position,
+      situation: this.active
+    };
   }
   constructor(container: EmployeeContainer) {
     this.id = container.id ? container.id : v4();
@@ -99,8 +103,9 @@ export class Employee {
     this.first_name = container.first_name;
     this.last_name = container.last_name;
     this.biografia = container.biografia;
-    this.address = container.address
+    this.address = container.address;
     this.email = container.email;
+    this.active = container.active || true;
     if (container.departament) this.departament = container.departament;
     this.position = container.position;
     if (container.user) this.user = container.user;
@@ -116,7 +121,8 @@ export class Employee {
     userProps,
     biografia,
     email,
-    address
+    address,
+    active,
   }: EmployeeContainer): Promise<Employee> => {
     const isValidUUID = id ? validate(id) : null;
     if (isValidUUID === false) throw new Error(`Invalid UUID V4`);
@@ -130,6 +136,7 @@ export class Employee {
       last_name,
       matricula,
       position,
+      active: active || true,
       user: user ? user : undefined,
       id,
     });
@@ -138,19 +145,22 @@ export class Employee {
       employee: employee,
       login: userProps.login,
       password: userProps.password,
-      picture: userProps.picture
+      picture: userProps.picture,
     });
-    return new Employee({
-      id,
-      position,
-      biografia,
-      address,
-      email,
-      last_name,
-      first_name,
-      departament,
-      matricula,
-      user: userDomain,
-    });
+    employee.user = userDomain
+    return employee
+    //return new Employee({
+    //  id,
+    //  position,
+    //  biografia,
+    //  address,
+    //  email,
+    //  last_name,
+    //  first_name,
+    //  departament,
+    //  matricula,
+    //  active: active || true,
+    //  user: userDomain,
+    //});
   };
 }

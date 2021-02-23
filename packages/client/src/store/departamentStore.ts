@@ -10,6 +10,10 @@ export class DepartamentStore {
     return this.rootStore.AxiosStore.get(`/departaments/${id}`)
   }
 
+  public getLogByID = async (id: string): Promise<any> => {
+    return this.rootStore.AxiosStore.get(`/departaments/logs/${id}`)
+  }
+
   public getDepartamentsPage = async (
     perPage: number,
     currentPage: number,

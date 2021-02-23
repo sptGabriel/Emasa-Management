@@ -22,6 +22,7 @@ export class Migration20201102135636 extends Migration {
               .unique('matricula_idx');
             table.string('first_name', 100).notNullable();
             table.string('last_name', 100).notNullable();
+            table.boolean('active').defaultTo(true).notNullable();
             table
             .uuid('address_id')
             .notNullable()

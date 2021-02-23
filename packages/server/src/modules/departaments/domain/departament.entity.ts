@@ -1,7 +1,9 @@
 import {
+  Cascade,
   Collection,
   Entity,
   OneToMany,
+  OneToOne,
   PrimaryKey,
   Property,
   Unique,
@@ -10,6 +12,7 @@ import { Employee, Positions } from '@modules/employees/domain/employee.entity';
 import { enumFromValue } from '@utils/enumFromValue';
 import { isString } from '@utils/isString';
 import { v4, validate } from 'uuid';
+import { DepartamentRequests } from './requests.entity';
 
 interface DepartamentContainer {
   id?: string;
@@ -32,6 +35,12 @@ export class Departament {
   public employees = new Collection<Employee>(this);
   @Property({ default: true })
   public status: boolean;
+  @OneToOne({
+    entity: () => DepartamentRequests,
+    mappedBy: 'departament',
+    cascade: [Cascade.PERSIST],
+  })
+  public request: DepartamentRequests;
   @Property()
   public createdAt = new Date();
   @Property({ onUpdate: () => new Date() })

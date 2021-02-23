@@ -1,5 +1,6 @@
 import { Pagination } from '@shared/core/pagination';
 import { Departament } from '../domain/departament.entity';
+import { DepartamentRequests } from '../domain/requests.entity';
 
 export interface IDepartamentRepository {
   /**
@@ -15,6 +16,7 @@ export interface IDepartamentRepository {
    * @returns {Promise<User>}
    */
   byId(id: string): Promise<Departament | undefined>;
+  logsById(id: string): Promise<DepartamentRequests[]>;
   /**
    * @param {number} id
    * @returns {Promise<User>}
@@ -37,6 +39,12 @@ export interface IDepartamentRepository {
    * @param {string} departamentProps
    * @returns {Promise<Departament>}
    */
-  create(departament: Departament): Promise<Departament>;
+  create({
+    departament,
+    request,
+  }: {
+    departament: Departament;
+    request: DepartamentRequests;
+  }): Promise<Departament>;
   total(): Promise<number>;
 }

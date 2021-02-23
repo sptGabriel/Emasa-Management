@@ -98,6 +98,7 @@ export class User {
       position: this.employee.position,
       address: this.employee.address.Address,
       devices: sortedDevices,
+      situation: this.employee.active
     };
   }
 

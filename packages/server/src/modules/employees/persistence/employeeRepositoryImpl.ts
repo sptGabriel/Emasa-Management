@@ -9,10 +9,10 @@ export class EmployeeRepository implements IEmployeeRepository {
   constructor() {
     this.em = RequestContext.getEntityManager();
   }
-  public create = async (employee: Employee): Promise<Employee> => {
-    if (!(employee instanceof Employee)) throw new Error(`Invalid Data Type`);
-    await this.em.persist(employee).flush();
-    return employee;
+  public create = async (data: Employee): Promise<Employee> => {
+    if (!(data instanceof Employee)) throw new Error(`Invalid Data Type`);
+    await this.em.persistAndFlush(data);
+    return data;
   };
   public update = async (matricula: string, data: any): Promise<Employee> => {
     const employee = await this.em.findOne(Employee, { matricula });

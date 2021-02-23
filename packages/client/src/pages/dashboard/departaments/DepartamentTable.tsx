@@ -301,7 +301,11 @@ const DepartamentTable: React.FC = observer(() => {
             />
           </svg>
         </button>
-        <button className="flex-initial cursor-pointer" type="button">
+        <button
+          onClick={() => navigate(item.id, {replace: true})}
+          className="flex-initial cursor-pointer"
+          type="button"
+        >
           <svg
             className="w-5 h-5"
             fill="none"
@@ -325,7 +329,6 @@ const DepartamentTable: React.FC = observer(() => {
     return data.map((item) => (
       <tr
         key={item.id}
-        onClick={() => navigate(item.id, {replace: true})}
         className={`${
           item.checked ? 'bg-blue-200 text-blue-800' : 'bg-white text-gray-600'
         } lg:hover:bg-blue-200 lg:hover:text-blue-800 flex lg:table-row flex-row lg:flex-row flex-wrap lg:flex-no-wrap mb-10 lg:mb-0 cursor-pointer`}

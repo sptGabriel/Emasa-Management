@@ -9,6 +9,7 @@ import { EntityManager } from '@mikro-orm/postgresql';
 import { Pagination } from '@shared/core/pagination';
 import { injectable } from 'tsyringe';
 import { Departament } from '../domain/departament.entity';
+import { DepartamentRequests } from '../domain/requests.entity';
 import { IDepartamentRepository } from './departamentRepository';
 @injectable()
 export class DepartamentRepository implements IDepartamentRepository {
@@ -16,7 +17,23 @@ export class DepartamentRepository implements IDepartamentRepository {
   constructor() {
     this.em = RequestContext.getEntityManager();
   }
-  public create = async (departament: Departament): Promise<Departament> => {
+  public create = async ({
+    departament,
+    request,
+  }: {
+    departament: Departament;
+    request: DepartamentRequests;
+  }): Promise<Departament> => {
+    const em = await this.em.fork();
+    await em.begin();
+    try {
+      await em.persist(departament);
+      await em.persist(request);
+      await em.commit();
+    } catch (e) {
+      await em.rollback();
+      throw e;
+    }
     if (!(departament instanceof Departament))
       throw new Error(`Invalid Data Type`);
     await this.em.persist(departament).flush();
@@ -55,6 +72,9 @@ export class DepartamentRepository implements IDepartamentRepository {
     ]);
     if (!departamentRow) return;
     return departamentRow;
+  };
+  public logsById = async (id: string): Promise<DepartamentRequests[]> => {
+    return await this.em.find(DepartamentRequests, { departament_id:id });
   };
   public byName = async (
     departament_name: string,

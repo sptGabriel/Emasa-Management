@@ -19,6 +19,7 @@ export type TUser = {
   biografia: string
   address: UserAddress
   devices: DeviceModel[]
+  situation: boolean
 }
 export class UserModel implements TUser {
   id: string
@@ -48,6 +49,8 @@ export class UserModel implements TUser {
 
   devices: DeviceModel[] = []
 
+  situation: boolean
+
   constructor(props?: TUser) {
     makeAutoObservable(this)
     this.id = props ? props.id : ''
@@ -62,6 +65,7 @@ export class UserModel implements TUser {
     this.biografia = props ? props.biografia : ''
     this.email = props ? props.email : ''
     this.position = props ? props.position : ''
+    this.situation = props ? props.situation : true
     this.address = props ? props.address : new UserAddress()
     if (props && props.devices) this.devices.push(...props.devices)
   }
