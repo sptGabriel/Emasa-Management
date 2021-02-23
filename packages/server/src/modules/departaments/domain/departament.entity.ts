@@ -38,7 +38,7 @@ export class Departament {
   @OneToOne({
     entity: () => DepartamentRequests,
     mappedBy: 'departament',
-    cascade: [Cascade.PERSIST],
+    cascade: [],
   })
   public request: DepartamentRequests;
   @Property()

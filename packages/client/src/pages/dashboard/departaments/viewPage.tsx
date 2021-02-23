@@ -100,21 +100,25 @@ const Employees: React.FC<{employees: UserModel[]}> = ({employees}) => {
           Funcionários
         </span>
       </div>
-      <table className="border-collapse w-full mt-8">
-        <thead>
-          <tr>
-            {['Nome', 'Matricula', 'Cargo', 'Situação'].map((item, index) => (
-              <th
-                key={index}
-                className="text-sm py-3 pl-4 pr-3 font-semibold bg-gray-200 text-gray-700 border border-gray-300 hidden lg:table-cell text-left"
-              >
-                {item}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>{renderDataList()}</tbody>
-      </table>
+      {employees.length > 0 ? (
+        <table className="border-collapse w-full mt-8">
+          <thead>
+            <tr>
+              {['Nome', 'Matricula', 'Cargo', 'Situação'].map((item, index) => (
+                <th
+                  key={index}
+                  className="text-sm py-3 pl-4 pr-3 font-semibold bg-gray-200 text-gray-700 border border-gray-300 hidden lg:table-cell text-left"
+                >
+                  {item}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>{renderDataList()}</tbody>
+        </table>
+      ) : (
+        ''
+      )}
     </div>
   )
 }
@@ -123,7 +127,11 @@ const LogsPage: React.FC<{id: string}> = ({id}) => {
   const [logs, setLogs] = useState<DepartamentLogs[]>([])
   const {departamentStore} = useRootStore()
   useEffect(() => {
-    departamentStore.getLogByID(id).then((res) => console.log(res))
+    departamentStore
+      .getLogByID(id)
+      .then((res) => res.data)
+      .then((data) => data.map((log: any) => new DepartamentLogs(log)))
+      .then((logs) => setLogs(logs))
   }, [])
   return (
     <div>
@@ -132,6 +140,21 @@ const LogsPage: React.FC<{id: string}> = ({id}) => {
         className="employees w-full mt-7 py-4"
       >
         <span className="font-semibold text-xl tracking-wider	">Logs</span>
+      </div>
+      <div className="pt-1">
+        {logs.map((log) => (
+          <div className="flex px-2 py-2 justify-between text-sm">
+            <div className="rounded-md bg-gray-200 px-2">
+              <span className="mr-1">{log.code}</span>
+              <span>{log.code === 200 ? 'OK' : 'BAD'}</span>
+            </div>
+            <div className="px-2">
+              <span className="mr-4">{log.method}</span>
+              <span>{log.url}</span>
+            </div>
+            <span>{log.createdAt.toLocaleString('pt-br')}</span>
+          </div>
+        ))}
       </div>
     </div>
   )
@@ -280,7 +303,7 @@ const DepartamentViewer = observer(() => {
   }
 
   return (
-    <div className="w-full flex pb-11 relative">
+    <div className="w-full flex pb-11 relative h-full">
       <div style={{minWidth: '240px', maxWidth: '320px', flex: '0 0 30%'}}>
         {renderDetails()}
       </div>

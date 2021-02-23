@@ -41,7 +41,6 @@ export class CreateDepartamentUseCase
       code,
       departament,
     });
-    console.log(request, 'request')
     const createdDepartament = await this.departamentRepository.create({
       departament,
       request,

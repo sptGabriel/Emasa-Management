@@ -27,11 +27,14 @@ export class DepartamentRepository implements IDepartamentRepository {
     const em = await this.em.fork();
     await em.begin();
     try {
+      request.code = 200
       await em.persist(departament);
       await em.persist(request);
       await em.commit();
     } catch (e) {
       await em.rollback();
+      request.code = 500
+      await em.persistAndFlush(request);
       throw e;
     }
     if (!(departament instanceof Departament))

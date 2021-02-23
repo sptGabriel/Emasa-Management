@@ -11,8 +11,8 @@ export class Migration20201104231412 extends Migration {
             table.increments('id').primary();
             table
             .uuid('departament_id')
-            .notNullable()
             .references('departaments.id')
+            .notNullable();
             table
               .string('url')
               .notNullable();

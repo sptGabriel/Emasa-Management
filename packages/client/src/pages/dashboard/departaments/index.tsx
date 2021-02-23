@@ -4,7 +4,7 @@ import {Outlet} from 'react-router-dom'
 
 const DepartamentPage: React.FC = observer(() => {
   return (
-    <div style={{padding: '0 10px'}}>
+    <div style={{padding: '0 10px', height: '100%'}}>
       <Outlet />
     </div>
   )
