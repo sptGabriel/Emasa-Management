@@ -8,7 +8,7 @@ import userAvatar from '../../../assets/logo_emasa.png'
 import {UserModel} from '../../../models/userModel'
 import {createBackgroundImage} from '../../../shared/utils/createCloudinaryBG'
 import {capitalizeFirstLetter} from '../../../shared/utils/capitalizeFirstLetter'
-import {DepartamentLogs} from '../../../models/departamentLogs'
+import {DepartamentRequestLogs} from '../../../models/departamentRequestLogs'
 
 interface EmployeeTable {
   loading: boolean
@@ -123,16 +123,9 @@ const Employees: React.FC<{employees: UserModel[]}> = ({employees}) => {
   )
 }
 
-const LogsPage: React.FC<{id: string}> = ({id}) => {
-  const [logs, setLogs] = useState<DepartamentLogs[]>([])
-  const {departamentStore} = useRootStore()
-  useEffect(() => {
-    departamentStore
-      .getLogByID(id)
-      .then((res) => res.data)
-      .then((data) => data.map((log: any) => new DepartamentLogs(log)))
-      .then((logs) => setLogs(logs))
-  }, [])
+const LogsPage: React.FC<{requestLogs: DepartamentRequestLogs[]}> = ({
+  requestLogs,
+}) => {
   return (
     <div>
       <div
@@ -142,8 +135,8 @@ const LogsPage: React.FC<{id: string}> = ({id}) => {
         <span className="font-semibold text-xl tracking-wider	">Logs</span>
       </div>
       <div className="pt-1">
-        {logs.map((log) => (
-          <div className="flex px-2 py-2 justify-between text-sm">
+        {requestLogs.map((log) => (
+          <div className="flex px-2 py-2 justify-between text-sm" key={log.id}>
             <div className="rounded-md bg-gray-200 px-2">
               <span className="mr-1">{log.code}</span>
               <span>{log.code === 200 ? 'OK' : 'BAD'}</span>
@@ -167,7 +160,7 @@ const DepartamentViewer = observer(() => {
   })
   const {departamentStore} = useRootStore()
   const {departamentId} = useParams()
-  const [departament, setDepartament] = useState(new DepartamentModel())
+  const [departament, setDepartament] = useState<any>(undefined)
   const [expandDetails, setExpandOn] = useState(true)
   function tabHanlder(value: string) {
     switch (value) {
@@ -181,79 +174,99 @@ const DepartamentViewer = observer(() => {
   }
 
   useEffect(() => {
-    departamentStore.byID(departamentId).then((res) => setDepartament(res.data))
+    departamentStore
+      .byID(departamentId)
+      .then((res) => setDepartament(new DepartamentModel(res.data)))
   }, [])
 
   function renderDetails() {
     return (
       <div className="fixed self-start h-full flex pb-14">
-        <div>
-          <div className="info">
-            <h1 className="font-roboto font-semibold text-2xl pt-3 pb-2">
-              {departament ? capitalizeFirstLetter(departament.nome) : ''}
-            </h1>
-          </div>
-          <div className="pb-2 details relative">
-            <div
-              style={{boxShadow: expandDetails ? 'inset 0 -1px #e3e8ee' : ''}}
-              className="py-2"
-            >
-              <button
-                type="button"
-                onClick={() => setExpandOn(!expandDetails)}
-                className="font-semibold tracking-wider text-base flex items-center"
-              >
-                <span className="mr-1 text-gray-500">
-                  {expandDetails ? (
-                    <TiArrowSortedDown size={24} />
-                  ) : (
-                    <TiArrowSortedDown
-                      size={24}
-                      style={{transform: 'rotate(270deg)'}}
-                    />
-                  )}
-                </span>
-                <span className="text-gray-800">Detalhes</span>
-              </button>
+        {departament ? (
+          <div>
+            <div className="info">
+              <h1 className="font-roboto font-semibold text-2xl pt-3 pb-2">
+                {departament.nome
+                  ? capitalizeFirstLetter(departament.nome)
+                  : ''}
+              </h1>
             </div>
-            {expandDetails ? (
-              <div className="expand pt-4">
-                <div className="created_at">
-                  <h1 className="font-normal text-gray-500 tracking-wide">
-                    Data de criação
-                  </h1>
-                  <span className="text-gray-600">20 fev 2020</span>
-                </div>
-                <div className="created_by mt-3">
-                  <h1 className="font-normal text-gray-400 tracking-wide">
-                    Criador do departamento
-                  </h1>
-                  <span className="text-gray-600">Testando name</span>
-                </div>
-                <div className="diretor mt-2">
-                  <h1 className="font-normal text-gray-500 tracking-wide">
-                    Diretor do departamento
-                  </h1>
-                  <span className="text-gray-600">Gabriel Costa</span>
-                </div>
-                <div className="gerente mt-3">
-                  <h1 className="font-normal text-gray-500 tracking-wide">
-                    Gerente do departamento
-                  </h1>
-                  <span className="text-gray-600">Gabriel Costa</span>
-                </div>
-                <div className="coordenador mt-3">
-                  <h1 className="font-normal text-gray-400 tracking-wide">
-                    Coordenador do departamento
-                  </h1>
-                  <span className="text-gray-600">Gabriel Costa</span>
-                </div>
+            <div className="pb-2 details relative">
+              <div
+                style={{boxShadow: expandDetails ? 'inset 0 -1px #e3e8ee' : ''}}
+                className="py-2"
+              >
+                <button
+                  type="button"
+                  onClick={() => setExpandOn(!expandDetails)}
+                  className="font-semibold tracking-wider text-base flex items-center"
+                >
+                  <span className="mr-1 text-gray-500">
+                    {expandDetails ? (
+                      <TiArrowSortedDown size={24} />
+                    ) : (
+                      <TiArrowSortedDown
+                        size={24}
+                        style={{transform: 'rotate(270deg)'}}
+                      />
+                    )}
+                  </span>
+                  <span className="text-gray-800">Detalhes</span>
+                </button>
               </div>
-            ) : (
-              ''
-            )}
+              {expandDetails ? (
+                <div className="expand pt-4">
+                  <div className="created_at">
+                    <h1 className="font-normal text-gray-500 tracking-wide">
+                      Data de criação
+                    </h1>
+                    <span className="text-gray-600">
+                      {departament.createdAt
+                        ? departament.createdAt.toLocaleString('pt-br')
+                        : ''}
+                    </span>
+                  </div>
+                  <div className="created_by mt-3">
+                    <h1 className="font-normal text-gray-400 tracking-wide">
+                      Criador do departamento
+                    </h1>
+                    <span className="text-gray-600">ANY</span>
+                  </div>
+                  <div className="diretor mt-2">
+                    <h1 className="font-normal text-gray-400 tracking-wide">
+                      Diretor do departamento
+                    </h1>
+                    <span className="text-gray-600">
+                      {departament.diretor ? departament.diretor.nome : ''}
+                    </span>
+                  </div>
+                  <div className="gerente mt-3">
+                    <h1 className="font-normal text-gray-400 tracking-wide">
+                      Gerente do departamento
+                    </h1>
+                    <span className="text-gray-600">
+                      {departament.gerente ? departament.gerente.nome : ''}
+                    </span>
+                  </div>
+                  <div className="coordenador mt-3">
+                    <h1 className="font-normal text-gray-400 tracking-wide">
+                      Coordenador do departamento
+                    </h1>
+                    <span className="text-gray-600">
+                      {departament.coordenador
+                        ? departament.coordenador.nome
+                        : ''}
+                    </span>
+                  </div>
+                </div>
+              ) : (
+                ''
+              )}
+            </div>
           </div>
-        </div>
+        ) : (
+          ''
+        )}
       </div>
     )
   }
@@ -309,12 +322,12 @@ const DepartamentViewer = observer(() => {
       </div>
       <div style={{flexGrow: 1}} className="ml-14 select-none">
         {renderTabs()}
-        {tabs.details ? (
+        {departament && tabs.details ? (
           <Employees employees={departament.employees} />
-        ) : tabs.logs ? (
-          <LogsPage id={departament.id} />
+        ) : departament && tabs.logs ? (
+          <LogsPage requestLogs={departament.requestLogs} />
         ) : (
-          <Employees employees={departament.employees} />
+          ''
         )}
       </div>
     </div>

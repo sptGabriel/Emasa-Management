@@ -6,7 +6,7 @@ export type TDepartamentLogs = {
   code: number
   createdAt: Date
 }
-export class DepartamentLogs implements TDepartamentLogs {
+export class DepartamentRequestLogs implements TDepartamentLogs {
   id!: number
 
   url!: string

@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-import {makeAutoObservable} from 'mobx'
+import {DepartamentRequestLogs} from './departamentRequestLogs'
 import {UserModel} from './userModel'
 
 interface IPositions {
@@ -15,7 +15,8 @@ export type TDepartament = {
   gerente: IPositions
   coordenador: IPositions
   employees: UserModel[]
-  criado: Date
+  requestLogs: DepartamentRequestLogs[]
+  createdAt: Date
   status: boolean
 }
 export class DepartamentModel implements TDepartament {
@@ -33,7 +34,9 @@ export class DepartamentModel implements TDepartament {
 
   employees: UserModel[] = []
 
-  criado!: Date
+  requestLogs: DepartamentRequestLogs[] = []
+
+  createdAt!: Date
 
   status!: boolean
 
@@ -56,6 +59,11 @@ export class DepartamentModel implements TDepartament {
     this.nome = props ? props.nome : ''
     this.sigla = props ? props.sigla : ''
     if (props) this.employees.push(...props.employees)
-    if (props && props.criado) this.criado = props.criado
+    this.requestLogs.push(
+      ...props.requestLogs.map(
+        (log: DepartamentRequestLogs) => new DepartamentRequestLogs(log),
+      ),
+    )
+    if (props && props.createdAt) this.createdAt = new Date(props.createdAt)
   }
 }

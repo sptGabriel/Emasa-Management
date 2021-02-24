@@ -1,6 +1,7 @@
 import {
   Cascade,
   Entity,
+  ManyToOne,
   OneToOne,
   PrimaryKey,
   Property,
@@ -17,17 +18,25 @@ interface DepartamentRequestsContainer {
 export class DepartamentRequests {
   @PrimaryKey()
   public readonly id: number;
-  @OneToOne(() => Departament, departament => departament, {
-    fieldName: 'departament_id',
-    owner: true
-  })
-  public readonly departament: Departament;
+  @ManyToOne({ entity: () => Departament, name: 'departament_id' })
+  public departament: Departament;
   @Property()
   public url: string;
   @Property()
   public code: number;
   @Property()
   public method: string;
+  @Property({ name: 'requestsFormat', persist: false })
+  public get formatedReponse(): any {
+    return {
+      id: this.id,
+      departament_id: this.departament.id,
+      url: this.url,
+      code: this.code,
+      method: this.method,
+      createdAt: this.createdAt
+    }
+  }
   @Property()
   public createdAt = new Date();
 

@@ -35,12 +35,8 @@ export class Departament {
   public employees = new Collection<Employee>(this);
   @Property({ default: true })
   public status: boolean;
-  @OneToOne({
-    entity: () => DepartamentRequests,
-    mappedBy: 'departament',
-    cascade: [],
-  })
-  public request: DepartamentRequests;
+  @OneToMany(() => DepartamentRequests, request => request.departament)
+  public requests = new Collection<DepartamentRequests>(this);
   @Property()
   public createdAt = new Date();
   @Property({ onUpdate: () => new Date() })
@@ -48,7 +44,7 @@ export class Departament {
   @Property()
   public deletedAt?: Date;
 
-  @Property({ name: 'devicesInformations', persist: false })
+  @Property({ name: 'departamentFormat', persist: false })
   public get formatedReponse(): any {
     const gerente = this.employees
       .getItems()
@@ -66,8 +62,9 @@ export class Departament {
       diretor: diretor ? diretor.formatedEmployee : null,
       coordenador: coordenador ? coordenador.formatedEmployee : null,
       gerente: gerente ? gerente.formatedEmployee : null,
+      requestLogs: this.requests.getItems().map((log) => log.formatedReponse),
       status: this.status,
-      criado: this.createdAt,
+      createdAt: this.createdAt,
       employees: this.employees
         .getItems()
         .map(employee => employee.formatedEmployee),

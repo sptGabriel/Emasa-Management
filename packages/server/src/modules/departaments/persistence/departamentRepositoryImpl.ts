@@ -62,7 +62,7 @@ export class DepartamentRepository implements IDepartamentRepository {
         flags: [QueryFlag.PAGINATE],
       },
     );
-    await this.em.populate(departaments, ['employees']);
+    await this.em.populate(departaments, ['employees', 'requests']);
     const total = await this.total();
     return { departaments, total };
   };
@@ -71,7 +71,7 @@ export class DepartamentRepository implements IDepartamentRepository {
   };
   public byId = async (id: string): Promise<Departament | undefined> => {
     const departamentRow = await this.em.findOne(Departament, { id }, [
-      'employees',
+      'employees','requests'
     ]);
     if (!departamentRow) return;
     return departamentRow;
